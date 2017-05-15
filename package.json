@@ -1,0 +1,25 @@
+{
+  "name": "pixel-editor",
+  "version": "1.0.0",
+  "description": "A pixel editor built in Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/davidfig/pixel-editor",
+  "author": "David Figatner",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "~1.6.2",
+    "pixi.js": "^4.5.1"
+  },
+  "dependencies": {
+    "jsonfile": "^3.0.0",
+    "temp": "^0.8.3",
+    "yy-animate": "^1.6.6",
+    "yy-color": "^1.0.6",
+    "yy-random": "^1.2.0",
+    "yy-renderer": "^1.2.1",
+    "yy-update": "^1.1.9"
+  }
+}

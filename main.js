@@ -9,7 +9,7 @@ const Pixel = require('./data/pixel');
 const Colors = require('./data/colors');
 const Layers = require('./data/layers');
 
-let _mainWindow, _paletteWindow, _zoomWindow, _showWindow, _coordsWindow, _data, _state;
+let _mainWindow, _paletteWindow, _zoomWindow, _showWindow, _coordsWindow, _toolsWindow,_data, _state;
 
 const app = electron.app;
 
@@ -34,12 +34,16 @@ function save()
     jsonfile.writeFileSync(filename, _state);
 }
 
-function updateState(window)
+function updateState(window, noResize)
 {
+    if (noResize)
+    {
+        window.setResizable(false);
+    }
     const state = _state[window.stateID];
     if (state)
     {
-        if (state.width)
+        if (!noResize && state.width)
         {
             window.setSize(state.width, state.height);
         }
@@ -47,7 +51,7 @@ function updateState(window)
         {
             window.setPosition(state.x, state.y);
         }
-        if (state.maximize)
+        if (!noResize && state.maximize)
         {
             window.maximize();
         }
@@ -56,37 +60,49 @@ function updateState(window)
     {
         _state[window.stateID] = {};
     }
-    window.on('maximize',
-        function (object)
-        {
-            _state[object.sender.stateID].maximize = true;
-            save();
-        });
-    window.on('unmaximize',
-        function (object)
-        {
-            _state[object.sender.stateID].maximize = false;
-            save();
-        });
+    if (!noResize)
+    {
+        window.on('maximize',
+            function (object)
+            {
+                _state[object.sender.stateID].maximize = true;
+                save();
+            });
+        window.on('unmaximize',
+            function (object)
+            {
+                _state[object.sender.stateID].maximize = false;
+                save();
+            });
+
+        window.on('resize',
+            function (object)
+            {
+                const window = object.sender;
+                const size = window.getSize();
+                const state = _state[window.stateID];
+                state.width = size[0];
+                state.height = size[1];
+                save();
+            });
+    }
     window.on('move',
+    function (object)
+    {
+        const window = object.sender;
+        const position = window.getPosition();
+        const state = _state[window.stateID];
+        state.x = position[0];
+        state.y = position[1];
+        save();
+    });
+    window.on('focus',
         function (object)
         {
-            const window = object.sender;
-            const position = window.getPosition();
-            const state = _state[window.stateID];
-            state.x = position[0];
-            state.y = position[1];
-            save();
-        });
-    window.on('resize',
-        function (object)
-        {
-            const window = object.sender;
-            const size = window.getSize();
-            const state = _state[window.stateID];
-            state.width = size[0];
-            state.height = size[1];
-            save();
+            if (object.sender !== _zoomWindow)
+            {
+                _zoomWindow.focus();
+            }
         });
 }
 
@@ -102,6 +118,7 @@ function createWindow()
     _data.pixel = new Pixel(15, 15);
     Colors.init(_data.pixel);
     _data.colors = Colors;
+    _data.tool = 'paint';
 
     _paletteWindow = new BrowserWindow({ backgroundColor: BACKGROUND, title: 'Palette', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
     _paletteWindow.stateID = 'palette';
@@ -110,26 +127,33 @@ function createWindow()
     _paletteWindow.loadURL(url.format({ pathname: path.join(__dirname, 'palette.html'), protocol: 'file:', slashes: true }));
     _paletteWindow.setMenu(null);
     _paletteWindow.main = _zoomWindow;
-    _paletteWindow.on('focus', () => _zoomWindow.focus());
     // _paletteWindow.toggleDevTools();
 
-    _showWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'show', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _showWindow = new BrowserWindow({ frame: false, backgroundColor: BACKGROUND, x: 0, y: 0, title: 'show', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
     _showWindow.stateID = 'show';
     _showWindow.pixel = _data;
     _showWindow.loadURL(url.format({ pathname: path.join(__dirname, 'show.html'), protocol: 'file:', slashes: true }));
     _showWindow.setMenu(null);
-    updateState(_showWindow);
+    updateState(_showWindow, true);
     // _showWindow.toggleDevTools();
 
-    _coordsWindow = new BrowserWindow({ x: 0, y: 0, title: 'coords', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _coordsWindow = new BrowserWindow({ frame: false, parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
     _coordsWindow.stateID = 'coords';
     _coordsWindow.pixel = _data;
     _coordsWindow.loadURL(url.format({ pathname: path.join(__dirname, 'coords.html'), protocol: 'file:', slashes: true }));
     _coordsWindow.setMenu(null);
-    updateState(_coordsWindow);
+    updateState(_coordsWindow, true);
     // _coordsWindow.toggleDevTools();
 
-    _zoomWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _toolsWindow = new BrowserWindow({ frame: false, title: 'tools', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _toolsWindow.stateID = 'tools';
+    _toolsWindow.pixel = _data;
+    _toolsWindow.loadURL(url.format({ pathname: path.join(__dirname, 'tools.html'), protocol: 'file:', slashes: true }));
+    _toolsWindow.setMenu(null);
+    updateState(_toolsWindow, true);
+    // _toolsWindow.toggleDevTools();
+
+    _zoomWindow = new BrowserWindow({ backgroundColor: BACKGROUND, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
     _zoomWindow.stateID = 'zoom';
     _zoomWindow.pixel = _data;
     _zoomWindow.loadURL(url.format({ pathname: path.join(__dirname, 'zoom.html'), protocol: 'file:', slashes: true }));

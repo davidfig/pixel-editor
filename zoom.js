@@ -20,7 +20,7 @@ let _pixel,
 function init()
 {
     View.init();
-    Input.init(View, {keyDown: key, down: downMouse, move: moveMouse, up: upMouse});
+    Input.init(View.renderer.canvas, {keyDown: key, down: downMouse, move: moveMouse, up: upMouse});
     Sheet.init();
     _pixel = remote.getCurrentWindow().pixel.pixel;
     _colors = remote.getCurrentWindow().pixel.colors;

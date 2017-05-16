@@ -16,7 +16,7 @@ let _blocks,
 function init()
 {
     View.init();
-    Input.init(View, { down });
+    Input.init(View.renderer.canvas, { down });
     Sheet.init();
     _colors = remote.getCurrentWindow().pixel.colors;
     _blocks = View.add(new PIXI.Container());

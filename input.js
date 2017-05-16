@@ -6,10 +6,9 @@ const Input = {
     keys: {},
     input: [],
 
-    init: function (view, handlers)
+    init: function (div, handlers)
     {
         Input.handlers = handlers;
-        const div = view.renderer.canvas;
         div.addEventListener('mousedown', Input.mouseDown);
         div.addEventListener('mousemove', Input.mouseMove);
         div.addEventListener('mouseup', Input.mouseUp);

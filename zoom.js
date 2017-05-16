@@ -14,12 +14,13 @@ let _pixel,
     _cursorAlt,
     _blocks,
     _grid,
-    _colors;
+    _colors,
+    _isDown = -1;
 
 function init()
 {
     View.init();
-    Input.init(View, {keyDown: key});
+    Input.init(View, {keyDown: key, down: downMouse, move: moveMouse, up: upMouse});
     Sheet.init();
     _pixel = remote.getCurrentWindow().pixel.pixel;
     _colors = remote.getCurrentWindow().pixel.colors;
@@ -121,23 +122,17 @@ function move(x, y)
     _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
     _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
     cursor();
-    View.render();
 }
 
 function space()
 {
     const current = _pixel.get(_cursor.x, _cursor.y);
-    if (current !== _colors.foreground)
-    {
-        _pixel.set(_cursor.x, _cursor.y, _colors.foreground);
-    }
-    else
-    {
-        _pixel.set(_cursor.x, _cursor.y, _colors.background);
-    }
+    const color = (current !== _colors.foreground) ?_colors.foreground : _colors.background;
+    _pixel.set(_cursor.x, _cursor.y, color);
     draw();
     cursor();
     View.render();
+    return color;
 }
 
 function zoom(delta)
@@ -147,9 +142,39 @@ function zoom(delta)
     const window = remote.getCurrentWindow();
     window.setContentSize(Math.ceil(_zoom * _pixel.width), Math.ceil(_zoom * _pixel.height));
     frame();
-    cursor();
     draw();
+    cursor();
     View.render();
+}
+
+function downMouse(x, y)
+{
+    _cursor.x = Math.floor(x / _zoom);
+    _cursor.y = Math.floor(y / _zoom);
+    _isDown = space();
+}
+
+function moveMouse(x, y)
+{
+    if (_isDown !== -1)
+    {
+        const xx = Math.floor(x / _zoom);
+        const yy = Math.floor(y / _zoom);
+        if (_cursor.x !== xx || _cursor.y !== yy)
+        {
+            _cursor.x = xx;
+            _cursor.y = yy;
+            _pixel.set(_cursor.x, _cursor.y, _isDown);
+            draw();
+            cursor();
+            View.render();
+        }
+    }
+}
+
+function upMouse()
+{
+    _isDown = -1;
 }
 
 function key(code)

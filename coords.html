@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            @font-face {
+                font-family: bitmap;
+                src: url(./assets/VT323-Regular.ttf);
+            }
+        </style>
+    </head>
+    <body style="font-family: bitmap; font-size: 1.5em">
+        <div style="display: flex; justify-content: space-around; margin-bottom: 1em">
+            <div>x: <span id="x">0</span></div>
+            <div>y: <span id="y">0</span></div>
+        </div>
+        <div style="text-align: center">Pixels: <span id="pixels">5</span></div>
+        <div style="display: flex; justify-content: space-around; ">
+            <div>w: <span id="width">0</span></div>
+            <div>h: <span id="height">0</span></div>
+        </div>
+    </body>
+
+    <script>
+        require('./coords.js')
+    </script>
+</html>

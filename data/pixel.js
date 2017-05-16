@@ -1,3 +1,5 @@
+const jsonfile = require('jsonfile');
+
 class Pixel
 {
     constructor()
@@ -83,6 +85,8 @@ class Pixel
 
     save()
     {
+        const data = JSON.stringify(this);
+        jsonfile.writeFileSync('c:\\Users\\dsfig\\Desktop\\test.json', data);
     }
 }
 

@@ -5,10 +5,11 @@ const url = require('url');
 const jsonfile = require('jsonfile');
 
 const BrowserWindow = electron.BrowserWindow;
-const Pixel = require('./pixel');
-const Colors = require('./colors');
+const Pixel = require('./data/pixel');
+const Colors = require('./data/colors');
+const Layers = require('./data/layers');
 
-let _mainWindow, _paletteWindow, _zoomWindow, _showWindow, _data, _state;
+let _mainWindow, _paletteWindow, _zoomWindow, _showWindow, _coordsWindow, _data, _state;
 
 const app = electron.app;
 
@@ -102,14 +103,6 @@ function createWindow()
     Colors.init(_data.pixel);
     _data.colors = Colors;
 
-    _zoomWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
-    _zoomWindow.stateID = 'zoom';
-    _zoomWindow.pixel = _data;
-    _zoomWindow.loadURL(url.format({ pathname: path.join(__dirname, 'zoom.html'), protocol: 'file:', slashes: true }));
-    _zoomWindow.setMenu(null);
-    updateState(_zoomWindow);
-    // _zoomWindow.toggleDevTools();
-
     _paletteWindow = new BrowserWindow({ backgroundColor: BACKGROUND, title: 'Palette', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
     _paletteWindow.stateID = 'palette';
     updateState(_paletteWindow);
@@ -127,7 +120,24 @@ function createWindow()
     _showWindow.setMenu(null);
     updateState(_showWindow);
     // _showWindow.toggleDevTools();
+
+    _coordsWindow = new BrowserWindow({ x: 0, y: 0, title: 'coords', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _coordsWindow.stateID = 'coords';
+    _coordsWindow.pixel = _data;
+    _coordsWindow.loadURL(url.format({ pathname: path.join(__dirname, 'coords.html'), protocol: 'file:', slashes: true }));
+    _coordsWindow.setMenu(null);
+    updateState(_coordsWindow);
+    // _coordsWindow.toggleDevTools();
+
+    _zoomWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _zoomWindow.stateID = 'zoom';
+    _zoomWindow.pixel = _data;
+    _zoomWindow.loadURL(url.format({ pathname: path.join(__dirname, 'zoom.html'), protocol: 'file:', slashes: true }));
+    _zoomWindow.setMenu(null);
+    updateState(_zoomWindow);
+    _zoomWindow.coordsWindow = _coordsWindow;
     _zoomWindow.showWindow = _showWindow;
+    // _zoomWindow.toggleDevTools();
 
     _zoomWindow.focus();
 

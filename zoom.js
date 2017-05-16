@@ -111,6 +111,7 @@ function cursor()
     {
         cursorInit();
     }
+    remote.getCurrentWindow().coordsWindow.emit('cursor', _cursor.x, _cursor.y);
 }
 
 function move(x, y)
@@ -140,6 +141,7 @@ function space()
 function dirty()
 {
     remote.getCurrentWindow().showWindow.emit('dirty');
+    _pixel.save();
 }
 
 function zoom(delta)

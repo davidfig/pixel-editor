@@ -1,5 +1,3 @@
-const Random = require('yy-random');
-
 class Pixel
 {
     constructor()
@@ -13,11 +11,9 @@ class Pixel
             this._width = arguments[0];
             this._height = arguments[1];
             this.data = [];
-
-// temporary
             for (let i = 0; i < this._width * this._height; i++)
             {
-                this.data[i] = Random.chance() ? null : 0;
+                this.data[i] = null;
             }
         }
         this.undo = [];

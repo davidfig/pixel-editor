@@ -122,6 +122,7 @@ function move(x, y)
     _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
     _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
     cursor();
+    View.render();
 }
 
 function space()
@@ -132,7 +133,13 @@ function space()
     draw();
     cursor();
     View.render();
+    dirty();
     return color;
+}
+
+function dirty()
+{
+    remote.getCurrentWindow().showWindow.emit('dirty');
 }
 
 function zoom(delta)
@@ -167,6 +174,7 @@ function moveMouse(x, y)
             _pixel.set(_cursor.x, _cursor.y, _isDown);
             draw();
             cursor();
+            dirty();
             View.render();
         }
     }

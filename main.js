@@ -1,4 +1,5 @@
 const electron = require('electron');
+
 const path = require('path');
 const url = require('url');
 const jsonfile = require('jsonfile');
@@ -7,7 +8,7 @@ const BrowserWindow = electron.BrowserWindow;
 const Pixel = require('./pixel');
 const Colors = require('./colors');
 
-let _mainWindow, _paletteWindow, _zoomWindow, _data, _state;
+let _mainWindow, _paletteWindow, _zoomWindow, _showWindow, _data, _state;
 
 const app = electron.app;
 
@@ -45,17 +46,33 @@ function updateState(window)
         {
             window.setPosition(state.x, state.y);
         }
+        if (state.maximize)
+        {
+            window.maximize();
+        }
     }
+    else
+    {
+        _state[window.stateID] = {};
+    }
+    window.on('maximize',
+        function (object)
+        {
+            _state[object.sender.stateID].maximize = true;
+            save();
+        });
+    window.on('unmaximize',
+        function (object)
+        {
+            _state[object.sender.stateID].maximize = false;
+            save();
+        });
     window.on('move',
         function (object)
         {
             const window = object.sender;
             const position = window.getPosition();
-            let state = _state[window.stateID];
-            if (!state)
-            {
-                state = _state[window.stateID] = {};
-            }
+            const state = _state[window.stateID];
             state.x = position[0];
             state.y = position[1];
             save();
@@ -65,13 +82,10 @@ function updateState(window)
         {
             const window = object.sender;
             const size = window.getSize();
-            let state = _state[window.stateID];
-            if (!state)
-            {
-                state = _state[window.stateID] = {};
-            }
+            const state = _state[window.stateID];
             state.width = size[0];
             state.height = size[1];
+            save();
         });
 }
 
@@ -106,8 +120,16 @@ function createWindow()
     _paletteWindow.on('focus', () => _zoomWindow.focus());
     // _paletteWindow.toggleDevTools();
 
-    _zoomWindow.focus();
+    _showWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'show', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden' });
+    _showWindow.stateID = 'show';
+    _showWindow.pixel = _data;
+    _showWindow.loadURL(url.format({ pathname: path.join(__dirname, 'show.html'), protocol: 'file:', slashes: true }));
+    _showWindow.setMenu(null);
+    updateState(_showWindow);
+    // _showWindow.toggleDevTools();
+    _zoomWindow.showWindow = _showWindow;
 
+    _zoomWindow.focus();
 
     accelerators();
 }

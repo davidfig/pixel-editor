@@ -1,17 +1,15 @@
 /* Copyright (c) 2017 YOPEY YOPEY LLC */
 
-const View = require('./view.js');
-const Zoom = require('./zoom.js');
-
 const Input = {
 
     touches: [],
     keys: {},
     input: [],
 
-    init: function ()
+    init: function (view, handlers)
     {
-        const div = View.renderer.canvas;
+        Input.handlers = handlers;
+        const div = view.renderer.canvas;
         div.addEventListener('mousedown', Input.mouseDown);
         div.addEventListener('mousemove', Input.mouseMove);
         div.addEventListener('mouseup', Input.mouseUp);
@@ -150,14 +148,27 @@ const Input = {
 
     handleDown: function(x, y)
     {
+        if (Input.handlers.down)
+        {
+            Input.handlers.down(x, y);
+        }
+
     },
 
     handleUp: function(x, y)
     {
+        if (Input.handlers.up)
+        {
+            Input.handlers.up(x, y);
+        }
     },
 
     handleMove: function(x, y)
     {
+        if (Input.handlers.move)
+        {
+            Input.handlers.move(x, y);
+        }
     },
 
     /**
@@ -185,29 +196,9 @@ const Input = {
             return;
         }
         console.log(code);
-        switch (code)
+        if (Input.handlers.keyDown)
         {
-            case 37: // left
-                Zoom.move(-1, 0);
-                break;
-            case 38: // up
-                Zoom.move(0, -1);
-                break;
-            case 39: // right
-                Zoom.move(1, 0);
-                break;
-            case 40: // down
-                Zoom.move(0, 1);
-                break;
-            case 187: // - increase zoom
-                Zoom.zoom(-1);
-                break;
-            case 189: // = decrease zoom
-                Zoom.zoom(1);
-                break;
-            case 32: // space
-                Zoom.space();
-                break;
+            Input.handlers.keyDown(code);
         }
     },
 
@@ -221,9 +212,9 @@ const Input = {
         Input.keys.meta = e.metaKey;
         Input.keys.ctrl = e.ctrlKey;
         const code = (typeof e.which === 'number') ? e.which : e.keyCode;
-        //debug(code);
-        switch (code)
+        if (Input.handlers.keyUp)
         {
+            Input.handlers.keyUp(code);
         }
     }
 };

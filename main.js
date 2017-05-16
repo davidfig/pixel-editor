@@ -11,6 +11,8 @@ let _mainWindow, _paletteWindow, _zoomWindow, _data, _state;
 
 const app = electron.app;
 
+const BACKGROUND = '#aaaaaa';
+
 const filename = path.join(app.getPath('userData'), 'window-state.json');
 
 function load()
@@ -75,7 +77,7 @@ function updateState(window)
 
 function createWindow()
 {
-    _mainWindow = new BrowserWindow({ fullscreen: true, backgroundColor: '#aaaaaa' });
+    _mainWindow = new BrowserWindow({ backgroundColor: BACKGROUND });
     _mainWindow.stateID = 'main';
     updateState(_mainWindow);
 
@@ -86,19 +88,33 @@ function createWindow()
     Colors.init(_data.pixel);
     _data.colors = Colors;
 
-    _zoomWindow = new BrowserWindow({ x: 0, y: 0, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
+    _zoomWindow = new BrowserWindow({ backgroundColor: BACKGROUND, x: 0, y: 0, title: 'Zoomed', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
     _zoomWindow.stateID = 'zoom';
     _zoomWindow.pixel = _data;
     _zoomWindow.loadURL(url.format({ pathname: path.join(__dirname, 'zoom.html'), protocol: 'file:', slashes: true }));
     _zoomWindow.setMenu(null);
     updateState(_zoomWindow);
+    // _zoomWindow.toggleDevTools();
 
-    _paletteWindow = new BrowserWindow({ title: 'Palette', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
+    _paletteWindow = new BrowserWindow({ backgroundColor: BACKGROUND, title: 'Palette', parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true, titleBarStyle: 'hidden'});
+    _paletteWindow.stateID = 'palette';
+    updateState(_paletteWindow);
     _paletteWindow.pixel = _data;
     _paletteWindow.loadURL(url.format({ pathname: path.join(__dirname, 'palette.html'), protocol: 'file:', slashes: true }));
     _paletteWindow.setMenu(null);
-    updateState(_paletteWindow);
+    _paletteWindow.main = _zoomWindow;
+    _paletteWindow.on('focus', () => _zoomWindow.focus());
     // _paletteWindow.toggleDevTools();
+
+    _zoomWindow.focus();
+
+
+    accelerators();
+}
+
+function accelerators()
+{
+    electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
 }
 
 app.on('ready', load);

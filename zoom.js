@@ -1,13 +1,13 @@
 const remote = require('electron').remote;
 
+const Input = require('./input');
 const View = require('./view');
+const Sheet = require('./sheet');
 
-const GRAY = 0xeeeeee;
 const CURSOR_COLOR = 0xff0000;
 const CURSOR_COLOR_ALT = 0x00ff00;
 
-let _transparency,
-    _pixel,
+let _pixel,
     _zoom = 50,
     _cursor = { x: 5, y: 5 },
     _cursorBlock,
@@ -18,39 +18,37 @@ let _transparency,
 
 function init()
 {
+    View.init();
+    Input.init(View, {keyDown: key});
+    Sheet.init();
     _pixel = remote.getCurrentWindow().pixel.pixel;
     _colors = remote.getCurrentWindow().pixel.colors;
-    _transparency = View.add(new PIXI.Container());
     _blocks = View.add(new PIXI.Container());
     _grid = View.add(new PIXI.Graphics());
-    transparency();
+    window.addEventListener('resize', resize);
+    resize();
+}
+
+function resize()
+{
+    View.resize();
+    const size = remote.getCurrentWindow().getContentSize();
+    let width = size[0], height = size[1];
+    let w = width / _pixel.width;
+    let h = height / _pixel.height;
+    if (_pixel.width * h < width)
+    {
+        _zoom = h;
+    }
+    else
+    {
+        _zoom = w;
+    }
     cursorInit();
     frame();
     cursor();
     draw();
-    View.dirty();
-}
-
-function transparency()
-{
-    _transparency.removeChildren();
-    let alt = true, last;
-    for (let y = 0; y < _pixel.height * 2; y++)
-    {
-        alt = !last;
-        last = alt;
-        for (let x = 0; x < _pixel.width * 2; x++)
-        {
-            if (alt)
-            {
-                const block = _transparency.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-                block.tint = GRAY;
-                block.width = block.height = _zoom / 2;
-                block.position.set(x * _zoom / 2, y * _zoom / 2);
-            }
-            alt = !alt;
-        }
-    }
+    View.render();
 }
 
 function cursorInit(alt)
@@ -73,17 +71,15 @@ function draw()
         for (let x = 0; x < _pixel.height; x++)
         {
             const color = _pixel.get(x, y);
+            const block = _blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
+            block.width = block.height = _zoom;
+            block.position.set(x * _zoom, y * _zoom);
             if (color !== null)
             {
-                const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-                block.width = block.height = _zoom;
-                block.position.set(x * _zoom, y * _zoom);
                 block.tint = color;
             }
         }
     }
-    const window = remote.getCurrentWindow();
-    window.setContentSize(_pixel.width * _zoom, _pixel.height * _zoom);
 }
 
 function frame()
@@ -125,39 +121,63 @@ function move(x, y)
     _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
     _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
     cursor();
-    View.dirty();
+    View.render();
 }
 
 function space()
 {
-    const current = _pixel.get(_cursor.x, _cursor.y)
-    if (current === null && current !== _colors.current)
+    const current = _pixel.get(_cursor.x, _cursor.y);
+    if (current !== _colors.foreground)
     {
-        _pixel.set(_cursor.x, _cursor.y, _colors.current);
+        _pixel.set(_cursor.x, _cursor.y, _colors.foreground);
     }
     else
     {
-        _pixel.set(_cursor.x, _cursor.y, null);
+        _pixel.set(_cursor.x, _cursor.y, _colors.background);
     }
     draw();
     cursor();
-    View.dirty();
+    View.render();
 }
 
 function zoom(delta)
 {
     _zoom += delta;
     _zoom = _zoom < 1 ? 1 : _zoom;
+    const window = remote.getCurrentWindow();
+    window.setContentSize(Math.ceil(_zoom * _pixel.width), Math.ceil(_zoom * _pixel.height));
     frame();
     cursor();
     draw();
-    View.dirty();
+    View.render();
 }
 
-module.exports = {
-    init,
-    move,
-    draw,
-    space,
-    zoom
-};
+function key(code)
+{
+    switch (code)
+    {
+        case 37: // left
+            move(-1, 0);
+            break;
+        case 38: // up
+            move(0, -1);
+            break;
+        case 39: // right
+            move(1, 0);
+            break;
+        case 40: // down
+            move(0, 1);
+            break;
+        case 187:
+            zoom(1);
+            break;
+        case 189:
+            zoom(-1);
+            break;
+        case 32: // space
+            space();
+            break;
+    }
+}
+
+init();

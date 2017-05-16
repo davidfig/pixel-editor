@@ -6,13 +6,20 @@ const Update = require('yy-update');
 
 const View = {
 
-    init: function()
+    init: function(update)
     {
         Update.init();
-        Animate.init({update: Update});
-        View.renderer = new Renderer({color: 0xffffff, update: Update});
+        if (update)
+        {
+            Animate.init({ update: Update });
+            View.renderer = new Renderer({ update: Update });
+            Update.update();
+        }
+        else
+        {
+            View.renderer = new Renderer();
+        }
         View.resize();
-        Update.update();
     },
 
     resize: function()
@@ -38,6 +45,11 @@ const View = {
     dirty()
     {
         View.renderer.dirty = true;
+    },
+
+    render()
+    {
+        View.renderer.render();
     }
 };
 

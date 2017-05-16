@@ -1,7 +1,7 @@
 const Color = require('yy-color');
 
 let _colors = [];
-let _current;
+let _foreground, _background;
 
 const GRAYS = 10;
 
@@ -18,8 +18,7 @@ function find(color)
 
 function grays()
 {
-    _colors.push(0);
-    _colors.push(0xffffff);
+    _colors.push(0, 0xffffff);
     for (let i = 1; i < GRAYS - 1; i++)
     {
         const color = Color.blend(i / GRAYS, 0xffffff, 0);
@@ -30,6 +29,11 @@ function grays()
     }
 }
 
+function primaries()
+{
+    _colors.push(0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff);
+}
+
 function load()
 {
 }
@@ -37,6 +41,7 @@ function load()
 function init(pixel)
 {
     grays();
+    primaries();
     for (let data of pixel.data)
     {
         if (!find(data))
@@ -44,23 +49,32 @@ function init(pixel)
             _colors.push(data);
         }
     }
-    _current = 0;
+    _foreground = 0;
+    _background = null;
 }
 
 module.exports = {
     init,
     load,
-    get current()
+    get foreground()
     {
-        return _current;
+        return _foreground;
     },
-    set current(value)
+    set foreground(value)
     {
-        _current = value;
+        _foreground = value;
         if (!find(value))
         {
             _colors.push(value);
         }
+    },
+    get background()
+    {
+        return _background;
+    },
+    set background(value)
+    {
+        _background = value;
     },
     get colors()
     {

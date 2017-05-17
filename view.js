@@ -6,18 +6,19 @@ const Update = require('yy-update');
 
 const View = {
 
-    init: function(update)
+    init: function(options)
     {
+        options = options || {};
         Update.init();
-        if (update)
+        if (options.update)
         {
             Animate.init({ update: Update });
-            View.renderer = new Renderer({ update: Update });
+            View.renderer = new Renderer({ update: Update, canvas: options.canvas });
             Update.update();
         }
         else
         {
-            View.renderer = new Renderer();
+            View.renderer = new Renderer({canvas: options.canvas});
         }
         View.resize();
     },

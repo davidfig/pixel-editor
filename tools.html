@@ -6,7 +6,9 @@
         @font-face { font-family: bitmap; src: url(./assets/VT323-Regular.ttf); }
     </style>
   </head>
-  <body>
+  <body style="overflow: hidden">
+      <div style="-webkit-app-region: drag; height: 1em; width: 100%"></div>
+      <canvas id="canvas"></canvas>
   </body>
 
   <script src="node_modules/pixi.js/dist/pixi.min.js"></script>

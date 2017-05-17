@@ -100,14 +100,6 @@ class State
                 state.y = position[1];
                 that.save();
             });
-        // window.on('focus',
-        //     function (object)
-        //     {
-        //         if (object.sender !== _zoomWindow)
-        //         {
-        //             _zoomWindow.focus();
-        //         }
-        //     });
     }
 }
 

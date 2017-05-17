@@ -12,21 +12,21 @@ const BORDER = 5;
 const WIDTH = 50;
 let _blocks,
     _text,
-    _isDragging,
     _data;
 
 const TOOLS = ['paint', 'select', 'circle'];
 
 function init()
 {
-    View.init();
-    Input.init(View.renderer.canvas, { down, move, up });
+    View.init(document.getElementById('canvas'));
+    Input.init(View.renderer.canvas, { down });
     Sheet.init();
     _data = remote.getCurrentWindow().pixel;
     _blocks = View.add(new PIXI.Container());
     _text = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize(true);
+    remote.getCurrentWindow().show();
 }
 
 function resize(resize)
@@ -81,21 +81,6 @@ function down(x, y)
             return;
         }
     }
-    _isDragging = { x, y };
-}
-
-function move(x, y)
-{
-    if (_isDragging)
-    {
-        const position = remote.getCurrentWindow().getPosition();
-        remote.getCurrentWindow().setPosition(position[0] + x - _isDragging.x, position[1] + y - _isDragging.y);
-    }
-}
-
-function up()
-{
-    _isDragging = null;
 }
 
 const font = new FontFaceObserver('bitmap');

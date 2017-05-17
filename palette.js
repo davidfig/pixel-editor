@@ -22,6 +22,8 @@ function init()
     _blocks = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize(true);
+    remote.getCurrentWindow().show();
+    remote.getCurrentWindow().on('dropper', dropper);
 }
 
 function resize(resize)
@@ -117,6 +119,40 @@ function setActiveColor()
     {
         _activeColor.tint = 0;
     }
+}
+
+function dropper(color)
+{
+    if (_isForeground)
+    {
+        _colors.foreground = color;
+        if (_colors.foreground === null)
+        {
+            _foreground.tint = 0xffffff;
+            _foreground.texture = Sheet.getTexture('transparency');
+        }
+        else
+        {
+            _foreground.tint = color;
+            _foreground.texture = PIXI.Texture.WHITE;
+        }
+    }
+    else
+    {
+        _colors.background = colors;
+        if (_colors.background === null)
+        {
+            _background.tint = 0xffffff;
+            _background.texture = Sheet.getTexture('transparency');
+        }
+        else
+        {
+            _background.tint = color;
+            _background.texture = PIXI.Texture.WHITE;
+        }
+    }
+    setActiveColor();
+    View.render();
 }
 
 function down(x, y)

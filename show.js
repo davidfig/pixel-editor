@@ -1,6 +1,5 @@
 const remote = require('electron').remote;
 
-const Input = require('./input');
 const View = require('./view');
 
 const BUFFER = 10;
@@ -13,13 +12,13 @@ const TRANSPARENT = 0x888888;
 
 function init()
 {
-    View.init();
-    Input.init(View.renderer.canvas, { move, down, up });
+    View.init({canvas: document.getElementById('canvas')});
     _pixel = remote.getCurrentWindow().pixel.pixel;
     _blocks = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize();
     remote.getCurrentWindow().on('dirty', draw);
+    remote.getCurrentWindow().show();
 }
 
 function resize()
@@ -46,35 +45,6 @@ function draw()
     const window = remote.getCurrentWindow();
     window.setContentSize(BUFFER * 2 + Math.ceil(_pixel.width * _zoom), BUFFER * 2 + Math.ceil(_pixel.height * _zoom));
     View.render();
-}
-
-function down(x, y)
-{
-    const point = new PIXI.Point(x, y);
-    for (let block of _blocks.children)
-    {
-        if (block.containsPoint(point))
-        {
-            _data.tool = block.tool;
-            updateTool();
-            return;
-        }
-    }
-    _isDragging = { x, y };
-}
-
-function move(x, y)
-{
-    if (_isDragging)
-    {
-        const position = remote.getCurrentWindow().getPosition();
-        remote.getCurrentWindow().setPosition(position[0] + x - _isDragging.x, position[1] + y - _isDragging.y);
-    }
-}
-
-function up()
-{
-    _isDragging = null;
 }
 
 init();

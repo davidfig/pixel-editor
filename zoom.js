@@ -33,6 +33,7 @@ function init()
     _grid = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
     resize();
+    remote.getCurrentWindow().show();
 }
 
 function resize()
@@ -200,8 +201,16 @@ function save(filename)
         filename += '.json';
     }
     _state.lastFile = filename;
+    _state.save();
     _pixel.save(filename);
     remote.getCurrentWindow().save();
+    remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
+}
+
+function dropper()
+{
+    const color = _pixel.get(_cursor.x, _cursor.y);
+    remote.getCurrentWindow().paletteWindow.emit('dropper', color);
 }
 
 function key(code, special)
@@ -240,6 +249,9 @@ function key(code, special)
                 break;
             case 32: // space
                 space();
+                break;
+            case 73:
+                dropper();
                 break;
         }
     }

@@ -80,13 +80,24 @@ class Pixel
 
     load(filename)
     {
-
+        try
+        {
+            const load = jsonfile.readFileSync(filename);
+            this._width = load._width;
+            this._height = load._height;
+            this.data = load.data;
+            this.undo = load.undo;
+        }
+        catch (e)
+        {
+            return null;
+        }
     }
 
-    save()
+    save(filename)
     {
-        const data = JSON.stringify(this);
-        jsonfile.writeFileSync('c:\\Users\\dsfig\\Desktop\\test.json', data);
+        filename = filename || 'c:\\Users\\dsfig\\Desktop\\test.json';
+        jsonfile.writeFileSync(filename, this);
     }
 }
 

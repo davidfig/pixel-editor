@@ -10,7 +10,7 @@
   "author": "David Figatner",
   "license": "MIT",
   "devDependencies": {
-    "electron": "~1.6.2",
+    "electron": "^1.6.8",
     "pixi.js": "^4.5.1"
   },
   "dependencies": {

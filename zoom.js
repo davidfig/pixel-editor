@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+const path = require('path');
 
 const Input = require('./input');
 const View = require('./view');
@@ -7,7 +8,9 @@ const Sheet = require('./sheet');
 const CURSOR_COLOR = 0xff0000;
 const CURSOR_COLOR_ALT = 0x00ff00;
 
-let _pixel,
+let _data,
+    _state,
+    _pixel,
     _zoom = 50,
     _cursor = { x: 5, y: 5 },
     _cursorBlock,
@@ -22,8 +25,10 @@ function init()
     View.init();
     Input.init(View.renderer.canvas, {keyDown: key, down: downMouse, move: moveMouse, up: upMouse});
     Sheet.init();
-    _pixel = remote.getCurrentWindow().pixel.pixel;
-    _colors = remote.getCurrentWindow().pixel.colors;
+    _state = remote.getCurrentWindow().state;
+    _data = remote.getCurrentWindow().pixel;
+    _pixel = _data.pixel;
+    _colors = _data.colors;
     _blocks = View.add(new PIXI.Container());
     _grid = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
@@ -141,7 +146,7 @@ function space()
 function dirty()
 {
     remote.getCurrentWindow().showWindow.emit('dirty');
-    _pixel.save();
+    _pixel.save(_state.lastFile);
 }
 
 function zoom(delta)
@@ -187,31 +192,56 @@ function upMouse()
     _isDown = -1;
 }
 
-function key(code)
+function save(filename)
 {
-    switch (code)
+    _state.lastPath = path.dirname(filename);
+    if (path.extname(filename) !== '.json')
     {
-        case 37: // left
-            move(-1, 0);
-            break;
-        case 38: // up
-            move(0, -1);
-            break;
-        case 39: // right
-            move(1, 0);
-            break;
-        case 40: // down
-            move(0, 1);
-            break;
-        case 187:
-            zoom(1);
-            break;
-        case 189:
-            zoom(-1);
-            break;
-        case 32: // space
-            space();
-            break;
+        filename += '.json';
+    }
+    _state.lastFile = filename;
+    _pixel.save(filename);
+    remote.getCurrentWindow().save();
+}
+
+function key(code, special)
+{
+    if (special.ctrl)
+    {
+        switch (code)
+        {
+            case 83:
+                debugger;
+                remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: _state.lastPath }, save);
+                break;
+        }
+    }
+    else
+    {
+        switch (code)
+        {
+            case 37: // left
+                move(-1, 0);
+                break;
+            case 38: // up
+                move(0, -1);
+                break;
+            case 39: // right
+                move(1, 0);
+                break;
+            case 40: // down
+                move(0, 1);
+                break;
+            case 187:
+                zoom(1);
+                break;
+            case 189:
+                zoom(-1);
+                break;
+            case 32: // space
+                space();
+                break;
+        }
     }
 }
 

@@ -197,7 +197,7 @@ const Input = {
         console.log(code);
         if (Input.handlers.keyDown)
         {
-            Input.handlers.keyDown(code);
+            Input.handlers.keyDown(code, Input.keys);
         }
     },
 
@@ -213,7 +213,7 @@ const Input = {
         const code = (typeof e.which === 'number') ? e.which : e.keyCode;
         if (Input.handlers.keyUp)
         {
-            Input.handlers.keyUp(code);
+            Input.handlers.keyUp(code, Input.keys);
         }
     }
 };

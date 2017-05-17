@@ -6,34 +6,40 @@ const View = require('./view');
 const Sheet = require('./sheet');
 
 const CURSOR_COLOR = 0xff0000;
-const CURSOR_COLOR_ALT = 0x00ff00;
 
 let _data,
     _state,
     _pixel,
     _zoom = 50,
     _cursor = { x: 5, y: 5 },
+    _cursorSize = { x: 1, y: 1 },
     _cursorBlock,
-    _cursorAlt,
     _blocks,
     _grid,
     _colors,
-    _isDown = -1;
+    _isDown = -1,
+    _shift,
+    _stamp;
 
 function init()
 {
     View.init();
-    Input.init(View.renderer.canvas, {keyDown: key, down: downMouse, move: moveMouse, up: upMouse});
+    Input.init(View.renderer.canvas, { keyDown: key, down: downMouse, move: moveMouse, up: upMouse });
     Sheet.init();
-    _state = remote.getCurrentWindow().state;
-    _data = remote.getCurrentWindow().pixel;
-    _pixel = _data.pixel;
-    _colors = _data.colors;
     _blocks = View.add(new PIXI.Container());
     _grid = View.add(new PIXI.Graphics());
+    _cursorBlock = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
+    const cw = remote.getCurrentWindow();
+    _state = cw.state;
+    _data = cw.pixel;
+    _pixel = _data.pixel;
+    _colors = _data.colors;
     resize();
-    remote.getCurrentWindow().show();
+    cw.show();
+    cw.focus();
+    cw.on('tool', tool);
+    cw.on('keydown', key);
 }
 
 function resize()
@@ -51,23 +57,10 @@ function resize()
     {
         _zoom = w;
     }
-    cursorInit();
     frame();
     cursor();
     draw();
     View.render();
-}
-
-function cursorInit(alt)
-{
-    if (!_cursorBlock)
-    {
-        _cursorBlock = View.add(new PIXI.Graphics());
-    }
-    _cursorAlt = alt;
-    _cursorBlock.clear();
-    _cursorBlock.lineStyle(5, alt ? CURSOR_COLOR_ALT : CURSOR_COLOR);
-    _cursorBlock.drawRect(0, 0, _zoom, _zoom);
 }
 
 function draw()
@@ -106,48 +99,187 @@ function frame()
     }
 }
 
+// from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+function circleCursor(color)
+{
+    _cursorBlock.lineStyle(0);
+    _cursorBlock.position.set(0, 0);
+    let x0 = _cursor.x;
+    let y0 = _cursor.y;
+    let x = _cursorSize.x;
+    let y = 0;
+    let decisionOver2 = 1 - x;   // Decision criterion divided by 2 evaluated at x=r, y=0
+
+    const blocks = {};
+    while (x >= y)
+    {
+        for (let i = 0; i < x * 2; i++)
+        {
+            blocks[(-x + x0 + i) + ',' + (y + y0)] = true;
+            blocks[(-x + x0 + i) + ',' + (-y + y0)] = true;
+        }
+        for (let i = 0; i < y * 2; i++)
+        {
+            blocks[(-y + x0 + i) + ',' + (x + y0)] = true;
+            blocks[(-y + x0 + i) + ',' + (-x + y0)] = true;
+        }
+        y++;
+        if (decisionOver2 <= 0)
+        {
+            decisionOver2 += 2 * y + 1; // Change in decision criterion for y -> y+1
+        } else
+        {
+            x--;
+            decisionOver2 += 2 * (y - x) + 1; // Change for y -> y+1, x -> x-1
+        }
+    }
+    _stamp = [];
+    for (let block in blocks)
+    {
+        const pos = block.split(',');
+        _cursorBlock.beginFill(color, 0.85).drawRect(parseInt(pos[0]) * _zoom, parseInt(pos[1]) * _zoom, _zoom, _zoom).endFill();
+        _stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) });
+    }
+}
+
 function cursor()
 {
-    _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
-    if (_pixel.get(_cursor.x, _cursor.y) === CURSOR_COLOR)
+    switch (_data.tool)
     {
-        cursorInit(true);
+        case 'paint':
+        case 'select':
+            _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
+            _cursorBlock.clear();
+            _cursorBlock.lineStyle(5, CURSOR_COLOR);
+            const x = _cursorSize.x + _cursor.x >= _pixel.width ? _pixel.width - _cursor.x : _cursorSize.x;
+            const y = _cursorSize.y + _cursor.y >= _pixel.height ? _pixel.height - _cursor.y : _cursorSize.y;
+            _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
+            remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+            break;
+
+        case 'circle':
+            _cursorBlock.clear();
+            circleCursor(_colors.foreground);
+            remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+            break;
     }
-    else if (_cursorAlt)
-    {
-        cursorInit();
-    }
-    remote.getCurrentWindow().coordsWindow.emit('cursor', _cursor.x, _cursor.y);
 }
 
 function move(x, y)
 {
-    _cursor.x += x;
-    _cursor.y += y;
-    _cursor.x = _cursor.x < 0 ? _pixel.width - 1 : _cursor.x;
-    _cursor.y = _cursor.y < 0 ? _pixel.height - 1 : _cursor.y;
-    _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
-    _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
+    if (_shift)
+    {
+        _cursorSize.x += x;
+        _cursorSize.x = (_cursorSize.x > _pixel.width) ? _pixel.width : _cursorSize.x;
+        _cursorSize.x = (_cursorSize.x < -_pixel.width) ? -_pixel.width : _cursorSize.x;
+        if (_data.tool === 'circle' && _cursorSize.x < 1)
+        {
+            _cursorSize.x = 1;
+        }
+        if (_cursorSize.x === 0)
+        {
+            _cursorSize.x = (x < 0) ? -1 : 1;
+        }
+        _cursorSize.y += y;
+        _cursorSize.y = (_cursorSize.y > _pixel.height) ? _pixel.height : _cursorSize.y;
+        _cursorSize.y = (_cursorSize.y < -_pixel.height) ? -_pixel.height : _cursorSize.y;
+        if (_cursorSize.y === 0)
+        {
+            _cursorSize.y = (y < 0) ? -1 : 1;
+        }
+        cursor();
+    }
+    else
+    {
+        if (_cursorSize.x < 0)
+        {
+            _cursor.x += _cursorSize.x;
+            _cursorSize.x = -_cursorSize.x;
+        }
+        if (_cursorSize.y < 0)
+        {
+            _cursor.y += _cursorSize.y;
+            _cursorSize.y = -_cursorSize.y;
+        }
+        _cursor.x += x;
+        _cursor.y += y;
+        _cursor.x = _cursor.x < 0 ? _pixel.width - 1 : _cursor.x;
+        _cursor.y = _cursor.y < 0 ? _pixel.height - 1 : _cursor.y;
+        _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
+        _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
+    }
     cursor();
     View.render();
 }
 
 function space()
 {
-    const current = _pixel.get(_cursor.x, _cursor.y);
-    const color = (current !== _colors.foreground) ?_colors.foreground : _colors.background;
-    _pixel.set(_cursor.x, _cursor.y, color);
-    draw();
-    cursor();
-    View.render();
-    dirty();
-    return color;
+    switch (_data.tool)
+    {
+        case 'paint':
+            if (_cursorSize.x === 1 && _cursorSize.y === 1)
+            {
+                const current = _pixel.get(_cursor.x, _cursor.y);
+                const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
+                _pixel.set(_cursor.x, _cursor.y, color);
+                dirty();
+                return color;
+            }
+            else
+            {
+                const color = _colors.foreground;
+                let xStart = _cursor.x, yStart = _cursor.y, xTo, yTo;
+                if (_cursorSize.x < 0)
+                {
+                    xStart += _cursorSize.x;
+                    xTo = xStart + Math.abs(_cursorSize.x);
+                }
+                else
+                {
+                    xTo = xStart + _cursorSize.x;
+                }
+                if (_cursorSize.y < 0)
+                {
+                    yStart += _cursorSize.y;
+                    yTo = yStart + Math.abs(_cursorSize.y) - 1;
+                }
+                else
+                {
+                    yTo = yStart + _cursorSize.y;
+                }
+                for (let y = yStart; y < yTo; y++)
+                {
+                    for (let x = xStart; x < xTo; x++)
+                    {
+                        _pixel.set(x, y, color);
+                    }
+                }
+                dirty();
+                View.render();
+            }
+            break;
+
+        case 'circle':
+            const color = _colors.foreground;
+            for (let block of _stamp)
+            {
+                if (block.x >= 0 && block.x < _pixel.width && block.y >= 0 && block.y < _pixel.height)
+                {
+                    _pixel.set(block.x, block.y, color);
+                }
+            }
+            dirty();
+            View.render();
+            break;
+    }
 }
 
 function dirty()
 {
-    remote.getCurrentWindow().showWindow.emit('dirty');
+    remote.getCurrentWindow().windows.show.emit('dirty');
     _pixel.save(_state.lastFile);
+    draw();
+    View.render();
 }
 
 function zoom(delta)
@@ -164,27 +296,47 @@ function zoom(delta)
 
 function downMouse(x, y)
 {
-    _cursor.x = Math.floor(x / _zoom);
-    _cursor.y = Math.floor(y / _zoom);
-    _isDown = space();
+    switch (_data.tool)
+    {
+        case 'paint':
+            const xx = Math.floor(x / _zoom);
+            const yy = Math.floor(y / _zoom);
+            const current = _pixel.get(_cursor.x, _cursor.y);
+            const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
+            _pixel.set(xx, yy, color);
+            dirty();
+            _isDown = { color, x: xx, y: yy };
+            break;
+
+        case 'circle':
+            space();
+            break;
+    }
 }
 
 function moveMouse(x, y)
 {
-    if (_isDown !== -1)
+    switch (_data.tool)
     {
-        const xx = Math.floor(x / _zoom);
-        const yy = Math.floor(y / _zoom);
-        if (_cursor.x !== xx || _cursor.y !== yy)
-        {
-            _cursor.x = xx;
-            _cursor.y = yy;
-            _pixel.set(_cursor.x, _cursor.y, _isDown);
-            draw();
+        case 'paint':
+            if (_isDown !== -1)
+            {
+                const xx = Math.floor(x / _zoom);
+                const yy = Math.floor(y / _zoom);
+                if (_isDown.x !== xx || _isDown.y !== yy)
+                {
+                    _pixel.set(xx, yy, _isDown.color);
+                    dirty();
+                }
+            }
+            break;
+
+        case 'circle':
+            _cursor.x =  Math.floor(x / _zoom);
+            _cursor.y =  Math.floor(y / _zoom);
             cursor();
-            dirty();
             View.render();
-        }
+            break;
     }
 }
 
@@ -207,21 +359,71 @@ function save(filename)
     remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
 }
 
+function load(list)
+{
+    const filename = list[0];
+    if (_pixel.load(filename))
+    {
+        _state.lastFile = filename;
+        remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
+        resize();
+    }
+}
+
 function dropper()
 {
     const color = _pixel.get(_cursor.x, _cursor.y);
-    remote.getCurrentWindow().paletteWindow.emit('dropper', color);
+    remote.getCurrentWindow().windows.palette.emit('dropper', color);
+}
+
+function clear()
+{
+    switch (_data.tool)
+    {
+        case 'paint':
+            if (_cursorSize.x < 0)
+            {
+                _cursor.x += _cursorSize.x;
+            }
+            if (_cursorSize.y < 0)
+            {
+                _cursor.y += _cursorSize.y;
+            }
+            _cursorSize.x = 1;
+            _cursorSize.y = 1;
+            cursor();
+            View.render();
+            break;
+    }
+}
+
+function tool()
+{
+    switch (_data.tool)
+    {
+        case 'circle':
+            if (_cursorSize.x === 1)
+            {
+                _cursorSize.x = 3;
+            }
+            break;
+    }
+    cursor();
+    dirty();
 }
 
 function key(code, special)
 {
+    _shift = special.shift;
     if (special.ctrl)
     {
         switch (code)
         {
             case 83:
-                debugger;
                 remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: _state.lastPath }, save);
+                break;
+            case 79:
+                remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: _state.lastPath, filters: [ {name: 'JSON', extensions: ['json']}] }, load);
                 break;
         }
     }
@@ -252,6 +454,24 @@ function key(code, special)
                 break;
             case 73:
                 dropper();
+                break;
+            case 27:
+                clear();
+                break;
+            case 66:
+                _data.tool = 'paint';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
+                break;
+            case 86:
+                _data.tool = 'select';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
+                break;
+            case 67:
+                _data.tool = 'circle';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
                 break;
         }
     }

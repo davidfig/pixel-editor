@@ -87,6 +87,7 @@ class Pixel
             this._height = load._height;
             this.data = load.data;
             this.undo = load.undo;
+            return true;
         }
         catch (e)
         {

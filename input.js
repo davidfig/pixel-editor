@@ -9,14 +9,17 @@ const Input = {
     init: function (div, handlers)
     {
         Input.handlers = handlers;
-        div.addEventListener('mousedown', Input.mouseDown);
-        div.addEventListener('mousemove', Input.mouseMove);
-        div.addEventListener('mouseup', Input.mouseUp);
-        div.addEventListener('mouseout', Input.mouseUp);
+        if (div)
+        {
+            div.addEventListener('mousedown', Input.mouseDown);
+            div.addEventListener('mousemove', Input.mouseMove);
+            div.addEventListener('mouseup', Input.mouseUp);
+            div.addEventListener('mouseout', Input.mouseUp);
 
-        div.addEventListener('touchstart', Input.touchStart);
-        div.addEventListener('touchmove', Input.touchMove);
-        div.addEventListener('touchend', Input.touchEnd);
+            div.addEventListener('touchstart', Input.touchStart);
+            div.addEventListener('touchmove', Input.touchMove);
+            div.addEventListener('touchend', Input.touchEnd);
+        }
         Input.keysListener();
     },
 
@@ -194,7 +197,6 @@ const Input = {
             window.location.reload();
             return;
         }
-        console.log(code);
         if (Input.handlers.keyDown)
         {
             Input.handlers.keyDown(code, Input.keys);

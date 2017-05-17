@@ -18,15 +18,17 @@ const TOOLS = ['paint', 'select', 'circle'];
 
 function init()
 {
-    View.init(document.getElementById('canvas'));
-    Input.init(View.renderer.canvas, { down });
+    View.init();
+    Input.init(View.renderer.canvas, { down, keyDown });
     Sheet.init();
-    _data = remote.getCurrentWindow().pixel;
+    const cw = remote.getCurrentWindow();
+    _data = cw.pixel;
     _blocks = View.add(new PIXI.Container());
     _text = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize(true);
-    remote.getCurrentWindow().show();
+    cw.show();
+    cw.on('tools', updateTool);
 }
 
 function resize(resize)
@@ -40,23 +42,24 @@ function draw(resize)
 {
     _blocks.removeChildren();
     _text.removeChildren();
-    let y = 0.5;
+    const yStart = 30;
+    let y = 0;
     for (let tool of TOOLS)
     {
         const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
         block.width = block.height = WIDTH - BORDER;
-        block.position.set(BORDER, y * WIDTH + BORDER);
+        block.position.set(BORDER, y * WIDTH + BORDER + yStart);
         block.tint = (_data.tool === tool) ? SELECT : UNSELECT;
         block.tool = tool;
         const text = _text.addChild(new PIXI.Text(tool[0].toUpperCase(), { fontFamily: 'bitmap', fontSize: WIDTH * 0.75, fill: 0xffffff }));
         text.anchor.set(0.5);
-        text.position.set(BORDER / 2 + WIDTH / 2, y * WIDTH + BORDER + WIDTH / 2);
+        text.position.set(BORDER / 2 + WIDTH / 2, y * WIDTH + BORDER + WIDTH / 2 + yStart);
         y++;
     }
     if (resize === true)
     {
         const window = remote.getCurrentWindow();
-        window.setContentSize(Math.ceil(BORDER + WIDTH), Math.ceil(y * WIDTH + BORDER * 2));
+        window.setContentSize(Math.ceil(BORDER + WIDTH), Math.ceil(y * WIDTH + BORDER * 2 + yStart));
     }
 }
 
@@ -76,11 +79,20 @@ function down(x, y)
     {
         if (block.containsPoint(point))
         {
-            _data.tool = block.tool;
-            updateTool();
+            if (_data.tool !== block.tool)
+            {
+                _data.tool = block.tool;
+                updateTool();
+                remote.getCurrentWindow().windows.zoom.emit('tool');
+            }
             return;
         }
     }
+}
+
+function keyDown(code, special)
+{
+    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
 }
 
 const font = new FontFaceObserver('bitmap');

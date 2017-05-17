@@ -17,6 +17,7 @@ class State
         try
         {
             this.state = jsonfile.readFileSync(this.filename);
+            return true;
         }
         catch (err)
         {
@@ -40,7 +41,7 @@ class State
         this.state.lastFile = value;
     }
 
-    addWindow(window, noResize)
+    addWindow(window, noResize, square)
     {
         if (noResize)
         {
@@ -51,7 +52,19 @@ class State
         {
             if (!noResize && state.width)
             {
-                window.setSize(state.width, state.height);
+                if (square)
+                {
+                    if (state.width > state.height)
+                    {
+                        state.width = state.height;
+                    }
+                    else if (state.height < state.width)
+                    {
+                        state.height = state.width;
+                    }
+                    this.save();
+                }
+                window.setContentSize(state.width, state.height);
             }
             if (state.x)
             {
@@ -85,7 +98,7 @@ class State
             window.on('resize',
                 function (object)
                 {
-                    const size = object.sender.getSize();
+                    const size = object.sender.getContentSize();
                     state.width = size[0];
                     state.height = size[1];
                     that.save();

@@ -16,7 +16,7 @@ let _blocks,
 function init()
 {
     View.init();
-    Input.init(View.renderer.canvas, { down });
+    Input.init(View.renderer.canvas, { down, keyDown });
     Sheet.init();
     _colors = remote.getCurrentWindow().pixel.colors;
     _blocks = View.add(new PIXI.Container());
@@ -39,16 +39,18 @@ function draw(resize)
     const width = (size[0] / WIDTH) - (BORDER / WIDTH);
     _blocks.removeChildren();
 
+    let yStart = 30;
+
     _foreground = _blocks.addChild(new PIXI.Sprite(_colors.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
     _foreground.width = _foreground.height = width * 2 - BORDER;
-    _foreground.position.set(BORDER, BORDER);
+    _foreground.position.set(BORDER, BORDER + yStart);
     if (_colors.foreground !== null)
     {
         _foreground.tint = _colors.foreground;
     }
     _background = _blocks.addChild(new PIXI.Sprite(_colors.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
     _background.width = _background.height = width * 2 - BORDER;
-    _background.position.set(BORDER + width * 2, BORDER);
+    _background.position.set(BORDER + width * 2, BORDER + yStart);
     if (_colors.background !== null)
     {
         _background.tint = _colors.background;
@@ -56,7 +58,7 @@ function draw(resize)
 
     const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
     block.width = block.height = width / 3;
-    block.position.set((_isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2);
+    block.position.set((_isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
     _activeColor = block;
     setActiveColor();
 
@@ -66,7 +68,7 @@ function draw(resize)
         const color = colors[i];
         const block = _blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
         block.width = block.height = width * 1.25 - BORDER;
-        block.position.set(width * 5 + i * (width * 1.25) + BORDER, BORDER + width / 3);
+        block.position.set(width * 5 + i * (width * 1.25) + BORDER, BORDER + width / 3 + yStart);
         if (color !== null)
         {
             block.tint = color;
@@ -82,7 +84,7 @@ function draw(resize)
     {
         const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
         block.width = block.height = width - BORDER;
-        block.position.set(x * width + BORDER, y * width + BORDER);
+        block.position.set(x * width + BORDER, y * width + BORDER + yStart);
         block.tint = color;
         x++;
         if (x === WIDTH)
@@ -94,7 +96,7 @@ function draw(resize)
     if (resize === true)
     {
         const window = remote.getCurrentWindow();
-        window.setContentSize(Math.ceil(WIDTH * width) + BORDER, Math.ceil((y + 1) * width + BORDER));
+        window.setContentSize(Math.ceil(WIDTH * width) + BORDER, Math.ceil((y + 1) * width + BORDER + yStart));
     }
 }
 
@@ -211,6 +213,11 @@ function down(x, y)
             return;
         }
     }
+}
+
+function keyDown(code, special)
+{
+    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
 }
 
 init();

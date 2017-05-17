@@ -23,8 +23,11 @@ class Pixel
 
     set(x, y, value)
     {
-        this.undo.push({ type: 'set', x, y });
-        this.data[x + y * this.width] = value;
+        if (x < this.width && x >= 0 && y < this.height && y >= 0)
+        {
+            this.undo.push({ type: 'set', x, y });
+            this.data[x + y * this.width] = value;
+        }
     }
 
     get(x, y)

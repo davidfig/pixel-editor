@@ -19,7 +19,8 @@ let _data,
     _colors,
     _isDown = -1,
     _shift,
-    _stamp;
+    _stamp,
+    _clipboard;
 
 function init()
 {
@@ -365,6 +366,7 @@ function load(list)
     if (_pixel.load(filename))
     {
         _state.lastFile = filename;
+        _state.save();
         remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
         resize();
     }
@@ -412,6 +414,74 @@ function tool()
     dirty();
 }
 
+function cut()
+{
+    copy(true);
+    dirty();
+}
+
+function copy(clear)
+{
+    if (_cursorSize.x === 1 && _cursorSize.y === 1)
+    {
+        _clipboard = { width: 1, height: 1, data: _pixel.get(_cursor.x, _cursor.y) };
+        if (clear)
+        {
+            _pixel.set(_cursor.x, _cursor.y, null);
+        }
+    }
+    else
+    {
+        let xStart = _cursor.x, yStart = _cursor.y, xTo, yTo;
+        if (_cursorSize.x < 0)
+        {
+            xStart += _cursorSize.x;
+            xTo = xStart + Math.abs(_cursorSize.x);
+        }
+        else
+        {
+            xTo = xStart + _cursorSize.x;
+        }
+        if (_cursorSize.y < 0)
+        {
+            yStart += _cursorSize.y;
+            yTo = yStart + Math.abs(_cursorSize.y) - 1;
+        }
+        else
+        {
+            yTo = yStart + _cursorSize.y;
+        }
+        _clipboard = { width: xTo - xStart, height: yTo - yStart, data: [] };
+        for (let y = yStart; y < yTo; y++)
+        {
+            for (let x = xStart; x < xTo; x++)
+            {
+                _clipboard.data.push(_pixel.get(x, y));
+                if (clear)
+                {
+                    _pixel.set(x, y, null);
+                }
+            }
+        }
+    }
+}
+
+function paste()
+{
+    if (_clipboard)
+    {
+        let i = 0;
+        for (let y = 0; y < _clipboard.height; y++)
+        {
+            for (let x = 0; x < _clipboard.width; x++)
+            {
+                _pixel.set(x + _cursor.x, y + _cursor.y, _clipboard.data[i++]);
+            }
+        }
+        dirty();
+    }
+}
+
 function key(code, special)
 {
     _shift = special.shift;
@@ -424,6 +494,15 @@ function key(code, special)
                 break;
             case 79:
                 remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: _state.lastPath, filters: [ {name: 'JSON', extensions: ['json']}] }, load);
+                break;
+            case 88:
+                cut();
+                break;
+            case 67:
+                copy();
+                break;
+            case 86:
+                paste();
                 break;
         }
     }

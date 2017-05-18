@@ -166,6 +166,7 @@ class Pixel
             this.filename = filename;
             this.current = load.current;
             this.frames = load.frames;
+            this.animations = load.animations || '{}';
             return true;
         }
         catch (e)

@@ -70,7 +70,6 @@ function draw()
 
 function down(x, y)
 {
-debugger;
     y -= document.getElementById('spacer').offsetHeight;
     for (let button of _buttons)
     {

@@ -12,7 +12,6 @@ const State = require('./data/state');
 
 let _windows, _mainWindow, _state, _data;
 
-
 const BACKGROUND = '#aaaaaa';
 const WINDOW_BACKGROUND = '#bbbbbb';
 

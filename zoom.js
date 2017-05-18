@@ -580,7 +580,7 @@ function key(code, special)
                     _pixel.undoOne();
                 }
                 resize();
-                remote.getCurrentWindow().windows.show.emit('dirty');
+                dirty();
                 break;
         }
     }

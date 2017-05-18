@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+const app = remote.app;
 const path = require('path');
 
 const Input = require('./input');
@@ -44,13 +45,16 @@ function init()
     cw.on('tool', tool);
     cw.on('keydown', key);
     cw.on('refresh', refresh);
+    cw.on('cursor', () => { cursor(); View.render(); });
     cw.setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    _state.save();
 }
 
 function refresh()
 {
-    resize();
     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    resize();
+    _state.save();
 }
 
 function resize()
@@ -158,13 +162,14 @@ function circleCursor(color)
 
 function cursor()
 {
+    const color = _colors.foreground === null ? CURSOR_COLOR : _colors.foreground;
     switch (_data.tool)
     {
         case 'paint':
         case 'select':
             _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
             _cursorBlock.clear();
-            _cursorBlock.lineStyle(5, CURSOR_COLOR);
+            _cursorBlock.lineStyle(5, color);
             const x = _cursorSize.x + _cursor.x >= _pixel.width ? _pixel.width - _cursor.x : _cursorSize.x;
             const y = _cursorSize.y + _cursor.y >= _pixel.height ? _pixel.height - _cursor.y : _cursorSize.y;
             _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
@@ -315,7 +320,7 @@ function downMouse(x, y)
     switch (_data.tool)
     {
         case 'paint':
-            const current = _pixel.get(_cursor.x, _cursor.y);
+            const current = _pixel.get(xx, yy);
             const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
             _pixel.set(xx, yy, color);
             dirty();

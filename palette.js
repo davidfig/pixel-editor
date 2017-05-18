@@ -10,8 +10,7 @@ let _blocks,
     _foreground,
     _background,
     _colors,
-    _activeColor,
-    _isForeground = true;
+    _activeColor;
 
 function init()
 {
@@ -24,6 +23,7 @@ function init()
     resize(true);
     remote.getCurrentWindow().show();
     remote.getCurrentWindow().on('dropper', dropper);
+    remote.getCurrentWindow().on('refresh', () => resize());
 }
 
 function resize(resize)
@@ -33,7 +33,7 @@ function resize(resize)
     View.render();
 }
 
-function draw(resize)
+function draw()
 {
     const size = remote.getCurrentWindow().getContentSize();
     const width = (size[0] / WIDTH) - (BORDER / WIDTH);
@@ -58,7 +58,7 @@ function draw(resize)
 
     const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
     block.width = block.height = width / 3;
-    block.position.set((_isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
+    block.position.set((_colors.isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
     _activeColor = block;
     setActiveColor();
 
@@ -93,17 +93,12 @@ function draw(resize)
             x = 0;
         }
     }
-    if (resize === true)
-    {
-        const window = remote.getCurrentWindow();
-        window.setContentSize(Math.ceil(WIDTH * width) + BORDER, Math.ceil((y + 1) * width + BORDER + yStart));
-    }
 }
 
 function setActiveColor()
 {
     let color;
-    if (_isForeground)
+    if (_colors.isForeground)
     {
         _activeColor.x = _foreground.width / 2 - _activeColor.width / 2 + BORDER;
         color = _foreground.tint;
@@ -125,7 +120,7 @@ function setActiveColor()
 
 function dropper(color)
 {
-    if (_isForeground)
+    if (_colors.isForeground)
     {
         _colors.foreground = color;
         if (_colors.foreground === null)
@@ -162,14 +157,14 @@ function down(x, y)
     const point = new PIXI.Point(x, y);
     if (_foreground.containsPoint(point))
     {
-        _isForeground = true;
+        _colors.isForeground = true;
         setActiveColor();
         View.render();
         return;
     }
     if (_background.containsPoint(point))
     {
-        _isForeground = false;
+        _colors.isForeground = false;
         setActiveColor();
         View.render();
         return;
@@ -178,7 +173,7 @@ function down(x, y)
     {
         if (block.containsPoint(point))
         {
-            if (_isForeground)
+            if (_colors.isForeground)
             {
                 if (block.isTransparent)
                 {
@@ -192,6 +187,7 @@ function down(x, y)
                     _foreground.texture = PIXI.Texture.WHITE;
                     _colors.foreground = block.tint;
                 }
+                remote.getCurrentWindow().windows.zoom.emit('cursor');
             }
             else
             {

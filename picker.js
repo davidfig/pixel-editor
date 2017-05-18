@@ -8,7 +8,7 @@ const Input = require('./input');
 
 const BORDER = 5;
 const WIDTH = 4;
-let _g, _color = 0x12ab89, _hsl, _yStart, _total, _width, _bottom, _isDown;
+let _g, _hsl, _yStart, _total, _width, _bottom, _isDown, _colors;
 
 function init()
 {
@@ -17,6 +17,7 @@ function init()
     Sheet.init();
     _g = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
+    _colors = remote.getCurrentWindow().pixel.colors;
     resize(true);
     remote.getCurrentWindow().show();
 }
@@ -40,10 +41,10 @@ function changeColor(h, s, l)
 
 function draw()
 {
-    function box(x, percent)
+    function box(x, percent, reverse)
     {
         const actual = percent * (_total - 1);
-        _g.beginFill(0)
+        _g.beginFill(reverse ? 0xffffff : 0)
             .drawRect(x, actual + _yStart - BORDER, _width, BORDER)
             .drawRect(x + _width - BORDER, actual + _yStart - BORDER, BORDER, BORDER * 2)
             .drawRect(x, actual + _yStart + 1, _width, BORDER)
@@ -51,15 +52,15 @@ function draw()
             .endFill();
     }
 
-    _g.clear();
-
-    _g.beginFill(_color)
+    const color = _colors.current;
+    _g.clear()
+        .beginFill(color)
         .drawRect(BORDER, _yStart, _width, _width)
         .endFill();
 
     let y = _yStart + _width * 2 + BORDER;
 
-    let test = _color.toString(16);
+    let test = color.toString(16);
     while (test.length < 6)
     {
         test = '0' + test;
@@ -94,9 +95,9 @@ function draw()
             .drawRect(BORDER * 4 + _width * 3, y, _width, 1)
             .endFill();
     }
-    box(BORDER * 2 + _width, _hsl.h / 360);
-    box(BORDER * 3 + _width * 2, _hsl.s);
-    box(BORDER * 4 + _width * 3, _hsl.l);
+    box(BORDER * 2 + _width, _hsl.h / 360, _hsl.l < 0.5);
+    box(BORDER * 3 + _width * 2, _hsl.s, _hsl.l < 0.5);
+    box(BORDER * 4 + _width * 3, _hsl.l, _hsl.l < 0.5);
     View.render();
 }
 
@@ -135,8 +136,9 @@ function down(x, y)
     {
         _hsl.l = (y - _yStart) / _total;
     }
-    _color = changeColor(_hsl.h, _hsl.s, _hsl.l);
+    _colors.current = changeColor(_hsl.h, _hsl.s, _hsl.l);
     draw();
+    remote.getCurrentWindow().windows.palette.emit('refresh');
     _isDown = true;
 }
 

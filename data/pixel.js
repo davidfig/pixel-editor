@@ -88,6 +88,7 @@ class Pixel
         try
         {
             const load = jsonfile.readFileSync(filename);
+            this.filename = filename;
             this._width = load._width;
             this._height = load._height;
             this.data = load.data;
@@ -102,7 +103,7 @@ class Pixel
 
     save(filename)
     {
-        filename = filename || 'c:\\Users\\dsfig\\Desktop\\test.json';
+        filename = filename || this.filename;
         jsonfile.writeFileSync(filename, this);
     }
 }

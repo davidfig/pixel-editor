@@ -1,7 +1,7 @@
 const Color = require('yy-color');
 
 let _colors = [];
-let _foreground, _background;
+let _foreground, _background, _isForeground = true;
 
 const GRAYS = 10;
 
@@ -79,5 +79,28 @@ module.exports = {
     get colors()
     {
         return _colors;
+    },
+    get isForeground()
+    {
+        return _isForeground;
+    },
+    set isForeground(value)
+    {
+        _isForeground = value;
+    },
+    get current()
+    {
+        return _isForeground ? _foreground : _background;
+    },
+    set current(value)
+    {
+        if (_isForeground)
+        {
+            _foreground = value;
+        }
+        else
+        {
+            _background = value;
+        }
     }
 };

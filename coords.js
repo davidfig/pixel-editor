@@ -37,6 +37,10 @@ function widthChange(value)
     {
         document.getElementById('width').innerHTML = original;
     }
+    else
+    {
+        remote.getCurrentWindow().pixel.pixel.save();
+    }
     remote.getCurrentWindow().windows.zoom.emit('refresh');
 }
 
@@ -48,6 +52,10 @@ function heightChange(value)
     {
         document.getElementById('height').innerHTML = original;
     }
+    else
+    {
+        remote.getCurrentWindow().pixel.pixel.save();
+    }
     remote.getCurrentWindow().windows.zoom.emit('refresh');
 }
 
@@ -55,11 +63,6 @@ function move(x, y)
 {
     document.getElementById('x').innerHTML = x;
     document.getElementById('y').innerHTML = y;
-}
-
-function sizeEdit(width, height)
-{
-
 }
 
 function size(width, height)

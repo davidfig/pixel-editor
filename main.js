@@ -1,5 +1,6 @@
 const electron = require('electron');
-
+const app = electron.app;
+const console = require('console');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
@@ -11,14 +12,12 @@ const State = require('./data/state');
 
 let _windows, _mainWindow, _state, _data;
 
-const app = electron.app;
 
 const BACKGROUND = '#aaaaaa';
 const WINDOW_BACKGROUND = '#bbbbbb';
 
 function init()
 {
-
     _state = new State();
     _data = {};
     if (_state.lastFile)
@@ -66,7 +65,7 @@ function create(name, options)
 function createWindow()
 {
     _windows = {};
-    _mainWindow = new BrowserWindow({ show: false, backgroundColor: BACKGROUND });
+    _mainWindow = new BrowserWindow({ backgroundColor: BACKGROUND });
     _mainWindow.stateID = 'main';
     _mainWindow.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
     _mainWindow.setMenu(null);
@@ -88,6 +87,8 @@ function accelerators()
 {
     electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
 }
+
+app.console = new console.Console(process.stdout, process.stderr);
 
 app.on('ready', init);
 

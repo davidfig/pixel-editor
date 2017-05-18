@@ -136,7 +136,7 @@ function dropper(color)
     }
     else
     {
-        _colors.background = colors;
+        _colors.background = color;
         if (_colors.background === null)
         {
             _background.tint = 0xffffff;
@@ -155,18 +155,20 @@ function dropper(color)
 function down(x, y)
 {
     const point = new PIXI.Point(x, y);
-    if (_foreground.containsPoint(point))
+    if (_foreground.containsPoint(point) && !_colors.isForeground)
     {
         _colors.isForeground = true;
         setActiveColor();
         View.render();
+        remote.getCurrentWindow().windows.picker.emit('refresh');
         return;
     }
-    if (_background.containsPoint(point))
+    if (_background.containsPoint(point) && _colors.isForeground)
     {
         _colors.isForeground = false;
         setActiveColor();
         View.render();
+        remote.getCurrentWindow().windows.picker.emit('refresh');
         return;
     }
     for (let block of _blocks.children)
@@ -204,6 +206,8 @@ function down(x, y)
                     _colors.background = block.tint;
                 }
             }
+            _colors.current = block.tint === null ? 0xffffff : block.tint;
+            remote.getCurrentWindow().windows.picker.emit('refresh');
             setActiveColor();
             View.render();
             return;

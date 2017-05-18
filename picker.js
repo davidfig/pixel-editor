@@ -1,5 +1,4 @@
 const remote = require('electron').remote;
-const Color = require('yy-color');
 const TinyColor = require('tinycolor2');
 
 const Sheet = require('./sheet');
@@ -20,6 +19,7 @@ function init()
     _colors = remote.getCurrentWindow().pixel.colors;
     resize(true);
     remote.getCurrentWindow().show();
+    remote.getCurrentWindow().on('refresh', () => { _hsl = null; draw(); });
 }
 
 function resize(resize)
@@ -139,6 +139,7 @@ function down(x, y)
     _colors.current = changeColor(_hsl.h, _hsl.s, _hsl.l);
     draw();
     remote.getCurrentWindow().windows.palette.emit('refresh');
+    remote.getCurrentWindow().windows.zoom.emit('cursor');
     _isDown = true;
 }
 

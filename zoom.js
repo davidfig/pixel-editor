@@ -50,11 +50,17 @@ function init()
     cw.on('cursor', () => { cursor(); View.render(); });
     cw.setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
     _state.save();
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.name + ')');
 }
 
 function refresh()
 {
-    remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.name + ')');
+    const size = remote.getCurrentWindow().getContentSize();
+    if (Math.round(_pixel.width * _zoom) !== size[0] || Math.round(_pixel.height * _zoom) !== size[1])
+    {
+        remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    }
     resize();
     _state.save();
 }
@@ -64,15 +70,18 @@ function resize()
     View.resize();
     const size = remote.getCurrentWindow().getContentSize();
     let width = size[0], height = size[1];
-    let w = width / _pixel.width;
-    let h = height / _pixel.height;
-    if (_pixel.width * h < width)
+    if (Math.round(_pixel.width * _zoom) !== size[0] || Math.round(_pixel.height * _zoom) !== size[1])
     {
-        _zoom = h;
-    }
-    else
-    {
-        _zoom = w;
+        let w = width / _pixel.width;
+        let h = height / _pixel.height;
+        if (_pixel.width * h < width)
+        {
+            _zoom = h;
+        }
+        else
+        {
+            _zoom = w;
+        }
     }
     _cursorSize.x = (_cursorSize.x >= _pixel.width) ? _pixel.width - 1 : _cursorSize.x;
     _cursorSize.y = (_cursorSize.x >= _pixel.height) ? _pixel.height - 1 : _cursorSize.y;
@@ -666,6 +675,12 @@ function key(code, special)
                 resize();
                 dirty();
                 break;
+            case 68:
+                _pixel.duplicate(_pixel.current);
+                draw();
+                dirty();
+                break;
+
         }
     }
     else

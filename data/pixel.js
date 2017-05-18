@@ -19,6 +19,15 @@ class Pixel
         }
     }
 
+    duplicate(index)
+    {
+        if (index < this.frames.length)
+        {
+            const frame = this.frames[index];
+            this.frames.push({ name: (this.frames.length + 1).toString(), width: frame.width, height: frame.height, data: frame.data, undo: frame.undo, redo: frame.redo });
+        }
+    }
+
     set(x, y, value, noUndo)
     {
         if (x < this.width && x >= 0 && y < this.height && y >= 0)
@@ -34,6 +43,11 @@ class Pixel
     get(x, y)
     {
         return this.data[x + y * this.width];
+    }
+
+    get name()
+    {
+        return this.frames[this.current].name;
     }
 
     get data()

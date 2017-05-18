@@ -1,5 +1,4 @@
 const remote = require('electron').remote;
-const app = remote.app;
 const path = require('path');
 
 const Input = require('./input');
@@ -7,6 +6,8 @@ const View = require('./view');
 const Sheet = require('./sheet');
 
 const CURSOR_COLOR = 0xff0000;
+const SHAPE_HOVER_ALPHA = 1;
+const BORDER = 1;
 
 let _data,
     _state,
@@ -23,7 +24,8 @@ let _data,
     _stamp,
     _clipboard,
     _dragging,
-    _selecting;
+    _selecting,
+    _line;
 
 function init()
 {
@@ -103,7 +105,7 @@ function draw()
 function frame()
 {
     _grid.clear();
-    _grid.lineStyle(1, 0x888888);
+    _grid.lineStyle(BORDER, 0x888888);
     for (let y = 0; y <= _pixel.height; y++)
     {
         _grid.moveTo(0, y * _zoom);
@@ -155,25 +157,80 @@ function circleCursor(color)
     for (let block in blocks)
     {
         const pos = block.split(',');
-        _cursorBlock.beginFill(color, 0.85).drawRect(parseInt(pos[0]) * _zoom, parseInt(pos[1]) * _zoom, _zoom, _zoom).endFill();
+        _cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * _zoom, parseInt(pos[1]) * _zoom, _zoom, _zoom).endFill();
         _stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) });
     }
 }
 
-function cursor()
+function lineCursor()
 {
     const color = _colors.foreground === null ? CURSOR_COLOR : _colors.foreground;
+    _cursorBlock.position.set(0);
+    if (_line)
+    {
+        _stamp = [];
+        let x0 = _cursor.x;
+        let y0 = _cursor.y;
+        let x1 = _line.x;
+        let y1 = _line.y;
+
+        const dx = Math.abs(x1 - x0);
+        const dy = Math.abs(y1 - y0);
+        const sx = x0 < x1 ? 1 : -1;
+        const sy = y0 < y1 ? 1 : -1;
+        let err = dx - dy;
+        let e2;
+        while (true)
+        {
+            _cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA)
+                .drawRect(x0 * _zoom - BORDER, y0 * _zoom - BORDER, _zoom + BORDER * 2, _zoom + BORDER * 2)
+                .endFill();
+            _stamp.push({ x: x0, y: y0 });
+            if (x0 == x1 && y0 == y1)
+            {
+                break;
+            }
+            e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy;
+                x0 += sx;
+            }
+            if (e2 < dx)
+            {
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
+    else
+    {
+        _cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA)
+            .drawRect(_cursor.x * _zoom - BORDER, _cursor.y * _zoom - BORDER, _zoom + BORDER * 2, _zoom + BORDER * 2)
+            .endFill();
+        _stamp = [{ x: _cursor.x, y: _cursor.y }];
+    }
+}
+
+function normalCursor()
+{
+    const color = _colors.foreground === null ? CURSOR_COLOR : _colors.foreground;
+    _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
+    _cursorBlock.lineStyle(5, color);
+    const x = _cursorSize.x + _cursor.x >= _pixel.width ? _pixel.width - _cursor.x : _cursorSize.x;
+    const y = _cursorSize.y + _cursor.y >= _pixel.height ? _pixel.height - _cursor.y : _cursorSize.y;
+    _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
+    remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+}
+
+function cursor()
+{
     switch (_data.tool)
     {
         case 'paint':
         case 'select':
-            _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
             _cursorBlock.clear();
-            _cursorBlock.lineStyle(5, color);
-            const x = _cursorSize.x + _cursor.x >= _pixel.width ? _pixel.width - _cursor.x : _cursorSize.x;
-            const y = _cursorSize.y + _cursor.y >= _pixel.height ? _pixel.height - _cursor.y : _cursorSize.y;
-            _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
-            remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+            normalCursor();
             break;
 
         case 'circle':
@@ -181,6 +238,10 @@ function cursor()
             circleCursor(_colors.foreground);
             remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
             break;
+
+        case 'line':
+            _cursorBlock.clear();
+            lineCursor(_colors.foreground);
     }
 }
 
@@ -188,25 +249,40 @@ function move(x, y)
 {
     if (_shift)
     {
-        _cursorSize.x += x;
-        _cursorSize.x = (_cursorSize.x > _pixel.width) ? _pixel.width : _cursorSize.x;
-        _cursorSize.x = (_cursorSize.x < -_pixel.width) ? -_pixel.width : _cursorSize.x;
-        if (_data.tool === 'circle' && _cursorSize.x < 1)
+        if (_data.tool === 'line')
         {
-            _cursorSize.x = 1;
+            if (!_line)
+            {
+                _line = { x: _cursor.x, y: _cursor.y };
+            }
+            _line.x += x;
+            _line.y += y;
+            _line.x = _line.x < 0 ? _pixel.width - 1 : _line.x;
+            _line.y = _line.y < 0 ? _pixel.height - 1 : _line.y;
+            _line.x = _line.x === _pixel.width ? 0 : _line.x;
+            _line.y = _line.y === _pixel.height ? 0 : _line.y;
         }
-        if (_cursorSize.x === 0)
+        else
         {
-            _cursorSize.x = (x < 0) ? -1 : 1;
+            _cursorSize.x += x;
+            _cursorSize.x = (_cursorSize.x > _pixel.width) ? _pixel.width : _cursorSize.x;
+            _cursorSize.x = (_cursorSize.x < -_pixel.width) ? -_pixel.width : _cursorSize.x;
+            if (_data.tool === 'circle' && _cursorSize.x < 1)
+            {
+                _cursorSize.x = 1;
+            }
+            if (_cursorSize.x === 0)
+            {
+                _cursorSize.x = (x < 0) ? -1 : 1;
+            }
+            _cursorSize.y += y;
+            _cursorSize.y = (_cursorSize.y > _pixel.height) ? _pixel.height : _cursorSize.y;
+            _cursorSize.y = (_cursorSize.y < -_pixel.height) ? -_pixel.height : _cursorSize.y;
+            if (_cursorSize.y === 0)
+            {
+                _cursorSize.y = (y < 0) ? -1 : 1;
+            }
         }
-        _cursorSize.y += y;
-        _cursorSize.y = (_cursorSize.y > _pixel.height) ? _pixel.height : _cursorSize.y;
-        _cursorSize.y = (_cursorSize.y < -_pixel.height) ? -_pixel.height : _cursorSize.y;
-        if (_cursorSize.y === 0)
-        {
-            _cursorSize.y = (y < 0) ? -1 : 1;
-        }
-        cursor();
     }
     else
     {
@@ -280,6 +356,7 @@ function space()
             break;
 
         case 'circle':
+        case 'line':
             const color = _colors.foreground;
             _pixel.undoSave();
             for (let block of _stamp)
@@ -291,6 +368,9 @@ function space()
             }
             dirty();
             View.render();
+            break;
+
+        case 'line':
             break;
     }
 }
@@ -475,6 +555,10 @@ function tool()
             _dragging = false;
             _selecting = false;
             break;
+
+        case 'line':
+            _line = null;
+            break;
     }
     cursor();
     dirty();
@@ -627,6 +711,11 @@ function key(code, special)
                 break;
             case 67:
                 _data.tool = 'circle';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
+                break;
+            case 76:
+                _data.tool = 'line';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;

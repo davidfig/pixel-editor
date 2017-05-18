@@ -14,7 +14,7 @@ let _blocks,
     _text,
     _data;
 
-const TOOLS = ['paint', 'select', 'circle'];
+const TOOLS = ['paint', 'select', 'circle', 'line'];
 
 function init()
 {

@@ -41,7 +41,7 @@ class State
         this.state.lastFile = value;
     }
 
-    addWindow(window, noResize, square)
+    addWindow(window, noResize)
     {
         if (noResize)
         {
@@ -52,18 +52,6 @@ class State
         {
             if (!noResize && state.width)
             {
-                if (square)
-                {
-                    if (state.width > state.height)
-                    {
-                        state.width = state.height;
-                    }
-                    else if (state.height < state.width)
-                    {
-                        state.height = state.width;
-                    }
-                    this.save();
-                }
                 window.setContentSize(state.width, state.height);
             }
             if (state.x)

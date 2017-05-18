@@ -43,7 +43,14 @@ function init()
     cw.focus();
     cw.on('tool', tool);
     cw.on('keydown', key);
-    cw.on('refresh', resize);
+    cw.on('refresh', refresh);
+    cw.setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+}
+
+function refresh()
+{
+    resize();
+    remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
 }
 
 function resize()

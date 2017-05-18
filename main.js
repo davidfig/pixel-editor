@@ -49,7 +49,7 @@ function create(name, options)
     options = options || {};
     const window = new BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: false, backgroundColor: WINDOW_BACKGROUND, parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
     window.stateID = name;
-    _state.addWindow(window, options.noResize, options.square);
+    _state.addWindow(window, options.noResize);
     window.pixel = _data;
     window.state = _state;
     window.loadURL(url.format({ pathname: path.join(__dirname, name + '.html'), protocol: 'file:', slashes: true }));
@@ -79,7 +79,7 @@ function createWindow()
     create('coords', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
-    create('zoom', { square: true, frame: true, dev: true });
+    create('zoom', { frame: true });
 
     accelerators();
 }

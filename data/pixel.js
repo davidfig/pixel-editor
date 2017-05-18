@@ -17,8 +17,9 @@ class Pixel
             {
                 this.data[i] = null;
             }
+            this.undo = [];
+            this.redo = [];
         }
-        this.undo = [];
     }
 
     set(x, y, value)
@@ -90,16 +91,30 @@ class Pixel
             this.undo.shift();
         }
         this.undo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
+        this.redo = [];
     }
 
     undoOne()
     {
         if (this.undo.length)
         {
+            this.redo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
             const undo = this.undo.pop();
             this._width = undo.width;
             this._height = undo.height;
             this.data = undo.data;
+        }
+    }
+
+    redoOne()
+    {
+        if (this.redo.length)
+        {
+            const redo = this.redo.pop();
+            this._width = redo.width;
+            this._height = redo.height;
+            this.data = redo.data;
+            this.undo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
         }
     }
 
@@ -112,7 +127,8 @@ class Pixel
             this._width = load._width;
             this._height = load._height;
             this.data = load.data;
-            this.undo = load.undo;
+            this.undo = load.undo || [];
+            this.redo = load.redo || [];
             return true;
         }
         catch (e)

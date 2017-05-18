@@ -546,12 +546,6 @@ function paste()
     }
 }
 
-function undo()
-{
-    _pixel.undoOne();
-    resize();
-}
-
 function key(code, special)
 {
     _shift = special.shift;
@@ -575,8 +569,15 @@ function key(code, special)
                 paste();
                 break;
             case 90:
-                undo();
-
+                if (special.shift)
+                {
+                    _pixel.redoOne();
+                }
+                else
+                {
+                    _pixel.undoOne();
+                }
+                resize();
                 break;
         }
     }

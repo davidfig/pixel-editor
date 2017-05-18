@@ -79,7 +79,7 @@ function createWindow()
     create('tools', { noResize: true });
     create('picker');
     create('animation');
-    create('zoom', { frame: true, dev: true });
+    create('zoom', { frame: true });
 
     accelerators();
 }

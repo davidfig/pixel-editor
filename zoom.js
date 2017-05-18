@@ -246,6 +246,7 @@ function space()
             }
             else
             {
+                _pixel.undoSave();
                 const color = _colors.foreground;
                 let xStart = _cursor.x, yStart = _cursor.y, xTo, yTo;
                 if (_cursorSize.x < 0)
@@ -270,7 +271,7 @@ function space()
                 {
                     for (let x = xStart; x < xTo; x++)
                     {
-                        _pixel.set(x, y, color);
+                        _pixel.set(x, y, color, true);
                     }
                 }
                 dirty();
@@ -280,11 +281,12 @@ function space()
 
         case 'circle':
             const color = _colors.foreground;
+            _pixel.undoSave();
             for (let block of _stamp)
             {
                 if (block.x >= 0 && block.x < _pixel.width && block.y >= 0 && block.y < _pixel.height)
                 {
-                    _pixel.set(block.x, block.y, color);
+                    _pixel.set(block.x, block.y, color, true);
                 }
             }
             dirty();
@@ -578,6 +580,7 @@ function key(code, special)
                     _pixel.undoOne();
                 }
                 resize();
+                remote.getCurrentWindow().windows.show.emit('dirty');
                 break;
         }
     }

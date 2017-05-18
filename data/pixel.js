@@ -22,11 +22,14 @@ class Pixel
         }
     }
 
-    set(x, y, value)
+    set(x, y, value, noUndo)
     {
         if (x < this.width && x >= 0 && y < this.height && y >= 0)
         {
-            this.undoSave();
+            if (!noUndo)
+            {
+                this.undoSave();
+            }
             this.data[x + y * this.width] = value;
         }
     }

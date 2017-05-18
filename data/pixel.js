@@ -16,6 +16,7 @@ class Pixel
             {
                 this.data[i] = null;
             }
+            this.pixels = 5;
         }
     }
 
@@ -167,6 +168,7 @@ class Pixel
             this.current = load.current;
             this.frames = load.frames;
             this.animations = load.animations || '{}';
+            this.pixels = load.pixels;
             return true;
         }
         catch (e)

@@ -52,7 +52,8 @@ function resize()
         for (let x = 0; x < _width; x++)
         {
             const block = blocks[i];
-            block.width = block.height = remote.getCurrentWindow().state.zoom;
+            block.width = block.height = _pixel.pixels;
+            block.tint = require('yy-random').color();
         }
     }
     View.render();

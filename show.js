@@ -6,7 +6,6 @@ const View = require('./view');
 const BUFFER = 10;
 
 let _pixel,
-    _zoom = 5,
     _blocks,
     _buttons;
 
@@ -41,8 +40,8 @@ function draw()
         if (i === _pixel.current)
         {
             const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-            block.width = _zoom * frame.width + BUFFER;
-            block.height = _zoom * frame.height + BUFFER;
+            block.width = _pixel.pixels * frame.width + BUFFER;
+            block.height = _pixel.pixels * frame.height + BUFFER;
             block.position.set(xStart - BUFFER / 2, yStart - BUFFER / 2);
             block.tint = 0xff0000;
         }
@@ -51,16 +50,16 @@ function draw()
             for (let x = 0; x < frame.height; x++)
             {
                 const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-                block.width = block.height = _zoom;
-                block.position.set(xStart + x * _zoom, yStart + y * _zoom);
+                block.width = block.height = _pixel.pixels;
+                block.position.set(xStart + x * _pixel.pixels, yStart + y * _pixel.pixels);
                 const color = frame.data[x + y * frame.width];
                 block.tint = color === null ? TRANSPARENT : color;
             }
         }
-        _buttons.push({ x1: xStart, y1: yStart + BUFFER, x2: xStart + _zoom * frame.width, y2: yStart + BUFFER + _zoom * frame.height, current: i });
-        xStart += BUFFER + _zoom * frame.width;
-        total.width += BUFFER + _zoom * frame.width;
-        total.height = _zoom * frame.height > total.height ? _zoom * frame.height : total.height;
+        _buttons.push({ x1: xStart, y1: yStart + BUFFER, x2: xStart + _pixel.pixels * frame.width, y2: yStart + BUFFER + _pixel.pixels * frame.height, current: i });
+        xStart += BUFFER + _pixel.pixels * frame.width;
+        total.width += BUFFER + _pixel.pixels * frame.width;
+        total.height = _pixel.pixels * frame.height > total.height ? _pixel.pixels * frame.height : total.height;
         i++;
     }
     const window = remote.getCurrentWindow();

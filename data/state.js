@@ -22,7 +22,7 @@ class State
         catch (err)
         {
             console.error(err);
-            this.state = {};
+            this.state = {zoom: 5};
         }
     }
 

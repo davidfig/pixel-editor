@@ -10,15 +10,12 @@ class Pixel
         }
         else
         {
-            this._width = arguments[0];
-            this._height = arguments[1];
-            this.data = [];
-            for (let i = 0; i < this._width * this._height; i++)
+            this.current = 0;
+            this.frames = [{ name: '1', width: arguments[0], height: arguments[1], data: [], undo: [], redo: [] }];
+            for (let i = 0; i < this.width * this.height; i++)
             {
                 this.data[i] = null;
             }
-            this.undo = [];
-            this.redo = [];
         }
     }
 
@@ -39,52 +36,78 @@ class Pixel
         return this.data[x + y * this.width];
     }
 
-    get width()
+    get data()
     {
-        return this._width;
+        return this.frames[this.current].data;
+    }
+    set data(value)
+    {
+        this.frames[this.current].data = value;
     }
 
+    get width()
+    {
+        return this.frames[this.current].width;
+    }
     set width(value)
     {
         value = parseInt(value);
-        if (this._width !== value && !isNaN(value) && value > 0)
+        if (this.width !== value && !isNaN(value) && value > 0)
         {
             this.undoSave();
             const data = [];
-            for (let y = 0; y < this._height; y++)
+            for (let y = 0; y < this.height; y++)
             {
                 for (let x = 0; x < value; x++)
                 {
-                    data[x + y * value] = (x < this._width) ? this.get(x, y) : null;
+                    data[x + y * value] = (x < this.width) ? this.get(x, y) : null;
                 }
             }
             this.data = data;
-            this._width = value;
+            this.frames[this.current].width = value;
         }
     }
 
     get height()
     {
-        return this._height;
+        return this.frames[this.current].height;
     }
 
     set height(value)
     {
         value = parseInt(value);
-        if (this._height !== value && !isNaN(value) && value > 0)
+        if (this.height !== value && !isNaN(value) && value > 0)
         {
             this.undoSave();
             const data = [];
             for (let y = 0; y < value; y++)
             {
-                for (let x = 0; x < this._width; x++)
+                for (let x = 0; x < this.width; x++)
                 {
-                    data[x + y * this._width] = (y < this._height) ? this.get(x, y) : null;
+                    data[x + y * this.width] = (y < this.height) ? this.get(x, y) : null;
                 }
             }
             this.data = data;
-            this._height = value;
+            this.frames[this.current].height = value;
         }
+    }
+
+    get undo()
+    {
+        return this.frames[this.current].undo;
+    }
+    set undo(value)
+    {
+        this.frames[this.current].undo = value;
+    }
+
+    get redo()
+    {
+        return this.frames[this.current].redo;
+    }
+    set redo(value)
+    {
+        this.frames[this.current].redo = value;
     }
 
     undoSave()
@@ -93,7 +116,7 @@ class Pixel
         {
             this.undo.shift();
         }
-        this.undo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
+        this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) });
         this.redo = [];
     }
 
@@ -101,11 +124,11 @@ class Pixel
     {
         if (this.undo.length)
         {
-            this.redo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
+            this.redo.push({ width: this.width, height: this.height, data: this.data.slice(0) });
             const undo = this.undo.pop();
-            this._width = undo.width;
-            this._height = undo.height;
-            this.data = undo.data;
+            this.frames[this.current].width = undo.width;
+            this.frames[this.current].height = undo.height;
+            this.frames[this.current].data = undo.data;
         }
     }
 
@@ -113,11 +136,11 @@ class Pixel
     {
         if (this.redo.length)
         {
-            const redo = this.redo.pop();
-            this._width = redo.width;
-            this._height = redo.height;
-            this.data = redo.data;
-            this.undo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
+            const redo = redo.pop();
+            this.frames[this.current].width = redo.width;
+            this.frames[this.current].height = redo.height;
+            this.frames[this.current].data = redo.data;
+            this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) });
         }
     }
 
@@ -127,11 +150,8 @@ class Pixel
         {
             const load = jsonfile.readFileSync(filename);
             this.filename = filename;
-            this._width = load._width;
-            this._height = load._height;
-            this.data = load.data;
-            this.undo = load.undo || [];
-            this.redo = load.redo || [];
+            this.current = load.current;
+            this.frames = load.frames;
             return true;
         }
         catch (e)

@@ -25,7 +25,7 @@ class Pixel
     {
         if (x < this.width && x >= 0 && y < this.height && y >= 0)
         {
-            this.undo.push({ type: 'set', x, y });
+            this.undoSave();
             this.data[x + y * this.width] = value;
         }
     }
@@ -45,7 +45,7 @@ class Pixel
         value = parseInt(value);
         if (this._width !== value && !isNaN(value) && value > 0)
         {
-            this.undo.push({ type: 'width', value, data: this.data.slice(0) });
+            this.undoSave();
             const data = [];
             for (let y = 0; y < this._height; y++)
             {
@@ -69,7 +69,7 @@ class Pixel
         value = parseInt(value);
         if (this._height !== value && !isNaN(value) && value > 0)
         {
-            this.undo.push({ type: 'height', value, data: this.data.slice(0) });
+            this.undoSave();
             const data = [];
             for (let y = 0; y < value; y++)
             {
@@ -80,6 +80,26 @@ class Pixel
             }
             this.data = data;
             this._height = value;
+        }
+    }
+
+    undoSave()
+    {
+        while (this.undo.length > 10000)
+        {
+            this.undo.shift();
+        }
+        this.undo.push({ width: this._width, height: this._height, data: this.data.slice(0) });
+    }
+
+    undoOne()
+    {
+        if (this.undo.length)
+        {
+            const undo = this.undo.pop();
+            this._width = undo.width;
+            this._height = undo.height;
+            this.data = undo.data;
         }
     }
 

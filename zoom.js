@@ -546,6 +546,12 @@ function paste()
     }
 }
 
+function undo()
+{
+    _pixel.undoOne();
+    resize();
+}
+
 function key(code, special)
 {
     _shift = special.shift;
@@ -567,6 +573,10 @@ function key(code, special)
                 break;
             case 86:
                 paste();
+                break;
+            case 90:
+                undo();
+
                 break;
         }
     }

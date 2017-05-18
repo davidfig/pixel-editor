@@ -18,6 +18,7 @@ const WINDOW_BACKGROUND = '#bbbbbb';
 
 function init()
 {
+
     _state = new State();
     _data = {};
     if (_state.lastFile)
@@ -46,7 +47,7 @@ function init()
 function create(name, options)
 {
     options = options || {};
-    const window = new BrowserWindow({ frame: options.frame ? true : false, show: false, backgroundColor: WINDOW_BACKGROUND, parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
+    const window = new BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: false, backgroundColor: WINDOW_BACKGROUND, parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
     window.stateID = name;
     _state.addWindow(window, options.noResize, options.square);
     window.pixel = _data;
@@ -78,7 +79,7 @@ function createWindow()
     create('coords', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
-    create('zoom', { square: true, frame: true });
+    create('zoom', { square: true, frame: true, dev: true });
 
     accelerators();
 }

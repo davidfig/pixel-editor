@@ -18,7 +18,7 @@ const View = {
         }
         else
         {
-            View.renderer = new Renderer({canvas: options.canvas});
+            View.renderer = new Renderer({ canvas: options.canvas});
         }
         View.resize();
     },

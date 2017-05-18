@@ -42,7 +42,8 @@ class Pixel
 
     set width(value)
     {
-        if (this._width !== value)
+        value = parseInt(value);
+        if (this._width !== value && !isNaN(value) && value > 0)
         {
             this.undo.push({ type: 'width', value, data: this.data.slice(0) });
             const data = [];
@@ -65,7 +66,8 @@ class Pixel
 
     set height(value)
     {
-        if (this._height !== value)
+        value = parseInt(value);
+        if (this._height !== value && !isNaN(value) && value > 0)
         {
             this.undo.push({ type: 'height', value, data: this.data.slice(0) });
             const data = [];

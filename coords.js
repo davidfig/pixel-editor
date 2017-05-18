@@ -1,8 +1,10 @@
 const remote = require('electron').remote;
 const FontFaceObserver = require('fontfaceobserver');
-const Input = require('./input');
 
-let _pixel;
+const Input = require('./input');
+const EasyEdit = require('./easyedit');
+
+let _pixel, _editing, _original;
 
 function init()
 {
@@ -12,12 +14,52 @@ function init()
     remote.getCurrentWindow().setSize(document.body.offsetWidth, document.body.offsetHeight);
     remote.getCurrentWindow().show();
     remote.getCurrentWindow().on('cursor', move);
+    new EasyEdit(document.getElementById('width'), { onsuccess: widthChange, oncancel: cancel, onedit: start });
+    new EasyEdit(document.getElementById('height'), { onsuccess: heightChange, oncancel: cancel, onedit: start });
+}
+
+function start()
+{
+    _editing = true;
+    _original = remote.getCurrentWindow().windows.zoom.getContentSize();
+}
+
+function cancel()
+{
+    _editing = false;
+}
+
+function widthChange(value)
+{
+    const original = remote.getCurrentWindow().pixel.pixel.width;
+    remote.getCurrentWindow().pixel.pixel.width = value;
+    if (remote.getCurrentWindow().pixel.pixel.width !== parseInt(value))
+    {
+        document.getElementById('width').innerHTML = original;
+    }
+    remote.getCurrentWindow().windows.zoom.emit('refresh');
+}
+
+function heightChange(value)
+{
+    const original = remote.getCurrentWindow().pixel.pixel.height;
+    remote.getCurrentWindow().pixel.pixel.height = value;
+    if (remote.getCurrentWindow().pixel.pixel.height !== parseInt(value))
+    {
+        document.getElementById('height').innerHTML = original;
+    }
+    remote.getCurrentWindow().windows.zoom.emit('refresh');
 }
 
 function move(x, y)
 {
     document.getElementById('x').innerHTML = x;
     document.getElementById('y').innerHTML = y;
+}
+
+function sizeEdit(width, height)
+{
+
 }
 
 function size(width, height)
@@ -29,7 +71,10 @@ function size(width, height)
 
 function keyDown(code, special)
 {
-    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    if (!_editing)
+    {
+        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    }
 }
 
 const font = new FontFaceObserver('bitmap');

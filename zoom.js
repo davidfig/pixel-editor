@@ -20,7 +20,9 @@ let _data,
     _isDown = -1,
     _shift,
     _stamp,
-    _clipboard;
+    _clipboard,
+    _dragging,
+    _selecting;
 
 function init()
 {
@@ -41,6 +43,7 @@ function init()
     cw.focus();
     cw.on('tool', tool);
     cw.on('keydown', key);
+    cw.on('refresh', resize);
 }
 
 function resize()
@@ -58,10 +61,13 @@ function resize()
     {
         _zoom = w;
     }
+    _cursorSize.x = (_cursorSize.x >= _pixel.width) ? _pixel.width - 1 : _cursorSize.x;
+    _cursorSize.y = (_cursorSize.x >= _pixel.height) ? _pixel.height - 1 : _cursorSize.y;
     frame();
     cursor();
     draw();
     View.render();
+    remote.getCurrentWindow().zoom = _zoom;
 }
 
 function draw()
@@ -297,11 +303,11 @@ function zoom(delta)
 
 function downMouse(x, y)
 {
+    const xx = Math.floor(x / _zoom);
+    const yy = Math.floor(y / _zoom);
     switch (_data.tool)
     {
         case 'paint':
-            const xx = Math.floor(x / _zoom);
-            const yy = Math.floor(y / _zoom);
             const current = _pixel.get(_cursor.x, _cursor.y);
             const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
             _pixel.set(xx, yy, color);
@@ -312,18 +318,31 @@ function downMouse(x, y)
         case 'circle':
             space();
             break;
+
+        case 'select':
+            if (xx >= _cursor.x && xx <= _cursor.x + _cursorSize.x && yy >= _cursor.y && yy <= _cursor.y + _cursorSize.y)
+            {
+                _dragging = { x: xx, y: yy, data: _pixel.data.slice(0) };
+            }
+            else
+            {
+                _selecting = true;
+                _cursor.x = xx;
+                _cursor.y = yy;
+            }
+            break;
     }
 }
 
 function moveMouse(x, y)
 {
+    const xx = Math.floor(x / _zoom);
+    const yy = Math.floor(y / _zoom);
     switch (_data.tool)
     {
         case 'paint':
             if (_isDown !== -1)
             {
-                const xx = Math.floor(x / _zoom);
-                const yy = Math.floor(y / _zoom);
                 if (_isDown.x !== xx || _isDown.y !== yy)
                 {
                     _pixel.set(xx, yy, _isDown.color);
@@ -333,17 +352,45 @@ function moveMouse(x, y)
             break;
 
         case 'circle':
-            _cursor.x =  Math.floor(x / _zoom);
-            _cursor.y =  Math.floor(y / _zoom);
+            _cursor.x = Math.floor(x / _zoom);
+            _cursor.y = Math.floor(y / _zoom);
             cursor();
             View.render();
             break;
+
+        case 'select':
+            if (_selecting)
+            {
+                _cursorSize.x = xx - _cursor.x;
+                _cursorSize.y = yy - _cursor.y;
+                cursor();
+                View.render();
+            }
+            else if (_dragging && (xx !== _dragging.x || yy !== _dragging.y))
+            {
+                _cursor.x = _dragging.x;
+                _cursor.y = _dragging.y;
+                _pixel.data = _dragging.data;
+                const temp = _clipboard;
+                cut();
+                _cursor.x = xx; //_dragging.x;
+                _cursor.y = yy;// - _dragging.y;
+                paste();
+                _clipboard = temp;
+                cursor();
+                dirty();
+            }
     }
 }
 
 function upMouse()
 {
     _isDown = -1;
+    if (_dragging)
+    {
+
+    }
+    _selecting = _dragging = false;
 }
 
 function save(filename)
@@ -408,6 +455,11 @@ function tool()
             {
                 _cursorSize.x = 3;
             }
+            break;
+
+        case 'select':
+            _dragging = false;
+            _selecting = false;
             break;
     }
     cursor();

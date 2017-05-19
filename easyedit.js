@@ -7,8 +7,8 @@ class EasyEdit
      * @param {HTMLElement} object
      * @param {object} options
      * @param {function} options.onedit - editing starts: callback(element, inputElement)
-     * @param {function} options.onsuccess - editing is finished successfully: callback(value, element)
-     * @param {function} options.oncancel - editing was canceled with escape: callback(element)
+     * @param {function} options.onsuccess - value changed and user pressed enter: callback(value, element)
+     * @param {function} options.oncancel - editing canceled with escape: callback(element)
      * @param {function} options.onchange - value was changed (but editing is not done): callback(value, element)
      */
     constructor(object, options)
@@ -20,6 +20,7 @@ class EasyEdit
         this.replace.style.display = 'none';
         this.replace.addEventListener('change', this.change.bind(this));
         this.replace.addEventListener('input', this.input.bind(this));
+        this.replace.addEventListener('keydown', this.key.bind(this));
         this.object.insertAdjacentElement('afterend', this.replace);
     }
 
@@ -39,6 +40,21 @@ class EasyEdit
         }
     }
 
+    key(e)
+    {
+        const code = (typeof e.which === 'number') ? e.which : e.keyCode;
+        if (code === 27)
+        {
+            this.object.style.display = this.display;
+            this.replace.style.display = 'none';
+            this.replace.value = this.object.innerHTML;
+            if (this.options.oncancel)
+            {
+                this.options.oncancel(this.object, this.replace);
+            }
+        }
+    }
+
     input()
     {
         if (this.options.onchange)
@@ -49,10 +65,11 @@ class EasyEdit
 
     change()
     {
+        const changed = this.object.innerHTML !== this.replace.value;
         this.object.innerHTML = this.replace.value;
         this.replace.style.display = 'none';
         this.object.style.display = this.display;
-        if (this.options.onsuccess)
+        if (changed && this.options.onsuccess)
         {
             this.options.onsuccess(this.object.innerHTML, this.object);
         }

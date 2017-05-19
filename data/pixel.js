@@ -7,6 +7,7 @@ class Pixel
         if (arguments.length === 1)
         {
             this.load(arguments[0]);
+            this.animations = {};
         }
         else
         {
@@ -16,6 +17,7 @@ class Pixel
             {
                 this.data[i] = null;
             }
+            this.animations = {};
             this.pixels = 5;
         }
     }
@@ -167,7 +169,7 @@ class Pixel
             this.filename = filename;
             this.current = load.current;
             this.frames = load.frames;
-            this.animations = load.animations || '{}';
+            this.animations = load.animations || {};
             this.pixels = load.pixels;
             return true;
         }

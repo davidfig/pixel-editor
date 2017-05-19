@@ -77,7 +77,7 @@ function createWindow()
     create('coords', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
-    create('animation');
+    create('animation', {});
     create('zoom', { frame: true });
 
     accelerators();

@@ -18,7 +18,8 @@ const View = {
         }
         else
         {
-            View.renderer = new Renderer({ canvas: options.canvas});
+debugger
+            View.renderer = new Renderer({ canvas: options.canvas });
         }
         View.resize();
     },

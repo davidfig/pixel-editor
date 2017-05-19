@@ -680,7 +680,17 @@ function key(code, special)
                 draw();
                 dirty();
                 break;
-
+            case 65:
+                _data.tool = 'select';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
+                _cursor.x = 0;
+                _cursor.y = 0;
+                _cursorSize.x = _pixel.width;
+                _cursorSize.y = _pixel.height;
+                cursor();
+                View.render();
+                break;
         }
     }
     else

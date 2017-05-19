@@ -1,12 +1,14 @@
 const remote = require('electron').remote;
-
+const Update = require('yy-update');
+const EasyEdit = require('./easyedit');
 const Input = require('./input');
 const View = require('./view');
 
-let _pixel, _blocks, _width, _height, _animation, _time, _next;
+let _pixel, _blocks, _width, _height, _animation, _time, _next, _frame, _editing;
 
 function init()
 {
+    Update.init();
     View.init({ canvas: document.getElementById('canvas') });
     Input.init(View.renderer.canvas, { keyDown, down });
     _pixel = remote.getCurrentWindow().pixel.pixel;
@@ -15,6 +17,12 @@ function init()
     window.addEventListener('resize', resize);
     resize();
     remote.getCurrentWindow().show();
+    Update.add(update);
+    _time = 0;
+    _next = 0;
+    _frame = _pixel.frames[0];
+    new EasyEdit(document.getElementById('name'), { onsuccess: changeName, onstart: () => _editing = true, oncancel: () => _editing = false });
+    Update.update();
 }
 
 function setup()
@@ -33,6 +41,10 @@ function setup()
             _height = frame.height;
         }
     }
+    document.getElementById('canvas').width = _width * _pixel.pixels;
+    document.getElementById('canvas').height = _height * _pixel.pixels;
+    document.getElementById('canvas').style.width = _width * _pixel.pixels + 'px';
+    document.getElementById('canvas').style.height = _height * _pixel.pixels + 'px';
     for (let y = 0; y < _height; y++)
     {
         for (let x = 0; x < _width; x++)
@@ -40,7 +52,15 @@ function setup()
             _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
         }
     }
-    _time = 0;
+    const select = document.getElementById('animation');
+    let html = '';
+    for (let animation in _pixel.animations)
+    {
+        html += '<option value="' + animation + '">' + animation.name + '</option>';
+    }
+    html += '<option value="-new">Create animation...</option>';
+    select.innerHTML = html;
+    document.getElementById('name').innerHTML = _animation ? _animation.name : 'Create here';
 }
 
 function resize()
@@ -51,35 +71,34 @@ function resize()
     {
         for (let x = 0; x < _width; x++)
         {
-            const block = blocks[i];
+            const block = blocks[i++];
             block.width = block.height = _pixel.pixels;
-            block.tint = require('yy-random').color();
+            block.position.set(x * _pixel.pixels, y * _pixel.pixels);
         }
     }
-    View.render();
 }
 
 function update(elapsed)
 {
+    const blocks = _blocks.children;
     _time += elapsed;
+    for (let block of blocks)
+    {
+        block.tint = 0xffffff;
+    }
     if (_time >= _next)
     {
-
-    }
-    for (let y = 0; y < frame.height; y++)
-    {
-        for (let x = 0; x < frame.height; x++)
+        _next = 1000;
+        for (let y = 0; y < _frame.height; y++)
         {
-            const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-            block.width = block.height = _zoom;
-            block.position.set(xStart + x * _zoom, yStart + y * _zoom);
-            const color = frame.data[x + y * frame.width];
-            block.tint = color === null ? TRANSPARENT : color;
+            for (let x = 0; x < _frame.width; x++)
+            {
+                const i = x + y * _frame.width;
+                blocks[i].tint = (_frame.data[i] === null) ? 0xbbbbbb : _frame.data[i];
+            }
         }
+        View.render();
     }
-    const window = remote.getCurrentWindow();
-    window.setContentSize(total.width, total.height + yStart + BUFFER + document.getElementById('spacer').offsetHeight);
-    View.render();
 }
 
 function down(x, y)
@@ -97,9 +116,17 @@ function down(x, y)
     }
 }
 
+function changeName()
+{
+
+}
+
 function keyDown(code, special)
 {
-    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    if (!_editing)
+    {
+        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    }
 }
 
 init();

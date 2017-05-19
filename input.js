@@ -199,7 +199,7 @@ const Input = {
         }
         if (Input.handlers.keyDown)
         {
-            Input.handlers.keyDown(code, Input.keys);
+            Input.handlers.keyDown(code, Input.keys, e);
         }
     },
 

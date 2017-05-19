@@ -58,6 +58,10 @@ function create(name, options)
     {
         window.toggleDevTools();
     }
+    if (options.noThrottling)
+    {
+        window.backgroundThrottling = false;
+    }
     return window;
 }
 
@@ -77,7 +81,7 @@ function createWindow()
     create('coords', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
-    create('animation', {});
+    create('animation', { noThrottling: true });
     create('zoom', { frame: true });
 
     accelerators();

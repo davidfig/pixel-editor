@@ -86,10 +86,13 @@ class State
             window.on('resize',
                 function (object)
                 {
-                    const size = object.sender.getContentSize();
-                    state.width = size[0];
-                    state.height = size[1];
-                    that.save();
+                    if (!object.sender.noResizeSave)
+                    {
+                        const size = object.sender.getContentSize();
+                        state.width = size[0];
+                        state.height = size[1];
+                        that.save();
+                    }
                 });
         }
         window.on('move',

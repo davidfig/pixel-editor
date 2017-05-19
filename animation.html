@@ -3,17 +3,16 @@
   <head>
     <meta charset="UTF-8">
   </head>
-  <body style="margin: 0 1em; font-family: consolas; font-size: 1em">
-        <div style="height: 1em; -webkit-app-region: drag;"></div>
-        <div style="display: flex; flex-direction: row; justify-content: flex-start">
-            <div><canvas id="canvas" style="background: white; margin-right: 0.5em"></canvas></div>
-            <div>
-                <select id="animation">
-                </select>
-                <span id="name"></span>
-            </div>
+  <body style="margin: 0 1em; font-family: consolas; overflow: hidden">
+        <div id="top" style="height: 1em; -webkit-app-region: drag;"></div>
+        <div id="middle" style="display: flex; flex-direction: row">
+            <canvas id="canvas" style="background: white; margin-right: 0.5em"></canvas>
+            <select id="animation" style="height: 2em">
+            </select>
+            <button id="hide" style="margin-left: 0.5em; height: 2em">Hide Code</button>
         </div>
-        <div id="animation" style="margin-top: 0.5em; background: white; color: black; width: 100%; min-height: 1em"></div>
+        <textarea id="code" style="tab-size: 2; font-size: 1em; font-family: consolas; padding: 0; margin: 0; border: none; background: white; color: black; width: 100%; resize: none"></textarea>
+        <div id="error" style="background: white; color: red; width: 100%; min-height: 5em"></div>
   </body>
 
   <script src="node_modules/pixi.js/dist/pixi.min.js"></script>

@@ -7,7 +7,6 @@ class Pixel
         if (arguments.length === 1)
         {
             this.load(arguments[0]);
-            this.animations = {};
         }
         else
         {
@@ -18,8 +17,17 @@ class Pixel
                 this.data[i] = null;
             }
             this.animations = {};
-            this.pixels = 5;
+            this._pixels = 5;
         }
+    }
+
+    get pixels()
+    {
+        return parseInt(this._pixels);
+    }
+    set pixels(value)
+    {
+        this._pixels = parseInt(value);
     }
 
     duplicate(index)
@@ -51,6 +59,10 @@ class Pixel
     get name()
     {
         return this.frames[this.current].name;
+    }
+    set name(value)
+    {
+        this.frames[this.current].name = value;
     }
 
     get data()
@@ -170,7 +182,7 @@ class Pixel
             this.current = load.current;
             this.frames = load.frames;
             this.animations = load.animations || {};
-            this.pixels = load.pixels;
+            this._pixels = load._pixels;
             return true;
         }
         catch (e)

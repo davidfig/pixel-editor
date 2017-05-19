@@ -9,7 +9,6 @@ let _pixel,
     _blocks,
     _buttons,
     _name,
-    _nameDiv,
     _spacer,
     _canvas;
 
@@ -19,7 +18,6 @@ function init()
 {
     _spacer = document.getElementById('spacer');
     _name = document.getElementById('name');
-    _nameDiv = document.getElementById('name-div');
     _canvas = document.getElementById('canvas');
     View.init({canvas: _canvas});
     Input.init(_canvas, { keyDown, down });
@@ -73,7 +71,7 @@ function draw()
         i++;
     }
     const window = remote.getCurrentWindow();
-    window.setContentSize(total.width, _spacer.offsetHeight + _nameDiv.offsetHeight + total.height + yStart + BUFFER + document.getElementById('spacer').offsetHeight);
+    window.setContentSize(total.width, _spacer.offsetHeight + _name.offsetHeight + total.height + yStart + BUFFER);
     View.render();
 }
 

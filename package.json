@@ -4,7 +4,8 @@
   "description": "A pixel editor built in Electron",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . PixelEditor --platform=win32 --arch=x64"
   },
   "repository": "https://github.com/davidfig/pixel-editor",
   "author": "David Figatner",

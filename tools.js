@@ -14,21 +14,20 @@ let _blocks,
     _text,
     _data;
 
-const TOOLS = ['paint', 'select', 'circle', 'line'];
+const TOOLS = ['paint', 'select', 'circle', 'line', 'fill'];
 
 function init()
 {
     View.init();
     Input.init(View.renderer.canvas, { down, keyDown });
     Sheet.init();
-    const cw = remote.getCurrentWindow();
-    _data = cw.pixel;
+    _data = remote.getCurrentWindow().pixel;
     _blocks = View.add(new PIXI.Container());
     _text = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize(true);
-    cw.show();
-    cw.on('tools', updateTool);
+    remote.getCurrentWindow().show();
+    remote.getCurrentWindow().on('tools', updateTool);
 }
 
 function resize(resize)

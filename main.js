@@ -21,25 +21,39 @@ function init()
     _data = {};
     if (_state.lastFile)
     {
-        _data.pixel = new Pixel(_state.lastFile);
+        try
+        {
+            _data.pixel = new Pixel(_state.lastFile);
+            Colors.init(_data.pixel);
+            _data.colors = Colors;
+        }
+        catch (e)
+        {
+            newFile();
+        }
     }
     else
     {
-        _data.pixel = new Pixel(10, 10);
-        let i = 0, filename;
-        do
-        {
-            i++;
-            filename = path.join(app.getPath('documents'), 'pixel-' + i + '.json');
-        }
-        while (fs.existsSync(filename));
-        _data.pixel.save(filename);
-        _state.lastFile = filename;
+        newFile();
     }
-    Colors.init(_data.pixel);
-    _data.colors = Colors;
     _data.tool = 'paint';
     createWindow();
+}
+
+function newFile()
+{
+    _data.pixel = new Pixel(10, 10);
+    let i = 0, filename;
+    do
+    {
+        i++;
+        filename = path.join(app.getPath('documents'), 'pixel-' + i + '.json');
+    }
+    while (fs.existsSync(filename));
+    _data.pixel.save(filename);
+    _state.lastFile = filename;
+    Colors.init(_data.pixel);
+    _data.colors = Colors;
 }
 
 function create(name, options)

@@ -7,7 +7,7 @@ const Input = require('./input');
 const View = require('./view');
 
 let _canvas, _pixel, _code, _error, _select, _hide, _top, _middle, _saved, _blocks, _width, _height, _animations = {}, _editing,
-    _animation, _next, _frame, _index, _entry;
+    _animation, _next, _frame, _index, _entry, _time, _animationName;
 
 function init()
 {
@@ -32,7 +32,7 @@ function init()
     _next = 0;
     _frame = _pixel.frames[0];
     remote.getCurrentWindow().show();
-    update(0);
+    update();
 }
 
 function hide()
@@ -121,14 +121,21 @@ function setupSelect()
             if (!_animation)
             {
                 _animation = _pixel.animations[animation];
+                _animationName = animation;
             }
             _animations[animation] = true;
             _select.innerHTML += '<option value="' + animation + '"' + (different === animation ? 'selected = "selected"' : '') + '>' + animation + '</option>';
             if (different === animation)
             {
                 _animation = _pixel.animations[animation];
+                _animationName = animation;
             }
         }
+        changeAnimation();
+    }
+    else
+    {
+        _animation = _pixel.animations[_animationName]
         changeAnimation();
     }
 }
@@ -162,9 +169,9 @@ function changeAnimation()
 function updateFrame(leftover)
 {
     _entry = _animation[_index];
-    if (!Array.isArray(_entry))
+    if (typeof _entry[0] === 'string')
     {
-        switch (_entry)
+        switch (_entry[0])
         {
             case 'loop':
                 _index = 0;
@@ -183,8 +190,11 @@ function updateFrame(leftover)
     _frame = _pixel.frames[_entry[0]];
 }
 
-function update(elapsed)
+function update()
 {
+    const now = Date.now();
+    const elapsed = _time ? now - _time : 0;
+    _time = now;
     if (_next === -1)
     {
         return;
@@ -225,7 +235,6 @@ function codeChange()
         _pixel.animations = value;
         _pixel.save();
         setupSelect();
-        changeAnimation();
     }
     catch (e)
     {

@@ -4,6 +4,7 @@ const path = require('path');
 const Input = require('./input');
 const View = require('./view');
 const Sheet = require('./sheet');
+const Pixel = require('./data/pixel');
 
 const CURSOR_COLOR = 0xff0000;
 const SHAPE_HOVER_ALPHA = 1;
@@ -381,6 +382,36 @@ function space()
 
         case 'line':
             break;
+
+        case 'fill':
+            _pixel.undoSave();
+            floodFill(_cursor.x, _cursor.y, _pixel.get(_cursor.x, _cursor.y));
+            dirty();
+            break;
+    }
+}
+
+function floodFill(x, y, check)
+{
+    if (_pixel.get(x, y) === check)
+    {
+        _pixel.set(x, y, _colors.foreground, true);
+        if (y > 0)
+        {
+            floodFill(x, y - 1, check);
+        }
+        if (y < _pixel.height - 1)
+        {
+            floodFill(x, y + 1, check);
+        }
+        if (x > 0)
+        {
+            floodFill(x - 1, y, check);
+        }
+        if (x < _pixel.width - 1)
+        {
+            floodFill(x + 1, y, check)
+        }
     }
 }
 
@@ -520,6 +551,15 @@ function load(list)
         remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
         resize();
     }
+}
+
+function newFile()
+{
+    _pixel = new Pixel(15, 15);
+    remote.getCurrentWindow().pixel.pixel = _pixel;
+    _state.lastFile = null;
+    remote.getCurrentWindow().setTitle('New File');
+    resize();
 }
 
 function dropper()
@@ -690,6 +730,9 @@ function key(code, special)
                 _cursorSize.y = _pixel.height;
                 cursor();
                 View.render();
+                break;
+            case 78:
+                newFile();
                 break;
         }
     }

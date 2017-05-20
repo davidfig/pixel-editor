@@ -55,10 +55,10 @@ function pixelChange()
 {
     _pixel.load();
     remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
-    // if (Math.round(_pixel.width * _zoom) !== window.innerWidth || Math.round(_pixel.height * _zoom) !== window.innerHeight)
-    // {
-    //     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
-    // }
+    if (Math.round(_pixel.width * _zoom) !== window.innerWidth || Math.round(_pixel.height * _zoom) !== window.innerHeight)
+    {
+        remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    }
     resize();
 }
 
@@ -230,7 +230,6 @@ function singleCursor()
     _cursorBlock.position.set(_state.cursorX * _zoom, _state.cursorY * _zoom);
     _cursorBlock.lineStyle(5, color);
     _cursorBlock.drawRect(0, 0, _zoom, _zoom);
-    remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
 }
 
 function normalCursor()
@@ -241,7 +240,6 @@ function normalCursor()
     const x = _state.cursorSizeX + _state.cursorX >= _pixel.width ? _pixel.width - _state.cursorX : _state.cursorSizeX;
     const y = _state.cursorSizeY + _state.cursorY >= _pixel.height ? _pixel.height - _state.cursorY : _state.cursorSizeY;
     _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
-    // remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
 }
 
 function cursor()
@@ -256,7 +254,6 @@ function cursor()
 
         case 'circle':
             circleCursor(_state.foreground);
-            remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
             break;
 
         case 'line':
@@ -583,12 +580,6 @@ function newFile()
     resize();
 }
 
-function dropper()
-{
-    const color = _pixel.get(_state.cursorX, _state.cursorY);
-    remote.getCurrentWindow().windows.palette.emit('dropper', color);
-}
-
 function clear()
 {
     switch (_state.tool)
@@ -632,6 +623,7 @@ function tool()
     }
     cursor();
     dirty();
+    ipcRenderer.send('state');
 }
 
 function cut()
@@ -743,7 +735,6 @@ function key(code, special)
                 break;
             case 65:
                 _state.tool = 'select';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 _state.cursorX = 0;
                 _state.cursorY = 0;
@@ -783,34 +774,30 @@ function key(code, special)
                 space();
                 break;
             case 73:
-                dropper();
+                _state.foreground = _pixel.get(_state.cursorX, _state.cursorY);
+                ipcRenderer.send('state');
                 break;
             case 27:
                 clear();
                 break;
             case 66:
                 _state.tool = 'paint';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 86:
                 _state.tool = 'select';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 67:
                 _state.tool = 'circle';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 76:
                 _state.tool = 'line';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 70:
                 _state.tool = 'fill';
-                remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
         }

@@ -1,33 +1,49 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
 
 const Sheet = require('./sheet');
 const View = require('./view');
 const Input = require('./input');
+const State = require('./data/state');
 
 const SELECT = 0xdddddd;
 const UNSELECT = 0x777777;
 
 const BORDER = 5;
 const WIDTH = 50;
-let _blocks,
-    _text,
-    _data;
+let _state,
+    _blocks,
+    _text;
 
 const TOOLS = ['paint', 'select', 'circle', 'line', 'fill'];
 
 function init()
 {
+    _state = new State();
     View.init();
     Input.init(View.renderer.canvas, { down, keyDown });
     Sheet.init();
-    _data = remote.getCurrentWindow().pixel;
     _blocks = View.add(new PIXI.Container());
     _text = View.add(new PIXI.Container());
     window.addEventListener('resize', resize);
     resize(true);
+    ipcRenderer.on('state', stateChange);
     remote.getCurrentWindow().show();
-    remote.getCurrentWindow().on('tools', updateTool);
+}
+
+function stateChange()
+{
+    if (arguments.length)
+    {
+        _state.load();
+    }
+    for (let block of _blocks.children)
+    {
+        block.tint = (block.tool === _state.tool) ? SELECT : UNSELECT;
+    }
+    View.render();
+
 }
 
 function resize(resize)
@@ -48,7 +64,7 @@ function draw(resize)
         const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
         block.width = block.height = WIDTH - BORDER;
         block.position.set(BORDER, y * WIDTH + BORDER + yStart);
-        block.tint = (_data.tool === tool) ? SELECT : UNSELECT;
+        block.tint = (_state.tool === tool) ? SELECT : UNSELECT;
         block.tool = tool;
         const text = _text.addChild(new PIXI.Text(tool[0].toUpperCase(), { fontFamily: 'bitmap', fontSize: WIDTH * 0.75, fill: 0xffffff }));
         text.anchor.set(0.5);
@@ -62,15 +78,6 @@ function draw(resize)
     }
 }
 
-function updateTool()
-{
-    for (let block of _blocks.children)
-    {
-        block.tint = (block.tool === _data.tool) ? SELECT : UNSELECT;
-    }
-    View.render();
-}
-
 function down(x, y)
 {
     const point = new PIXI.Point(x, y);
@@ -78,11 +85,11 @@ function down(x, y)
     {
         if (block.containsPoint(point))
         {
-            if (_data.tool !== block.tool)
+            if (_state.tool !== block.tool)
             {
-                _data.tool = block.tool;
-                updateTool();
-                remote.getCurrentWindow().windows.zoom.emit('tool');
+                _state.tool = block.tool;
+                stateChange();
+                ipcRenderer.send('state');
             }
             return;
         }

@@ -237,7 +237,7 @@ class PixelEditor extends Pixel
         }
         try
         {
-            this.editor.frames = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'));
+            this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'));
         }
         catch (e)
         {
@@ -257,7 +257,7 @@ class PixelEditor extends Pixel
         jsonfile.writeFileSync(this.filename, { frames: this.frames, animations: this.animations });
         if (this.editor)
         {
-            jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json', this.editor));
+            jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor);
         }
     }
 

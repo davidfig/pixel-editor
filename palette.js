@@ -35,7 +35,8 @@ function init()
 function stateChange()
 {
     _state.load();
-    // dropper();
+    draw();
+    View.render();
 }
 
 function pixelChange()

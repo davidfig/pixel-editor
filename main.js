@@ -29,7 +29,7 @@ function init()
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: true });
-    // create('tools', { noResize: true });
+    create('tools', { noResize: true });
     // create('picker');
     // create('animation', { noThrottling: true });
 
@@ -42,7 +42,7 @@ function create(name, options)
     options = options || {};
     const window = new electron.BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: DEBUG ? true : false, backgroundColor: WINDOW_BACKGROUND, parent: _main, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
     window.stateID = name;
-    _state.addWindow(window, options.noResize);
+    _state.addWindow(window, (!DEV_ALL && options.noResize));
     window.loadURL(url.format({ pathname: path.join(__dirname, name + '.html'), protocol: 'file:', slashes: true }));
     window.setMenu(null);
     window.windows = _windows;

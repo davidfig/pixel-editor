@@ -99,7 +99,7 @@ function down(x, y)
                 _pixel.current = button.current;
                 _name.innerHTML = button.current;
                 resize();
-                ipcRenderer.send('state');
+                ipcRenderer.send('pixel');
             }
             return;
         }

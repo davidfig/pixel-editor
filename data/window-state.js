@@ -18,7 +18,18 @@ class State
         }
         catch (err)
         {
+            const size = electron.screen.getPrimaryDisplay().workAreaSize;
+            const list = jsonfile.readFileSync('default-window-state.json');
             this.state = {};
+            for (let key in list)
+            {
+                const entry = list[key];
+                this.state[key] = {
+                    x: entry.x * size.width, y: entry.y * size.height,
+                    width: entry.width * size.width, height: entry.height * size.height,
+                    maximize: entry.maximize
+                };
+            }
         };
     }
 
@@ -38,11 +49,11 @@ class State
         {
             if (!noResize && state.width)
             {
-                window.setContentSize(state.width, state.height);
+                window.setContentSize(Math.round(state.width), Math.round(state.height));
             }
             if (state.x)
             {
-                window.setPosition(state.x, state.y);
+                window.setPosition(Math.round(state.x), Math.round(state.y));
             }
             if (!noResize && state.maximize)
             {
@@ -90,6 +101,22 @@ class State
                 state.y = position[1];
                 that.save();
             });
+    }
+
+    createDefaults()
+    {
+        const list = {};
+        const size = electron.screen.getPrimaryDisplay().workAreaSize;
+        for (let key in this.state)
+        {
+            const entry = this.state[key];
+            list[key] = ({
+                x: entry.x / size.width, y: entry.y / size.height,
+                width: entry.width / size.width, height: entry.height / size.height,
+                maximize: entry.maximize
+            });
+        }
+        jsonfile.writeFileSync('default-window-state.json', list);
     }
 }
 

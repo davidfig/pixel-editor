@@ -61,6 +61,7 @@ function create(name, options)
 function accelerators()
 {
     electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
+    electron.globalShortcut.register('CommandOrControl+Shift+Alt+D', () => _state.createDefaults());
 }
 
 function listener(type)

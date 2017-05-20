@@ -1,74 +1,53 @@
 const electron = require('electron');
 const app = electron.app;
 const console = require('console');
-const path = require('path');
 const url = require('url');
-const fs = require('fs');
+const path = require('path');
 
-const BrowserWindow = electron.BrowserWindow;
-const Pixel = require('./data/pixel');
-const Colors = require('./data/colors');
-const State = require('./data/state');
+const WindowState = require('./data/window-state');
 
-let _windows, _mainWindow, _state, _data;
+const DEBUG = true;
+const DEV_ALL = false;
+
+let _windows, _main, _state;
 
 const BACKGROUND = '#aaaaaa';
 const WINDOW_BACKGROUND = '#bbbbbb';
 
 function init()
 {
-    _state = new State();
-    _data = {};
-    if (_state.lastFile)
-    {
-        try
-        {
-            _data.pixel = new Pixel(_state.lastFile);
-            Colors.init(_data.pixel);
-            _data.colors = Colors;
-        }
-        catch (e)
-        {
-            newFile();
-        }
-    }
-    else
-    {
-        newFile();
-    }
-    _data.tool = 'paint';
-    createWindow();
-}
+    _state = new WindowState();
 
-function newFile()
-{
-    _data.pixel = new Pixel(10, 10);
-    let i = 0, filename;
-    do
-    {
-        i++;
-        filename = path.join(app.getPath('documents'), 'pixel-' + i + '.json');
-    }
-    while (fs.existsSync(filename));
-    _data.pixel.save(filename);
-    _state.lastFile = filename;
-    Colors.init(_data.pixel);
-    _data.colors = Colors;
+    _windows = {};
+    _main = new electron.BrowserWindow({ backgroundColor: BACKGROUND });
+    _main.stateID = 'main';
+    _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
+    _main.setMenu(null);
+    _state.addWindow(_main);
+
+    create('zoom', { frame: true });
+    create('coords', { noResize: true });
+    create('palette');
+    // create('show', { noResize: true });
+    // create('tools', { noResize: true });
+    // create('picker');
+    // create('animation', { noThrottling: true });
+
+    accelerators();
+    listeners();
 }
 
 function create(name, options)
 {
     options = options || {};
-    const window = new BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: false, backgroundColor: WINDOW_BACKGROUND, parent: _mainWindow, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
+    const window = new electron.BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: DEBUG ? true : false, backgroundColor: WINDOW_BACKGROUND, parent: _main, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
     window.stateID = name;
     _state.addWindow(window, options.noResize);
-    window.pixel = _data;
-    window.state = _state;
     window.loadURL(url.format({ pathname: path.join(__dirname, name + '.html'), protocol: 'file:', slashes: true }));
     window.setMenu(null);
     window.windows = _windows;
     _windows[name] = window;
-    if (options.dev)
+    if (options.dev || DEV_ALL)
     {
         window.toggleDevTools();
     }
@@ -79,51 +58,46 @@ function create(name, options)
     return window;
 }
 
-function createWindow()
-{
-    _windows = {};
-    _mainWindow = new BrowserWindow({ backgroundColor: BACKGROUND });
-    _mainWindow.stateID = 'main';
-    _mainWindow.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
-    _mainWindow.setMenu(null);
-    _windows.mainWindow = _mainWindow;
-    _mainWindow.windows = _windows;
-    _state.addWindow(_mainWindow);
-
-    create('palette');
-    create('show', { noResize: true });
-    create('coords', { noResize: true });
-    create('tools', { noResize: true });
-    create('picker');
-    create('animation', { noThrottling: true });
-    create('zoom', { frame: true });
-
-    accelerators();
-}
-
 function accelerators()
 {
     electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
 }
 
+function listeners()
+{
+    electron.ipcMain.on('state',
+        function (event)
+        {
+            for (let key in _windows)
+            {
+                const window = _windows[key];
+                if (!window.isDestroyed() && window.webContents !== event.sender)
+                {
+                    window.webContents.send('state');
+                }
+            }
+        });
+    electron.ipcMain.on('pixel',
+        function (event)
+        {
+            for (let key in _windows)
+            {
+                const window = _windows[key];
+                if (!window.isDestroyed() && window.webContents !== event.sender)
+                {
+                    window.webContents.send('pixel');
+                }
+            }
+        });
+}
+
 app.console = new console.Console(process.stdout, process.stderr);
 
 app.on('ready', init);
-
-app.on('window-all-closed',
-    function ()
-    {
-        if (process.platform !== 'darwin')
-        {
-            app.quit();
-        }
-    }
-);
-
 app.on('activate',
     function ()
     {
-        if (_mainWindow === null)
+        if (_main === null)
         {
             init();
         }

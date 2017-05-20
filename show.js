@@ -43,7 +43,7 @@ function draw()
     let xStart = BUFFER, yStart = BUFFER, i = 0, total = { width: xStart, height: yStart };
     for (let frame of _pixel.frames)
     {
-        if (i === _pixel.current)
+        if (i === _state.current)
         {
             const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
             block.width = _pixel.pixels * frame.width + BUFFER;
@@ -82,7 +82,7 @@ function down(x, y)
     {
         if (x >= button.x1 && x <= button.x2 && y >= button.y1 && y <= button.y2)
         {
-            _pixel.current = button.current;
+            _state.current = button.current;
             draw();
             _name.innerHTML = button.current;
             remote.getCurrentWindow().windows.zoom.emit('refresh');

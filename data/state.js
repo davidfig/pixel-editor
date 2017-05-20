@@ -1,6 +1,4 @@
 const electron = require('electron');
-const app = electron.app;
-
 const path = require('path');
 const jsonfile = require('jsonfile');
 
@@ -8,8 +6,10 @@ class State
 {
     constructor()
     {
-        this.filename = path.join(app.getPath('userData'), 'window-state.json');
+        this.filename = path.join(electron.remote.app.getPath('userData'), 'state.json');
         this.load();
+        this.state.cursorX = this.state.cursorY = 0;
+        this.state.cursorSizeX = this.state.cursorSizeY = 1;
     }
 
     load()
@@ -17,12 +17,145 @@ class State
         try
         {
             this.state = jsonfile.readFileSync(this.filename);
-            return true;
         }
         catch (err)
         {
-            console.error(err);
-            this.state = {zoom: 5};
+            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, current: 0, color: 0, foreground: 0, picker: 0, background: null };
+        }
+    }
+
+    get picker()
+    {
+        return this.state.picker;
+    }
+    set picker(value)
+    {
+        if (this.state.picker !== value)
+        {
+            this.state.picker = value;
+            this.save();
+        }
+    }
+
+    get current()
+    {
+        return this.state.current;
+    }
+    set current(value)
+    {
+        if (this.state.current !== value)
+        {
+            this.state.current = value;
+            this.save();
+        }
+    }
+
+    get cursorX()
+    {
+        return this.state.cursorX;
+    }
+    set cursorX(value)
+    {
+        if (this.state.cursorX !== value)
+        {
+            this.state.cursorX = value;
+            this.save();
+        }
+    }
+
+    get cursorY()
+    {
+        return this.state.cursorY;
+    }
+    set cursorY(value)
+    {
+        if (this.state.cursorY !== value)
+        {
+            this.state.cursorY = value;
+            this.save();
+        }
+    }
+
+    get cursorSizeX()
+    {
+        return this.state.cursorSizeX;
+    }
+    set cursorSizeX(value)
+    {
+        if (this.state.cursorSizeX !== value)
+        {
+            this.state.cursorSizeX = value;
+            this.save();
+        }
+    }
+
+    get cursorSizeY()
+    {
+        return this.state.cursorSizeY;
+    }
+    set cursorSizeY(value)
+    {
+        if (this.state.cursorSizeY !== value)
+        {
+            this.state.cursorSizeY = value;
+            this.save();
+        }
+    }
+
+    get color()
+    {
+        return this.state.color;
+    }
+    set color(value)
+    {
+        if (this.state.color !== value)
+        {
+            this.state.color = value;
+            this.save();
+        }
+    }
+
+    get foreground()
+    {
+        return this.state.foreground;
+    }
+    set foreground(value)
+    {
+        this.state.foreground = value;
+        this.save();
+    }
+
+    get background()
+    {
+        return this.state.background;
+    }
+    set background(value)
+    {
+        this.state.background = value;
+        this.save();
+    }
+
+    get tool()
+    {
+        return this.state.tool;
+    }
+    set tool(value)
+    {
+        this.state.tool = value;
+        this.save();
+    }
+
+    get pixels()
+    {
+        return this.state.pixels;
+    }
+    set pixels(value)
+    {
+        value = parseInt(value);
+        if (!isNaN(value) && value > 0 && value !== this.state.pixels)
+        {
+            this.state.pixels = value;
+            this.save();
         }
     }
 
@@ -35,75 +168,13 @@ class State
     {
         return this.state.lastFile;
     }
-
     set lastFile(value)
     {
-        this.state.lastFile = value;
-    }
-
-    addWindow(window, noResize)
-    {
-        if (noResize)
+        if (this.state.lastFile !== value)
         {
-            window.setResizable(false);
+            this.state.lastFile = value;
+            this.save();
         }
-        let state = this.state[window.stateID];
-        if (state)
-        {
-            if (!noResize && state.width)
-            {
-                window.setContentSize(state.width, state.height);
-            }
-            if (state.x)
-            {
-                window.setPosition(state.x, state.y);
-            }
-            if (!noResize && state.maximize)
-            {
-                window.maximize();
-            }
-        }
-        else
-        {
-            state = this.state[window.stateID] = {};
-        }
-        const that = this;
-        if (!noResize)
-        {
-            window.on('maximize',
-                function ()
-                {
-                    state.maximize = true;
-                    that.save();
-                });
-            window.on('unmaximize',
-                function ()
-                {
-                    state.maximize = false;
-                    that.save();
-                });
-
-            window.on('resize',
-                function (object)
-                {
-                    if (!object.sender.noResizeSave)
-                    {
-                        const size = object.sender.getContentSize();
-                        state.width = size[0];
-                        state.height = size[1];
-                        that.save();
-                    }
-                });
-        }
-        window.on('move',
-            function (object)
-            {
-                const window = object.sender;
-                const position = window.getPosition();
-                state.x = position[0];
-                state.y = position[1];
-                that.save();
-            });
     }
 }
 

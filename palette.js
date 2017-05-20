@@ -1,64 +1,117 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 
 const Sheet = require('./sheet');
 const View = require('./view');
 const Input = require('./input');
+const State = require('./data/state');
+const PixelEditor = require('./data/pixel-editor');
+const Color = require('yy-color');
+
+const COLORS_PER_LINE = 10;
 
 const BORDER = 5;
 const WIDTH = 10;
-let _blocks,
-    _foreground,
-    _background,
-    _colors,
-    _activeColor;
+
+let _state, _pixel, _colors = [[]], _isForeground = true,
+    _blocks, _foreground, _background, _activeColor;
 
 function init()
 {
+    _state = new State();
+    _pixel = new PixelEditor(_state.lastFile);
     View.init();
-    Input.init(View.renderer.canvas, { down, keyDown });
     Sheet.init();
-    _colors = remote.getCurrentWindow().pixel.colors;
     _blocks = View.add(new PIXI.Container());
+    palettes();
+    Input.init(View.renderer.canvas, { down, keyDown });
     window.addEventListener('resize', resize);
     resize(true);
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
     remote.getCurrentWindow().show();
-    remote.getCurrentWindow().on('dropper', dropper);
-    remote.getCurrentWindow().on('refresh', () => resize());
+}
+
+function stateChange()
+{
+    _state.load();
+    // dropper();
+}
+
+function pixelChange()
+{
+    _pixel.load();
+    // updateColors();
+}
+
+function palettes()
+{
+    _colors[1] = [];
+    for (let i = 0; i < COLORS_PER_LINE; i++)
+    {
+        const color = Color.blend((i + 1) / (COLORS_PER_LINE + 2), 0xffffff, 0);
+        _colors[1].push(color);
+    }
+    _colors[2] = [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff];
 }
 
 function resize(resize)
 {
     View.resize();
+    updateColors();
     draw(resize);
     View.render();
 }
 
+function updateColors()
+{
+    function find(color)
+    {
+        for (let find of _colors[0])
+        {
+            if (find === color)
+            {
+                return true;
+            }
+        }
+    }
+    for (let frame of _pixel.frames)
+    {
+        for (let color of frame.data)
+        {
+            if (color !== null && !find(color))
+            {
+                _colors[0].push(color);
+            }
+        }
+    }
+}
+
 function draw()
 {
-    const size = remote.getCurrentWindow().getContentSize();
-    const width = (size[0] / WIDTH) - (BORDER / WIDTH);
+    const width = (window.innerWidth / WIDTH) - (BORDER / WIDTH);
     _blocks.removeChildren();
 
     let yStart = 30;
 
-    _foreground = _blocks.addChild(new PIXI.Sprite(_colors.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
+    _foreground = _blocks.addChild(new PIXI.Sprite(_state.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
     _foreground.width = _foreground.height = width * 2 - BORDER;
     _foreground.position.set(BORDER, BORDER + yStart);
-    if (_colors.foreground !== null)
+    if (_state.foreground !== null)
     {
-        _foreground.tint = _colors.foreground;
+        _foreground.tint = _state.foreground;
     }
-    _background = _blocks.addChild(new PIXI.Sprite(_colors.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
+    _background = _blocks.addChild(new PIXI.Sprite(_state.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
     _background.width = _background.height = width * 2 - BORDER;
     _background.position.set(BORDER + width * 2, BORDER + yStart);
-    if (_colors.background !== null)
+    if (_state.background !== null)
     {
-        _background.tint = _colors.background;
+        _background.tint = _state.background;
     }
 
     const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
     block.width = block.height = width / 3;
-    block.position.set((_colors.isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
+    block.position.set((_isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
     _activeColor = block;
     setActiveColor();
 
@@ -80,25 +133,30 @@ function draw()
     }
 
     let x = 0, y = 2;
-    for (let color of _colors.colors)
+    for (let line of _colors)
     {
-        const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-        block.width = block.height = width - BORDER;
-        block.position.set(x * width + BORDER, y * width + BORDER + yStart);
-        block.tint = color;
-        x++;
-        if (x === WIDTH)
+        for (let i = 0; i < line.length; i++)
         {
-            y++;
-            x = 0;
+            const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
+            block.width = block.height = width - BORDER;
+            block.position.set(x * width + BORDER, y * width + BORDER + yStart);
+            block.tint = line[i];
+            x++;
+            if (x === WIDTH && i !== line.length - 1)
+            {
+                y++;
+                x = 0;
+            }
         }
+        x = 0;
+        y++;
     }
 }
 
 function setActiveColor()
 {
     let color;
-    if (_colors.isForeground)
+    if (_isForeground)
     {
         _activeColor.x = _foreground.width / 2 - _activeColor.width / 2 + BORDER;
         color = _foreground.tint;
@@ -120,10 +178,10 @@ function setActiveColor()
 
 function dropper(color)
 {
-    if (_colors.isForeground)
+    if (_isForeground)
     {
-        _colors.foreground = color;
-        if (_colors.foreground === null)
+        _state.foreground = color;
+        if (_state.foreground === null)
         {
             _foreground.tint = 0xffffff;
             _foreground.texture = Sheet.getTexture('transparency');
@@ -136,8 +194,8 @@ function dropper(color)
     }
     else
     {
-        _colors.background = color;
-        if (_colors.background === null)
+        _state.background = color;
+        if (_state.background === null)
         {
             _background.tint = 0xffffff;
             _background.texture = Sheet.getTexture('transparency');
@@ -155,41 +213,38 @@ function dropper(color)
 function down(x, y)
 {
     const point = new PIXI.Point(x, y);
-    if (_foreground.containsPoint(point) && !_colors.isForeground)
+    if (_foreground.containsPoint(point) && !_isForeground)
     {
-        _colors.isForeground = true;
+        _isForeground = true;
         setActiveColor();
         View.render();
-        remote.getCurrentWindow().windows.picker.emit('refresh');
         return;
     }
-    if (_background.containsPoint(point) && _colors.isForeground)
+    if (_background.containsPoint(point) && _isForeground)
     {
-        _colors.isForeground = false;
+        _isForeground = false;
         setActiveColor();
         View.render();
-        remote.getCurrentWindow().windows.picker.emit('refresh');
         return;
     }
     for (let block of _blocks.children)
     {
         if (block.containsPoint(point))
         {
-            if (_colors.isForeground)
+            if (_isForeground)
             {
                 if (block.isTransparent)
                 {
                     _foreground.tint = 0xffffff;
                     _foreground.texture = Sheet.getTexture('transparency');
-                    _colors.foreground = null;
+                    _state.foreground = null;
                 }
                 else
                 {
                     _foreground.tint = block.tint;
                     _foreground.texture = PIXI.Texture.WHITE;
-                    _colors.foreground = block.tint;
+                    _state.foreground = block.tint;
                 }
-                remote.getCurrentWindow().windows.zoom.emit('cursor');
             }
             else
             {
@@ -197,17 +252,17 @@ function down(x, y)
                 {
                     _background.tint = 0xffffff;
                     _background.texture = Sheet.getTexture('transparency');
-                    _colors.background = null;
+                    _state.background = null;
                 }
                 else
                 {
                     _background.tint = block.tint;
                     _background.texture = PIXI.Texture.WHITE;
-                    _colors.background = block.tint;
+                    _state.background = block.tint;
                 }
             }
-            _colors.current = block.tint === null ? 0xffffff : block.tint;
-            remote.getCurrentWindow().windows.picker.emit('refresh');
+            _state.picker = block.tint === null ? 0xffffff : block.tint;
+            ipcRenderer.send('state');
             setActiveColor();
             View.render();
             return;

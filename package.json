@@ -20,6 +20,7 @@
     "json-format": "^1.0.1",
     "jsonfile": "^3.0.0",
     "parse-json": "^2.2.0",
+    "pixi.js": "^4.5.2",
     "temp": "^0.8.3",
     "tinycolor2": "^1.4.1",
     "yy-animate": "^1.6.6",

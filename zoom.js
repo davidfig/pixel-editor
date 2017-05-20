@@ -1,35 +1,28 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 
 const Input = require('./input');
 const View = require('./view');
 const Sheet = require('./sheet');
-const Pixel = require('./data/pixel');
+const State = require('./data/state');
+const PixelEditor = require('./data/pixel-editor');
 
 const CURSOR_COLOR = 0xff0000;
 const SHAPE_HOVER_ALPHA = 1;
 const BORDER = 1;
 
-let _data,
-    _state,
-    _pixel,
-    _zoom = 50,
-    _cursor = { x: 5, y: 5 },
-    _cursorSize = { x: 1, y: 1 },
-    _cursorBlock,
-    _blocks,
-    _grid,
-    _colors,
-    _isDown = -1,
-    _shift,
-    _stamp,
-    _clipboard,
-    _dragging,
-    _selecting,
-    _line;
+let _state, _pixel, _zoom = 50,
+    _cursorBlock, _blocks, _grid,
+    _isDown = -1, _shift,
+    _stamp, _clipboard,
+    _dragging, _selecting, _line;
 
 function init()
 {
+    _state = new State();
+    _pixel = new PixelEditor(_state.lastFile);
+    _state.lastFile = _pixel.filename;
     View.init();
     Input.init(View.renderer.canvas, { keyDown: key, down: downMouse, move: moveMouse, up: upMouse });
     Sheet.init();
@@ -37,33 +30,31 @@ function init()
     _grid = View.add(new PIXI.Graphics());
     _cursorBlock = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
-    const cw = remote.getCurrentWindow();
-    _state = cw.state;
-    _data = cw.pixel;
-    _pixel = _data.pixel;
-    _colors = _data.colors;
     resize();
-    cw.show();
-    cw.focus();
-    cw.on('tool', tool);
-    cw.on('keydown', key);
-    cw.on('refresh', refresh);
-    cw.on('cursor', () => { cursor(); View.render(); });
-    cw.setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
-    _state.save();
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.name + ')');
+    remote.getCurrentWindow().on('keydown', key);
+    remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _state.current + ')');
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
+    remote.getCurrentWindow().show();
 }
 
-function refresh()
+function stateChange()
 {
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.name + ')');
-    const size = remote.getCurrentWindow().getContentSize();
-    if (Math.round(_pixel.width * _zoom) !== size[0] || Math.round(_pixel.height * _zoom) !== size[1])
-    {
-        remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
-    }
+    _state.load();
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _state.current + ')');
+    cursor();
+    View.render();
+}
+
+function pixelChange()
+{
+    _pixel.load();
+    // if (Math.round(_pixel.width * _zoom) !== window.innerWidth || Math.round(_pixel.height * _zoom) !== window.innerHeight)
+    // {
+    //     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
+    // }
     resize();
-    _state.save();
 }
 
 function resize()
@@ -84,8 +75,8 @@ function resize()
             _zoom = w;
         }
     }
-    _cursorSize.x = (_cursorSize.x >= _pixel.width) ? _pixel.width - 1 : _cursorSize.x;
-    _cursorSize.y = (_cursorSize.x >= _pixel.height) ? _pixel.height - 1 : _cursorSize.y;
+    _state.cursorSizeX = (_state.cursorSizeX >= _pixel.width) ? _pixel.width - 1 : _state.cursorSizeX;
+    _state.cursorSizeY = (_state.cursorSizeX >= _pixel.height) ? _pixel.height - 1 : _state.cursorSizeY;
     frame();
     cursor();
     draw();
@@ -134,9 +125,9 @@ function circleCursor(color)
 {
     _cursorBlock.lineStyle(0);
     _cursorBlock.position.set(0, 0);
-    let x0 = _cursor.x;
-    let y0 = _cursor.y;
-    let x = _cursorSize.x;
+    let x0 = _state.cursorX;
+    let y0 = _state.cursorY;
+    let x = _state.cursorSizeX;
     let y = 0;
     let decisionOver2 = 1 - x;   // Decision criterion divided by 2 evaluated at x=r, y=0
 
@@ -174,13 +165,13 @@ function circleCursor(color)
 
 function lineCursor()
 {
-    const color = _colors.foreground === null ? CURSOR_COLOR : _colors.foreground;
+    const color = _state.foreground === null ? CURSOR_COLOR : _state.foreground;
     _cursorBlock.position.set(0);
     if (_line)
     {
         _stamp = [];
-        let x0 = _cursor.x;
-        let y0 = _cursor.y;
+        let x0 = _state.cursorX;
+        let y0 = _state.cursorY;
         let x1 = _line.x;
         let y1 = _line.y;
 
@@ -216,42 +207,54 @@ function lineCursor()
     else
     {
         _cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA)
-            .drawRect(_cursor.x * _zoom - BORDER, _cursor.y * _zoom - BORDER, _zoom + BORDER * 2, _zoom + BORDER * 2)
+            .drawRect(_state.cursorX * _zoom - BORDER, _state.cursorY * _zoom - BORDER, _zoom + BORDER * 2, _zoom + BORDER * 2)
             .endFill();
-        _stamp = [{ x: _cursor.x, y: _cursor.y }];
+        _stamp = [{ x: _state.cursorX, y: _state.cursorY }];
     }
+}
+
+function singleCursor()
+{
+    const color = _state.foreground === null ? CURSOR_COLOR : _state.foreground;
+    _cursorBlock.position.set(_state.cursorX * _zoom, _state.cursorY * _zoom);
+    _cursorBlock.lineStyle(5, color);
+    _cursorBlock.drawRect(0, 0, _zoom, _zoom);
+    remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
 }
 
 function normalCursor()
 {
-    const color = _colors.foreground === null ? CURSOR_COLOR : _colors.foreground;
-    _cursorBlock.position.set(_cursor.x * _zoom, _cursor.y * _zoom);
+    const color = _state.foreground === null ? CURSOR_COLOR : _state.foreground;
+    _cursorBlock.position.set(_state.cursorX * _zoom, _state.cursorY * _zoom);
     _cursorBlock.lineStyle(5, color);
-    const x = _cursorSize.x + _cursor.x >= _pixel.width ? _pixel.width - _cursor.x : _cursorSize.x;
-    const y = _cursorSize.y + _cursor.y >= _pixel.height ? _pixel.height - _cursor.y : _cursorSize.y;
+    const x = _state.cursorSizeX + _state.cursorX >= _pixel.width ? _pixel.width - _state.cursorX : _state.cursorSizeX;
+    const y = _state.cursorSizeY + _state.cursorY >= _pixel.height ? _pixel.height - _state.cursorY : _state.cursorSizeY;
     _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
-    remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+    // remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
 }
 
 function cursor()
 {
-    switch (_data.tool)
+    _cursorBlock.clear();
+    switch (_state.tool)
     {
         case 'paint':
         case 'select':
-            _cursorBlock.clear();
             normalCursor();
             break;
 
         case 'circle':
-            _cursorBlock.clear();
-            circleCursor(_colors.foreground);
-            remote.getCurrentWindow().windows.coords.emit('cursor', _cursor.x, _cursor.y);
+            circleCursor(_state.foreground);
+            remote.getCurrentWindow().windows.coords.emit('cursor', _state.cursorX, _state.cursorY);
             break;
 
         case 'line':
-            _cursorBlock.clear();
-            lineCursor(_colors.foreground);
+            lineCursor(_state.foreground);
+            break;
+
+        case 'fill':
+            singleCursor();
+            break;
     }
 }
 
@@ -259,11 +262,11 @@ function move(x, y)
 {
     if (_shift)
     {
-        if (_data.tool === 'line')
+        if (_state.tool === 'line')
         {
             if (!_line)
             {
-                _line = { x: _cursor.x, y: _cursor.y };
+                _line = { x: _state.cursorX, y: _state.cursorY };
             }
             _line.x += x;
             _line.y += y;
@@ -274,84 +277,85 @@ function move(x, y)
         }
         else
         {
-            _cursorSize.x += x;
-            _cursorSize.x = (_cursorSize.x > _pixel.width) ? _pixel.width : _cursorSize.x;
-            _cursorSize.x = (_cursorSize.x < -_pixel.width) ? -_pixel.width : _cursorSize.x;
-            if (_data.tool === 'circle' && _cursorSize.x < 1)
+            _state.cursorSizeX += x;
+            _state.cursorSizeX = (_state.cursorSizeX > _pixel.width) ? _pixel.width : _state.cursorSizeX;
+            _state.cursorSizeX = (_state.cursorSizeX < -_pixel.width) ? -_pixel.width : _state.cursorSizeX;
+            if (_state.tool === 'circle' && _state.cursorSizeX < 1)
             {
-                _cursorSize.x = 1;
+                _state.cursorSizeX = 1;
             }
-            if (_cursorSize.x === 0)
+            if (_state.cursorSizeX === 0)
             {
-                _cursorSize.x = (x < 0) ? -1 : 1;
+                _state.cursorSizeX = (x < 0) ? -1 : 1;
             }
-            _cursorSize.y += y;
-            _cursorSize.y = (_cursorSize.y > _pixel.height) ? _pixel.height : _cursorSize.y;
-            _cursorSize.y = (_cursorSize.y < -_pixel.height) ? -_pixel.height : _cursorSize.y;
-            if (_cursorSize.y === 0)
+            _state.cursorSizeY += y;
+            _state.cursorSizeY = (_state.cursorSizeY > _pixel.height) ? _pixel.height : _state.cursorSizeY;
+            _state.cursorSizeY = (_state.cursorSizeY < -_pixel.height) ? -_pixel.height : _state.cursorSizeY;
+            if (_state.cursorSizeY === 0)
             {
-                _cursorSize.y = (y < 0) ? -1 : 1;
+                _state.cursorSizeY = (y < 0) ? -1 : 1;
             }
         }
     }
     else
     {
-        if (_cursorSize.x < 0)
+        if (_state.cursorSizeX < 0)
         {
-            _cursor.x += _cursorSize.x;
-            _cursorSize.x = -_cursorSize.x;
+            _state.cursorX += _state.cursorSizeX;
+            _state.cursorSizeX = -_state.cursorSizeX;
         }
-        if (_cursorSize.y < 0)
+        if (_state.cursorSizeY < 0)
         {
-            _cursor.y += _cursorSize.y;
-            _cursorSize.y = -_cursorSize.y;
+            _state.cursorY += _state.cursorSizeY;
+            _state.cursorSizeY = -_state.cursorSizeY;
         }
-        _cursor.x += x;
-        _cursor.y += y;
-        _cursor.x = _cursor.x < 0 ? _pixel.width - 1 : _cursor.x;
-        _cursor.y = _cursor.y < 0 ? _pixel.height - 1 : _cursor.y;
-        _cursor.x = _cursor.x === _pixel.width ? 0 : _cursor.x;
-        _cursor.y = _cursor.y === _pixel.height ? 0 : _cursor.y;
+        _state.cursorX += x;
+        _state.cursorY += y;
+        _state.cursorX = _state.cursorX < 0 ? _pixel.width - 1 : _state.cursorX;
+        _state.cursorY = _state.cursorY < 0 ? _pixel.height - 1 : _state.cursorY;
+        _state.cursorX = _state.cursorX === _pixel.width ? 0 : _state.cursorX;
+        _state.cursorY = _state.cursorY === _pixel.height ? 0 : _state.cursorY;
     }
     cursor();
+    ipcRenderer.send('state');
     View.render();
 }
 
 function space()
 {
-    switch (_data.tool)
+    switch (_state.tool)
     {
         case 'paint':
-            if (_cursorSize.x === 1 && _cursorSize.y === 1)
+            if (_state.cursorSizeX === 1 && _state.cursorSizeY === 1)
             {
-                const current = _pixel.get(_cursor.x, _cursor.y);
-                const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
-                _pixel.set(_cursor.x, _cursor.y, color);
+                const current = _pixel.get(_state.cursorX, _state.cursorY);
+                const color = (current !== _state.foreground) ? _state.foreground : _state.background;
+                _pixel.set(_state.cursorX, _state.cursorY, color);
                 dirty();
                 return color;
             }
             else
             {
                 _pixel.undoSave();
-                const color = _colors.foreground;
-                let xStart = _cursor.x, yStart = _cursor.y, xTo, yTo;
-                if (_cursorSize.x < 0)
+                const color = _state.foreground;
+                let xStart = _state.cursorX, yStart = _state.cursorY, xTo, yTo;
+                if (_state.cursorSizeX < 0)
                 {
-                    xStart += _cursorSize.x;
-                    xTo = xStart + Math.abs(_cursorSize.x);
+                    xStart += _state.cursorSizeX;
+                    xTo = xStart + Math.abs(_state.cursorSizeX);
                 }
                 else
                 {
-                    xTo = xStart + _cursorSize.x;
+                    xTo = xStart + _state.cursorSizeX;
                 }
-                if (_cursorSize.y < 0)
+                if (_state.cursorSizeY < 0)
                 {
-                    yStart += _cursorSize.y;
-                    yTo = yStart + Math.abs(_cursorSize.y) - 1;
+                    yStart += _state.cursorSizeY;
+                    yTo = yStart + Math.abs(_state.cursorSizeY) - 1;
                 }
                 else
                 {
-                    yTo = yStart + _cursorSize.y;
+                    yTo = yStart + _state.cursorSizeY;
                 }
                 for (let y = yStart; y < yTo; y++)
                 {
@@ -367,7 +371,7 @@ function space()
 
         case 'circle':
         case 'line':
-            const color = _colors.foreground;
+            const color = _state.foreground;
             _pixel.undoSave();
             for (let block of _stamp)
             {
@@ -385,7 +389,7 @@ function space()
 
         case 'fill':
             _pixel.undoSave();
-            floodFill(_cursor.x, _cursor.y, _pixel.get(_cursor.x, _cursor.y));
+            floodFill(_state.cursorX, _state.cursorY, _pixel.get(_state.cursorX, _state.cursorY));
             dirty();
             break;
     }
@@ -393,9 +397,9 @@ function space()
 
 function floodFill(x, y, check)
 {
-    if (_pixel.get(x, y) === check)
+    if (check !== _state.foreground && _pixel.get(x, y) === check)
     {
-        _pixel.set(x, y, _colors.foreground, true);
+        _pixel.set(x, y, _state.foreground, true);
         if (y > 0)
         {
             floodFill(x, y - 1, check);
@@ -410,14 +414,13 @@ function floodFill(x, y, check)
         }
         if (x < _pixel.width - 1)
         {
-            floodFill(x + 1, y, check)
+            floodFill(x + 1, y, check);
         }
     }
 }
 
 function dirty()
 {
-    remote.getCurrentWindow().windows.show.emit('dirty');
     _pixel.save(_state.lastFile);
     draw();
     View.render();
@@ -439,14 +442,20 @@ function downMouse(x, y)
 {
     const xx = Math.floor(x / _zoom);
     const yy = Math.floor(y / _zoom);
-    switch (_data.tool)
+    switch (_state.tool)
     {
         case 'paint':
             const current = _pixel.get(xx, yy);
-            const color = (current !== _colors.foreground) ? _colors.foreground : _colors.background;
+            const color = (current !== _state.foreground) ? _state.foreground : _state.background;
             _pixel.set(xx, yy, color);
             dirty();
             _isDown = { color, x: xx, y: yy };
+            break;
+
+        case 'fill':
+            _pixel.undoSave();
+            floodFill(xx, yy, _pixel.get(xx, yy));
+            dirty();
             break;
 
         case 'circle':
@@ -454,15 +463,15 @@ function downMouse(x, y)
             break;
 
         case 'select':
-            if (xx >= _cursor.x && xx <= _cursor.x + _cursorSize.x && yy >= _cursor.y && yy <= _cursor.y + _cursorSize.y)
+            if (xx >= _state.cursorX && xx <= _state.cursorX + _state.cursorSizeX && yy >= _state.cursorY && yy <= _state.cursorY + _state.cursorSizeY)
             {
                 _dragging = { x: xx, y: yy, data: _pixel.data.slice(0) };
             }
             else
             {
                 _selecting = true;
-                _cursor.x = xx;
-                _cursor.y = yy;
+                _state.cursorX = xx;
+                _state.cursorY = yy;
             }
             break;
     }
@@ -472,7 +481,7 @@ function moveMouse(x, y)
 {
     const xx = Math.floor(x / _zoom);
     const yy = Math.floor(y / _zoom);
-    switch (_data.tool)
+    switch (_state.tool)
     {
         case 'paint':
             if (_isDown !== -1)
@@ -486,8 +495,8 @@ function moveMouse(x, y)
             break;
 
         case 'circle':
-            _cursor.x = Math.floor(x / _zoom);
-            _cursor.y = Math.floor(y / _zoom);
+            _state.cursorX = Math.floor(x / _zoom);
+            _state.cursorY = Math.floor(y / _zoom);
             cursor();
             View.render();
             break;
@@ -495,20 +504,20 @@ function moveMouse(x, y)
         case 'select':
             if (_selecting)
             {
-                _cursorSize.x = xx - _cursor.x;
-                _cursorSize.y = yy - _cursor.y;
+                _state.cursorSizeX = xx - _state.cursorX;
+                _state.cursorSizeY = yy - _state.cursorY;
                 cursor();
                 View.render();
             }
             else if (_dragging && (xx !== _dragging.x || yy !== _dragging.y))
             {
-                _cursor.x = _dragging.x;
-                _cursor.y = _dragging.y;
+                _state.cursorX = _dragging.x;
+                _state.cursorY = _dragging.y;
                 _pixel.data = _dragging.data;
                 const temp = _clipboard;
                 cut();
-                _cursor.x = xx; //_dragging.x;
-                _cursor.y = yy;// - _dragging.y;
+                _state.cursorX = xx; //_dragging.x;
+                _state.cursorY = yy;// - _dragging.y;
                 paste();
                 _clipboard = temp;
                 cursor();
@@ -564,25 +573,25 @@ function newFile()
 
 function dropper()
 {
-    const color = _pixel.get(_cursor.x, _cursor.y);
+    const color = _pixel.get(_state.cursorX, _state.cursorY);
     remote.getCurrentWindow().windows.palette.emit('dropper', color);
 }
 
 function clear()
 {
-    switch (_data.tool)
+    switch (_state.tool)
     {
         case 'paint':
-            if (_cursorSize.x < 0)
+            if (_state.cursorSizeX < 0)
             {
-                _cursor.x += _cursorSize.x;
+                _state.cursorX += _state.cursorSizeX;
             }
-            if (_cursorSize.y < 0)
+            if (_state.cursorSizeY < 0)
             {
-                _cursor.y += _cursorSize.y;
+                _state.cursorY += _state.cursorSizeY;
             }
-            _cursorSize.x = 1;
-            _cursorSize.y = 1;
+            _state.cursorSizeX = 1;
+            _state.cursorSizeY = 1;
             cursor();
             View.render();
             break;
@@ -591,12 +600,12 @@ function clear()
 
 function tool()
 {
-    switch (_data.tool)
+    switch (_state.tool)
     {
         case 'circle':
-            if (_cursorSize.x === 1)
+            if (_state.cursorSizeX === 1)
             {
-                _cursorSize.x = 3;
+                _state.cursorSizeX = 3;
             }
             break;
 
@@ -621,34 +630,34 @@ function cut()
 
 function copy(clear)
 {
-    if (_cursorSize.x === 1 && _cursorSize.y === 1)
+    if (_state.cursorSizeX === 1 && _state.cursorSizeY === 1)
     {
-        _clipboard = { width: 1, height: 1, data: _pixel.get(_cursor.x, _cursor.y) };
+        _clipboard = { width: 1, height: 1, data: _pixel.get(_state.cursorX, _state.cursorY) };
         if (clear)
         {
-            _pixel.set(_cursor.x, _cursor.y, null);
+            _pixel.set(_state.cursorX, _state.cursorY, null);
         }
     }
     else
     {
-        let xStart = _cursor.x, yStart = _cursor.y, xTo, yTo;
-        if (_cursorSize.x < 0)
+        let xStart = _state.cursorX, yStart = _state.cursorY, xTo, yTo;
+        if (_state.cursorSizeX < 0)
         {
-            xStart += _cursorSize.x;
-            xTo = xStart + Math.abs(_cursorSize.x);
+            xStart += _state.cursorSizeX;
+            xTo = xStart + Math.abs(_state.cursorSizeX);
         }
         else
         {
-            xTo = xStart + _cursorSize.x;
+            xTo = xStart + _state.cursorSizeX;
         }
-        if (_cursorSize.y < 0)
+        if (_state.cursorSizeY < 0)
         {
-            yStart += _cursorSize.y;
-            yTo = yStart + Math.abs(_cursorSize.y) - 1;
+            yStart += _state.cursorSizeY;
+            yTo = yStart + Math.abs(_state.cursorSizeY) - 1;
         }
         else
         {
-            yTo = yStart + _cursorSize.y;
+            yTo = yStart + _state.cursorSizeY;
         }
         _clipboard = { width: xTo - xStart, height: yTo - yStart, data: [] };
         for (let y = yStart; y < yTo; y++)
@@ -674,7 +683,7 @@ function paste()
         {
             for (let x = 0; x < _clipboard.width; x++)
             {
-                _pixel.set(x + _cursor.x, y + _cursor.y, _clipboard.data[i++]);
+                _pixel.set(x + _state.cursorX, y + _state.cursorY, _clipboard.data[i++]);
             }
         }
         dirty();
@@ -716,18 +725,18 @@ function key(code, special)
                 dirty();
                 break;
             case 68:
-                _pixel.duplicate(_pixel.current);
+                _pixel.duplicate(_state.current);
                 draw();
                 dirty();
                 break;
             case 65:
-                _data.tool = 'select';
+                _state.tool = 'select';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
-                _cursor.x = 0;
-                _cursor.y = 0;
-                _cursorSize.x = _pixel.width;
-                _cursorSize.y = _pixel.height;
+                _state.cursorX = 0;
+                _state.cursorY = 0;
+                _state.cursorSizeX = _pixel.width;
+                _state.cursorSizeY = _pixel.height;
                 cursor();
                 View.render();
                 break;
@@ -768,22 +777,27 @@ function key(code, special)
                 clear();
                 break;
             case 66:
-                _data.tool = 'paint';
+                _state.tool = 'paint';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 86:
-                _data.tool = 'select';
+                _state.tool = 'select';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 67:
-                _data.tool = 'circle';
+                _state.tool = 'circle';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;
             case 76:
-                _data.tool = 'line';
+                _state.tool = 'line';
+                remote.getCurrentWindow().windows.tools.emit('tools');
+                tool();
+                break;
+            case 70:
+                _state.tool = 'fill';
                 remote.getCurrentWindow().windows.tools.emit('tools');
                 tool();
                 break;

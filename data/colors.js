@@ -1,106 +1,94 @@
 const Color = require('yy-color');
 
-let _colors = [];
-let _foreground, _background, _isForeground = true;
+const COLORS_PER_LINE = 10;
 
-const GRAYS = 10;
-
-function find(color)
+class Colors
 {
-    for (let find of _colors)
+    constructor(filename)
     {
-        if (find === color)
+        if (filename)
         {
-            return true;
+            this.filename = filename;
+            this.load();
         }
     }
-}
 
-function grays()
-{
-    _colors.push(0, 0xffffff);
-    for (let i = 1; i < GRAYS - 1; i++)
+    static create()
     {
-        const color = Color.blend(i / GRAYS, 0xffffff, 0);
-        if (!find(color))
-        {
-            _colors.push(color);
-        }
+
     }
-}
-
-function primaries()
-{
-    _colors.push(0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff);
-}
-
-function load()
-{
-}
-
-function init(pixel)
-{
-    grays();
-    primaries();
-    for (let data of pixel.data)
-    {
-        if (!find(data))
-        {
-            _colors.push(data);
-        }
+        this.palettes = [[], [], []];
+        this.isForeground = true;
+        grays(lines[1]);
+        primaries(lines[2]);
     }
-    _foreground = 0;
-    _background = null;
-}
 
-module.exports = {
-    init,
-    load,
-    get foreground()
+    update(pixel)
     {
-        return _foreground;
-    },
-    set foreground(value)
-    {
-        _foreground = value;
-        if (!find(value))
+        for (let frame of pixel.frames)
         {
-            _colors.push(value);
+            for (let data of frame.data)
+            {
+                if (!find(lines[0], data))
+                {
+                    _colors.push(data);
+                }
+            }
         }
-    },
-    get background()
-    {
-        return _background;
-    },
-    set background(value)
-    {
-        _background = value;
-    },
-    get colors()
-    {
-        return _colors;
-    },
-    get isForeground()
-    {
-        return _isForeground;
-    },
-    set isForeground(value)
-    {
-        _isForeground = value;
-    },
-    get current()
-    {
-        return _isForeground ? _foreground : _background;
-    },
-    set current(value)
-    {
-        if (_isForeground)
+        _foreground = 0;
+        _background = null;
+    }
+
+
+
+
+
+    module.exports = {
+        init,
+        get foreground()
+        {
+            return _foreground;
+        },
+        set foreground(value)
         {
             _foreground = value;
-        }
-        else
+            if (!find(value))
+            {
+                _colors.push(value);
+            }
+        },
+        get background()
+        {
+            return _background;
+        },
+        set background(value)
         {
             _background = value;
+        },
+        get isForeground()
+        {
+            return _isForeground;
+        },
+        set isForeground(value)
+        {
+            _isForeground = value;
+        },
+        get current()
+        {
+            return _isForeground ? _foreground : _background;
+        },
+        set current(value)
+        {
+            if (_isForeground)
+            {
+                _foreground = value;
+            }
+            else
+            {
+                _background = value;
+            }
         }
     }
-};
+
+
+module.exports = Colors;

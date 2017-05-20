@@ -1,23 +1,27 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
 
 const Input = require('./input');
 const EasyEdit = require('./easyedit');
+const State = require('./data/state');
+const PixelEditor = require('./data/pixel-editor');
 
-let _pixel, _editing;
+let _state, _pixel, _editing;
 
 function init()
 {
     Input.init(null, { keyDown });
-    _pixel = remote.getCurrentWindow().pixel.pixel;
-    size(_pixel.width, _pixel.height);
-    pixel(_pixel.pixels);
-    remote.getCurrentWindow().setSize(document.body.offsetWidth, document.body.offsetHeight);
-    remote.getCurrentWindow().show();
-    remote.getCurrentWindow().on('cursor', move);
+    _state = new State();
+    _pixel = new PixelEditor(_state.lastFile);
+    stateChange(true);
+    pixelChange(true);
     new EasyEdit(document.getElementById('width'), { onsuccess: widthChange, oncancel: cancel, onedit: start });
     new EasyEdit(document.getElementById('height'), { onsuccess: heightChange, oncancel: cancel, onedit: start });
     new EasyEdit(document.getElementById('pixels'), { onsuccess: pixelsChange, oncancel: cancel, onedit: start });
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
+    remote.getCurrentWindow().show();
 }
 
 function start()
@@ -42,7 +46,6 @@ function widthChange(value)
     {
         _pixel.save();
     }
-    remote.getCurrentWindow().windows.zoom.emit('refresh');
 }
 
 function heightChange(value)
@@ -57,7 +60,6 @@ function heightChange(value)
     {
         _pixel.save();
     }
-    remote.getCurrentWindow().windows.zoom.emit('refresh');
 }
 
 function pixelsChange(value)
@@ -68,25 +70,28 @@ function pixelsChange(value)
         _pixel.pixels = value;
         _pixel.save();
     }
-    remote.getCurrentWindow().windows.show.emit('dirty');
 }
 
-function move(x, y)
+function pixelChange(noload)
 {
-    document.getElementById('x').innerHTML = x;
-    document.getElementById('y').innerHTML = y;
-}
-
-function size(width, height)
-{
-    document.getElementById('width').innerHTML = width;
-    document.getElementById('height').innerHTML = height;
+    if (noload !== true)
+    {
+        _pixel.load();
+    }
+    document.getElementById('width').innerHTML = _pixel.width;
+    document.getElementById('height').innerHTML = _pixel.height;
     remote.getCurrentWindow().setSize(document.body.offsetWidth, document.body.offsetHeight);
 }
 
-function pixel(pixels)
+function stateChange(noload)
 {
-    document.getElementById('pixels').innerHTML = pixels;
+    if (noload !== true)
+    {
+        _state.load();
+    }
+    document.getElementById('pixels').innerHTML = _state.pixels;
+    document.getElementById('x').innerHTML = _state.cursorX;
+    document.getElementById('y').innerHTML = _state.cursorY;
 }
 
 function keyDown(code, special)

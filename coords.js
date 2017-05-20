@@ -1,6 +1,7 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
+const path = require('path');
 
 const Input = require('./input');
 const EasyEdit = require('./easyedit');
@@ -92,6 +93,10 @@ function stateChange(noload)
     document.getElementById('pixels').innerHTML = _state.pixels;
     document.getElementById('x').innerHTML = _state.cursorX;
     document.getElementById('y').innerHTML = _state.cursorY;
+    document.getElementById('cursorWidth').innerHTML = _state.cursorSizeX;
+    document.getElementById('cursorHeight').innerHTML = _state.cursorSizeY;
+    const filename = '--- ' + path.basename(_state.lastFile, '.json') + ' ---';
+    document.getElementById('filename').innerHTML = filename;
 }
 
 function keyDown(code, special)

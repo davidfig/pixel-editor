@@ -1,18 +1,20 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
+const RenderSheet = require('yy-rendersheet');
 
 const Input = require('./input');
 const View = require('./view');
 const Sheet = require('./sheet');
 const State = require('./data/state');
 const PixelEditor = require('./data/pixel-editor');
+const Pixel = require('./data/pixel');
 
 const CURSOR_COLOR = 0xff0000;
 const SHAPE_HOVER_ALPHA = 1;
 const BORDER = 1;
 
-let _state, _pixel, _zoom = 50,
+let _state, _pixel, _zoom = 50, _sheet, _sprite,
     _cursorBlock, _blocks, _grid,
     _isDown = -1, _shift,
     _stamp, _clipboard,
@@ -22,20 +24,22 @@ function init()
 {
     _state = new State();
     _pixel = new PixelEditor(_state.lastFile);
+    _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST });
     _state.lastFile = _pixel.filename;
     View.init();
     Input.init(View.renderer.canvas, { keyDown: key, down: downMouse, move: moveMouse, up: upMouse });
     Sheet.init();
     _blocks = View.add(new PIXI.Container());
+    _sprite = View.add(new PIXI.Container());
     _grid = View.add(new PIXI.Graphics());
     _cursorBlock = View.add(new PIXI.Graphics());
-    window.addEventListener('resize', resize);
     resize();
     remote.getCurrentWindow().on('keydown', key);
     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
     remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
+    window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
 }
 
@@ -78,6 +82,7 @@ function resize()
     }
     _state.cursorSizeX = (_state.cursorSizeX >= _pixel.width) ? _pixel.width - 1 : _state.cursorSizeX;
     _state.cursorSizeY = (_state.cursorSizeX >= _pixel.height) ? _pixel.height - 1 : _state.cursorSizeY;
+    transparency();
     frame();
     cursor();
     draw();
@@ -85,23 +90,28 @@ function resize()
     remote.getCurrentWindow().zoom = _zoom;
 }
 
-function draw()
+function transparency()
 {
     _blocks.removeChildren();
     for (let y = 0; y < _pixel.height; y++)
     {
         for (let x = 0; x < _pixel.height; x++)
         {
-            const color = _pixel.get(x, y);
-            const block = _blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
+            const block = _blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')));
             block.width = block.height = _zoom;
             block.position.set(x * _zoom, y * _zoom);
-            if (color !== null)
-            {
-                block.tint = color;
-            }
         }
     }
+}
+
+function draw()
+{
+    _pixel.sheet(_sheet);
+    _sheet.render();
+    _sprite.removeChildren();
+    const pixel = _sprite.addChild(new Pixel(_pixel.getData()));
+    pixel.scale.set(_zoom);
+    pixel.frame(_pixel.current);
 }
 
 function frame()

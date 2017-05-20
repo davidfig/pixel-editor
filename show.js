@@ -79,7 +79,7 @@ function resize()
         pixel.scale.set(_state.pixels);
         pixel.frame(i);
         pixel.position.set(xStart, yStart);
-        _buttons.push({ x1: xStart, y1: yStart + BUFFER, x2: xStart + pixel.width, y2: yStart + BUFFER + pixel.height, current: i });
+        _buttons.push({ x1: xStart, y1: yStart - BUFFER, x2: xStart + pixel.width, y2: yStart + pixel.height + BUFFER, current: i });
         xStart += BUFFER + pixel.width;
     }
     const window = remote.getCurrentWindow();
@@ -89,6 +89,7 @@ function resize()
 
 function down(x, y)
 {
+    y -= _spacer.offsetHeight + _name.offsetHeight;
     for (let button of _buttons)
     {
         if (x >= button.x1 && x <= button.x2 && y >= button.y1 && y <= button.y2)

@@ -38,7 +38,6 @@ class Pixel extends PIXI.Sprite
             this.name = data.name;
             this.frames = data.frames;
             this.animations = data.animations;
-            // this.anchor.set(data.anchor.x, data.anchor.y);
         }
     }
 

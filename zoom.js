@@ -106,10 +106,10 @@ function transparency()
 
 function draw()
 {
-    _pixel.sheet(_sheet);
-    _sheet.render();
     _sprite.removeChildren();
     const pixel = _sprite.addChild(new Pixel(_pixel.getData()));
+    pixel.sheet(_sheet);
+    _sheet.render();
     pixel.scale.set(_zoom);
     pixel.frame(_pixel.current);
 }

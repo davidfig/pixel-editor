@@ -30,7 +30,7 @@ function measure(c, params)
 
 class Pixel extends PIXI.Sprite
 {
-    constructor(data)
+    constructor(data, sheet)
     {
         super();
         if (data)
@@ -39,47 +39,56 @@ class Pixel extends PIXI.Sprite
             this.frames = data.frames;
             this.animations = data.animations;
         }
+        this.rendersheet = sheet;
     }
 
     sheet(sheet)
     {
-        Pixel.sheet = sheet;
+        this.rendersheet = sheet || this.rendersheet;
         for (let i = 0; i < this.frames.length; i++)
         {
             const frame = this.frames[i];
-            sheet.add(this.name + '-' + i, draw, measure, frame);
+            this.rendersheet.add(this.name + '-' + i, draw, measure, frame);
         }
     }
 
     animate(name)
     {
         this.animation = this.animations[name];
-        this.index = 0;
-        this.updateFrame(0);
+        if (this.animation)
+        {
+            this.index = 0;
+            this.updateFrame(0);
+            this.stop = false;
+        }
+        else
+        {
+            this.stop = true;
+        }
     }
 
     updateFrame(leftover)
     {
-        const entry = this.animation[this.index];
+        let entry = this.animation[this.index];
         if (typeof entry[0] === 'string')
         {
             switch (entry[0])
             {
                 case 'loop':
                     this.index = 0;
-                    this.entry = this.animation[0];
+                    entry = this.animation[0];
                     break;
             }
         }
-        if (Array.isArray(this.entry[1]))
+        if (Array.isArray(entry[1]))
         {
-            this.next = Random.range(this.entry[1][0], this.entry[1][1]) + leftover;
+            this.next = Random.range(entry[1][0], entry[1][1]) + leftover;
         }
         else
         {
-            this.next = this.entry[1] + leftover;
+            this.next = entry[1] + leftover;
         }
-        this.texture = Pixel.sheet.getTexture(this.name + '-' + this.entry[0]);
+        this.texture = this.rendersheet.getTexture(this.name + '-' + entry[0]);
     }
 
     update(elapsed)
@@ -94,16 +103,20 @@ class Pixel extends PIXI.Sprite
             this.index++;
             if (this.index === this.animation.length)
             {
-                this.next = -1;
+                this.stop = true;
             }
-            this.updateFrame(this.next);
+            else
+            {
+                this.updateFrame(this.next);
+                return true;
+            }
         }
     }
 
     frame(i)
     {
         this.stop = true;
-        this.texture = Pixel.sheet.getTexture(this.name + '-' + i);
+        this.texture = this.rendersheet.getTexture(this.name + '-' + i);
     }
 }
 

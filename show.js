@@ -51,8 +51,6 @@ function pixelChange()
     {
         _pixel.load();
     }
-    _pixel.sheet(_sheet);
-    _sheet.render();
     resize();
 }
 
@@ -75,7 +73,12 @@ function resize()
             block.height = _state.pixels * _pixel.height + BUFFER;
             _name.innerHTML = i;
         }
-        const pixel = _pixels.addChild(new Pixel(data));
+        const pixel = _pixels.addChild(new Pixel(data, _sheet));
+        if (i === 0)
+        {
+            pixel.sheet(_sheet);
+            _sheet.render();
+        }
         pixel.scale.set(_state.pixels);
         pixel.frame(i);
         pixel.position.set(xStart, yStart);

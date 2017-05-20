@@ -1,38 +1,61 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const Parse = require('parse-json');
 const Format = require('json-format');
 const Random = require('yy-random');
+const RenderSheet = require('yy-rendersheet');
 
 const Input = require('./input');
 const View = require('./view');
+const State = require('./data/state');
+const Pixel = require('./data/pixel');
+const PixelEditor = require('./data/pixel-editor');
 
-let _canvas, _pixel, _code, _error, _select, _hide, _top, _middle, _saved, _blocks, _width, _height, _animations = {}, _editing,
-    _animation, _next, _frame, _index, _entry, _time, _animationName;
+let _canvas, _state, _pixel, _sprite, _sheet,
+    _code, _error, _select, _hide, _top, _middle, _saved, _editing,
+    _time, _animation, _animations = {}, _animationName;
 
 function init()
 {
+    _state = new State();
+    _pixel = new PixelEditor(_state.lastFile);
     _canvas = document.getElementById('canvas');
     View.init({ canvas: _canvas });
     Input.init(_canvas, { keyDown });
-    _pixel = remote.getCurrentWindow().pixel.pixel;
-    _blocks = View.add(new PIXI.Container());
+
     _code = document.getElementById('code');
     _code.addEventListener('focus', () => _editing = true);
     _code.addEventListener('blur', () => _editing = false);
     _code.addEventListener('input', codeChange);
+
     _error = document.getElementById('error');
     _select = document.getElementById('animation');
     _hide = document.getElementById('hide');
     _hide.addEventListener('click', hide);
     _top = document.getElementById('top');
     _middle = document.getElementById('middle');
+
     setup();
-    window.addEventListener('resize', resize);
     resize();
-    _next = 0;
-    _frame = _pixel.frames[0];
+    setupSelect();
+    window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
+
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
+
     update();
+}
+
+function stateChange()
+{
+    _state.load();
+}
+
+function pixelChange()
+{
+    _pixel.load();
+    resize();
 }
 
 function hide()
@@ -58,37 +81,16 @@ function hide()
 
 function setup()
 {
-    _blocks.removeChildren();
-    _width = 0;
-    _height = 0;
-    for (let frame of _pixel.frames)
-    {
-        if (frame.width > _width)
-        {
-            _width = frame.width;
-        }
-        if (frame.height > _height)
-        {
-            _height = frame.height;
-        }
-    }
-    _canvas.width = _width * _pixel.pixels;
-    _canvas.height = _height * _pixel.pixels;
-    _canvas.style.width = _width * _pixel.pixels + 'px';
-    _canvas.style.height = _height * _pixel.pixels + 'px';
-    for (let y = 0; y < _height; y++)
-    {
-        for (let x = 0; x < _width; x++)
-        {
-            _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-        }
-    }
-    setupSelect();
+    _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST });
     try
     {
         _code.value = Format(_pixel.animations);
     }
-    catch (e) { }
+    catch (e)
+    {
+        _code.value = _pixel.animations;
+        _error.innerHTML = e.message;
+    }
 }
 
 
@@ -131,63 +133,38 @@ function setupSelect()
                 _animationName = animation;
             }
         }
-        changeAnimation();
+        if (_sprite)
+        {
+            _sprite.animate(_animationName);
+        }
     }
     else
     {
-        _animation = _pixel.animations[_animationName]
-        changeAnimation();
+        if (_sprite)
+        {
+            _sprite.animate(_animationName);
+        }
     }
 }
 
 function resize()
 {
+    View.clear();
     View.resize();
-    let i = 0, blocks = _blocks.children;
-    for (let y = 0; y < _height; y++)
+    _sprite = View.add(new Pixel(_pixel.getData(), _sheet));
+    _sprite.sheet(_sheet);
+    _sheet.render();
+    _sprite.scale.set(_state.pixels);
+    _sprite.frame(0);
+    if (_animationName)
     {
-        for (let x = 0; x < _width; x++)
-        {
-            const block = blocks[i++];
-            block.width = block.height = _pixel.pixels;
-            block.position.set(x * _pixel.pixels, y * _pixel.pixels);
-        }
+        _sprite.animate(_animationName);
     }
-    // _error.style.display = 'none';
-    _code.style.height = window.innerHeight - _top.offsetHeight - document.getElementById('middle').offsetHeight - _error.offsetHeight + 'px';
-}
+    _canvas.style.width = _sprite.width + 'px';
+    _canvas.style.height = _sprite.height + 'px';
+    View.render();
 
-function changeAnimation()
-{
-    if (_animation)
-    {
-        _index = 0;
-        updateFrame(0);
-    }
-}
-
-function updateFrame(leftover)
-{
-    _entry = _animation[_index];
-    if (typeof _entry[0] === 'string')
-    {
-        switch (_entry[0])
-        {
-            case 'loop':
-                _index = 0;
-                _entry = _animation[0];
-                break;
-        }
-    }
-    if (Array.isArray(_entry[1]))
-    {
-        _next = Random.range(_entry[1][0], _entry[1][1]) + leftover;
-    }
-    else
-    {
-        _next = _entry[1] + leftover;
-    }
-    _frame = _pixel.frames[_entry[0]];
+    _code.style.height = window.innerHeight - _top.offsetHeight - _middle.offsetHeight - _error.offsetHeight + 'px';
 }
 
 function update()
@@ -195,33 +172,12 @@ function update()
     const now = Date.now();
     const elapsed = _time ? now - _time : 0;
     _time = now;
-    if (_next === -1)
+    if (_sprite)
     {
-        return;
-    }
-    _next -= elapsed;
-    if (_next <= 0)
-    {
-        _index++;
-        if (_index === _animation.length)
+        if (_sprite.update(elapsed))
         {
-            _next = -1;
+            View.render();
         }
-        updateFrame(_next);
-        const blocks = _blocks.children;
-        for (let block of blocks)
-        {
-            block.tint = 0xffffff;
-        }
-        for (let y = 0; y < _frame.height; y++)
-        {
-            for (let x = 0; x < _frame.width; x++)
-            {
-                const i = x + y * _frame.width;
-                blocks[i].tint = (_frame.data[i] === null) ? 0xbbbbbb : _frame.data[i];
-            }
-        }
-        View.render();
     }
     requestAnimationFrame(update);
 }
@@ -234,7 +190,9 @@ function codeChange()
         _error.innerHTML = 'Compiled.';
         _pixel.animations = value;
         _pixel.save();
+        ipcRenderer.send('pixel');
         setupSelect();
+        resize();
     }
     catch (e)
     {

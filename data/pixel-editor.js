@@ -36,6 +36,7 @@ class PixelEditor extends Pixel
         {
             this.filename = filename;
             this.load();
+            this.name = this.name || path.basename(filename, '.json');
         }
     }
 
@@ -254,7 +255,7 @@ class PixelEditor extends Pixel
 
     save()
     {
-        jsonfile.writeFileSync(this.filename, { frames: this.frames, animations: this.animations });
+        jsonfile.writeFileSync(this.filename, { name: this.name, frames: this.frames, animations: this.animations });
         if (this.editor)
         {
             jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor);

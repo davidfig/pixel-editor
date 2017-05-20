@@ -6,7 +6,7 @@ const path = require('path');
 
 const WindowState = require('./data/window-state');
 
-const DEBUG = true;
+const DEBUG = false;
 const DEV_ALL = false;
 
 let _windows, _main, _state;
@@ -31,7 +31,7 @@ function init()
     create('show', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
-    // create('animation', { noThrottling: true });
+    create('animation', { noThrottling: true });
 
     accelerators();
     listeners();
@@ -40,7 +40,7 @@ function init()
 function create(name, options)
 {
     options = options || {};
-    const window = new electron.BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: DEBUG ? true : false, backgroundColor: WINDOW_BACKGROUND, parent: _main, maximizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
+    const window = new electron.BrowserWindow({ skipTaskbar: true, frame: options.frame ? true : false, show: DEBUG ? true : false, backgroundColor: WINDOW_BACKGROUND, parent: _main, maximizable: false, minimizable: false, closable: false, fullscreenable: false, acceptFirstMouse: true });
     window.stateID = name;
     _state.addWindow(window, (!DEV_ALL && options.noResize));
     window.loadURL(url.format({ pathname: path.join(__dirname, name + '.html'), protocol: 'file:', slashes: true }));

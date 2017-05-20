@@ -63,33 +63,27 @@ function accelerators()
     electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
 }
 
+function listener(type)
+{
+    electron.ipcMain.on(type,
+        function (event)
+        {
+            for (let key in _windows)
+            {
+                const window = _windows[key];
+                if (!window.isDestroyed() && window.webContents !== event.sender)
+                {
+                    window.webContents.send(type);
+                }
+            }
+        });
+}
+
 function listeners()
 {
-    electron.ipcMain.on('state',
-        function (event)
-        {
-            for (let key in _windows)
-            {
-                const window = _windows[key];
-                if (!window.isDestroyed() && window.webContents !== event.sender)
-                {
-                    window.webContents.send('state');
-                }
-            }
-        });
-
-    electron.ipcMain.on('pixel',
-        function (event)
-        {
-            for (let key in _windows)
-            {
-                const window = _windows[key];
-                if (!window.isDestroyed() && window.webContents !== event.sender)
-                {
-                    window.webContents.send('pixel');
-                }
-            }
-        });
+    listener('state');
+    listener('pixel');
+    listener('reset');
 }
 
 app.console = new console.Console(process.stdout, process.stderr);

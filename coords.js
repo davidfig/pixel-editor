@@ -22,7 +22,16 @@ function init()
     new EasyEdit(document.getElementById('pixels'), { onsuccess: pixelsChange, oncancel: cancel, onedit: start });
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
+    ipcRenderer.on('reset', reset);
     remote.getCurrentWindow().show();
+}
+
+function reset()
+{
+    _state.load();
+    _pixel = new PixelEditor(_state.lastFile);
+    stateChange(true);
+    pixelChange(true);
 }
 
 function start()

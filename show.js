@@ -32,11 +32,12 @@ function init()
     View.init({ canvas: _canvas });
     _pixels = View.add(new PIXI.Container());
     Input.init(_canvas, { keyDown, down });
-    ipcRenderer.on('state', stateChange);
-    ipcRenderer.on('pixel', pixelChange);
     pixelChange();
     resize();
     window.addEventListener('resize', resize);
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
+    ipcRenderer.on('reset', reset);
     remote.getCurrentWindow().show();
 }
 
@@ -51,6 +52,13 @@ function pixelChange()
     {
         _pixel.load();
     }
+    resize();
+}
+
+function reset()
+{
+    _state.load();
+    _pixel = new PixelEditor(_state.lastFile);
     resize();
 }
 

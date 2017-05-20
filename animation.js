@@ -2,7 +2,6 @@ const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const Parse = require('parse-json');
 const Format = require('json-format');
-const Random = require('yy-random');
 const RenderSheet = require('yy-rendersheet');
 
 const Input = require('./input');
@@ -38,13 +37,17 @@ function init()
     setup();
     resize();
     setupSelect();
+
     window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
 
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
+    ipcRenderer.on('reset', reset);
 
     update();
+    resize();
+    this.hide();
 }
 
 function stateChange()
@@ -56,6 +59,15 @@ function pixelChange()
 {
     _pixel.load();
     resize();
+}
+
+function reset()
+{
+    _state.load();
+    _pixel = new PixelEditor(_state.lastFile);
+    setup();
+    resize();
+    setupSelect();
 }
 
 function hide()
@@ -92,7 +104,6 @@ function setup()
         _error.innerHTML = e.message;
     }
 }
-
 
 function setupSelect()
 {
@@ -149,13 +160,13 @@ function setupSelect()
 
 function resize()
 {
-    View.clear();
     View.resize();
+    View.clear();
     _sprite = View.add(new Pixel(_pixel.getData(), _sheet));
     _sprite.sheet(_sheet);
     _sheet.render();
-    _sprite.scale.set(_state.pixels);
     _sprite.frame(0);
+    _sprite.scale.set(_state.pixels);
     if (_animationName)
     {
         _sprite.animate(_animationName);

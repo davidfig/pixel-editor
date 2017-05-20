@@ -42,7 +42,7 @@ class PixelEditor extends Pixel
 
     add(index)
     {
-        const add = { width: DEFAULT[0], height: DEFAULT[1], data: [], undo: [], redo: [] };
+        const add = { width: DEFAULT[0], height: DEFAULT[1], data: [] };
         for (let i = 0; i < DEFAULT[0] * DEFAULT[0]; i++)
         {
             add.data[i] = null;
@@ -50,10 +50,12 @@ class PixelEditor extends Pixel
         if (typeof index !== 'undefined')
         {
             this.frames.splice(index, 0, add);
+            this.editor.frames.splice(index, 0, add);
         }
         else
         {
             this.frames.push(add);
+            this.editor.frames.push(add);
         }
     }
 
@@ -71,7 +73,9 @@ class PixelEditor extends Pixel
         if (index < this.frames.length)
         {
             const frame = this.frames[index];
-            this.frames.push({ width: frame.width, height: frame.height, data: frame.data, undo: frame.undo, redo: frame.redo });
+            this.frames.push({ width: frame.width, height: frame.height, data: frame.data });
+            const editor = this.editor.frames[index];
+            this.editor.frames.push({ undo: editor.undo, redo: editor.redo });
             this.save();
         }
     }
@@ -253,8 +257,9 @@ class PixelEditor extends Pixel
         }
     }
 
-    save()
+    save(filename)
     {
+        this.filename = filename || this.filename;
         jsonfile.writeFileSync(this.filename, { name: this.name, frames: this.frames, animations: this.animations });
         if (this.editor)
         {

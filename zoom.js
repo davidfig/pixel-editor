@@ -23,7 +23,15 @@ let _state, _pixel, _zoom = 50, _sheet, _sprite,
 function init()
 {
     _state = new State();
-    _pixel = new PixelEditor(_state.lastFile);
+    try
+    {
+        _pixel = new PixelEditor(_state.lastFile);
+    }
+    catch (e)
+    {
+        _pixel = new PixelEditor();
+        remote.app.console.log(e.message);
+    }
     _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST });
     _state.lastFile = _pixel.filename;
     View.init();
@@ -36,17 +44,22 @@ function init()
     resize();
     remote.getCurrentWindow().on('keydown', key);
     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
+    title();
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
     window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
 }
 
+function title()
+{
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
+}
+
 function stateChange()
 {
     _state.load();
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
+    title();
     cursor();
     View.render();
 }
@@ -54,7 +67,7 @@ function stateChange()
 function pixelChange()
 {
     _pixel.load();
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
+    title();
     if (Math.round(_pixel.width * _zoom) !== window.innerWidth || Math.round(_pixel.height * _zoom) !== window.innerHeight)
     {
         remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
@@ -332,7 +345,7 @@ function move(x, y)
 function space()
 {
     switch (_state.tool)
-    {
+        {
         case 'paint':
             if (_state.cursorSizeX === 1 && _state.cursorSizeY === 1)
             {
@@ -555,29 +568,29 @@ function save(filename)
     _state.lastFile = filename;
     _state.save();
     _pixel.save(filename);
-    remote.getCurrentWindow().save();
-    remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
+    title();
+    ipcRenderer.send('reset');
 }
 
 function load(list)
 {
     const filename = list[0];
-    if (_pixel.load(filename))
-    {
-        _state.lastFile = filename;
-        _state.save();
-        remote.getCurrentWindow().setTitle(path.basename(filename, '.json'));
-        resize();
-    }
+    _pixel = new PixelEditor(filename);
+    _state.lastFile = filename;
+    _state.current = 0;
+    title();
+    resize();
+    ipcRenderer.send('reset');
 }
 
 function newFile()
 {
-    _pixel = new Pixel(15, 15);
-    remote.getCurrentWindow().pixel.pixel = _pixel;
-    _state.lastFile = null;
-    remote.getCurrentWindow().setTitle('New File');
+    _pixel = new PixelEditor();
+    _state.lastFile = _pixel.filename;
+    _state.current = 0;
+    title();
     resize();
+    ipcRenderer.send('reset');
 }
 
 function clear()

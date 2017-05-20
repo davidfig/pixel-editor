@@ -29,6 +29,7 @@ function init()
     window.addEventListener('resize', resize);
     resize(true);
     ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('reset', stateChange);
     remote.getCurrentWindow().show();
 }
 

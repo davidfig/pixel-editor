@@ -30,7 +30,17 @@ function init()
     resize(true);
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
+    ipcRenderer.on('reset', reset);
     remote.getCurrentWindow().show();
+}
+
+function reset()
+{
+    _state.load();
+    _pixel = new PixelEditor(_state.lastFile);
+    updateColors();
+    draw();
+    View.render();
 }
 
 function stateChange()

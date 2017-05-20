@@ -1,25 +1,36 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const TinyColor = require('tinycolor2');
 
 const Sheet = require('./sheet');
 const View = require('./view');
 const Input = require('./input');
+const State = require('./data/state.js');
 
 const BORDER = 5;
 const WIDTH = 4;
-let _g, _hsl, _yStart, _total, _width, _bottom, _isDown, _colors;
+let _state, _g, _hsl, _yStart, _total, _width, _bottom, _isDown;
 
 function init()
 {
+    _state = new State();
     View.init();
     Input.init(View.renderer.canvas, { down, move, up, keyDown });
     Sheet.init();
     _g = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
-    _colors = remote.getCurrentWindow().pixel.colors;
     resize(true);
+    ipcRenderer.on('state', stateChange);
     remote.getCurrentWindow().show();
-    remote.getCurrentWindow().on('refresh', () => { _hsl = null; draw(); });
+
+}
+
+function stateChange()
+{
+    _state.load();
+    _hsl = null;
+    draw();
+    View.render();
 }
 
 function resize(resize)
@@ -52,7 +63,7 @@ function draw()
             .endFill();
     }
 
-    const color = _colors.current;
+    const color = _state.isForeground ? _state.foreground : _state.background;
     _g.clear()
         .beginFill(color)
         .drawRect(BORDER, _yStart, _width, _width)
@@ -136,11 +147,17 @@ function down(x, y)
     {
         _hsl.l = (y - _yStart) / _total;
     }
-    _colors.current = changeColor(_hsl.h, _hsl.s, _hsl.l);
+    if (_state.isForeground)
+    {
+        _state.foreground = changeColor(_hsl.h, _hsl.s, _hsl.l);
+    }
+    else
+    {
+        _state.background = changeColor(_hsl.h, _hsl.s, _hsl.l);
+    }
     draw();
-    remote.getCurrentWindow().windows.palette.emit('refresh');
-    remote.getCurrentWindow().windows.zoom.emit('cursor');
     _isDown = true;
+    ipcRenderer.send('state');
 }
 
 function up()

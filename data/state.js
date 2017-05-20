@@ -20,19 +20,19 @@ class State
         }
         catch (err)
         {
-            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, picker: 0, background: null };
+            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null };
         }
     }
 
-    get picker()
+    get isForeground()
     {
-        return this.state.picker;
+        return this.state.isForeground;
     }
-    set picker(value)
+    set isForeground(value)
     {
-        if (this.state.picker !== value)
+        if (this.state.isForeground !== value)
         {
-            this.state.picker = value;
+            this.state.isForeground = value;
             this.save();
         }
     }

@@ -30,7 +30,7 @@ function init()
     create('palette');
     create('show', { noResize: true });
     create('tools', { noResize: true });
-    // create('picker');
+    create('picker');
     // create('animation', { noThrottling: true });
 
     accelerators();

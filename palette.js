@@ -1,5 +1,6 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
+const TinyColor = require('tinycolor2');
 
 const Sheet = require('./sheet');
 const View = require('./view');
@@ -13,7 +14,7 @@ const COLORS_PER_LINE = 10;
 const BORDER = 5;
 const WIDTH = 10;
 
-let _state, _pixel, _colors = [[]], _isForeground = true,
+let _state, _pixel, _colors = [[]],
     _blocks, _foreground, _background, _activeColor;
 
 function init()
@@ -42,7 +43,9 @@ function stateChange()
 function pixelChange()
 {
     _pixel.load();
-    // updateColors();
+    updateColors();
+    draw();
+    View.render();
 }
 
 function palettes()
@@ -64,8 +67,19 @@ function resize(resize)
     View.render();
 }
 
+function convert(color)
+{
+    let test = color.toString(16);
+    while (test.length < 6)
+    {
+        test = '0' + test;
+    }
+    return TinyColor(test).toHsl();
+}
+
 function updateColors()
 {
+    _colors[0] = [];
     function find(color)
     {
         for (let find of _colors[0])
@@ -86,6 +100,13 @@ function updateColors()
             }
         }
     }
+    _colors[0].sort(
+        function (a, b)
+        {
+            const hslA = convert(a);
+            const hslB = convert(b);
+            return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0;
+        });
 }
 
 function draw()
@@ -112,7 +133,7 @@ function draw()
 
     const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
     block.width = block.height = width / 3;
-    block.position.set((_isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
+    block.position.set((_state.isForeground ? width: width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart);
     _activeColor = block;
     setActiveColor();
 
@@ -157,7 +178,7 @@ function draw()
 function setActiveColor()
 {
     let color;
-    if (_isForeground)
+    if (_state.isForeground)
     {
         _activeColor.x = _foreground.width / 2 - _activeColor.width / 2 + BORDER;
         color = _foreground.tint;
@@ -177,53 +198,19 @@ function setActiveColor()
     }
 }
 
-function dropper(color)
-{
-    if (_isForeground)
-    {
-        _state.foreground = color;
-        if (_state.foreground === null)
-        {
-            _foreground.tint = 0xffffff;
-            _foreground.texture = Sheet.getTexture('transparency');
-        }
-        else
-        {
-            _foreground.tint = color;
-            _foreground.texture = PIXI.Texture.WHITE;
-        }
-    }
-    else
-    {
-        _state.background = color;
-        if (_state.background === null)
-        {
-            _background.tint = 0xffffff;
-            _background.texture = Sheet.getTexture('transparency');
-        }
-        else
-        {
-            _background.tint = color;
-            _background.texture = PIXI.Texture.WHITE;
-        }
-    }
-    setActiveColor();
-    View.render();
-}
-
 function down(x, y)
 {
     const point = new PIXI.Point(x, y);
-    if (_foreground.containsPoint(point) && !_isForeground)
+    if (_foreground.containsPoint(point) && !_state.isForeground)
     {
-        _isForeground = true;
+        _state.isForeground = true;
         setActiveColor();
         View.render();
         return;
     }
-    if (_background.containsPoint(point) && _isForeground)
+    if (_background.containsPoint(point) && _state.isForeground)
     {
-        _isForeground = false;
+        _state.isForeground = false;
         setActiveColor();
         View.render();
         return;
@@ -232,7 +219,7 @@ function down(x, y)
     {
         if (block.containsPoint(point))
         {
-            if (_isForeground)
+            if (_state.isForeground)
             {
                 if (block.isTransparent)
                 {
@@ -262,7 +249,6 @@ function down(x, y)
                     _state.background = block.tint;
                 }
             }
-            _state.picker = block.tint === null ? 0xffffff : block.tint;
             ipcRenderer.send('state');
             setActiveColor();
             View.render();

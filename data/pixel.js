@@ -10,7 +10,12 @@ function draw(c, frame)
             const color = pixels[x + y * frame.width];
             if (color !== null)
             {
-                c.fillStyle = color;
+                let hex = color.toString(16);
+                while (hex.length < 6)
+                {
+                    hex = '0' + hex;
+                }
+                c.fillStyle = '#' + hex;
                 c.beginPath();
                 c.fillRect(x, y, 1, 1);
             }
@@ -75,7 +80,7 @@ class Pixel extends PIXI.Sprite
         {
             this.next = this.entry[1] + leftover;
         }
-        this.texture = this.sheet.getTexture(this.name + '-' + this.entry[0]);
+        this.texture = Pixel.sheet.getTexture(this.name + '-' + this.entry[0]);
     }
 
     update(elapsed)
@@ -94,6 +99,12 @@ class Pixel extends PIXI.Sprite
             }
             this.updateFrame(this.next);
         }
+    }
+
+    frame(i)
+    {
+        this.stop = true;
+        this.texture = Pixel.sheet.getTexture(this.name + '-' + i);
     }
 }
 

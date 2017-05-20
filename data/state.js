@@ -20,7 +20,7 @@ class State
         }
         catch (err)
         {
-            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, current: 0, color: 0, foreground: 0, picker: 0, background: null };
+            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, picker: 0, background: null };
         }
     }
 
@@ -33,19 +33,6 @@ class State
         if (this.state.picker !== value)
         {
             this.state.picker = value;
-            this.save();
-        }
-    }
-
-    get current()
-    {
-        return this.state.current;
-    }
-    set current(value)
-    {
-        if (this.state.current !== value)
-        {
-            this.state.current = value;
             this.save();
         }
     }

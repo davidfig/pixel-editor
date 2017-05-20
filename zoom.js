@@ -33,7 +33,7 @@ function init()
     resize();
     remote.getCurrentWindow().on('keydown', key);
     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _state.current + ')');
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
     remote.getCurrentWindow().show();
@@ -42,7 +42,7 @@ function init()
 function stateChange()
 {
     _state.load();
-    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _state.current + ')');
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
     cursor();
     View.render();
 }
@@ -50,6 +50,7 @@ function stateChange()
 function pixelChange()
 {
     _pixel.load();
+    remote.getCurrentWindow().setTitle(path.basename(_state.lastFile, '.json') + ' (' + _pixel.current + ')');
     // if (Math.round(_pixel.width * _zoom) !== window.innerWidth || Math.round(_pixel.height * _zoom) !== window.innerHeight)
     // {
     //     remote.getCurrentWindow().setContentSize(Math.round(_pixel.width * _zoom), Math.round(_pixel.height * _zoom));
@@ -423,6 +424,7 @@ function dirty()
 {
     _pixel.save(_state.lastFile);
     draw();
+    ipcRenderer.send('pixel');
     View.render();
 }
 
@@ -725,7 +727,7 @@ function key(code, special)
                 dirty();
                 break;
             case 68:
-                _pixel.duplicate(_state.current);
+                _pixel.duplicate(_pixel.current);
                 draw();
                 dirty();
                 break;

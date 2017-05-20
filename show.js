@@ -1,91 +1,105 @@
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
+const RenderSheet = require('yy-rendersheet');
 
 const Input = require('./input');
 const View = require('./view');
+const State = require('./data/state');
+const PixelEditor = require('./data/pixel-editor');
+const Pixel = require('./data/pixel');
+
+const COLOR_SELECTED = 0x888888;
 
 const BUFFER = 10;
 
-let _pixel,
-    _blocks,
+let _sheet,
+    _state,
+    _pixel,
+    _pixels,
     _buttons,
     _name,
     _spacer,
     _canvas;
 
-const TRANSPARENT = 0x888888;
-
 function init()
 {
+    _state = new State();
+    _pixel = new PixelEditor(_state.lastFile);
+    _sheet = new RenderSheet({scaleMode: PIXI.SCALE_MODES.NEAREST});
     _spacer = document.getElementById('spacer');
     _name = document.getElementById('name');
     _canvas = document.getElementById('canvas');
-    View.init({canvas: _canvas});
+    View.init({ canvas: _canvas });
+    _pixels = View.add(new PIXI.Container());
     Input.init(_canvas, { keyDown, down });
-    _pixel = remote.getCurrentWindow().pixel.pixel;
-    _blocks = View.add(new PIXI.Container());
-    window.addEventListener('resize', resize);
+    ipcRenderer.on('state', stateChange);
+    ipcRenderer.on('pixel', pixelChange);
+    pixelChange();
     resize();
-    remote.getCurrentWindow().on('dirty', draw);
+    window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
+}
+
+function stateChange()
+{
+    _state.load();
+}
+
+function pixelChange()
+{
+    if (arguments.length)
+    {
+        _pixel.load();
+    }
+    _pixel.sheet(_sheet);
+    _sheet.render();
+    resize();
 }
 
 function resize()
 {
     View.resize();
-    draw();
-    View.render();
-}
-
-function draw()
-{
-    _blocks.removeChildren();
+    _pixels.removeChildren();
     _buttons = [];
-    let xStart = BUFFER, yStart = BUFFER, i = 0, total = { width: xStart, height: yStart };
-    for (let frame of _pixel.frames)
+    const data = _pixel.getData();
+    let xStart = BUFFER, yStart = BUFFER;
+    for (let i = 0; i < _pixel.frames.length; i++)
     {
-        if (i === _state.current)
+        let block;
+        if (i === _pixel.current)
         {
-            const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-            block.width = _pixel.pixels * frame.width + BUFFER;
-            block.height = _pixel.pixels * frame.height + BUFFER;
+            block = _pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
+            block.tint = COLOR_SELECTED;
             block.position.set(xStart - BUFFER / 2, yStart - BUFFER / 2);
-            block.tint = 0xff0000;
+            block.width = _state.pixels * _pixel.width + BUFFER;
+            block.height = _state.pixels * _pixel.height + BUFFER;
             _name.innerHTML = i;
         }
-        for (let y = 0; y < frame.height; y++)
-        {
-            for (let x = 0; x < frame.width; x++)
-            {
-                const block = _blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-                block.width = block.height = _pixel.pixels;
-                block.position.set(xStart + x * _pixel.pixels, yStart + y * _pixel.pixels);
-                const color = frame.data[x + y * frame.width];
-                block.tint = color === null ? TRANSPARENT : color;
-            }
-        }
-
-        _buttons.push({ x1: xStart, y1: yStart + BUFFER, x2: xStart + _pixel.pixels * frame.width, y2: yStart + BUFFER + _pixel.pixels * frame.height, current: i });
-        xStart += BUFFER + _pixel.pixels * frame.width;
-        total.width += BUFFER + _pixel.pixels * frame.width;
-        total.height = _pixel.pixels * frame.height > total.height ? _pixel.pixels * frame.height : total.height;
-        i++;
+        const pixel = _pixels.addChild(new Pixel(data));
+        pixel.scale.set(_state.pixels);
+        pixel.frame(i);
+        pixel.position.set(xStart, yStart);
+        _buttons.push({ x1: xStart, y1: yStart + BUFFER, x2: xStart + pixel.width, y2: yStart + BUFFER + pixel.height, current: i });
+        xStart += BUFFER + pixel.width;
     }
     const window = remote.getCurrentWindow();
-    window.setContentSize(total.width, _spacer.offsetHeight + _name.offsetHeight + total.height + yStart + BUFFER);
+    window.setContentSize(xStart, _pixels.height + _spacer.offsetHeight + _name.offsetHeight + BUFFER);
     View.render();
 }
 
 function down(x, y)
 {
-    y -= document.getElementById('spacer').offsetHeight;
     for (let button of _buttons)
     {
         if (x >= button.x1 && x <= button.x2 && y >= button.y1 && y <= button.y2)
         {
-            _state.current = button.current;
-            draw();
-            _name.innerHTML = button.current;
-            remote.getCurrentWindow().windows.zoom.emit('refresh');
+            if (_pixel.current !== button.current)
+            {
+                _pixel.current = button.current;
+                _name.innerHTML = button.current;
+                resize();
+                ipcRenderer.send('state');
+            }
             return;
         }
     }
@@ -93,10 +107,7 @@ function down(x, y)
 
 function keyDown(code, special)
 {
-    if (!_editing)
-    {
-        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
-    }
+    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
 }
 
 init();

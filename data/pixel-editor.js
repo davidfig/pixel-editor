@@ -1,5 +1,4 @@
 const remote = require('electron').remote;
-const ipcRenderer = require('electron').ipcRenderer;
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 const path = require('path');
@@ -29,6 +28,7 @@ class PixelEditor extends Pixel
             }
             while (fs.existsSync(filename));
             this.filename = filename;
+            this.name = path.basename(filename, '.json');
             this.editor = { current: 0, frames: [{ undo: [], redo: [] }] };
             this.save();
         }
@@ -102,6 +102,19 @@ class PixelEditor extends Pixel
         this.save();
     }
 
+    get current()
+    {
+        return this.editor.current;
+    }
+    set current(value)
+    {
+        if (this.editor.current !== value)
+        {
+            this.editor.current = value;
+            this.save();
+        }
+    }
+
     get width()
     {
         return this.frames[this.editor.current].width;
@@ -130,7 +143,6 @@ class PixelEditor extends Pixel
     {
         return this.frames[this.editor.current].height;
     }
-
     set height(value)
     {
         value = parseInt(value);
@@ -247,6 +259,11 @@ class PixelEditor extends Pixel
         {
             jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json', this.editor));
         }
+    }
+
+    getData()
+    {
+        return { name: this.name, frames: this.frames, animations: this.animations };
     }
 }
 

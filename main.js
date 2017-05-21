@@ -28,7 +28,7 @@ function init()
     create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
-    create('show', { noResize: true });
+    create('show', { noResize: false });
     create('tools', { noResize: true });
     create('picker');
     create('animation', { noThrottling: true });

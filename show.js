@@ -68,7 +68,7 @@ function resize()
     _pixels.removeChildren();
     _buttons = [];
     const data = _pixel.getData();
-    let xStart = BUFFER, yStart = BUFFER;
+    let xStart = BUFFER, yStart = BUFFER, yEnd = 0;
     for (let i = 0; i < _pixel.frames.length; i++)
     {
         let block;
@@ -90,11 +90,12 @@ function resize()
         pixel.scale.set(_state.pixels);
         pixel.frame(i);
         pixel.position.set(xStart, yStart);
+        yEnd = pixel.height > yEnd ? pixel.height : yEnd;
         _buttons.push({ x1: xStart, y1: yStart - BUFFER, x2: xStart + pixel.width, y2: yStart + pixel.height + BUFFER, current: i });
         xStart += BUFFER + pixel.width;
     }
     const window = remote.getCurrentWindow();
-    window.setContentSize(xStart, _pixels.height + _spacer.offsetHeight + _name.offsetHeight + BUFFER);
+    window.setContentSize(xStart + BUFFER * 2, yEnd + _spacer.offsetHeight + _name.offsetHeight + BUFFER * 2);
     View.render();
 }
 

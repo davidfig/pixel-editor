@@ -984,6 +984,23 @@ function menu(caller, menu)
         case 'save':
             saveFile();
             break;
+
+        case 'duplicate':
+            _pixel.duplicate(_pixel.current);
+            draw();
+            dirty();
+            break;
+
+        case 'delete':
+            if (_pixel.frames.length > 1)
+            {
+                const current = _pixel.current === 0 ? 0 : _pixel.current - 1;
+                _pixel.delete(_pixel.current);
+                _pixel.current = current;
+                draw();
+                title();
+                dirty();
+            }
     }
 }
 

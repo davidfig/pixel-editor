@@ -67,6 +67,11 @@ function init(windows)
         ['Tools', 'tools'],
         ['Editor', 'zoom'],
     ]);
+    append('Frame', [
+        ['Duplicate (Ctrl-D)', 'duplicate'],
+        ['Delete', 'delete'],
+        ['New Frame', 'frame']
+    ]);
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template));
 }
 

@@ -80,6 +80,16 @@ class PixelEditor extends Pixel
         }
     }
 
+    delete(index)
+    {
+        if (index < this.frames.length && this.frames.length > 1)
+        {
+            this.frames.splice(index, 1);
+            this.editor.frames.splice(index, 1);
+            this.save();
+        }
+    }
+
     set(x, y, value, noUndo)
     {
         if (x < this.width && x >= 0 && y < this.height && y >= 0)

@@ -144,6 +144,65 @@ function frame()
     }
 }
 
+function ellipseCursor(color)
+{
+    _cursorBlock.lineStyle(0);
+    _cursorBlock.position.set(0, 0);
+    let xc = _state.cursorX;
+    let yc = _state.cursorY;
+    let rx = _state.cursorSizeX;
+    let ry = _state.cursorSizeY;
+    let x = 0, y = ry;
+    let p = (ry * ry) - (rx * rx * ry) + ((rx * rx) / 4);
+    const blocks = {};
+    while ((2 * x * ry * ry) < (2 * y * rx * rx))
+    {
+        for (let i = 0; i < x * 2; i++)
+        {
+            blocks[(xc - x + i) + ',' + (yc - y)] = true;
+            blocks[(xc - x + i) + ',' + (yc + y)] = true;
+        }
+        if (p < 0)
+        {
+            x = x + 1;
+            p = p + (2 * ry * ry * x) + (ry * ry);
+        }
+        else
+        {
+            x = x + 1;
+            y = y - 1;
+            p = p + (2 * ry * ry * x + ry * ry) - (2 * rx * rx * y);
+        }
+    }
+    p = (x + 0.5) * (x + 0.5) * ry * ry + (y - 1) * (y - 1) * rx * rx - rx * rx * ry * ry;
+    while (y >= 0)
+    {
+        for (let i = 0; i < x * 2; i++)
+        {
+            blocks[(xc - x + i) + ',' + (yc - y)] = true;
+            blocks[(xc - x + i) + ',' + (yc + y)] = true;
+        }
+        if (p > 0)
+        {
+            y = y - 1;
+            p = p - (2 * rx * rx * y) + (rx * rx);
+        }
+        else
+        {
+            y = y - 1;
+            x = x + 1;
+            p = p + (2 * ry * ry * x) - (2 * rx * rx * y) - (rx * rx);
+        }
+    }
+    _stamp = [];
+    for (let block in blocks)
+    {
+        const pos = block.split(',');
+        _cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * _zoom, parseInt(pos[1]) * _zoom, _zoom, _zoom).endFill();
+        _stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) });
+    }
+}
+
 // from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
 function circleCursor(color)
 {
@@ -269,6 +328,10 @@ function cursor()
             circleCursor(_state.foreground);
             break;
 
+        case 'ellipse':
+            ellipseCursor(_state.foreground);
+            break;
+
         case 'line':
             lineCursor(_state.foreground);
             break;
@@ -301,9 +364,13 @@ function move(x, y)
             _state.cursorSizeX += x;
             _state.cursorSizeX = (_state.cursorSizeX > _pixel.width) ? _pixel.width : _state.cursorSizeX;
             _state.cursorSizeX = (_state.cursorSizeX < -_pixel.width) ? -_pixel.width : _state.cursorSizeX;
-            if (_state.tool === 'circle' && _state.cursorSizeX < 1)
+            if ((_state.tool === 'circle' || _state.tool === 'ellipse') && _state.cursorSizeX < 1)
             {
                 _state.cursorSizeX = 1;
+            }
+            if (_state.tool === 'ellipse' && _state.cursorSizeY < 1)
+            {
+                _state.cursorSizeY = 1;
             }
             if (_state.cursorSizeX === 0)
             {
@@ -390,6 +457,7 @@ function space()
             }
             break;
 
+        case 'ellipse':
         case 'circle':
         case 'line':
             const color = _state.foreground;
@@ -480,6 +548,7 @@ function downMouse(x, y)
             dirty();
             break;
 
+        case 'ellipse':
         case 'circle':
             space();
             break;
@@ -516,6 +585,7 @@ function moveMouse(x, y)
             }
             break;
 
+        case 'ellipse':
         case 'circle':
             _state.cursorX = Math.floor(x / _zoom);
             _state.cursorY = Math.floor(y / _zoom);
@@ -618,6 +688,14 @@ function tool()
 {
     switch (_state.tool)
     {
+        case 'ellipse':
+            if (_state.cursorSizeX === 1 && _state.cursorSizeY === 1)
+            {
+                _state.cursorSizeX = 3;
+                _state.cursorSizeY = 3;
+            }
+            break;
+
         case 'circle':
             if (_state.cursorSizeX === 1)
             {
@@ -811,6 +889,10 @@ function key(code, special)
                 break;
             case 70:
                 _state.tool = 'fill';
+                tool();
+                break;
+            case 69:
+                _state.tool = 'ellipse';
                 tool();
                 break;
         }

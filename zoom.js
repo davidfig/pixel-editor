@@ -2,6 +2,7 @@ const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const RenderSheet = require('yy-rendersheet');
+const TinyColor = require('tinycolor2');
 
 const Input = require('./input');
 const View = require('./view');
@@ -906,9 +907,66 @@ function key(code, special)
                 _state.tool = 'ellipse';
                 tool();
                 break;
+            case 49:
+                _state.foreground = 0;
+                ipcRenderer.send('state');
+                break;
+            case 50:
+                _state.foreground = 0xffffff;
+                ipcRenderer.send('state');
+                break;
+            case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58:
+                color(code - 51);
+                break;
         }
     }
+}
 
+function convert(color)
+{
+    let test = color.toString(16);
+    while (test.length < 6)
+    {
+        test = '0' + test;
+    }
+    return TinyColor(test).toHsl();
+}
+
+function color(color)
+{
+    const colors = [];
+    function find(color)
+    {
+        for (let find of colors)
+        {
+            if (find === color)
+            {
+                return true;
+            }
+        }
+    }
+    for (let frame of _pixel.frames)
+    {
+        for (let color of frame.data)
+        {
+            if (color !== null && !find(color))
+            {
+                colors.push(color);
+            }
+        }
+    }
+    colors.sort(
+        function (a, b)
+        {
+            const hslA = convert(a);
+            const hslB = convert(b);
+            return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0;
+        });
+    if (color < colors.length)
+    {
+        _state.foreground = colors[color];
+        ipcRenderer.send('state');
+    }
 }
 
 function menu(caller, menu)

@@ -1,6 +1,8 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const TinyColor = require('tinycolor2');
+const Misc = require('yy-misc');
+const FontFaceObserver = require('fontfaceobserver');
 
 const Sheet = require('./sheet');
 const View = require('./view');
@@ -124,6 +126,8 @@ function draw()
     const width = (window.innerWidth / WIDTH) - (BORDER / WIDTH);
     _blocks.removeChildren();
 
+    const fontSize = Misc.fontSize('8', width, width * 0.75, 'bitmap');
+
     let yStart = 30;
 
     _foreground = _blocks.addChild(new PIXI.Sprite(_state.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE));
@@ -157,6 +161,10 @@ function draw()
         if (color !== null)
         {
             block.tint = color;
+            const fill = color === 0 ? 'white' : 'black';
+            const text = _blocks.addChild(new PIXI.Text(i + 1, { fontFamily: 'bitmap', fontSize, fill }));
+            text.anchor.set(0.5);
+            text.position.set(width * 5 + i * (width * 1.25) + BORDER + (width * 1.25) / 2 - BORDER / 2, BORDER + width / 3 + yStart + (width * 1.25) / 2) - BORDER / 2;
         }
         else
         {
@@ -164,7 +172,7 @@ function draw()
         }
     }
 
-    let x = 0, y = 2;
+    let x = 0, y = 2, first = true;
     for (let line of _colors)
     {
         for (let i = 0; i < line.length; i++)
@@ -173,6 +181,13 @@ function draw()
             block.width = block.height = width - BORDER;
             block.position.set(x * width + BORDER, y * width + BORDER + yStart);
             block.tint = line[i];
+            if (first)
+            {
+                const fill = line[i] === 0 ? 'white' : 'black';
+                const text = _blocks.addChild(new PIXI.Text(i !== 9 ? i + 3 : 0, { fontFamily: 'bitmap', fontSize, fill }));
+                text.anchor.set(0.5);
+                text.position.set(x * width + BORDER / 2 + width / 2, y * width + BORDER + width / 2 + yStart);
+            }
             x++;
             if (x === WIDTH && i !== line.length - 1)
             {
@@ -182,6 +197,7 @@ function draw()
         }
         x = 0;
         y++;
+        first = false;
     }
 }
 
@@ -272,4 +288,5 @@ function keyDown(code, special)
     remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
 }
 
-init();
+const font = new FontFaceObserver('bitmap');
+font.load().then(function () { init(); });

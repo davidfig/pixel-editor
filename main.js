@@ -10,7 +10,7 @@ const Menu = require('./menu');
 const DEBUG = false;
 const DEV_ALL = false;
 
-let _windows, _main, _state, _zoom;
+let _windows, _main, _state;
 
 const BACKGROUND = '#aaaaaa';
 const WINDOW_BACKGROUND = '#bbbbbb';
@@ -25,7 +25,7 @@ function init()
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
     _state.addWindow(_main);
 
-    _zoom = create('zoom', { frame: true });
+    create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: true });

@@ -55,6 +55,7 @@ function widthChange(value)
     else
     {
         _pixel.save();
+        ipcRenderer.send('pixel');
     }
 }
 
@@ -69,6 +70,7 @@ function heightChange(value)
     else
     {
         _pixel.save();
+        ipcRenderer.send('pixel');
     }
 }
 
@@ -79,6 +81,7 @@ function pixelsChange(value)
     {
         _pixel.pixels = value;
         _pixel.save();
+        ipcRenderer.send('pixel');
     }
 }
 

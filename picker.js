@@ -11,7 +11,7 @@ const State = require('./data/state.js');
 
 const BORDER = 5;
 const WIDTH = 4;
-let _canvas, _spacer, _hex, _hexDiv, _rgbDiv, _state, _g, _hsl, _yStart, _total, _width, _bottom, _isDown, _color, _editing;
+let _canvas, _spacer, _hex, _hexDiv, _rgbDiv, _state, _g, _hsl, _total, _width, _bottom, _isDown, _color, _editing;
 
 function init()
 {
@@ -30,7 +30,6 @@ function init()
     resize();
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('reset', stateChange);
-    resize();
     new EasyEdit(document.getElementById('r'),
         { onedit: () => _editing = true, onsuccess: (value) => { rgb({ r: value }); _editing = false; }, oncancel: _editing = false });
     new EasyEdit(document.getElementById('g'),
@@ -38,6 +37,7 @@ function init()
     new EasyEdit(document.getElementById('b'),
         { onedit: () => _editing = true, onsuccess: (value) => { rgb({ b: value }); _editing = false; }, oncancel: _editing = false });
     new EasyEdit(_hex, { onedit: () => _editing = true, onsuccess: (value) => { hex(value); _editing = false; }, oncancel: _editing = false });
+    resize();
 }
 
 function rgb(value)
@@ -88,15 +88,14 @@ function stateChange()
 function resize()
 {
     View.resize();
-    _yStart = BORDER;
     _width = (window.innerWidth / WIDTH) - (WIDTH + 1) * BORDER / WIDTH;
     const width = window.innerWidth - BORDER * 2;
     const height = _total = window.innerHeight - _hexDiv.offsetHeight * 2 - _rgbDiv.offsetHeight - _spacer.offsetHeight;
     _canvas.width = width * window.devicePixelRatio;
-    _canvas.height = height * window.devicePixelRatio;
+    _canvas.height = (height + BORDER) * window.devicePixelRatio;
     _canvas.style.width = width + 'px';
-    _canvas.style.height = height + 'px';
-    _bottom = _total - BORDER * 2;
+    _canvas.style.height = (height + BORDER) + 'px';
+    _bottom = _total - BORDER;
     draw();
 }
 
@@ -119,22 +118,22 @@ function draw()
 {
     function box(x, percent, reverse)
     {
-        const actual = percent * (_total - 1);
+        const actual = percent * (_bottom - BORDER * 2);
         _g.beginFill(reverse ? 0xffffff : 0)
-            .drawRect(x, actual + _yStart - BORDER, _width, BORDER)
-            .drawRect(x + _width - BORDER, actual + _yStart - BORDER, BORDER, BORDER * 2)
-            .drawRect(x, actual + _yStart + 1, _width, BORDER)
-            .drawRect(x, actual + _yStart - BORDER, BORDER, BORDER * 2)
+            .drawRect(x, actual, _width, BORDER)
+            .drawRect(x + _width - BORDER, actual, BORDER, BORDER * 2)
+            .drawRect(x, actual + BORDER + 1, _width, BORDER)
+            .drawRect(x, actual, BORDER, BORDER * 2)
             .endFill();
     }
 
     _color = _state.isForeground ? _state.foreground : _state.background;
     _g.clear()
         .beginFill(_color)
-        .drawRect(0, _yStart, _width, _width)
+        .drawRect(0, BORDER, _width, _width)
         .endFill();
 
-    let y = _yStart + _width * 2 + BORDER;
+    let y = _width * 2 + BORDER * 2;
 
     let test = _color.toString(16);
     while (test.length < 6)
@@ -152,9 +151,9 @@ function draw()
         y += _width + BORDER;
     }
 
-    for (let y = _yStart; y < _bottom; y++)
+    for (let y = BORDER * 2; y <= _bottom - BORDER; y++)
     {
-        let percent = (y - _yStart) / _total;
+        let percent = (y - BORDER * 2) / _bottom;
         percent = percent > 1 ? 1 : percent;
 
         // h
@@ -189,18 +188,18 @@ function move(x, y)
 
 function down(x, y)
 {
-    y -= _spacer.offsetHeight + BORDER;
-    y = y < _yStart ? _yStart : y;
+    y -= _spacer.offsetHeight + BORDER * 2;
+    y = y < BORDER ? BORDER : y;
     y = y > _bottom ? _bottom : y;
     let percent = y / _bottom;
     percent = percent > 1 ? 1 : percent;
     if (x < BORDER + _width)
     {
-        if (y > _yStart + _width * 2 + BORDER && y < _yStart + _width * 3 + BORDER)
+        if (y > _width * 2 + BORDER * 2 && y < _width * 3 + BORDER * 2)
         {
             _hsl.s *= 0.9;
         }
-        else if (y > _yStart + _width * 3 + BORDER * 2 && y < _yStart + _width * 4 + BORDER * 2)
+        else if (y > _width * 3 + BORDER * 3 && y < _width * 4 + BORDER * 3)
         {
             _hsl.s *= 1.1;
         }

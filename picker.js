@@ -1,7 +1,9 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const TinyColor = require('tinycolor2');
+const FontFaceObserver = require('fontfaceobserver');
 
+const EasyEdit = require('./easyedit');
 const Sheet = require('./sheet');
 const View = require('./view');
 const Input = require('./input');
@@ -9,21 +11,71 @@ const State = require('./data/state.js');
 
 const BORDER = 5;
 const WIDTH = 4;
-let _state, _g, _hsl, _yStart, _total, _width, _bottom, _isDown;
+let _canvas, _spacer, _hex, _hexDiv, _rgbDiv, _state, _g, _hsl, _yStart, _total, _width, _bottom, _isDown, _color, _editing;
 
 function init()
 {
+    _canvas = document.getElementById('canvas');
+    _spacer = document.getElementById('spacer');
+    _hex = document.getElementById('hex');
+    _hexDiv = document.getElementById('hex-div');
+    _rgbDiv = document.getElementById('rgb-div');
     _state = new State();
-    View.init();
-    Input.init(View.renderer.canvas, { down, move, up, keyDown });
+    View.init({ canvas: _canvas });;
+    Input.init(_canvas, { down, move, up, keyDown });
     Sheet.init();
     _g = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
-    resize(true);
+    remote.getCurrentWindow().show();
+    resize();
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('reset', stateChange);
-    remote.getCurrentWindow().show();
+    resize();
+    new EasyEdit(document.getElementById('r'),
+        { onedit: () => _editing = true, onsuccess: (value) => { rgb({ r: value }); _editing = false; }, oncancel: _editing = false });
+    new EasyEdit(document.getElementById('g'),
+        { onedit: () => _editing = true, onsuccess: (value) => { rgb({ g: value }); _editing = false; }, oncancel: _editing = false });
+    new EasyEdit(document.getElementById('b'),
+        { onedit: () => _editing = true, onsuccess: (value) => { rgb({ b: value }); _editing = false; }, oncancel: _editing = false });
+    new EasyEdit(_hex, { onedit: () => _editing = true, onsuccess: (value) => { hex(value); _editing = false; }, oncancel: _editing = false });
+}
 
+function rgb(value)
+{
+    const rgb = TinyColor({ h: _hsl.h, s: _hsl.s, l: _hsl.l }).toRgb();
+    rgb.r = value.r || rgb.r;
+    rgb.g = value.g || rgb.g;
+    rgb.b = value.b || rgb.b;
+    const color = TinyColor(rgb).toHex();
+    if (_state.isForeground)
+    {
+        _state.foreground = color;
+    }
+    else
+    {
+        _state.background = color;
+    }
+    ipcRenderer.send('state');
+    _hsl = null;
+    draw();
+    View.render();
+}
+
+function hex(value)
+{
+    const color = parseInt(value, 16);
+    if (_state.isForeground)
+    {
+        _state.foreground = color;
+    }
+    else
+    {
+        _state.background = color;
+    }
+    ipcRenderer.send('state');
+    _hsl = null;
+    draw();
+    View.render();
 }
 
 function stateChange()
@@ -31,19 +83,31 @@ function stateChange()
     _state.load();
     _hsl = null;
     draw();
-    View.render();
 }
 
-function resize(resize)
+function resize()
 {
     View.resize();
-    const size = remote.getCurrentWindow().getContentSize();
-    _yStart = 30;
-    _width = (size[0] / WIDTH) - (WIDTH + 1) * BORDER / WIDTH;
-    _bottom = size[1] - BORDER;
-    _total = _bottom - _yStart;
-    draw(resize);
-    View.render();
+    _yStart = BORDER;
+    _width = (window.innerWidth / WIDTH) - (WIDTH + 1) * BORDER / WIDTH;
+    const width = window.innerWidth - BORDER * 2;
+    const height = _total = window.innerHeight - _hexDiv.offsetHeight * 2 - _rgbDiv.offsetHeight - _spacer.offsetHeight;
+    _canvas.width = width * window.devicePixelRatio;
+    _canvas.height = height * window.devicePixelRatio;
+    _canvas.style.width = width + 'px';
+    _canvas.style.height = height + 'px';
+    _bottom = _total - BORDER * 2;
+    draw();
+}
+
+function showColor(color)
+{
+    color = color.toString(16);
+    while (color.length < 6)
+    {
+        color = '0' + color;
+    }
+    return color;
 }
 
 function changeColor(h, s, l)
@@ -64,15 +128,15 @@ function draw()
             .endFill();
     }
 
-    const color = _state.isForeground ? _state.foreground : _state.background;
+    _color = _state.isForeground ? _state.foreground : _state.background;
     _g.clear()
-        .beginFill(color)
-        .drawRect(BORDER, _yStart, _width, _width)
+        .beginFill(_color)
+        .drawRect(0, _yStart, _width, _width)
         .endFill();
 
     let y = _yStart + _width * 2 + BORDER;
 
-    let test = color.toString(16);
+    let test = _color.toString(16);
     while (test.length < 6)
     {
         test = '0' + test;
@@ -83,34 +147,36 @@ function draw()
     for (let color of others)
     {
         _g.beginFill(color)
-            .drawRect(BORDER, y, _width, _width)
+            .drawRect(0, y, _width, _width)
             .endFill();
         y += _width + BORDER;
     }
 
     for (let y = _yStart; y < _bottom; y++)
     {
-        const percent = (y - _yStart) / _total;
+        let percent = (y - _yStart) / _total;
+        percent = percent > 1 ? 1 : percent;
 
         // h
         _g.beginFill(changeColor(percent * 360, _hsl.s, _hsl.l))
-            .drawRect(BORDER * 2 + _width, y, _width, 1)
+            .drawRect(BORDER + _width, y, _width, 1)
             .endFill();
 
         // s
         _g.beginFill(changeColor(_hsl.h, percent, _hsl.l))
-            .drawRect(BORDER * 3 + _width * 2, y, _width, 1)
+            .drawRect(BORDER * 2 + _width * 2, y, _width, 1)
             .endFill();
 
         // l
         _g.beginFill(changeColor(_hsl.h, _hsl.s, percent))
-            .drawRect(BORDER * 4 + _width * 3, y, _width, 1)
+            .drawRect(BORDER * 3 + _width * 3, y, _width, 1)
             .endFill();
     }
-    box(BORDER * 2 + _width, _hsl.h / 360, _hsl.l < 0.5);
-    box(BORDER * 3 + _width * 2, _hsl.s, _hsl.l < 0.5);
-    box(BORDER * 4 + _width * 3, _hsl.l, _hsl.l < 0.5);
+    box(BORDER + _width, _hsl.h / 360, _hsl.l < 0.5);
+    box(BORDER * 2 + _width * 2, _hsl.s, _hsl.l < 0.5);
+    box(BORDER * 3 + _width * 3, _hsl.l, _hsl.l < 0.5);
     View.render();
+    words();
 }
 
 function move(x, y)
@@ -123,8 +189,11 @@ function move(x, y)
 
 function down(x, y)
 {
+    y -= _spacer.offsetHeight + BORDER;
     y = y < _yStart ? _yStart : y;
     y = y > _bottom ? _bottom : y;
+    let percent = y / _bottom;
+    percent = percent > 1 ? 1 : percent;
     if (x < BORDER + _width)
     {
         if (y > _yStart + _width * 2 + BORDER && y < _yStart + _width * 3 + BORDER)
@@ -138,15 +207,15 @@ function down(x, y)
     }
     else if (x > BORDER * 2 + _width && x < BORDER + _width * 2)
     {
-        _hsl.h = ((y - _yStart) / _total) * 360;
+        _hsl.h = percent * 360;
     }
     else if (x > BORDER * 3 + _width * 2 && x < BORDER * 3 + _width * 3)
     {
-        _hsl.s = (y - _yStart) / _total;
+        _hsl.s = percent;
     }
     else if (x > BORDER * 4 + _width * 3 && x < BORDER * 4 + _width * 4)
     {
-        _hsl.l = (y - _yStart) / _total;
+        _hsl.l = percent;
     }
     if (_state.isForeground)
     {
@@ -161,6 +230,15 @@ function down(x, y)
     ipcRenderer.send('state');
 }
 
+function words()
+{
+    _hex.innerHTML = showColor(_color);
+    const rgb = TinyColor({ h: _hsl.h, s: _hsl.s, l: _hsl.l }).toRgb();
+    document.getElementById('r').innerHTML = rgb.r;
+    document.getElementById('g').innerHTML = rgb.g;
+    document.getElementById('b').innerHTML = rgb.b;
+}
+
 function up()
 {
     _isDown = false;
@@ -168,7 +246,11 @@ function up()
 
 function keyDown(code, special)
 {
-    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    if (!_editing)
+    {
+        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+    }
 }
 
-init();
+const font = new FontFaceObserver('bitmap');
+font.load().then(() => init());

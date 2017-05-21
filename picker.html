@@ -2,9 +2,22 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <style>
+        @font-face {
+            font-family: bitmap;
+            src: url(./assets/VT323-Regular.ttf);
+        }
+    </style>
   </head>
-    <body style="overflow: hidden">
-        <div style="-webkit-app-region: drag; height: 1em; width: 100%"></div>
+    <body style="overflow: hidden; font-family: bitmap; font-size: 1.5em; color: white">
+        <div id="spacer" style="-webkit-app-region: drag; height: 1em; width: 100%"></div>
+        <canvas id="canvas" style="margin: 0; padding: 0; width: 100%;"></canvas>
+        <div id="hex-div" style="width: 100%; text-align: center">#<span id="hex" style="background: rgba(0,0,0,0.1)">000000</span></div>
+        <div id="rgb-div" style="width: 100%; text-align: center; display: flex; justify-content: space-around">
+            <div>r:<span id="r" style="background: rgba(0,0,0,0.1)">0</span></div>
+            <div>g:<span id="g" style="background: rgba(0,0,0,0.1)">0</span></div>
+            <div>b:<span id="b" style="background: rgba(0,0,0,0.1)">0</span></div>
+        </div>
     </body>
 
   <script src="node_modules/pixi.js/dist/pixi.min.js"></script>

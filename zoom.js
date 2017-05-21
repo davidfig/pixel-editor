@@ -31,7 +31,6 @@ function init()
     catch (e)
     {
         _pixel = new PixelEditor();
-        remote.app.console.log(e.message);
     }
     _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST });
     _state.lastFile = _pixel.filename;
@@ -1001,6 +1000,15 @@ function menu(caller, menu)
                 title();
                 dirty();
             }
+            break;
+
+        case 'frame':
+            _pixel.blank();
+            _pixel.current = _pixel.frames.length - 1;
+            draw();
+            title();
+            dirty();
+            break;
     }
 }
 

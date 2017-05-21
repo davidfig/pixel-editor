@@ -92,7 +92,12 @@ class PixelEditor extends Pixel
 
     blank()
     {
-        this.frames.push({ width: this.width, height: this.height, data: [] });
+        const data = [];
+        for (let i = 0; i < this.width * this.height; i++)
+        {
+            data.push(null);
+        }
+        this.frames.push({ width: this.width, height: this.height, data });
         this.editor.frames.push({ undo: [], redo: [] });
     }
 

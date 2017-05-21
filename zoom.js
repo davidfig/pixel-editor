@@ -47,6 +47,7 @@ function init()
     title();
     ipcRenderer.on('state', stateChange);
     ipcRenderer.on('pixel', pixelChange);
+    ipcRenderer.on('menu', menu);
     window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
 }
@@ -785,6 +786,16 @@ function paste()
     }
 }
 
+function saveFile()
+{
+    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: _state.lastPath }, save);
+}
+
+function openFile()
+{
+    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: _state.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, load);
+}
+
 function key(code, special)
 {
     _shift = special.shift;
@@ -793,10 +804,10 @@ function key(code, special)
         switch (code)
         {
             case 83:
-                remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: _state.lastPath }, save);
+                saveFile();
                 break;
             case 79:
-                remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: _state.lastPath, filters: [ {name: 'JSON', extensions: ['json']}] }, load);
+                openFile();
                 break;
             case 88:
                 cut();
@@ -896,6 +907,25 @@ function key(code, special)
                 tool();
                 break;
         }
+    }
+
+}
+
+function menu(caller, menu)
+{
+    switch (menu)
+    {
+        case 'new':
+            newFile();
+            break;
+
+        case 'open':
+            openFile();
+            break;
+
+        case 'save':
+            saveFile();
+            break;
     }
 }
 

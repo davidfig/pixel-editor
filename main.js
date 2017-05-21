@@ -5,11 +5,12 @@ const url = require('url');
 const path = require('path');
 
 const WindowState = require('./data/window-state');
+const Menu = require('./menu');
 
 const DEBUG = false;
 const DEV_ALL = false;
 
-let _windows, _main, _state;
+let _windows, _main, _state, _zoom;
 
 const BACKGROUND = '#aaaaaa';
 const WINDOW_BACKGROUND = '#bbbbbb';
@@ -22,16 +23,17 @@ function init()
     _main = new electron.BrowserWindow({ backgroundColor: BACKGROUND });
     _main.stateID = 'main';
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
-    _main.setMenu(null);
     _state.addWindow(_main);
 
-    create('zoom', { frame: true });
+    _zoom = create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: true });
     create('tools', { noResize: true });
     create('picker');
     create('animation', { noThrottling: true });
+
+    Menu(_windows);
 
     accelerators();
     listeners();

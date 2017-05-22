@@ -1,7 +1,7 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const RenderSheet = require('yy-rendersheet');
-const Pixel = require('yy-pixel');
+const Pixel = require('../components/pixel/pixel');
 
 const Input = require('./input');
 const View = require('./view');
@@ -19,7 +19,9 @@ let _sheet,
     _buttons,
     _name,
     _spacer,
-    _canvas;
+    _canvas,
+    _selector,
+    _dragging;
 
 function init()
 {
@@ -31,7 +33,7 @@ function init()
     _canvas = document.getElementById('canvas');
     View.init({ canvas: _canvas });
     _pixels = View.add(new PIXI.Container());
-    Input.init(_canvas, { keyDown, down });
+    Input.init(_canvas, { keyDown, down, up, move });
     pixelChange();
     resize();
     window.addEventListener('resize', resize);
@@ -71,14 +73,14 @@ function resize()
     let xStart = BUFFER, yStart = BUFFER, yEnd = 0;
     for (let i = 0; i < _pixel.frames.length; i++)
     {
-        let block;
+        _selector;
         if (i === _pixel.current)
         {
-            block = _pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
-            block.tint = COLOR_SELECTED;
-            block.position.set(xStart - BUFFER / 2, yStart - BUFFER / 2);
-            block.width = _state.pixels * _pixel.width + BUFFER;
-            block.height = _state.pixels * _pixel.height + BUFFER;
+            _selector = _pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE));
+            _selector.tint = COLOR_SELECTED;
+            _selector.position.set(xStart - BUFFER / 2, yStart - BUFFER / 2);
+            _selector.width = _state.pixels * _pixel.width + BUFFER;
+            _selector.height = _state.pixels * _pixel.height + BUFFER;
             _name.innerHTML = i;
         }
         const pixel = _pixels.addChild(new Pixel(data, _sheet));
@@ -91,11 +93,11 @@ function resize()
         pixel.frame(i);
         pixel.position.set(xStart, yStart);
         yEnd = pixel.height > yEnd ? pixel.height : yEnd;
-        _buttons.push({ x1: xStart, y1: yStart - BUFFER, x2: xStart + pixel.width, y2: yStart + pixel.height + BUFFER, current: i });
+        _buttons.push({ pixel, x1: xStart, y1: yStart - BUFFER, x2: xStart + pixel.width, y2: yStart + pixel.height + BUFFER, current: i });
         xStart += BUFFER + pixel.width;
     }
     const window = remote.getCurrentWindow();
-    window.setContentSize(xStart + BUFFER * 2, yEnd + _spacer.offsetHeight + _name.offsetHeight + BUFFER * 2);
+    // window.setContentSize(xStart + BUFFER * 2, yEnd + _spacer.offsetHeight + _name.offsetHeight + BUFFER * 2);
     View.render();
 }
 
@@ -113,8 +115,75 @@ function down(x, y)
                 resize();
                 ipcRenderer.send('pixel');
             }
+            const pixel = _buttons[button.current].pixel;
+            _dragging = { pixel, current: button.current, x, y, originalX: pixel.x, originalY: pixel.y };
             return;
         }
+    }
+}
+
+function move(x, y)
+{
+    if (_dragging)
+    {
+        const width = 10;
+        y -= _spacer.offsetHeight + _name.offsetHeight;
+        _dragging.pixel.x = _dragging.originalX + (x - _dragging.x);
+        _dragging.pixel.y = _dragging.originalY + (y - _dragging.y);
+        let found = false;
+        for (let button of _buttons)
+        {
+            if (x < (button.x1 + button.x2) / 2)
+            {
+                if (button.current === _dragging.current || button.current - 1 === _dragging.current)
+                {
+                    _selector.x = _dragging.originalX;
+                    _selector.width = _state.pixels * _pixel.width + BUFFER;
+                    _dragging.drop = _dragging.current;
+                }
+                else
+                {
+                    _selector.x = button.x1 - width / 2;
+                    _selector.width = width;
+                    _dragging.drop = button.current;
+                }
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            if (_dragging.current === _buttons.length - 1)
+            {
+                _selector.x = _dragging.originalX;
+                _selector.width = _state.pixels * _pixel.width + BUFFER;
+                _dragging.drop = _dragging.current;
+            }
+            else
+            {
+                _selector.x = _buttons[_buttons.length - 1].x2 + _pixel.width;
+                _selector.width = width;
+                _dragging.drop = _buttons.length;
+            }
+        }
+        View.render();
+    }
+}
+
+function up()
+{
+    if (_dragging)
+    {
+        if (_dragging.drop)
+        {
+            if (_dragging.drop !== _dragging.current)
+            {
+                _pixel.move(_dragging.current, _dragging.drop);
+                ipcRenderer.send('pixel');
+            }
+        }
+        _dragging = null;
+        resize();
     }
 }
 

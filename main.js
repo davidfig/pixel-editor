@@ -30,7 +30,7 @@ function init()
     create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
-    create('show', { noResize: false });
+    create('show', { noResize: false, dev: true });
     create('tools', { noResize: true });
     create('picker');
     create('animation', { noThrottling: true });

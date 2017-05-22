@@ -3,7 +3,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const RenderSheet = require('yy-rendersheet');
 const TinyColor = require('tinycolor2');
-const Pixel = require('yy-pixel');
+const Pixel = require('../components/pixel/pixel');
 
 const Input = require('./input');
 const View = require('./view');

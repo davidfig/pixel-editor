@@ -2,7 +2,7 @@ const remote = require('electron').remote;
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 const path = require('path');
-const Pixel = require('yy-pixel');
+const Pixel = require('../../components/pixel/pixel');
 
 const DEFAULT = [15, 15];
 
@@ -85,6 +85,22 @@ class PixelEditor extends Pixel
         {
             this.frames.splice(index, 1);
             this.editor.frames.splice(index, 1);
+            this.save();
+        }
+    }
+
+    move(index, newIndex)
+    {
+        if (index < this.frames.length)
+        {
+            const frame = this.frames.splice(index, 1)[0];
+            const editor = this.editor.frames.splice(index, 1)[0];
+            if (newIndex > index)
+            {
+                newIndex--;
+            }
+            this.frames.splice(newIndex, 0, frame);
+            this.editor.frames.splice(newIndex, 0, editor);
             this.save();
         }
     }

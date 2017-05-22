@@ -86,7 +86,6 @@ function resize()
         const pixel = _pixels.addChild(new Pixel(data, _sheet));
         if (i === 0)
         {
-            pixel.sheet(_sheet);
             _sheet.render();
         }
         pixel.scale.set(_state.pixels);
@@ -97,7 +96,7 @@ function resize()
         xStart += BUFFER + pixel.width;
     }
     const window = remote.getCurrentWindow();
-    // window.setContentSize(xStart + BUFFER * 2, yEnd + _spacer.offsetHeight + _name.offsetHeight + BUFFER * 2);
+    window.setContentSize(xStart + BUFFER * 2, yEnd + _spacer.offsetHeight + _name.offsetHeight + BUFFER * 2);
     View.render();
 }
 

@@ -121,8 +121,7 @@ function transparency()
 function draw()
 {
     _sprite.removeChildren();
-    const pixel = _sprite.addChild(new Pixel(_pixel.getData()));
-    pixel.sheet(_sheet);
+    const pixel = _sprite.addChild(new Pixel(_pixel.getData(), _sheet));
     _sheet.render();
     pixel.scale.set(_zoom);
     pixel.frame(_pixel.current);

@@ -12,7 +12,7 @@ const PixelEditor = require('./data/pixel-editor');
 
 let _canvas, _state, _pixel, _sprite, _sheet,
     _code, _error, _select, _hide, _top, _middle, _saved, _editing,
-    _time, _animation, _animations = {}, _animationName;
+    _time, _animation, _animations = {}, _animationName, _play, _stop;
 
 function init()
 {
@@ -29,6 +29,9 @@ function init()
 
     _error = document.getElementById('error');
     _select = document.getElementById('animation');
+    _select.addEventListener('change', changeAnimation);
+    document.getElementById('play').addEventListener('click', changeAnimation);
+    document.getElementById('stop').addEventListener('click', () => _sprite.frame(0));
     _hide = document.getElementById('hide');
     _hide.addEventListener('click', hide);
     _top = document.getElementById('top');
@@ -47,7 +50,8 @@ function init()
 
     update();
     resize();
-    this.hide();
+    hide();
+
 }
 
 function stateChange()
@@ -70,6 +74,11 @@ function reset()
     setupSelect();
 }
 
+function changeAnimation()
+{
+    _sprite.animate(_select.value);
+}
+
 function hide()
 {
     if (_hide.innerHTML === 'Hide Code')
@@ -84,7 +93,10 @@ function hide()
     else
     {
         _hide.innerHTML = 'Hide Code';
-        remote.getCurrentWindow().setContentSize(_saved[0], _saved[1]);
+        if (_saved)
+        {
+            remote.getCurrentWindow().setContentSize(_saved[0], _saved[1]);
+        }
         _code.style.display = 'block';
         _error.style.display = 'block';
         remote.getCurrentWindow().noResizeSave = false;

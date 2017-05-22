@@ -78,6 +78,22 @@ class Pixel extends PIXI.Sprite
                     this.index = 0;
                     entry = this.animation[0];
                     break;
+
+                case 'unique':
+                    let pick;
+                    do
+                    {
+                        pick = Random.pick(entry[1]);
+                    }
+                    while (this.last = pick);
+                    this.last = pick;
+                    entry = [pick, entry[2]];
+                    break;
+
+                case 'link':
+                    this.animation = this.animations[entry[1]];
+                    this.updateFrame(leftover);
+                    return;
             }
         }
         if (Array.isArray(entry[1]))

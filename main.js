@@ -31,7 +31,7 @@ function init()
     create('show', { noResize: false });
     create('tools', { noResize: true });
     create('picker');
-    create('animation', { noThrottling: true });
+    create('animation', { noThrottling: true, dev:true });
 
     Menu(_windows);
 

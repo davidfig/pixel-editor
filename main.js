@@ -25,15 +25,16 @@ function init()
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
     _state.addWindow(_main);
 
+    Menu(_windows);
+
     create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: false });
     create('tools', { noResize: true });
     create('picker');
-    create('animation', { noThrottling: true, dev:true });
+    create('animation', { noThrottling: true });
 
-    Menu(_windows);
 
     accelerators();
     listeners();

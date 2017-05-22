@@ -1009,6 +1009,37 @@ function menu(caller, menu)
             title();
             dirty();
             break;
+
+        case 'paint':
+            _state.tool = 'paint';
+            tool();
+            break;
+
+        case 'select':
+            _state.tool = 'select';
+            tool();
+            break;
+
+        case 'circle':
+            _state.tool = 'circle';
+            tool();
+            break;
+
+        case 'ellipse':
+            _state.tool = 'ellipse';
+            tool();
+            break;
+
+        case 'line':
+            _state.tool = 'line';
+            tool();
+            break;
+
+        case 'fill':
+            _state.tool = 'fill';
+            tool();
+            break;
+
     }
 }
 

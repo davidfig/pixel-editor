@@ -12,7 +12,7 @@ const PixelEditor = require('./data/pixel-editor');
 
 let _canvas, _state, _pixel, _sprite, _sheet,
     _code, _error, _select, _hide, _top, _middle, _saved, _editing,
-    _time, _animation, _animations = {}, _animationName, _play, _stop;
+    _time, _animation, _animations = {}, _animationName;
 
 function init()
 {
@@ -51,7 +51,6 @@ function init()
     update();
     resize();
     hide();
-
 }
 
 function stateChange()
@@ -77,6 +76,7 @@ function reset()
 function changeAnimation()
 {
     _sprite.animate(_select.value);
+    View.render();
 }
 
 function hide()
@@ -88,7 +88,7 @@ function hide()
         _error.style.display = 'none';
         _saved = remote.getCurrentWindow().getContentSize();
         remote.getCurrentWindow().noResizeSave = true;
-        remote.getCurrentWindow().setContentSize(_middle.offsetWidth, _middle.offsetHeight);
+        remote.getCurrentWindow().setContentSize(_middle.offsetWidth, _middle.offsetHeight + _top.offsetHeight);
     }
     else
     {

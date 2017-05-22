@@ -1,7 +1,7 @@
 const Menu = require('electron').Menu;
 const app = require('electron').app;
 
-let _zoom, _template = [], _windows;
+let _template = [], _windows;
 
 function append(label, items)
 {
@@ -15,7 +15,7 @@ function append(label, items)
         }
         else if (item[1])
         {
-            submenu.push({ label: item[0], click() { _zoom.webContents.send('menu', item[1]); } });
+            submenu.push({ label: item[0], click() { _windows.zoom.webContents.send('menu', item[1]); } });
         }
         else
         {
@@ -37,7 +37,6 @@ function view(label, items)
 function init(windows)
 {
     _windows = windows;
-    _zoom = windows.zoom;
     append('&File', [
         ['&New (Ctrl-N)', 'new'],
         ['&Save... (Ctrl-S)', 'save'],

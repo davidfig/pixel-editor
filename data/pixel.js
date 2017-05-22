@@ -77,7 +77,8 @@ class Pixel extends PIXI.Sprite
                 case 'loop':
                     this.index = 0;
                     entry = this.animation[0];
-                    break;
+                    this.updateFrame(leftover);
+                    return;
 
                 case 'unique':
                     let pick;
@@ -85,13 +86,14 @@ class Pixel extends PIXI.Sprite
                     {
                         pick = Random.pick(entry[1]);
                     }
-                    while (this.last = pick);
+                    while (this.last === pick);
                     this.last = pick;
                     entry = [pick, entry[2]];
                     break;
 
                 case 'link':
                     this.animation = this.animations[entry[1]];
+                    this.index = 0;
                     this.updateFrame(leftover);
                     return;
             }

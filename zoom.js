@@ -3,13 +3,13 @@ const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const RenderSheet = require('yy-rendersheet');
 const TinyColor = require('tinycolor2');
+const Pixel = require('yy-pixel');
 
 const Input = require('./input');
 const View = require('./view');
 const Sheet = require('./sheet');
 const State = require('./data/state');
 const PixelEditor = require('./data/pixel-editor');
-const Pixel = require('./data/pixel');
 
 const CURSOR_COLOR = 0xff0000;
 const SHAPE_HOVER_ALPHA = 1;

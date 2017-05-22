@@ -3,11 +3,11 @@ const ipcRenderer = require('electron').ipcRenderer;
 const Parse = require('parse-json');
 const Format = require('json-format');
 const RenderSheet = require('yy-rendersheet');
+const Pixel = require('yy-pixel');
 
 const Input = require('./input');
 const View = require('./view');
 const State = require('./data/state');
-const Pixel = require('./data/pixel');
 const PixelEditor = require('./data/pixel-editor');
 
 let _canvas, _state, _pixel, _sprite, _sheet,
@@ -84,9 +84,9 @@ function hide()
     if (_hide.innerHTML === 'Hide Code')
     {
         _hide.innerHTML = 'Show Code';
+        _saved = remote.getCurrentWindow().getContentSize();
         _code.style.display = 'none';
         _error.style.display = 'none';
-        _saved = remote.getCurrentWindow().getContentSize();
         remote.getCurrentWindow().noResizeSave = true;
         remote.getCurrentWindow().setContentSize(_middle.offsetWidth, _middle.offsetHeight + _top.offsetHeight);
     }

@@ -44,32 +44,32 @@ function init(windows)
         ['separator'],
         ['E&xit (Ctrl-Q)', null, () => app.quit()]
     ]);
-    append('Edit', [
-        ['Copy (Ctrl-C', 'copy'],
-        ['Cut (Ctrl-X)', 'cut'],
-        ['Paste (Ctrl-V)', 'paste'],
+    append('&Edit', [
+        ['&Copy (Ctrl-C', 'copy'],
+        ['C&ut (Ctrl-X)', 'cut'],
+        ['&Paste (Ctrl-V)', 'paste'],
     ]);
-    append('Tools', [
-        ['Paint (B)', 'paint'],
-        ['Select (V)', 'select'],
-        ['Circle (C)', 'circle'],
-        ['Ellipse (E)', 'ellipse'],
-        ['Line (L)', 'line'],
-        ['Fill (F)', 'fill']
+    append('&Tools', [
+        ['&Paint (B)', 'paint'],
+        ['&Select (V)', 'select'],
+        ['&Circle (C)', 'circle'],
+        ['&Ellipse (E)', 'ellipse'],
+        ['&Line (L)', 'line'],
+        ['&Fill (F)', 'fill']
     ]);
-    view('View', [
-        ['Animation', 'animation'],
-        ['Coordinates', 'coords'],
-        ['Palette', 'palette'],
-        ['Color Picker', 'picker'],
-        ['Frame Selector', 'show'],
-        ['Tools', 'tools'],
-        ['Editor', 'zoom'],
+    view('&View', [
+        ['&Animation', 'animation'],
+        ['Coor&dinates', 'coords'],
+        ['&Palette', 'palette'],
+        ['&Color Picker', 'picker'],
+        ['&Frame Selector', 'show'],
+        ['&Tools', 'tools'],
+        ['&Editor', 'zoom'],
     ]);
-    append('Frame', [
-        ['Duplicate (Ctrl-D)', 'duplicate'],
-        ['Delete', 'delete'],
-        ['New Frame', 'frame']
+    append('F&rame', [
+        ['&Duplicate (Ctrl-D)', 'duplicate'],
+        ['D&elete', 'delete'],
+        ['&New Frame', 'frame']
     ]);
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template));
 }

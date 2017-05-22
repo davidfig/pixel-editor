@@ -1,12 +1,12 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const RenderSheet = require('yy-rendersheet');
+const Pixel = require('yy-pixel');
 
 const Input = require('./input');
 const View = require('./view');
 const State = require('./data/state');
 const PixelEditor = require('./data/pixel-editor');
-const Pixel = require('./data/pixel');
 
 const COLOR_SELECTED = 0x888888;
 

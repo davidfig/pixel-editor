@@ -14,6 +14,7 @@ const PixelEditor = require('./data/pixel-editor');
 const CURSOR_COLOR = 0xff0000;
 const SHAPE_HOVER_ALPHA = 1;
 const BORDER = 1;
+const DOTTED = 10;
 
 let _state, _pixel, _zoom = 50, _sheet, _sprite,
     _cursorBlock, _blocks, _grid,
@@ -314,13 +315,59 @@ function normalCursor()
     _cursorBlock.drawRect(0, 0, _zoom * x, _zoom * y);
 }
 
+function selectCursor()
+{
+    const color = _state.foreground === null ? CURSOR_COLOR : _state.foreground;
+    _cursorBlock.position.set(_state.cursorX * _zoom, _state.cursorY * _zoom);
+    _cursorBlock.lineStyle(5, color);
+    const x = _state.cursorSizeX + _state.cursorX >= _pixel.width ? _pixel.width - _state.cursorX : _state.cursorSizeX;
+    const y = _state.cursorSizeY + _state.cursorY >= _pixel.height ? _pixel.height - _state.cursorY : _state.cursorSizeY;
+    let reverse = _zoom * x < 0;
+    for (let i = 0; reverse ? i > _zoom * x : i < _zoom * x; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
+    {
+        let far;
+        if (reverse)
+        {
+            far = i - DOTTED < _zoom * x ? _zoom * x : i - DOTTED;
+        }
+        else
+        {
+            far = i + DOTTED > _zoom * x ? _zoom * x : i + DOTTED;
+        }
+        _cursorBlock.moveTo(i, 0);
+        _cursorBlock.lineTo(far, 0);
+        _cursorBlock.moveTo(i, _zoom * y);
+        _cursorBlock.lineTo(far, _zoom * y);
+    }
+    reverse = _zoom * y < 0;
+    for (let i = 0; reverse ? i > _zoom * y : i < _zoom * y; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
+    {
+        let far;
+        if (reverse)
+        {
+            far = i - DOTTED < _zoom * y ? _zoom * y : i - DOTTED;
+        }
+        else
+        {
+            far = i + DOTTED > _zoom * y ? _zoom * y : i + DOTTED;
+        }
+        _cursorBlock.moveTo(0, i);
+        _cursorBlock.lineTo(0, far);
+        _cursorBlock.moveTo(_zoom * x, i);
+        _cursorBlock.lineTo(_zoom * x, far);
+    }
+}
+
 function cursor()
 {
     _cursorBlock.clear();
     switch (_state.tool)
     {
-        case 'paint':
         case 'select':
+            selectCursor();
+            break;
+
+        case 'paint':
             normalCursor();
             break;
 
@@ -469,6 +516,7 @@ function space()
                     _pixel.set(block.x, block.y, color, true);
                 }
             }
+            _pixel.save();
             dirty();
             View.render();
             break;
@@ -510,7 +558,7 @@ function floodFill(x, y, check)
 
 function dirty()
 {
-    _pixel.save(_state.lastFile);
+    _pixel.save();
     draw();
     ipcRenderer.send('pixel');
     View.render();
@@ -725,12 +773,13 @@ function cut()
 
 function copy(clear)
 {
+    _pixel.undoSave();
     if (_state.cursorSizeX === 1 && _state.cursorSizeY === 1)
     {
         _clipboard = { width: 1, height: 1, data: _pixel.get(_state.cursorX, _state.cursorY) };
         if (clear)
         {
-            _pixel.set(_state.cursorX, _state.cursorY, null);
+            _pixel.set(_state.cursorX, _state.cursorY, null, true);
         }
     }
     else
@@ -762,7 +811,7 @@ function copy(clear)
                 _clipboard.data.push(_pixel.get(x, y));
                 if (clear)
                 {
-                    _pixel.set(x, y, null);
+                    _pixel.set(x, y, null, true);
                 }
             }
         }
@@ -773,12 +822,13 @@ function paste()
 {
     if (_clipboard)
     {
+        _pixel.undoSave();
         let i = 0;
         for (let y = 0; y < _clipboard.height; y++)
         {
             for (let x = 0; x < _clipboard.width; x++)
             {
-                _pixel.set(x + _state.cursorX, y + _state.cursorY, _clipboard.data[i++]);
+                _pixel.set(x + _state.cursorX, y + _state.cursorY, _clipboard.data[i++], true);
             }
         }
         dirty();

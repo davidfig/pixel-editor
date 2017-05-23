@@ -175,6 +175,7 @@ function resize()
     View.resize();
     View.clear();
     _sprite = View.add(new Pixel(_pixel.getData(), _sheet));
+    _sprite.render(true);
     _sheet.render();
     _sprite.frame(0);
     _sprite.scale.set(_state.pixels);

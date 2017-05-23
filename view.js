@@ -31,11 +31,6 @@ const View = {
         View.renderer.stage.removeChildren();
     },
 
-    dirty()
-    {
-        View.renderer.dirty = true;
-    },
-
     render()
     {
         View.renderer.render();

@@ -126,7 +126,10 @@ class PixelEditor extends Pixel
             }
             this.data[x + y * this.width] = value;
         }
-        this.save();
+        if (!noUndo)
+        {
+            this.save();
+        }
     }
     get(x, y)
     {

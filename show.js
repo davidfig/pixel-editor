@@ -86,6 +86,7 @@ function resize()
         const pixel = _pixels.addChild(new Pixel(data, _sheet));
         if (i === 0)
         {
+            pixel.render(true);
             _sheet.render();
         }
         pixel.scale.set(_state.pixels);

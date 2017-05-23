@@ -7,7 +7,7 @@ const path = require('path');
 const WindowState = require('./data/window-state');
 const Menu = require('./menu');
 
-const DEBUG = false;
+const DEBUG = true;
 const DEV_ALL = false;
 
 let _windows, _main, _state;
@@ -27,7 +27,7 @@ function init()
 
     Menu(_windows);
 
-    create('zoom', { frame: true });
+    create('zoom', { frame: true,dev:true });
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: true });

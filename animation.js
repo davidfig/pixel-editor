@@ -75,6 +75,7 @@ function reset()
 
 function changeAnimation()
 {
+debugger
     _sprite.animate(_select.value);
     View.render();
 }

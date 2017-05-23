@@ -7,7 +7,7 @@ const path = require('path');
 const WindowState = require('./data/window-state');
 const Menu = require('./menu');
 
-const DEBUG = true;
+const DEBUG = false;
 const DEV_ALL = false;
 
 let _windows, _main, _state;
@@ -25,9 +25,8 @@ function init()
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
     _state.addWindow(_main);
 
-    Menu(_windows);
 
-    create('zoom', { frame: true,dev:true });
+    create('zoom', { frame: true });
     create('coords', { noResize: true });
     create('palette');
     create('show', { noResize: true });
@@ -35,6 +34,7 @@ function init()
     create('picker');
     create('animation', { noThrottling: true });
 
+    Menu(_windows);
 
     accelerators();
     listeners();
@@ -67,7 +67,7 @@ function accelerators()
     electron.globalShortcut.register('CommandOrControl+Shift+Alt+D', () => _state.createDefaults());
 }
 
-function listener(type)
+function listener(type, callback)
 {
     electron.ipcMain.on(type,
         function (event)
@@ -80,6 +80,10 @@ function listener(type)
                     window.webContents.send(type);
                 }
             }
+            if (callback)
+            {
+                callback();
+            }
         });
 }
 
@@ -87,7 +91,7 @@ function listeners()
 {
     listener('state');
     listener('pixel');
-    listener('reset');
+    listener('reset', () => Menu(_windows));
 }
 
 app.console = new console.Console(process.stdout, process.stderr);

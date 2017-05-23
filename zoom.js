@@ -123,6 +123,7 @@ function draw()
 {
     _sprite.removeChildren();
     const pixel = _sprite.addChild(new Pixel(_pixel.getData(), _sheet));
+    pixel.render(true);
     _sheet.render();
     pixel.scale.set(_zoom);
     pixel.frame(_pixel.current);
@@ -847,6 +848,15 @@ function openFile()
 
 function key(code, special)
 {
+    if (special.ctrl && code >= 48 && code <= 57)
+    {
+        let i = code === 48 ? 10 : code - 48;
+        if (i < _state.lastFiles.length)
+        {
+            load([_state.lastFiles[i]]);
+            return;
+        }
+    }
     _shift = special.shift;
     if (special.ctrl)
     {
@@ -1019,6 +1029,13 @@ function color(color)
 
 function menu(caller, menu)
 {
+    if (menu.indexOf('open***') !== -1)
+    {
+        const filename = menu.split('open***');
+        load([filename[1]]);
+        return;
+    }
+
     switch (menu)
     {
         case 'new':

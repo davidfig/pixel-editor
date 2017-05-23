@@ -6,8 +6,10 @@ class State
 {
     constructor()
     {
-        this.filename = path.join(electron.remote.app.getPath('userData'), 'state.json');
+        const app = electron.remote ? electron.remote.app : electron.app;
+        this.filename = path.join(app.getPath('userData'), 'state.json');
         this.load();
+        this.state.lastFiles = this.state.lastFiles || [];
         this.state.cursorX = this.state.cursorY = 0;
         this.state.cursorSizeX = this.state.cursorSizeY = 1;
     }
@@ -20,7 +22,7 @@ class State
         }
         catch (err)
         {
-            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null };
+            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null, lastFiles: [] };
         }
     }
 
@@ -160,8 +162,27 @@ class State
         if (this.state.lastFile !== value)
         {
             this.state.lastFile = value;
+            const index = this.state.lastFiles.indexOf(value);
+            if (index !== -1)
+            {
+                this.state.lastFiles.splice(index, 1);
+            }
+            this.state.lastFiles.unshift(value);
+            while (this.state.lastFiles.length > 11)
+            {
+                this.state.lastFiles.pop();
+            }
             this.save();
         }
+    }
+
+    get lastFiles()
+    {
+        return this.state.lastFiles;
+    }
+    set lastFiles(value)
+    {
+        this.state.lastFiles = value;
     }
 }
 

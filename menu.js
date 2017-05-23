@@ -1,5 +1,8 @@
 const Menu = require('electron').Menu;
 const app = require('electron').app;
+const path = require('path');
+
+const State = require('./data/state.js');
 
 let _template = [], _windows;
 
@@ -36,14 +39,26 @@ function view(label, items)
 
 function init(windows)
 {
+    _template = [];
+    const state = new State();
     _windows = windows;
-    append('&File', [
+    const list = [
         ['&New (Ctrl-N)', 'new'],
         ['&Save... (Ctrl-S)', 'save'],
         ['&Open... (Ctrl-O)', 'open'],
-        ['separator'],
+        ['separator']];
+    for (let i = 1; i < state.lastFiles.length; i++)
+    {
+        list.push(['&' + i + '. ' + path.basename(state.lastFiles[i], '.json') + ' (Ctrl+' + i + ')', 'open***' + state.lastFiles[i]]);
+    }
+    if (state.lastFiles.length)
+    {
+        list.push(['separator']);
+    }
+    list.push(
         ['E&xit (Ctrl-Q)', null, () => app.quit()]
-    ]);
+    );
+    append('&File', list);
     append('&Edit', [
         ['&Copy (Ctrl-C', 'copy'],
         ['C&ut (Ctrl-X)', 'cut'],
@@ -72,6 +87,10 @@ function init(windows)
         ['&New Frame', 'frame']
     ]);
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template));
+    for (let key in _windows)
+    {
+        windows[key].setMenu(null);
+    }
 }
 
 module.exports = init;

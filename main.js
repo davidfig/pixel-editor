@@ -20,11 +20,10 @@ function init()
     _state = new WindowState();
 
     _windows = {};
-    _main = new electron.BrowserWindow({ backgroundColor: BACKGROUND });
+    _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND });
     _main.stateID = 'main';
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }));
     _state.addWindow(_main);
-
 
     create('zoom', { frame: true });
     create('coords', { noResize: true });

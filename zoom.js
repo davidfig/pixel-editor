@@ -857,11 +857,19 @@ function key(code, special)
             return;
         }
     }
+    if (special.ctrl && special.shift && code === 68)
+    {
+        _state.createDefaults();
+        return;
+    }
     _shift = special.shift;
     if (special.ctrl)
     {
         switch (code)
         {
+            case 81:
+                remote.app.quit();
+                break;
             case 83:
                 saveFile();
                 break;

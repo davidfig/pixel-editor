@@ -35,7 +35,6 @@ function init()
 
     Menu(_windows);
 
-    accelerators();
     listeners();
 }
 
@@ -58,12 +57,6 @@ function create(name, options)
         window.backgroundThrottling = false;
     }
     return window;
-}
-
-function accelerators()
-{
-    electron.globalShortcut.register('CommandOrControl+Q', () => app.quit());
-    electron.globalShortcut.register('CommandOrControl+Shift+Alt+D', () => _state.createDefaults());
 }
 
 function listener(type, callback)

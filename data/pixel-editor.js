@@ -14,7 +14,7 @@ class PixelEditor extends Pixel
         if (!filename)
         {
             this.frames = [{ width: DEFAULT[0], height: DEFAULT[1], data: [] }];
-            this.animations = {};
+            this.animations = {'idle': [[0,0]]};
             for (let i = 0; i < DEFAULT[0] * DEFAULT[1]; i++)
             {
                 this.frames[0].data[i] = null;

@@ -6,7 +6,7 @@
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
+            "runtimeExecutable": "C:/Users/dsfig/AppData/Roaming/npm/node_modules/electron/dist/electron.exe",
             "program": "${workspaceRoot}/main.js",
             "args": [
                 "--disable-gpu-async-worker-context"

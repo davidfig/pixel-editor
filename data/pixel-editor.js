@@ -2,7 +2,7 @@ const remote = require('electron').remote;
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 const path = require('path');
-const Pixel = require('../../components/pixel/pixel');
+const Pixel = require('yy-pixel').Pixel;
 
 const DEFAULT = [15, 15];
 

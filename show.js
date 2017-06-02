@@ -1,7 +1,7 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const RenderSheet = require('yy-rendersheet');
-const Pixel = require('../components/pixel/pixel');
+const Pixel = require('yy-pixel').Pixel;
 
 const Input = require('./input');
 const View = require('./view');

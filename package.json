@@ -5,13 +5,12 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite"
+    "build": "electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.10"
   },
   "repository": "https://github.com/davidfig/pixel-editor",
   "author": "David Figatner",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.6.10",
     "pixi.js": "^4.5.1"
   },
   "dependencies": {

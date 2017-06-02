@@ -3,7 +3,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const Parse = require('parse-json');
 const Format = require('json-format');
 const RenderSheet = require('yy-rendersheet');
-const Pixel = require('../components/pixel/pixel');
+const Pixel = require('yy-pixel').Pixel;
 
 const Input = require('./input');
 const View = require('./view');

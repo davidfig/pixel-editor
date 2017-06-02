@@ -7,7 +7,10 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
-            "program": "${workspaceRoot}/main.js"
+            "program": "${workspaceRoot}/main.js",
+            "args": [
+                "--disable-gpu-async-worker-context"
+            ]
         }
     ]
 }

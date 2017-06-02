@@ -37,7 +37,7 @@ function init()
     _state.lastFile = _pixel.filename;
     View.init();
     Input.init(View.renderer.canvas, { keyDown: key, down: downMouse, move: moveMouse, up: upMouse });
-    Sheet.init();
+    Sheet.init(_state.transparentColor);
     _blocks = View.add(new PIXI.Container());
     _sprite = View.add(new PIXI.Container());
     _grid = View.add(new PIXI.Graphics());
@@ -63,6 +63,8 @@ function stateChange()
     _state.load();
     title();
     cursor();
+    Sheet.transparent = _state.transparentColor;
+    Sheet.render();
     View.render();
 }
 
@@ -110,7 +112,7 @@ function transparency()
     _blocks.removeChildren();
     for (let y = 0; y < _pixel.height; y++)
     {
-        for (let x = 0; x < _pixel.height; x++)
+        for (let x = 0; x < _pixel.width; x++)
         {
             const block = _blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')));
             block.width = block.height = _zoom;

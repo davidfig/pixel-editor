@@ -39,6 +39,19 @@ class State
         }
     }
 
+    get transparentColor()
+    {
+        return this.state.transparentColor;
+    }
+    set transparentColor(value)
+    {
+        if (this.state.transparentColor !== value)
+        {
+            this.state.transparentColor = value;
+            this.save();
+        }
+    }
+
     get cursorX()
     {
         return this.state.cursorX;

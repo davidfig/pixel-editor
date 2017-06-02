@@ -24,7 +24,7 @@ function init()
     _state = new State();
     _pixel = new PixelEditor(_state.lastFile);
     View.init();
-    Sheet.init();
+    Sheet.init(_state.transparentColor);
     _blocks = View.add(new PIXI.Container());
     palettes();
     Input.init(View.renderer.canvas, { down, keyDown });
@@ -48,6 +48,7 @@ function reset()
 function stateChange()
 {
     _state.load();
+    Sheet.render();
     draw();
     View.render();
 }

@@ -11,7 +11,7 @@ const State = require('./data/state.js');
 
 const BORDER = 5;
 const WIDTH = 4;
-let _canvas, _spacer, _hex, _hexDiv, _rgbDiv, _state, _g, _hsl, _total, _width, _bottom, _isDown, _color, _editing;
+let _canvas, _spacer, _hex, _hexDiv, _rgbDiv, _state, _g, _hsl, _total, _width, _bottom, _isDown, _color, _editing, _transparent;
 
 function init()
 {
@@ -23,7 +23,7 @@ function init()
     _state = new State();
     View.init({ canvas: _canvas });;
     Input.init(_canvas, { down, move, up, keyDown });
-    Sheet.init();
+    Sheet.init(_state.transparentColor);
     _g = View.add(new PIXI.Graphics());
     window.addEventListener('resize', resize);
     remote.getCurrentWindow().show();
@@ -128,6 +128,16 @@ function draw()
     }
 
     _color = _state.isForeground ? _state.foreground : _state.background;
+
+    if (_color === null)
+    {
+        _color = _state.transparentColor || 0xdddddd;
+        _transparent = true;
+    }
+    else
+    {
+        _transparent = false;
+    }
     _g.clear()
         .beginFill(_color)
         .drawRect(0, BORDER, _width, _width)
@@ -216,13 +226,22 @@ function down(x, y)
     {
         _hsl.l = percent;
     }
-    if (_state.isForeground)
+    if (_transparent)
     {
-        _state.foreground = changeColor(_hsl.h, _hsl.s, _hsl.l);
+        Sheet.transparent = _state.transparentColor = changeColor(_hsl.h, _hsl.s, _hsl.l);
+        ipcRenderer.send('state');
+        draw();
     }
     else
     {
-        _state.background = changeColor(_hsl.h, _hsl.s, _hsl.l);
+        if (_state.isForeground)
+        {
+            _state.foreground = changeColor(_hsl.h, _hsl.s, _hsl.l);
+        }
+        else
+        {
+            _state.background = changeColor(_hsl.h, _hsl.s, _hsl.l);
+        }
     }
     draw();
     _isDown = true;

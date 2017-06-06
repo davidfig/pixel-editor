@@ -7,7 +7,7 @@ const View = {
     init: function(options)
     {
         options = options || {};
-        View.renderer = new Renderer({ canvas: options.canvas });
+        View.renderer = new Renderer({ canvas: options.canvas, noWebGL: true });
         View.resize();
     },
 

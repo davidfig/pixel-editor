@@ -2,10 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <style>
+        @font-face {
+            font-family: bitmap;
+            src: url(./assets/VT323-Regular.ttf);
+        }
+    </style>
   </head>
-  <body style="overflow: hidden; padding: 0; margin:0">
+  <body style="font-family: bitmap; font-size: 20px; overflow: hidden; padding: 0; margin:0">
       <div id="spacer" style="height: 1em; -webkit-app-region: drag"></div>
-      <div id="name" style="margin-left: 1em">0</div>
+      <div style="margin-left: 1em">Frame <span id="name">0</span></div>
       <canvas id="canvas" style="height: 100%; width: 100%"></canvas>
   </body>
 

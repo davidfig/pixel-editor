@@ -2,6 +2,7 @@ const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const RenderSheet = require('yy-rendersheet');
 const Pixel = require('yy-pixel').Pixel;
+const FontFaceObserver = require('fontfaceobserver');
 
 const Input = require('./input');
 const View = require('./view');
@@ -92,6 +93,9 @@ function resize()
         pixel.scale.set(_state.pixels);
         pixel.frame(i);
         pixel.position.set(xStart, yStart);
+        const n = _pixels.addChild(new PIXI.Text(i, { fontFamily: 'bitmap', fontSize: '20px', fill: 0 }));
+        n.anchor.set(0, 1);
+        n.position.set(xStart, yStart + _state.pixels * _pixel.height);
         yEnd = pixel.height > yEnd ? pixel.height : yEnd;
         _buttons.push({ pixel, x1: xStart, y1: yStart - BUFFER, x2: xStart + pixel.width, y2: yStart + pixel.height + BUFFER, current: i });
         xStart += BUFFER + pixel.width;
@@ -192,4 +196,5 @@ function keyDown(code, special)
     remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
 }
 
-init();
+const font = new FontFaceObserver('bitmap');
+font.load().then(function () { init(); });

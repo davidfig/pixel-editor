@@ -1,6 +1,7 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
+require('pixi.js')
 const path = require('path');
 const EasyEdit = require('easyedit');
 

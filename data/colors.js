@@ -15,9 +15,7 @@ class Colors
 
     static create()
     {
-
-    }
-        this.palettes = [[], [], []];
+     this.palettes = [[], [], []];
         this.isForeground = true;
         grays(lines[1]);
         primaries(lines[2]);
@@ -38,10 +36,6 @@ class Colors
         _foreground = 0;
         _background = null;
     }
-
-
-
-
 
     module.exports = {
         init,
@@ -89,6 +83,5 @@ class Colors
             }
         }
     }
-
 
 module.exports = Colors;

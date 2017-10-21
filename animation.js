@@ -1,5 +1,6 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
+const PIXI = require('pixi.js')
 const Parse = require('parse-json');
 const Format = require('json-format');
 const RenderSheet = require('yy-rendersheet');

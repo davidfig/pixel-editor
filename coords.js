@@ -2,9 +2,9 @@ const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
 const path = require('path');
+const EasyEdit = require('easyedit');
 
 const Input = require('./input');
-const EasyEdit = require('./easyedit');
 const State = require('./data/state');
 const PixelEditor = require('./data/pixel-editor');
 

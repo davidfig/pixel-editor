@@ -1,6 +1,7 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const FontFaceObserver = require('fontfaceobserver');
+const PIXI = require('pixi.js')
 
 const Sheet = require('./sheet');
 const View = require('./view');

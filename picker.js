@@ -1,9 +1,10 @@
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
+const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2');
 const FontFaceObserver = require('fontfaceobserver');
+const EasyEdit = require('easyedit');
 
-const EasyEdit = require('./easyedit');
 const Sheet = require('./sheet');
 const View = require('./view');
 const Input = require('./input');

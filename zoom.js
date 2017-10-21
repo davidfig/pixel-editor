@@ -2,6 +2,7 @@ const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 const path = require('path');
 const RenderSheet = require('yy-rendersheet');
+const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2');
 const Pixel = require('yy-pixel').Pixel;
 

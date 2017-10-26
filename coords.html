@@ -4,14 +4,17 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="styles.css" />
     </head>
-    <body style="color: white; -webkit-app-region: drag; font-family: bitmap; font-size: 1.5em; user-select: none; width: 10em; height: 7.5em; overflow: hidden">
+    <body style="color: white; -webkit-app-region: drag; font-family: bitmap; font-size: 1.5em; user-select: none; width: 9em; height: 8.5em; overflow: hidden">
         <div style="display: flex; justify-content: space-around">
             <div>x: <span id="x">0</span></div>
             <div>y: <span id="y">0</span></div>
         </div>
-        <div style="display: flex; justify-content: space-around; margin-bottom: 1em">
+        <div style="display: flex; justify-content: space-around">
             <div>size: <span id="cursorWidth">0</span></div>
             <div>size: <span id="cursorHeight">0</span></div>
+        </div>
+        <div style="-webkit-app-region: no-drag; text-align: center;margin-bottom: 1em">
+            <input id="centered" type="checkbox">Center</input>
         </div>
         <div style="text-align: center; margin-bottom: 0.5em" id="filename"></div>
         <div style="-webkit-app-region: no-drag">

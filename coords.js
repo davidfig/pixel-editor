@@ -103,9 +103,10 @@ function stateChange(noload)
     {
         _state.load()
     }
+    const centered = document.getElementById('centered').checked
     document.getElementById('pixels').innerHTML = _state.pixels
-    document.getElementById('x').innerHTML = _state.cursorX
-    document.getElementById('y').innerHTML = _state.cursorY
+    document.getElementById('x').innerHTML = _state.cursorX - (centered ? Math.floor(_pixel.width / 2) : 0)
+    document.getElementById('y').innerHTML = _state.cursorY - (centered ? Math.floor(_pixel.height / 2) : 0)
     document.getElementById('cursorWidth').innerHTML = _state.cursorSizeX
     document.getElementById('cursorHeight').innerHTML = _state.cursorSizeY
     const filename = '--- ' + path.basename(_state.lastFile, '.json') + ' ---'

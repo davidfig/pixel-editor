@@ -8,19 +8,19 @@ const Input = {
 
     init: function (div, handlers)
     {
-        Input.handlers = handlers;
+        Input.handlers = handlers
         if (div)
         {
-            div.addEventListener('mousedown', Input.mouseDown);
-            div.addEventListener('mousemove', Input.mouseMove);
-            div.addEventListener('mouseup', Input.mouseUp);
-            div.addEventListener('mouseout', Input.mouseUp);
+            div.addEventListener('mousedown', Input.mouseDown)
+            div.addEventListener('mousemove', Input.mouseMove)
+            div.addEventListener('mouseup', Input.mouseUp)
+            div.addEventListener('mouseout', Input.mouseUp)
 
-            div.addEventListener('touchstart', Input.touchStart);
-            div.addEventListener('touchmove', Input.touchMove);
-            div.addEventListener('touchend', Input.touchEnd);
+            div.addEventListener('touchstart', Input.touchStart)
+            div.addEventListener('touchmove', Input.touchMove)
+            div.addEventListener('touchend', Input.touchEnd)
         }
-        Input.keysListener();
+        Input.keysListener()
     },
 
     /**
@@ -35,10 +35,10 @@ const Input = {
         {
             if (Input.touches[i].identifier === id)
             {
-                return Input.touches[i];
+                return Input.touches[i]
             }
         }
-        return null;
+        return null
     },
 
     /**
@@ -52,8 +52,8 @@ const Input = {
         {
             if (Input.touches[i].identifier === id)
             {
-                Input.touches.splice(i, 1);
-                return;
+                Input.touches.splice(i, 1)
+                return
             }
         }
     },
@@ -64,19 +64,19 @@ const Input = {
      */
     touchStart: function (e)
     {
-        e.preventDefault();
-        const touches = e.changedTouches;
+        e.preventDefault()
+        const touches = e.changedTouches
         for (let i = 0, _i = touches.length; i < _i; i++)
         {
-            const touch = touches[i];
+            const touch = touches[i]
             const entry = {
                 identifier: touch.identifier,
                 x: touch.clientX,
                 y: touch.clientY,
                 start: Date.now()
-            };
-            Input.touches.push(entry);
-            Input.handleDown(touch.clientX, touch.clientY);
+            }
+            Input.touches.push(entry)
+            Input.handleDown(touch.clientX, touch.clientY)
         }
     },
 
@@ -86,11 +86,11 @@ const Input = {
      */
     touchMove: function (e)
     {
-        e.preventDefault();
+        e.preventDefault()
         for (let i = 0, _i = e.changedTouches.length; i < _i; i++)
         {
-            const touch = e.changedTouches[i];
-            Input.handleMove(touch.clientX, touch.clientY);
+            const touch = e.changedTouches[i]
+            Input.handleMove(touch.clientX, touch.clientY)
         }
     },
 
@@ -100,15 +100,15 @@ const Input = {
      */
     touchEnd: function (e)
     {
-        e.preventDefault();
+        e.preventDefault()
         for (let i = 0, _i = e.changedTouches.length; i < _i; i++)
         {
-            const touch = e.changedTouches[i];
-            const previous = Input.findTouch(touch.identifier);
+            const touch = e.changedTouches[i]
+            const previous = Input.findTouch(touch.identifier)
             if (previous !== null)
             {
-                Input.removeTouch(touch.identifier);
-                Input.handleUp(touch.clientX, touch.clientY);
+                Input.removeTouch(touch.identifier)
+                Input.handleUp(touch.clientX, touch.clientY)
             }
         }
     },
@@ -119,10 +119,10 @@ const Input = {
      */
     mouseDown: function (e)
     {
-        e.preventDefault();
-        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX;
-        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY;
-        Input.handleDown(x, y);
+        e.preventDefault()
+        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX
+        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY
+        Input.handleDown(x, y)
     },
 
     /**
@@ -131,10 +131,10 @@ const Input = {
      */
     mouseMove: function (e)
     {
-        e.preventDefault();
-        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX;
-        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY;
-        Input.handleMove(x, y);
+        e.preventDefault()
+        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX
+        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY
+        Input.handleMove(x, y)
     },
 
     /**
@@ -143,16 +143,16 @@ const Input = {
      */
     mouseUp: function (e)
     {
-        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX;
-        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY;
-        Input.handleUp(x, y);
+        const x = window.navigator.msPointerEnabled ? e.offsetX : e.clientX
+        const y = window.navigator.msPointerEnabled ? e.offsetY : e.clientY
+        Input.handleUp(x, y)
     },
 
     handleDown: function(x, y)
     {
         if (Input.handlers.down)
         {
-            Input.handlers.down(x, y);
+            Input.handlers.down(x, y)
         }
 
     },
@@ -161,7 +161,7 @@ const Input = {
     {
         if (Input.handlers.up)
         {
-            Input.handlers.up(x, y);
+            Input.handlers.up(x, y)
         }
     },
 
@@ -169,7 +169,7 @@ const Input = {
     {
         if (Input.handlers.move)
         {
-            Input.handlers.move(x, y);
+            Input.handlers.move(x, y)
         }
     },
 
@@ -178,8 +178,8 @@ const Input = {
      */
     keysListener: function ()
     {
-        document.addEventListener('keydown', Input.keydown);
-        document.addEventListener('keyup', Input.keyup);
+        document.addEventListener('keydown', Input.keydown)
+        document.addEventListener('keyup', Input.keyup)
     },
 
     /**
@@ -187,19 +187,19 @@ const Input = {
      */
     keydown: function (e)
     {
-        Input.keys.shift = e.shiftKey;
-        Input.keys.meta = e.metaKey;
-        Input.keys.ctrl = e.ctrlKey;
-        const code = (typeof e.which === 'number') ? e.which : e.keyCode;
-        if (Input.keys.meta && code === 73) return; // allow chrome to open developer console
+        Input.keys.shift = e.shiftKey
+        Input.keys.meta = e.metaKey
+        Input.keys.ctrl = e.ctrlKey
+        const code = (typeof e.which === 'number') ? e.which : e.keyCode
+        if (Input.keys.meta && code === 73) return // allow chrome to open developer console
         if (code === 82 && Input.keys.meta)
         { // reload page with meta + r
-            window.location.reload();
-            return;
+            window.location.reload()
+            return
         }
         if (Input.handlers.keyDown)
         {
-            Input.handlers.keyDown(code, Input.keys, e);
+            Input.handlers.keyDown(code, Input.keys, e)
         }
     },
 
@@ -209,15 +209,15 @@ const Input = {
      */
     keyup: function (e)
     {
-        Input.keys.shift = e.shiftKey;
-        Input.keys.meta = e.metaKey;
-        Input.keys.ctrl = e.ctrlKey;
-        const code = (typeof e.which === 'number') ? e.which : e.keyCode;
+        Input.keys.shift = e.shiftKey
+        Input.keys.meta = e.metaKey
+        Input.keys.ctrl = e.ctrlKey
+        const code = (typeof e.which === 'number') ? e.which : e.keyCode
         if (Input.handlers.keyUp)
         {
-            Input.handlers.keyUp(code, Input.keys);
+            Input.handlers.keyUp(code, Input.keys)
         }
     }
-};
+}
 
-module.exports = Input;
+module.exports = Input

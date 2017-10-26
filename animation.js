@@ -1,226 +1,237 @@
-const remote = require('electron').remote;
-const ipcRenderer = require('electron').ipcRenderer;
+const remote = require('electron').remote
+const ipcRenderer = require('electron').ipcRenderer
 const PIXI = require('pixi.js')
-const Parse = require('parse-json');
-const Format = require('json-format');
-const RenderSheet = require('yy-rendersheet');
-const Pixel = require('yy-pixel').Pixel;
-
-const Input = require('./input');
-const View = require('./view');
-const State = require('./data/state');
-const PixelEditor = require('./data/pixel-editor');
+const Parse = require('parse-json')
+const Format = require('json-format')
+const RenderSheet = require('yy-rendersheet')
+const Pixel = require('yy-pixel').Pixel
+const Input = require('./input')
+const View = require('./view')
+const State = require('./data/state')
+const PixelEditor = require('./data/pixel-editor')
 
 let _canvas, _state, _pixel, _sprite, _sheet,
     _code, _error, _select, _hide, _top, _middle, _saved, _editing,
-    _time, _animation, _animations = {}, _animationName;
+    _time, _animation, _animations = {}, _animationName
 
 function init()
 {
-    _state = new State();
-    _pixel = new PixelEditor(_state.lastFile);
-    _canvas = document.getElementById('canvas');
-    View.init({ canvas: _canvas });
-    Input.init(_canvas, { keyDown });
+    _state = new State()
+    _pixel = new PixelEditor(_state.lastFile)
+    _canvas = document.getElementById('canvas')
+    View.init({ canvas: _canvas })
+    Input.init(_canvas, { keyDown })
 
-    _code = document.getElementById('code');
-    _code.addEventListener('focus', () => _editing = true);
-    _code.addEventListener('blur', () => _editing = false);
-    _code.addEventListener('input', codeChange);
+    _code = document.getElementById('code')
+    _code.addEventListener('focus', () => _editing = true)
+    _code.addEventListener('blur', () => _editing = false)
+    _code.addEventListener('input', codeChange)
 
-    _error = document.getElementById('error');
-    _select = document.getElementById('animation');
-    _select.addEventListener('change', changeAnimation);
-    document.getElementById('play').addEventListener('click', changeAnimation);
-    document.getElementById('stop').addEventListener('click', () => _sprite.frame(0));
-    _hide = document.getElementById('hide');
-    _hide.addEventListener('click', hide);
-    _top = document.getElementById('top');
-    _middle = document.getElementById('middle');
+    _error = document.getElementById('error')
+    _select = document.getElementById('animation')
+    _select.addEventListener('change', changeAnimation)
+    document.getElementById('play').addEventListener('click', control)
+    _hide = document.getElementById('hide')
+    _hide.addEventListener('click', hide)
+    _top = document.getElementById('top')
+    _middle = document.getElementById('middle')
 
-    setup();
-    resize();
-    setupSelect();
+    setup()
+    resize()
+    setupSelect()
 
-    window.addEventListener('resize', resize);
-    remote.getCurrentWindow().show();
+    window.addEventListener('resize', resize)
+    remote.getCurrentWindow().show()
 
-    ipcRenderer.on('state', stateChange);
-    ipcRenderer.on('pixel', pixelChange);
-    ipcRenderer.on('reset', reset);
+    ipcRenderer.on('state', stateChange)
+    ipcRenderer.on('pixel', pixelChange)
+    ipcRenderer.on('reset', reset)
 
-    update();
-    resize();
-    hide();
+    update()
+    resize()
+    hide()
+}
+
+function control()
+{
+    const play = document.getElementById('play')
+    if (play.innerText === 'Play')
+    {
+        changeAnimation()
+    }
+    else
+    {
+        _sprite.stop = true
+        _sprite.frame(0)
+        play.innerText = 'Play'
+    }
 }
 
 function stateChange()
 {
-    _state.load();
+    _state.load()
 }
 
 function pixelChange()
 {
-    _pixel.load();
-    resize();
+    _pixel.load()
+    resize()
 }
 
 function reset()
 {
-    _state.load();
-    _pixel = new PixelEditor(_state.lastFile);
-    setup();
-    resize();
-    setupSelect();
+    _state.load()
+    _pixel = new PixelEditor(_state.lastFile)
+    setup()
+    resize()
+    setupSelect()
 }
 
 function changeAnimation()
 {
-    _sprite.animate(_select.value);
-    View.render();
+    _sprite.animate(_select.value)
+    View.render()
+    document.getElementById('play').innerText = 'Stop'
 }
 
 function hide()
 {
-    if (_hide.innerHTML === 'Hide Code')
+    if (_hide.innerHTML === 'Hide')
     {
-        _hide.innerHTML = 'Show Code';
-        _saved = remote.getCurrentWindow().getContentSize();
-        _code.style.display = 'none';
-        _error.style.display = 'none';
-        remote.getCurrentWindow().noResizeSave = true;
-        remote.getCurrentWindow().setContentSize(_middle.offsetWidth, _middle.offsetHeight + _top.offsetHeight);
+        _hide.innerHTML = 'Show'
+        _saved = remote.getCurrentWindow().getContentSize()
+        _code.style.display = 'none'
+        _error.style.display = 'none'
+        remote.getCurrentWindow().noResizeSave = true
+        remote.getCurrentWindow().setContentSize(_middle.offsetWidth, _middle.offsetHeight + _top.offsetHeight)
     }
     else
     {
-        _hide.innerHTML = 'Hide Code';
+        _hide.innerHTML = 'Hide'
         if (_saved)
         {
-            remote.getCurrentWindow().setContentSize(_saved[0], _saved[1]);
+            remote.getCurrentWindow().setContentSize(_saved[0], _saved[1])
         }
-        _code.style.display = 'block';
-        _error.style.display = 'block';
-        remote.getCurrentWindow().noResizeSave = false;
+        _code.style.display = 'block'
+        _error.style.display = 'block'
+        remote.getCurrentWindow().noResizeSave = false
     }
 }
 
 function setup()
 {
-    _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST });
+    _sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
     try
     {
-        _code.value = Format(_pixel.animations);
+        _code.value = Format(_pixel.animations)
     }
     catch (e)
     {
-        _code.value = _pixel.animations;
-        _error.innerHTML = e.message;
+        _code.value = _pixel.animations
+        _error.innerHTML = e.message
     }
 }
 
 function setupSelect()
 {
-    let different = false;
+    let different = false
     for (let animation in _pixel.animations)
     {
         if (!_animations[animation])
         {
-            different = animation;
-            break;
+            different = animation
+            break
         }
     }
     for (let animation in _animations)
     {
         if (!_pixel.animations[animation])
         {
-            different = true;
-            break;
+            different = true
+            break
         }
     }
     if (different)
     {
-        _animation = null;
-        _animations = {};
-        _select.innerHTML = '';
+        _animation = null
+        _animations = {}
+        _select.innerHTML = ''
         for (let animation in _pixel.animations)
         {
             if (!_animation)
             {
-                _animation = _pixel.animations[animation];
-                _animationName = animation;
+                _animation = _pixel.animations[animation]
+                _animationName = animation
             }
-            _animations[animation] = true;
-            _select.innerHTML += '<option value="' + animation + '"' + (different === animation ? 'selected = "selected"' : '') + '>' + animation + '</option>';
+            _animations[animation] = true
+            _select.innerHTML += '<option value="' + animation + '"' + (different === animation ? 'selected = "selected"' : '') + '>' + animation + '</option>'
             if (different === animation)
             {
-                _animation = _pixel.animations[animation];
-                _animationName = animation;
+                _animation = _pixel.animations[animation]
+                _animationName = animation
             }
         }
         if (_sprite)
         {
-            _sprite.animate(_animationName);
+            _sprite.animate(_animationName)
         }
     }
     else
     {
         if (_sprite)
         {
-            _sprite.animate(_animationName);
+            _sprite.animate(_animationName)
         }
     }
 }
 
 function resize()
 {
-    View.resize();
-    View.clear();
-    _sprite = View.add(new Pixel(_pixel.getData(), _sheet));
-    _sprite.render(true);
-    _sheet.render();
-    _sprite.frame(0);
-    _sprite.scale.set(_state.pixels);
+    View.resize()
+    View.clear()
+    _sprite = View.add(new Pixel(_pixel.getData(), _sheet))
+    _sprite.render(true)
+    _sheet.render()
+    _sprite.frame(0)
+    _sprite.scale.set(_state.pixels)
     if (_animationName)
     {
-        _sprite.animate(_animationName);
+        _sprite.animate(_animationName)
     }
-    _canvas.style.width = _sprite.width + 'px';
-    _canvas.style.height = _sprite.height + 'px';
-    View.render();
-
-    _code.style.height = window.innerHeight - _top.offsetHeight - _middle.offsetHeight - _error.offsetHeight + 'px';
+    _canvas.style.width = _sprite.width + 'px'
+    _canvas.style.height = _sprite.height + 'px'
+    View.render()
+    _code.style.height = window.innerHeight - _top.offsetHeight - _middle.offsetHeight - _error.offsetHeight + 'px'
 }
 
 function update()
 {
-    const now = Date.now();
-    const elapsed = _time ? now - _time : 0;
-    _time = now;
+    const now = Date.now()
+    const elapsed = _time ? now - _time : 0
+    _time = now
     if (_sprite)
     {
-        if (_sprite.update(elapsed))
-        {
-            View.render();
-        }
+        _sprite.update(elapsed)
+        View.render()
     }
-    requestAnimationFrame(update);
+    requestAnimationFrame(update)
 }
 
 function codeChange()
 {
     try
     {
-        const value = Parse(_code.value);
-        _error.innerHTML = 'Compiled.';
-        _pixel.animations = value;
-        _pixel.save();
-        ipcRenderer.send('pixel');
-        setupSelect();
-        resize();
+        const value = Parse(_code.value)
+        _error.innerHTML = 'Compiled.'
+        _pixel.animations = value
+        _pixel.save()
+        ipcRenderer.send('pixel')
+        setupSelect()
+        resize()
     }
     catch (e)
     {
-        _error.innerHTML = e.message;
+        _error.innerHTML = e.message
     }
 }
 
@@ -230,16 +241,16 @@ function keyDown(code, special, e)
     {
         if (code === 9)
         {
-            e.preventDefault();
-            const s = _code.selectionStart;
-            _code.value = _code.value.substring(0, _code.selectionStart) + '\t' + _code.value.substring(_code.selectionEnd);
-            _code.selectionEnd = s + 4;
+            e.preventDefault()
+            const s = _code.selectionStart
+            _code.value = _code.value.substring(0, _code.selectionStart) + '\t' + _code.value.substring(_code.selectionEnd)
+            _code.selectionEnd = s + 4
         }
     }
     else
     {
-        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special);
+        remote.getCurrentWindow().windows.zoom.emit('keydown', code, special)
     }
 }
 
-init();
+init()

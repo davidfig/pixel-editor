@@ -27,7 +27,7 @@
     "yy-misc": "^1.0.1",
     "yy-pixel": "file:../components/pixel",
     "yy-random": "^1.2.0",
-    "yy-renderer": "^2.2.1",
-    "yy-rendersheet": "^3.1.0"
+    "yy-renderer": "^2.4.0",
+    "yy-rendersheet": "^3.2.2"
   }
 }

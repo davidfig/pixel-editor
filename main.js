@@ -24,6 +24,7 @@ function init()
     _main.stateID = 'main'
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }))
     _state.addWindow(_main)
+// _main.toggleDevTools()
 
     create('zoom', { frame: true })
     create('coords', { noResize: true })

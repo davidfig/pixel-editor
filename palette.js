@@ -4,13 +4,14 @@ const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const Misc = require('yy-misc')
 const FontFaceObserver = require('fontfaceobserver')
+const Color = require('yy-color')
 
 const Sheet = require('./sheet')
 const View = require('./view')
 const Input = require('./input')
 const State = require('./data/state')
 const PixelEditor = require('./data/pixel-editor')
-const Color = require('yy-color')
+const place = require('./place')
 
 const COLORS_PER_LINE = 10
 
@@ -34,6 +35,7 @@ function init()
     ipcRenderer.on('state', stateChange)
     ipcRenderer.on('pixel', pixelChange)
     ipcRenderer.on('reset', reset)
+    place(remote.getCurrentWindow())
     remote.getCurrentWindow().show()
 }
 

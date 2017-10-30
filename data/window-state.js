@@ -4,9 +4,10 @@ const jsonfile = require('jsonfile')
 
 class State
 {
-    constructor()
+    constructor(name)
     {
-        this.filename = path.join(electron.app.getPath('userData'), 'window-state.json')
+        name = name || 'window-state.json'
+        this.filename = path.join(electron.app.getPath('userData'), name)
         this.load()
     }
 

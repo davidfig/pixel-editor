@@ -5,14 +5,20 @@ const SIZE = 100
 
 const GRAY = '#dddddd'
 
+const IMAGES = ['select', 'pen', 'paint']
+
 let _sheet, _transparent
 
-function init(transparent)
+function load(callback)
 {
     _sheet = new RenderSheet()
-    _transparent = transparent || GRAY
+    _transparent = GRAY
     _sheet.add('transparency', draw, measure)
-    _sheet.render()
+    for (let image of IMAGES)
+    {
+        _sheet.addImage(image, '../images/' + image + '.png')
+    }
+    _sheet.render(callback)
 }
 
 function convert(color)
@@ -58,7 +64,7 @@ function render()
 }
 
 module.exports = {
-    init,
+    load,
     get,
     getTexture,
     render,

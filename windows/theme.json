@@ -1,0 +1,52 @@
+{
+    "Window": {
+        "font-family": "consolas",
+        "font-size": "2em",
+        "corners": 10,
+        "background-color": "#ffffff",
+        "foreground-color": 0,
+        "spacing": 10,
+        "selected-border-size": 2,
+        "selected-border-color": "#aaaaaa",
+        "resize-border-size": 25,
+        "resize-border-color": "#aaaaaa",
+        "text-padding-left": 0,
+        "text-padding-right": 0,
+        "text-padding-top": 0,
+        "text-padding-bottom": 0,
+        "shadow-size": 2,
+        "shadow-alpha": 0.15,
+        "shadow-blur": 2
+    },
+    "Button": {
+        "foreground-color": 0,
+        "background-color": "#f9f9f9",
+        "text-padding-left": 20,
+        "text-padding-right": 20,
+        "text-padding-top": 10,
+        "text-padding-bottom": 10,
+        "select-background-color": "#c9c9c9"
+    },
+    "Text": {
+        "transparent": true,
+        "edit-foreground": "#ffffff",
+        "edit-foreground-select": "#dddddd",
+        "edit-background": "#000000",
+        "edit-background-select": "#888888"
+    },
+    "Stack": {
+        "transparent": true
+    },
+    "Dialog": {
+        "text-padding-left": 10,
+        "text-padding-right": 10,
+        "text-padding-top": 10,
+        "text-padding-bottom": 10
+    },
+    "Picture": {
+        "spacing": 0
+    },
+    "Spacer": {
+        "spacing": 0
+    }
+}

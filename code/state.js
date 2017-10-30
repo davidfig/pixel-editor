@@ -10,6 +10,7 @@ class State
         this.filename = path.join(app.getPath('userData'), 'state.json')
         this.load()
         this.state.lastFiles = this.state.lastFiles || []
+        this.state.windows = this.state.windows || {}
         this.state.cursorX = this.state.cursorY = 0
         this.state.cursorSizeX = this.state.cursorSizeY = 1
     }
@@ -22,8 +23,19 @@ class State
         }
         catch (err)
         {
-            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null, lastFiles: [] }
+            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
         }
+    }
+
+    set(name, x, y, width, height)
+    {
+        this.state.windows[name] = { x, y, width, height }
+        this.save()
+    }
+
+    get(name)
+    {
+        return this.state.windows[name]
     }
 
     get isForeground()

@@ -21,22 +21,21 @@ function init()
 
     _windows = {}
     _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
-    _main.stateID = 'main'
-    _main.loadURL(url.format({ pathname: path.join(__dirname, 'main-window.html'), protocol: 'file:', slashes: true }))
-    _state.addWindow(_main)
-// _main.toggleDevTools()
+    _main.loadURL(url.format({ pathname: path.join(__dirname, 'html/main-window.html'), protocol: 'file:', slashes: true }))
+    _main.toggleDevTools()
+//     _state.addWindow(_main)
 
-    create('zoom', { frame: true })
-    create('coords', { noResize: true })
-    create('palette')
-    create('show', { noResize: true })
-    create('tools', { noResize: true })
-    create('picker')
-    create('animation', { noThrottling: true })
+//     create('zoom', { frame: true })
+//     create('coords', { noResize: true })
+//     create('palette')
+//     create('show', { noResize: true })
+//     create('tools', { noResize: true })
+//     create('picker')
+//     create('animation', { noThrottling: true })
 
-    Menu(_windows)
+//     Menu(_windows)
 
-    listeners()
+//     listeners()
 }
 
 function create(name, options)

@@ -15,24 +15,25 @@ module.exports = class Text extends Window
      *
      * @param {string} text
      * @param {object} [options]
-     * @param {number} [options.wrap]
-     * @param {number} [options.center]
+    //  * @param {number} [options.wrap]
+     * @param {string} [options.align] (middle or center, left, right) horizontal align
      * @param {boolean|string} [options.edit] (true, hex) type of characters allowed
-     * @param {string} [options.editLineStyle=dashed] (dashed, solid, none)
+     * @param {number} [options.count] number of characters to show
      * @param {number} [options.maxCount] maximum number of characters for editing
      */
     constructor(text, options)
     {
         options = options || {}
-        options.transparent = exists(options.transparent) ? options.transparent : true
+        options.transparent = exists(options.transparent) ? options.transparent : false
         super(options)
         this.types.push('Text')
         this._text = text
         this._fontFamily = options.fontFamily
         this._fontSize = options.fontSize
-        this._center = options.center
+        this._align = options.align
         this._wrap = options.wrap
         this._maxCount = options.maxCount
+        this._count = options.count
         this.edit = options.edit
         this.editLineStyle = options.editLineStyle || 'dashed'
         this.words = this.addChild(new PIXI.Text(text))
@@ -96,24 +97,34 @@ module.exports = class Text extends Window
         }
     }
 
-    get center()
+    get align()
     {
-        return this._center
+        return this._align
     }
-    set center(value)
+    set align(value)
     {
-        this._center = value
+        this._align = value
+        this.dirty = true
+    }
+
+    get count()
+    {
+        return this._count
+    }
+    set count(value)
+    {
+        this._count = value
         this.dirty = true
     }
 
     get width()
     {
-        return this._windowWidth || this.words.width + this.get('text-padding-left') + this.get('text-padding-right')
+        return this._windowWidth || this.words.width
     }
 
     get height()
     {
-        return this._windowWidth || this.words.height + this.get('text-padding-top') + this.get('text-padding-bottom')
+        return this._windowWidth || this.words.height
     }
 
     set text(value)
@@ -174,24 +185,59 @@ module.exports = class Text extends Window
     {
         this.words.style.fontFamily = this._fontFamily || this.get('font-family')
         this.words.style.fontSize = this._fontSize || this.get('font-size')
-        this.words.text = this._text
-        if (this._wrap || !this.width || this.words.width > this.width || this.words.width > this._wrap)
+        let text = ''
+        if (this.count && this._text.length < this.count)
         {
-            this.words.style.wordWrap = true
-            this.words.style.wordWrapWidth = (this._wrap || this.width) + this.get('text-padding-left') + this.get('text-padding-right')
+            if (this.align === 'middle' || this.align === 'center')
+            {
+                const first = Math.floor((this.count - this._text.length) / 2)
+                for (let i = 0; i < first; i++)
+                {
+                    text += ' '
+                }
+                text += this._text
+                for (let i = first + 1; i < this.count; i++)
+                {
+                    text += ' '
+                }
+            }
+            else
+            {
+                let pad = ''
+                for (let i = 0; i < this.count - this._text.length; i++)
+                {
+                    pad += ' '
+                }
+                if (this.align === 'right')
+                {
+                    text = pad + this._text
+                }
+                else
+                {
+                    text = this._text + pad
+                }
+            }
         }
         else
         {
-            this.words.style.wordWrap = false
+            text = this._text
         }
+        this.words.text = text
+        // if (this._wrap || !this.width || this.words.width > this.width || this.words.width > this._wrap)
+        // {
+        //     this.words.style.wordWrap = true
+        //     this.words.style.wordWrapWidth = (this._wrap || this.width) + this.get('text-padding-left') + this.get('text-padding-right')
+        // }
+        // else
+        // {
+        //     this.words.style.wordWrap = false
+        // }
         this.styles = {
             fontFamily: this.words.style.fontFamily,
             fontSize: this.words.style.fontSize,
-            wordWrap: this.words.style.wordWrap,
-            wordWrapWidth: this.words.style.wordWrapWidth
+            // wordWrap: this.words.style.wordWrap,
+            // wordWrapWidth: this.words.style.wordWrapWidth
         }
-        this.x = this.get('text-padding-left')
-        this.y = this.get('text-padding-top')
     }
 
     draw()
@@ -203,14 +249,14 @@ module.exports = class Text extends Window
             this.wordsEdit.visible = true
             this.wordsEdit.removeChildren()
             let x = 0
-            for (let i = 0; i < this._text.length; i++)
+            for (let i = 0; i < Math.max(this._text.length, this.count || 0); i++)
             {
                 const style = {}
                 for (let entry in this.styles)
                 {
                     style[entry] = this.styles[entry]
                 }
-                if (this.select.indexOf(i) !== -1)
+                if (i < this._text.length && this.select.indexOf(i) !== -1)
                 {
                     style.fill = this.get('edit-foreground-select', 'color')
                 }
@@ -219,8 +265,10 @@ module.exports = class Text extends Window
                     style.fill = this.get('edit-foreground', 'color')
                 }
                 const bg = this.wordsEdit.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                const letter = this.wordsEdit.addChild(new PIXI.Text(this._text[i], style))
-                letter.isLetter = true
+                const show = (i < this._text.length) ? this._text[i] : ' '
+                const letter = this.wordsEdit.addChild(new PIXI.Text(show, style))
+                letter.isLetter = i < this._text.length
+                letter.index = i
                 letter.x = bg.x = x
                 bg.width = letter.width
                 bg.height = letter.height
@@ -229,14 +277,14 @@ module.exports = class Text extends Window
             }
             if (!this.select.length)
             {
-                this.cursor = this.wordsEdit.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                this.cursor.height = this.lastHeight || this.wordsEdit.height
-                this.lastHeight = !this.lastHeight || this.cursor.height > this.lastHeight ? this.cursor.height : this.lastHeight
-                this.cursor.width = CURSOR_WIDTH
-                this.cursor.tint = this.get('edit-foreground', 'color')
+                this.textCursor = this.wordsEdit.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+                this.textCursor.height = this.lastHeight || this.wordsEdit.height
+                this.lastHeight = !this.lastHeight || this.textCursor.height > this.lastHeight ? this.textCursor.height : this.lastHeight
+                this.textCursor.width = CURSOR_WIDTH
+                this.textCursor.tint = this.get('edit-foreground', 'color')
                 for (let i = 0; i < this.cursorPlace; i++)
                 {
-                    this.cursor.x += this.wordsEdit.children[i * 2].width
+                    this.textCursor.x += this.wordsEdit.children[i * 2].width
                 }
             }
         }
@@ -245,6 +293,19 @@ module.exports = class Text extends Window
             this.words.visible = true
             this.wordsEdit.visible = false
             this.words.tint = this._color || this.get('foreground-color', 'color')
+            switch (this.align)
+            {
+                case 'middle':
+                case 'center':
+                    this.words.x = this.width / 2 - this.words.width / 2
+                    break
+                case 'left':
+                    this.words.x = 0
+                    break
+                case 'right':
+                    this.words.x = this.width - this.words.width
+                    break
+            }
         }
     }
 
@@ -261,17 +322,20 @@ module.exports = class Text extends Window
                 {
                     this.select.push(i)
                 }
-                this.dirty = true
                 this.cursorPlace = this._text.length
+                this.dirty = true
             }
             else
             {
+                this.select = []
                 for (let letter of this.wordsEdit.children)
                 {
                     if (letter.isLetter && letter.containsPoint(e.data.global))
                     {
-                        this.cursor.visible = true
-                        this.cursor.x = letter.x + letter.width
+                        const local = letter.toLocal(e.data.global)
+                        this.cursorPlace = letter.index + (local.x > letter.width / 2 ? 1 : 0)
+                        this.dirty = true
+                        return
                     }
                 }
             }
@@ -307,10 +371,13 @@ module.exports = class Text extends Window
                 {
                     if (this.select.length)
                     {
-                        this.cursorPlace = this.select[0] + 1
-                        this.text = this._text.slice(0, this.select[0]) + letter + this._text.slice(this.select[this.select.length - 1] + 1)
-                        this.select = []
-                        this.dirty = true
+                        if (isValid || valid.indexOf(letter) !== -1)
+                        {
+                            this.cursorPlace = this.select[0] + 1
+                            this.text = this._text.slice(0, this.select[0]) + letter + this._text.slice(this.select[this.select.length - 1] + 1)
+                            this.select = []
+                            this.dirty = true
+                        }
                     }
                     else
                     {
@@ -326,9 +393,13 @@ module.exports = class Text extends Window
         }
     }
 
+    ctrl(left)
+    {
+
+    }
+
     keyDown(code, special, data)
     {
-// console.log(code)
         if (this.editing)
         {
             if (special.shift)

@@ -7,6 +7,7 @@ class State extends Events
 {
     constructor()
     {
+        super()
         const app = electron.remote ? electron.remote.app : electron.app
         this.filename = path.join(app.getPath('userData'), 'state.json')
         this.load()

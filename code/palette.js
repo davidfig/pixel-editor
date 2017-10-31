@@ -25,6 +25,7 @@ module.exports = class Palette extends UI.Window
         this.palettes()
         this.resize()
         this.on('click', this.click, this)
+        this.on('resizing', this.resize, this)
     }
 
     palettes()

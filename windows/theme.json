@@ -28,10 +28,11 @@
         "select-background-color": "#c9c9c9"
     },
     "Text": {
-        "transparent": true,
         "foreground-color": "#ffffff",
+        "background-color": "#dddddd",
+        "corners": 0,
         "edit-foreground": "#ffffff",
-        "edit-background": "#cccccc",
+        "edit-background": "#888888",
         "edit-foreground-select": "#ffffff",
         "edit-background-select": "#000000"
     },

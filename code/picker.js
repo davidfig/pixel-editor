@@ -18,7 +18,12 @@ module.exports = class Picker extends UI.Window
         super({ background: 0xcccccc, clickable: true, draggable: true, resizeable: true })
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
-        this.hex = this.addChild(new UI.Text('#ffffff', { edit: 'hex', maxCount: 7  }))
+        this.hex = this.addChild(new UI.Text('#ffffff', { edit: 'hex', maxCount: 7, count: 7, align: 'middle' }))
+        this.part = [
+            this.addChild(new UI.Text('255', {edit: 'number', maxCount: 3, count: 3, align: 'right'})),
+            this.addChild(new UI.Text('255', {edit: 'number', maxCount: 3, count: 3, align: 'right'})),
+            this.addChild(new UI.Text('255', { edit: 'number', maxCount: 3, count: 3, align: 'right' }))
+        ]
         this.resize()
         this.on('resizing', this.resize, this)
     }
@@ -29,7 +34,7 @@ module.exports = class Picker extends UI.Window
         this.height = this.height < MIN_HEIGHT ? MIN_HEIGHT : this.height
         this.size = (this.width / WIDTH) - (WIDTH + 1) * BORDER / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
-        this.bottom = this.height - BORDER
+        this.bottom = this.height - this.hex.height - BORDER - this.part[0].height
         this.draw()
     }
 
@@ -104,8 +109,12 @@ module.exports = class Picker extends UI.Window
         this.box(BORDER + this.size, this.hsl.h / 360, this.hsl.l < 0.5)
         this.box(BORDER * 2 + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
         this.box(BORDER * 3 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
+        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.height - BORDER - this.hex.height)
+        this.part[0].position.set(BORDER + this.size + this.part[0].width / 2, this.height - BORDER * 2 - this.hex.height - this.part[0].height)
+        this.part[1].position.set(BORDER * 2 + this.size * 2 + this.part[0].width / 2, this.height - BORDER * 2 - this.hex.height - this.part[0].height)
+        this.part[2].position.set(BORDER * 3 + this.size * 3 + this.part[0].width / 2, this.height - BORDER * 2 - this.hex.height - this.part[0].height)
         this.dirty = true
-        // words()
+        // this.words()
     }
 
 

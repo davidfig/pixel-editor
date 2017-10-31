@@ -29,10 +29,11 @@
     },
     "Text": {
         "transparent": true,
+        "foreground-color": "#ffffff",
         "edit-foreground": "#ffffff",
-        "edit-foreground-select": "#dddddd",
-        "edit-background": "#000000",
-        "edit-background-select": "#888888"
+        "edit-background": "#cccccc",
+        "edit-foreground-select": "#ffffff",
+        "edit-background-select": "#000000"
     },
     "Stack": {
         "transparent": true

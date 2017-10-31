@@ -14,6 +14,7 @@
   "dependencies": {
     "calc-fontsize": "^1.1.0",
     "clicked": "^1.1.0",
+    "eventemitter3": "^2.0.3",
     "exists": "^1.0.1",
     "fontfaceobserver": "^2.0.9",
     "json-format": "^1.0.1",

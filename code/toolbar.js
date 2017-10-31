@@ -35,8 +35,7 @@ module.exports = class Toolbar extends UI.Stack
     stateSetup(name)
     {
         this.name = name
-        this.state = new State()
-        const place = this.state.get(name)
+        const place = State.get(name)
         if (exists(place))
         {
             this.position.set(place.x, place.y)
@@ -46,6 +45,6 @@ module.exports = class Toolbar extends UI.Stack
 
     dragged()
     {
-        this.state.set(this.name, this.x, this.y)
+        State.set(this.name, this.x, this.y)
     }
 }

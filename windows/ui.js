@@ -25,7 +25,6 @@ module.exports = class UI extends PIXI.Container
             const w = queue[i]
             if (w.types)
             {
-                w.update(elapsed)
                 if (w.dirty)
                 {
                     dirty = true

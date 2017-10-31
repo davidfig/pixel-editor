@@ -1,8 +1,9 @@
 const electron = require('electron')
 const path = require('path')
 const jsonfile = require('jsonfile')
+const Events = require('eventemitter3')
 
-class State
+class State extends Events
 {
     constructor()
     {
@@ -46,6 +47,7 @@ class State
     {
         if (this.state.isForeground !== value)
         {
+            this.emit('isForeground')
             this.state.isForeground = value
             this.save()
         }
@@ -59,6 +61,7 @@ class State
     {
         if (this.state.transparentColor !== value)
         {
+            this.emit('transparentColor')
             this.state.transparentColor = value
             this.save()
         }
@@ -72,6 +75,7 @@ class State
     {
         if (this.state.cursorX !== value)
         {
+            this.emit('cursorX')
             this.state.cursorX = value
             this.save()
         }
@@ -85,6 +89,7 @@ class State
     {
         if (this.state.cursorY !== value)
         {
+            this.emit('cursorY')
             this.state.cursorY = value
             this.save()
         }
@@ -98,6 +103,7 @@ class State
     {
         if (this.state.cursorSizeX !== value)
         {
+            this.emit('cursorSizeX')
             this.state.cursorSizeX = value
             this.save()
         }
@@ -111,6 +117,7 @@ class State
     {
         if (this.state.cursorSizeY !== value)
         {
+            this.emit('cursorSizeY')
             this.state.cursorSizeY = value
             this.save()
         }
@@ -124,6 +131,7 @@ class State
     {
         if (this.state.color !== value)
         {
+            this.emit('color')
             this.state.color = value
             this.save()
         }
@@ -135,6 +143,7 @@ class State
     }
     set foreground(value)
     {
+        this.emit('foreground')
         this.state.foreground = value
         this.save()
     }
@@ -145,6 +154,7 @@ class State
     }
     set background(value)
     {
+        this.emit('background')
         this.state.background = value
         this.save()
     }
@@ -155,6 +165,7 @@ class State
     }
     set tool(value)
     {
+        this.emit('tool')
         this.state.tool = value
         this.save()
     }
@@ -168,6 +179,7 @@ class State
         value = parseInt(value)
         if (!isNaN(value) && value > 0 && value !== this.state.pixels)
         {
+            this.emit('pixels')
             this.state.pixels = value
             this.save()
         }
@@ -211,4 +223,4 @@ class State
     }
 }
 
-module.exports = State
+module.exports = new State()

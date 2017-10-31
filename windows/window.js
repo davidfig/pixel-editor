@@ -324,7 +324,7 @@ module.exports = class Window extends PIXI.Container
     }
 
     layout() {}
-    update() { }
+
     // if (this.fit)
     // {
     //     const measuring = {left: Infinity, right: 0, top: Infinity, bottom: 0}

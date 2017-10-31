@@ -18,7 +18,7 @@ module.exports = class Picker extends UI.Window
         super({ background: 0xcccccc, clickable: true, draggable: true, resizeable: true })
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
-        this.hex = this.addChild(new UI.Text('#ffffff', { edit: true  }))
+        this.hex = this.addChild(new UI.Text('#ffffff', { edit: 'hex', maxCount: 7  }))
         this.resize()
         this.on('resizing', this.resize, this)
     }
@@ -47,11 +47,11 @@ module.exports = class Picker extends UI.Window
     draw()
     {
         super.draw()
-        this.colorCurrent = this.state.isForeground ? this.state.foreground : this.state.background
+        this.colorCurrent = State.isForeground ? State.foreground : State.background
 
         if (this.colorCurrent === null)
         {
-            this.colorCurrent = this.state.transparentColor || 0xdddddd
+            this.colorCurrent = State.transparentColor || 0xdddddd
             this.transparent = true
         }
         else
@@ -167,19 +167,19 @@ module.exports = class Picker extends UI.Window
         }
         // if (this.transparent)
         // {
-        //     Sheet.transparent = this.state.transparentColor = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
+        //     Sheet.transparent = State..transparentColor = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
         //     ipcRenderer.send('state')
         //     draw()
         // }
         // else
         // {
-        //     if (this.state.isForeground)
+        //     if (State..isForeground)
         //     {
-        //         this.state.foreground = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
+        //         State..foreground = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
         //     }
         //     else
         //     {
-        //         this.state.background = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
+        //         State..background = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
         //     }
         // }
         this.draw()
@@ -214,8 +214,7 @@ module.exports = class Picker extends UI.Window
     stateSetup(name)
     {
         this.name = name
-        this.state = new State()
-        const place = this.state.get(this.name)
+        const place = State.get(this.name)
         if (exists(place))
         {
             this.position.set(place.x, place.y)
@@ -233,7 +232,7 @@ module.exports = class Picker extends UI.Window
 
     stateSet()
     {
-        this.state.set(this.name, this.x, this.y, this.width, this.height)
+        State.set(this.name, this.x, this.y, this.width, this.height)
     }
 }
 
@@ -242,10 +241,10 @@ module.exports = class Picker extends UI.Window
 //     this.hex = document.getElementById('hex')
 //     this.hexDiv = document.getElementById('hex-div')
 //     this.rgbDiv = document.getElementById('rgb-div')
-//     this.state = new State()
+//     State. = new State()
 //     View.init({ canvas: this.canvas });
 //     Input.init(this.canvas, { down, move, up, keyDown })
-//     Sheet.init(this.state.transparentColor)
+//     Sheet.init(State..transparentColor)
 //     this.graphics = View.add(new PIXI.Graphics())
 //     window.addEventListener('resize', resize)
 //     remote.getCurrentWindow().show()
@@ -269,13 +268,13 @@ module.exports = class Picker extends UI.Window
 //     rgb.g = value.g || rgb.g
 //     rgb.b = value.b || rgb.b
 //     const color = TinyColor(rgb).toHex()
-//     if (this.state.isForeground)
+//     if (State..isForeground)
 //     {
-//         this.state.foreground = color
+//         State..foreground = color
 //     }
 //     else
 //     {
-//         this.state.background = color
+//         State..background = color
 //     }
 //     ipcRenderer.send('state')
 //     this.hsl = null
@@ -286,13 +285,13 @@ module.exports = class Picker extends UI.Window
 // function hex(value)
 // {
 //     const color = parseInt(value, 16)
-//     if (this.state.isForeground)
+//     if (State..isForeground)
 //     {
-//         this.state.foreground = color
+//         State..foreground = color
 //     }
 //     else
 //     {
-//         this.state.background = color
+//         State..background = color
 //     }
 //     ipcRenderer.send('state')
 //     this.hsl = null
@@ -302,13 +301,10 @@ module.exports = class Picker extends UI.Window
 
 // function stateChange()
 // {
-//     this.state.load()
+//     State..load()
 //     this.hsl = null
 //     draw()
 // }
-
-
-
 
 // function words()
 // {
@@ -318,4 +314,3 @@ module.exports = class Picker extends UI.Window
 //     document.getElementById('g').innerHTML = rgb.g
 //     document.getElementById('b').innerHTML = rgb.b
 // }
-

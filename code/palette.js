@@ -55,24 +55,24 @@ module.exports = class Palette extends UI.Window
 
         let yStart = 30
 
-        this.foregroundColor = this.blocks.addChild(new PIXI.Sprite(this.state.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
+        this.foregroundColor = this.blocks.addChild(new PIXI.Sprite(State.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
         this.foregroundColor.width = this.foregroundColor.height = width * 2 - BORDER
         this.foregroundColor.position.set(BORDER, BORDER + yStart)
-        if (this.state.foreground !== null)
+        if (State.foreground !== null)
         {
-            this.foregroundColor.tint = this.state.foreground
+            this.foregroundColor.tint = State.foreground
         }
-        this.backgroundColor = this.blocks.addChild(new PIXI.Sprite(this.state.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
+        this.backgroundColor = this.blocks.addChild(new PIXI.Sprite(State.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
         this.backgroundColor.width = this.backgroundColor.height = width * 2 - BORDER
         this.backgroundColor.position.set(BORDER + width * 2, BORDER + yStart)
-        if (this.state.background !== null)
+        if (State.background !== null)
         {
-            this.backgroundColor.tint = this.state.background
+            this.backgroundColor.tint = State.background
         }
 
         const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         block.width = block.height = width / 3
-        block.position.set((this.state.isForeground ? width : width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart)
+        block.position.set((State.isForeground ? width : width * 2) - block.width / 2 + BORDER / 2, width - block.width / 2 + BORDER / 2 + yStart)
         this.activeColor = block
         this.setActiveColor()
 
@@ -174,7 +174,7 @@ module.exports = class Palette extends UI.Window
     setActiveColor()
     {
         let color
-        if (this.state.isForeground)
+        if (State.isForeground)
         {
             this.activeColor.x = this.foregroundColor.width / 2 - this.activeColor.width / 2 + BORDER
             color = this.foregroundColor.tint
@@ -197,16 +197,16 @@ module.exports = class Palette extends UI.Window
     click(e)
     {
         const point = e.data.global
-        if (this.foregroundColor.containsPoint(point) && !this.state.isForeground)
+        if (this.foregroundColor.containsPoint(point) && !State.isForeground)
         {
-            this.state.isForeground = true
+            State.isForeground = true
             this.setActiveColor()
             this.dirty = true
             return
         }
-        if (this.backgroundColor.containsPoint(point) && this.state.isForeground)
+        if (this.backgroundColor.containsPoint(point) && State.isForeground)
         {
-            this.state.isForeground = false
+            State.isForeground = false
             this.setActiveColor()
             this.dirty = true
             return
@@ -215,19 +215,19 @@ module.exports = class Palette extends UI.Window
         {
             if (block.containsPoint(point))
             {
-                if (this.state.isForeground)
+                if (State.isForeground)
                 {
                     if (block.isTransparent)
                     {
                         this.foregroundColor.tint = 0xffffff
                         this.foregroundColor.texture = Sheet.getTexture('transparency')
-                        this.state.foreground = null
+                        State.foreground = null
                     }
                     else
                     {
                         this.foregroundColor.tint = block.tint
                         this.foregroundColor.texture = PIXI.Texture.WHITE
-                        this.state.foreground = block.tint
+                        State.foreground = block.tint
                     }
                 }
                 else
@@ -236,13 +236,13 @@ module.exports = class Palette extends UI.Window
                     {
                         this.backgroundColor.tint = 0xffffff
                         this.backgroundColor.texture = Sheet.getTexture('transparency')
-                        this.state.background = null
+                        State.background = null
                     }
                     else
                     {
                         this.backgroundColor.tint = block.tint
                         this.backgroundColor.texture = PIXI.Texture.WHITE
-                        this.state.background = block.tint
+                        State.background = block.tint
                     }
                 }
                 this.setActiveColor()
@@ -255,8 +255,7 @@ module.exports = class Palette extends UI.Window
     stateSetup(name)
     {
         this.name = name
-        this.state = new State()
-        const place = this.state.get(this.name)
+        const place = State.get(this.name)
         if (exists(place))
         {
             this.position.set(place.x, place.y)
@@ -273,7 +272,7 @@ module.exports = class Palette extends UI.Window
 
     dragged()
     {
-        this.state.set(this.name, this.x, this.y)
+        State.set(this.name, this.x, this.y)
     }
 }
 

@@ -1,17 +1,19 @@
 const exists = require('exists')
+const Input = require('yy-input')
 
+const Settings = require('./settings')
 const UI = require('../windows/UI')
-
 const State = require('./state')
 const Sheet = require('./sheet')
-
+let Main
 const BUTTONS = ['select', 'pen', 'paint']
 
 module.exports = class Toolbar extends UI.Stack
 {
     constructor()
     {
-        super({ draggable: true, transparent: false })
+        Main = require('./main')
+        super({ draggable: true, transparent: false, theme: { spacing: Settings.BORDER } })
         this.addChild(new UI.Spacer())
         this.buttons = []
         for (let image of BUTTONS)
@@ -22,6 +24,8 @@ module.exports = class Toolbar extends UI.Stack
         }
         this.buttons[0].select = true
         this.stateSetup('toolbar')
+        this.input = new Input({ noPointers: true })
+        this.input.on('keydown', this.keydown, this)
     }
 
     pressed(target)
@@ -29,6 +33,35 @@ module.exports = class Toolbar extends UI.Stack
         for (let button of this.buttons)
         {
             button.select = (button === target)
+        }
+    }
+
+    keydown(code, special)
+    {
+        if (Main.isEditing) return
+        if (!special.ctrl && !special.shift && !special.alt)
+        {
+            switch (code)
+            {
+                case 66:
+                    State.tool = 'paint'
+                    break
+                case 86:
+                    State.tool = 'select'
+                    break
+                case 67:
+                    State.tool = 'circle'
+                    break
+                case 76:
+                    State.tool = 'line'
+                    break
+                case 70:
+                    State.tool = 'fill'
+                    break
+                case 69:
+                    State.tool = 'ellipse'
+                    break
+            }
         }
     }
 
@@ -41,6 +74,7 @@ module.exports = class Toolbar extends UI.Stack
             this.position.set(place.x, place.y)
         }
         this.on('drag-end', this.dragged, this)
+        State.on('tool', () => this.dirty = true)
     }
 
     dragged()

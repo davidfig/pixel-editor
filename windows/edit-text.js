@@ -228,12 +228,12 @@ module.exports = class Text extends Window
         // {
         //     this.words.style.wordWrap = false
         // }
-        // this.styles = {
-        //     fontFamily: this.words.style.fontFamily,
-        //     fontSize: this.words.style.fontSize,
-        //     // wordWrap: this.words.style.wordWrap,
-        //     // wordWrapWidth: this.words.style.wordWrapWidth
-        // }
+        this.styles = {
+            fontFamily: this.words.style.fontFamily,
+            fontSize: this.words.style.fontSize,
+            // wordWrap: this.words.style.wordWrap,
+            // wordWrapWidth: this.words.style.wordWrapWidth
+        }
     }
 
     draw()

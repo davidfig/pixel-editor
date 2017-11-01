@@ -9,6 +9,7 @@ const UI = require('../windows/ui')
 const State = require('./state')
 const Sheet = require('./sheet')
 const Settings = require('./settings')
+let Main
 
 const COLORS_PER_LINE = 10
 
@@ -21,6 +22,7 @@ module.exports = class Palette extends UI.Window
 {
     constructor()
     {
+        Main = require('./main')
         super({ clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
         this.stateSetup('palette')
         this.blocks = this.addChild(new PIXI.Container())
@@ -93,15 +95,15 @@ module.exports = class Palette extends UI.Window
             {
                 block.texture = PIXI.Texture.WHITE
                 block.tint = color
-                const fill = color === 0 ? 'white' : 'black'
-                const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
-                text.anchor.set(0.5)
-                text.position.set(block.x + block.width / 2, block.y + block.height / 2)
             }
             else
             {
                 block.texture = Sheet.getTexture('transparency')
             }
+            const fill = color === 0 ? 'white' : 'black'
+            const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
+            text.anchor.set(0.5)
+            text.position.set(block.x + block.width / 2, block.y + block.height / 2)
         }
 
         let x = 0, y = 2, first = true
@@ -245,38 +247,29 @@ module.exports = class Palette extends UI.Window
 
     keydown(code, special)
     {
+        if (Main.isEditing()) return
         if (!special.ctrl && !special.alt && !special.shift)
         {
-            if (code === 88)
+            switch (code)
             {
-                State.isForeground = !State.isForeground
-                this.dirty = true
+                case 88:
+                    State.isForeground = !State.isForeground
+                    this.dirty = true
+                    break
+                case 49:
+                    State.color = 0
+                    this.dirty = true
+                    break
+                case 50:
+                    State.color = 0xffffff
+                    break
+                case 51:
+                    State.color = null
+                    break
+                case 52: case 53: case 54: case 55: case 56: case 57: case 58:
+                    State.color = this.colors[code - 52]
+                    break
             }
-            if (code === 49)
-            {
-                if (State.isForeground)
-                {
-
-                }
-            }
-            console.log(code)
         }
     }
 }
-
-/*
-
-function pixelChange()
-{
-    _pixel.load()
-    updateColors()
-    draw()
-    View.render()
-}
-
-function keyDown(code, special)
-{
-    remote.getCurrentWindow().windows.zoom.emit('keydown', code, special)
-}
-
-*/

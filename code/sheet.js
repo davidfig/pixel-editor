@@ -5,8 +5,6 @@ const State = require('./state')
 
 const SIZE = 100
 
-const GRAY = '#dddddd'
-
 const IMAGES = ['select', 'pen', 'paint']
 
 let _sheet
@@ -68,5 +66,9 @@ module.exports = {
     load,
     get,
     getTexture,
-    render
+    render,
+    get sheet()
+    {
+        return _sheet
+    }
 }

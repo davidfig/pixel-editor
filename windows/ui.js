@@ -17,6 +17,7 @@ module.exports = class UI extends PIXI.Container
 
     layout()
     {
+        this.editing = false
         let dirty
         const queue = [...this.children]
         let i = 0
@@ -25,6 +26,10 @@ module.exports = class UI extends PIXI.Container
             const w = queue[i]
             if (w.types)
             {
+                if (w.editing)
+                {
+                    this.editing = true
+                }
                 if (w.dirty)
                 {
                     dirty = true

@@ -48,9 +48,9 @@ class State extends Events
     {
         if (this.state.isForeground !== value)
         {
-            this.emit('isForeground')
             this.state.isForeground = value
             this.save()
+            this.emit('isForeground')
         }
     }
 
@@ -62,9 +62,9 @@ class State extends Events
     {
         if (this.state.transparentColor !== value)
         {
-            this.emit('transparentColor')
             this.state.transparentColor = value
             this.save()
+            this.emit('transparentColor')
         }
     }
 
@@ -76,9 +76,9 @@ class State extends Events
     {
         if (this.state.cursorX !== value)
         {
-            this.emit('cursorX')
             this.state.cursorX = value
             this.save()
+            this.emit('cursorX')
         }
     }
 
@@ -90,9 +90,9 @@ class State extends Events
     {
         if (this.state.cursorY !== value)
         {
-            this.emit('cursorY')
             this.state.cursorY = value
             this.save()
+            this.emit('cursorY')
         }
     }
 
@@ -104,9 +104,9 @@ class State extends Events
     {
         if (this.state.cursorSizeX !== value)
         {
-            this.emit('cursorSizeX')
             this.state.cursorSizeX = value
             this.save()
+            this.emit('cursorSizeX')
         }
     }
 
@@ -118,9 +118,9 @@ class State extends Events
     {
         if (this.state.cursorSizeY !== value)
         {
-            this.emit('cursorSizeY')
             this.state.cursorSizeY = value
             this.save()
+            this.emit('cursorSizeY')
         }
     }
 
@@ -132,9 +132,9 @@ class State extends Events
     {
         if (this.state.color !== value)
         {
-            this.emit('color')
             this.state.color = value
             this.save()
+            this.emit('color')
         }
     }
 
@@ -144,9 +144,9 @@ class State extends Events
     }
     set foreground(value)
     {
-        this.emit('foreground')
         this.state.foreground = value
         this.save()
+        this.emit('foreground')
     }
 
     get background()
@@ -155,9 +155,9 @@ class State extends Events
     }
     set background(value)
     {
-        this.emit('background')
         this.state.background = value
         this.save()
+        this.emit('background')
     }
 
     get tool()
@@ -166,9 +166,9 @@ class State extends Events
     }
     set tool(value)
     {
-        this.emit('tool')
         this.state.tool = value
         this.save()
+        this.emit('tool')
     }
 
     get pixels()
@@ -180,9 +180,9 @@ class State extends Events
         value = parseInt(value)
         if (!isNaN(value) && value > 0 && value !== this.state.pixels)
         {
-            this.emit('pixels')
             this.state.pixels = value
             this.save()
+            this.emit('pixels')
         }
     }
 

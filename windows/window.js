@@ -21,6 +21,7 @@ module.exports = class Window extends PIXI.Container
      * @param {boolean} [options.spacing]
      * @param {boolean} [options.cursor]
      * @param {boolean} [options.radius]
+     * @param {object} [options.theme]
      */
     constructor(options)
     {
@@ -35,6 +36,7 @@ module.exports = class Window extends PIXI.Container
         this._resizeable = options.resizeable
         this._clickable = options.clickable
         this._radius = options.radius
+        this.theme = options.theme || {}
         this.cursor = options.cursor
         if (exists(options.spacing))
         {
@@ -72,7 +74,7 @@ module.exports = class Window extends PIXI.Container
 
     get(name, type)
     {
-        let result = this._get(name)
+        let result = exists(this.theme[name]) ? this.theme[name] : this._get(name)
         switch (type)
         {
             case 'color':

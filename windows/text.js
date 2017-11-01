@@ -16,10 +16,13 @@ module.exports = class Text extends Window
      * @param {string} text
      * @param {object} [options]
     //  * @param {number} [options.wrap]
-     * @param {string} [options.align] (middle or center, left, right) horizontal align
+     * @param {string} [options.align=left] (middle or center, left, right) horizontal align
      * @param {boolean|string} [options.edit] (true, hex) type of characters allowed
+     * @param {number} [options.min] minimum number of type is number
+     * @param {number} [options.max] maximum number of type is number
      * @param {number} [options.count] number of characters to show
      * @param {number} [options.maxCount] maximum number of characters for editing
+     * @param {object} [options.theme]
      */
     constructor(text, options)
     {
@@ -27,16 +30,17 @@ module.exports = class Text extends Window
         options.transparent = exists(options.transparent) ? options.transparent : false
         super(options)
         this.types.push('Text')
-        this._text = text
-        this._fontFamily = options.fontFamily
-        this._fontSize = options.fontSize
+        this.text = text
         this._align = options.align
         this._wrap = options.wrap
         this._maxCount = options.maxCount
         this._count = options.count
+        this.min = options.min
+        this.max = options.max
+        this.words = this.addChild(new PIXI.Text(text))
+        this.wordsEdit = this.addChild(new PIXI.Container())
         this.edit = options.edit
         this.editLineStyle = options.editLineStyle || 'dashed'
-        this.words = this.addChild(new PIXI.Text(text))
         this.on('click', this.startEdit, this)
         this.input = new Input(null, { noPointers: true })
         this.input.on('keydown', this.keyDown, this)
@@ -92,7 +96,6 @@ module.exports = class Text extends Window
         this.interactive = value ? true : false
         if (value && !this.wordsEdit)
         {
-            this.wordsEdit = this.addChild(new PIXI.Container())
             this.wordsEdit.visible = false
         }
     }
@@ -135,7 +138,25 @@ module.exports = class Text extends Window
         }
         else
         {
-            this._text = value
+            this._text = '' + value
+        }
+        if (this.edit === 'number')
+        {
+            const current = parseInt(this._text)
+            if (exists(this.min))
+            {
+                if (current < this.min)
+                {
+                    this._text = this.min + ''
+                }
+            }
+            if (exists.max)
+            {
+                if (current > this.max)
+                {
+                    this._text = this.max + ''
+                }
+            }
         }
         this._cursorPlace = (this.cursorPlace >= this._text.length) ? this._text.length : this.cursorPlace
         this.dirty = true
@@ -183,8 +204,8 @@ module.exports = class Text extends Window
 
     layout()
     {
-        this.words.style.fontFamily = this._fontFamily || this.get('font-family')
-        this.words.style.fontSize = this._fontSize || this.get('font-size')
+        this.words.style.fontFamily = this.get('font-family')
+        this.words.style.fontSize = this.get('font-size')
         let text = ''
         if (this.count && this._text.length < this.count)
         {
@@ -315,6 +336,7 @@ module.exports = class Text extends Window
         {
             if (!this.editing)
             {
+                this.emit('editing', this)
                 this.editing = true
                 this.original = this._text
                 this.select = []
@@ -596,6 +618,7 @@ module.exports = class Text extends Window
 
                     case 13:
                         this.editing = false
+                        this.emit('changed', this)
                         this.dirty = true
                         data.event.stopPropagation()
                         break

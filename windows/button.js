@@ -9,6 +9,7 @@ module.exports = class Button extends Window
     /**
      * @param {object} [options]
      * @param {string} [options.text]
+     * @param {string} [options.fontSize]
      * @param {texture} [options.picture]
      * @param {texture} [options.select]
      */
@@ -22,7 +23,7 @@ module.exports = class Button extends Window
         this.types.push('Button')
         if (options.text)
         {
-            this.label = this.addChild(new Text(options.text))
+            this.label = this.addChild(new Text(options.text, { transparent: true, fontSize: options.fontSize }))
         }
         if (options.picture)
         {

@@ -15,7 +15,7 @@ module.exports = class UI extends PIXI.Container
         this.theme = options.theme || THEME
     }
 
-    layout(elapsed)
+    layout()
     {
         let dirty
         const queue = [...this.children]
@@ -69,9 +69,9 @@ module.exports = class UI extends PIXI.Container
         return dirty
     }
 
-    update(elapsed)
+    update()
     {
-        if (this.layout(elapsed))
+        if (this.layout())
         {
             this.save()
             return this.draw()

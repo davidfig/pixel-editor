@@ -23,8 +23,15 @@ module.exports = class Picker extends UI.Window
 
     wordsSetup()
     {
-        this.colorCurrent = State.isForeground ? State.foreground : State.background
-        let test = this.colorCurrent.toString(16)
+        let test
+        if (State.color === null)
+        {
+            test = State.transparentColor.toString(16)
+        }
+        else
+        {
+            test = State.color.toString(16)
+        }
         while (test.length < 6)
         {
             test = '0' + test
@@ -93,25 +100,21 @@ module.exports = class Picker extends UI.Window
         this.size = (this.width / WIDTH) - (WIDTH + 1) * Settings.BORDER / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
         this.bottom = this.height - this.hex.height - Settings.BORDER * 3 - this.part[0].height
-
-        this.colorCurrent = State.isForeground ? State.foreground : State.background
-        if (this.colorCurrent === null)
+        if (State.color === null)
         {
-            this.colorCurrent = State.transparentColor || 0xdddddd
-            this.transparent = true
+            this.isTransparent = true
         }
         else
         {
-            this.transparent = false
+            this.isTransparent = false
         }
         this.graphics.clear()
-            .beginFill(this.colorCurrent)
+            .beginFill(State.color)
             .drawRect(Settings.BORDER, Settings.BORDER * 2, this.size - Settings.BORDER, this.size - Settings.BORDER)
             .endFill()
 
         let y = this.size * 2 + Settings.BORDER * 2
-
-        let test = this.colorCurrent.toString(16)
+        let test = (State.color === null ? State.transparentColor : State.color).toString(16)
         while (test.length < 6)
         {
             test = '0' + test
@@ -162,7 +165,7 @@ module.exports = class Picker extends UI.Window
 
     words()
     {
-        let color = this.colorCurrent.toString(16)
+        let color = (State.color === null ? State.transparentColor : State.color).toString(16)
         while (color.length < 6)
         {
             color = '0' + color
@@ -231,7 +234,7 @@ module.exports = class Picker extends UI.Window
                 return
             }
         }
-        if (this.transparent)
+        if (this.isTransparent)
         {
             State.transparentColor = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
         }

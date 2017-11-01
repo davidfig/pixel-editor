@@ -75,8 +75,10 @@ module.exports = class Palette extends UI.Window
         }
 
         const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        block.anchor.set(0.5)
         block.width = block.height = width / 3
-        block.position.set((State.isForeground ? width : width * 2) - block.width / 2 + SPACING / 2, width - block.width / 2 + Settings.BORDER / 2 + yStart)
+        const choose = State.isForeground ? this.foregroundColor : this.backgroundColor
+        block.position.set(choose.x + choose.width / 2, this.foregroundColor.y + this.foregroundColor.height / 2)
         this.activeColor = block
         this.setActiveColor()
 
@@ -89,15 +91,16 @@ module.exports = class Palette extends UI.Window
             block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, Settings.BORDER + width / 3 + yStart)
             if (color !== null)
             {
+                block.texture = PIXI.Texture.WHITE
                 block.tint = color
                 const fill = color === 0 ? 'white' : 'black'
-                const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontFamily: 'bitmap', fontSize, fill }))
+                const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
                 text.anchor.set(0.5)
-                text.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER + (width * 1.25) / 2 - SPACING / 2, Settings.BORDER + width / 3 + yStart + (width * 1.25) / 2) - SPACING / 2
+                text.position.set(block.x + block.width / 2, block.y + block.height / 2)
             }
             else
             {
-                block.isTransparent = true
+                block.texture = Sheet.getTexture('transparency')
             }
         }
 
@@ -113,7 +116,7 @@ module.exports = class Palette extends UI.Window
                 if (first)
                 {
                     const fill = line[i] === 0 ? 'white' : 'black'
-                    const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 3 : 0, { fontFamily: 'bitmap', fontSize, fill }))
+                    const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 3 : 0, { fontSize, fill }))
                     text.anchor.set(0.5)
                     text.position.set(x * width + SPACING / 2 + width / 2, y * width + Settings.BORDER + width / 2 + yStart)
                 }
@@ -177,18 +180,7 @@ module.exports = class Palette extends UI.Window
 
     setActiveColor()
     {
-        let color
-        if (State.isForeground)
-        {
-            this.activeColor.x = this.foregroundColor.width / 2 - this.activeColor.width / 2 + Settings.BORDER
-            color = this.foregroundColor.tint
-        }
-        else
-        {
-            this.activeColor.x = this.foregroundColor.width * 1.5 - this.activeColor.width / 2 + Settings.BORDER * 2
-            color = this.backgroundColor.tint
-        }
-        if (color === 0)
+        if (State.color === 0)
         {
             this.activeColor.tint = 0xffffff
         }
@@ -219,37 +211,7 @@ module.exports = class Palette extends UI.Window
         {
             if (block.containsPoint(point))
             {
-                if (State.isForeground)
-                {
-                    if (block.isTransparent)
-                    {
-                        this.foregroundColor.tint = 0xffffff
-                        this.foregroundColor.texture = Sheet.getTexture('transparency')
-                        State.foreground = null
-                    }
-                    else
-                    {
-                        this.foregroundColor.tint = block.tint
-                        this.foregroundColor.texture = PIXI.Texture.WHITE
-                        State.foreground = block.tint
-                    }
-                }
-                else
-                {
-                    if (block.isTransparent)
-                    {
-                        this.backgroundColor.tint = 0xffffff
-                        this.backgroundColor.texture = Sheet.getTexture('transparency')
-                        State.background = null
-                    }
-                    else
-                    {
-                        this.backgroundColor.tint = block.tint
-                        this.backgroundColor.texture = PIXI.Texture.WHITE
-                        State.background = block.tint
-                    }
-                }
-                this.setActiveColor()
+                State.color = (block.isTransparent) ? null : block.tint
                 this.dirty = true
                 return
             }
@@ -283,10 +245,21 @@ module.exports = class Palette extends UI.Window
 
     keydown(code, special)
     {
-        if (code === 88 && !special.ctrl && !special.alt && !special.shift)
+        if (!special.ctrl && !special.alt && !special.shift)
         {
-            State.isForeground = !State.isForeground
-            this.dirty = true
+            if (code === 88)
+            {
+                State.isForeground = !State.isForeground
+                this.dirty = true
+            }
+            if (code === 49)
+            {
+                if (State.isForeground)
+                {
+
+                }
+            }
+            console.log(code)
         }
     }
 }

@@ -1,18 +1,19 @@
 const RenderSheet = require('yy-rendersheet')
 const Color = require('yy-color')
 
+const State = require('./state')
+
 const SIZE = 100
 
 const GRAY = '#dddddd'
 
 const IMAGES = ['select', 'pen', 'paint']
 
-let _sheet, _transparent
+let _sheet
 
 function load(callback)
 {
     _sheet = new RenderSheet()
-    _transparent = GRAY
     _sheet.add('transparency', draw, measure)
     for (let image of IMAGES)
     {
@@ -34,11 +35,11 @@ function convert(color)
 function draw(c)
 {
     const half = SIZE / 2
-    const light = convert(Color.blend(0.5, 0xffffff, _transparent));
+    const light = convert(Color.blend(0.5, 0xffffff, State.transparentColor))
     c.fillStyle = '#' + light
     c.fillRect(0, 0, half, half)
     c.fillRect(half, half, half, half)
-    c.fillStyle = '#' + convert(_transparent)
+    c.fillStyle = '#' + convert(State.transparentColor)
     c.fillRect(half, 0, half, half)
     c.fillRect(0, half, half, half)
 }
@@ -67,9 +68,5 @@ module.exports = {
     load,
     get,
     getTexture,
-    render,
-    set transparent(value)
-    {
-        _transparent = value
-    }
+    render
 }

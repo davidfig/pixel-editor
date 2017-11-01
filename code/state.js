@@ -2,6 +2,7 @@ const electron = require('electron')
 const path = require('path')
 const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
+const exists = require('exists')
 
 class State extends Events
 {
@@ -16,6 +17,7 @@ class State extends Events
         this.state.relative = this.state.relative || 'top-left'
         this.state.cursorX = this.state.cursorY = 0
         this.state.cursorSizeX = this.state.cursorSizeY = 1
+        this.state.transparentColor = exists(this.state.transparentColor) ? this.state.transparentColor : 0x888888
     }
 
     load()
@@ -26,7 +28,7 @@ class State extends Events
         }
         catch (err)
         {
-            this.state = { pixels: 5, tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, color: 0, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
+            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
         }
     }
 
@@ -127,15 +129,27 @@ class State extends Events
 
     get color()
     {
-        return this.state.color
+        return this.isForeground ? this.foreground : this.background
     }
     set color(value)
     {
-        if (this.state.color !== value)
+        if (this.isForeground)
         {
-            this.state.color = value
-            this.save()
-            this.emit('color')
+            if (this.foreground !== value)
+            {
+                this.foreground = value
+                this.save()
+                this.emit('foreground')
+            }
+        }
+        else
+        {
+            if (this.background !== value)
+            {
+                this.background = value
+                this.save()
+                this.emit('background')
+            }
         }
     }
 
@@ -170,21 +184,6 @@ class State extends Events
         this.state.tool = value
         this.save()
         this.emit('tool')
-    }
-
-    get pixels()
-    {
-        return this.state.pixels
-    }
-    set pixels(value)
-    {
-        value = parseInt(value)
-        if (!isNaN(value) && value > 0 && value !== this.state.pixels)
-        {
-            this.state.pixels = value
-            this.save()
-            this.emit('pixels')
-        }
     }
 
     get relative()

@@ -3,8 +3,9 @@ const TinyColor = require('tinycolor2')
 const Color = require('yy-color')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
-const UI = require('../windows/ui')
+const Input = require('yy-input')
 
+const UI = require('../windows/ui')
 const State = require('./state')
 const Sheet = require('./sheet')
 
@@ -19,13 +20,14 @@ module.exports = class Palette extends UI.Window
 {
     constructor()
     {
-        super({ background: 0xcccccc, clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
+        super({ clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
         this.stateSetup('palette')
         this.blocks = this.addChild(new PIXI.Container())
         this.palettes()
-        this.resize()
         this.on('click', this.click, this)
         this.on('resizing', this.resize, this)
+        this.input = new Input({noPointers: true})
+        this.input.on('keydown', this.keydown, this)
     }
 
     palettes()
@@ -40,11 +42,11 @@ module.exports = class Palette extends UI.Window
         this.colors[2] = [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff, 0xffaa00]
     }
 
-    resize(resize)
+    draw()
     {
         this.updateColors()
-        this.drawBlocks(resize)
-        this.dirty = true
+        this.drawBlocks()
+        super.draw()
     }
 
     drawBlocks()
@@ -269,11 +271,22 @@ module.exports = class Palette extends UI.Window
             this.height = MIN_HEIGHT
         }
         this.on('drag-end', this.dragged, this)
+        State.on('foreground', () => this.dirty = true)
+        State.on('background', () => this.dirty = true)
     }
 
     dragged()
     {
         State.set(this.name, this.x, this.y)
+    }
+
+    keydown(code, special)
+    {
+        if (code === 88 && !special.ctrl && !special.alt && !special.shift)
+        {
+            State.isForeground = !State.isForeground
+            this.dirty = true
+        }
     }
 }
 

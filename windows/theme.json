@@ -3,7 +3,7 @@
         "font-family": "consolas",
         "font-size": "2em",
         "corners": 10,
-        "background-color": "#ffffff",
+        "background-color": "#dddddd",
         "foreground-color": 0,
         "spacing": 10,
         "selected-border-size": 2,

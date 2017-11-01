@@ -15,7 +15,7 @@ module.exports = class Picker extends UI.Window
 {
     constructor()
     {
-        super({ background: 0xcccccc, clickable: true, draggable: true, resizeable: true })
+        super({ clickable: true, draggable: true, resizeable: true })
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
@@ -39,6 +39,7 @@ module.exports = class Picker extends UI.Window
         this.hsl = TinyColor(test).toHsl()
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
         this.hex = this.addChild(new UI.Text('#' + color, { edit: 'hex', maxCount: 7, count: 7 }))
+        this.hex.on('changed', this.changeHex, this)
         const style = { edit: 'number', maxCount: 3, count: 3, align: 'right', min: 0, max: 255 }
         this.part = [
             this.addChild(new UI.Text(rgb.r, style)),
@@ -48,6 +49,19 @@ module.exports = class Picker extends UI.Window
         this.part[0].on('changed', this.changeNumbers, this)
         this.part[1].on('changed', this.changeNumbers, this)
         this.part[2].on('changed', this.changeNumbers, this)
+    }
+
+    changeHex()
+    {
+        const color = TinyColor(this.hex.text).toHex()
+        if (State.isForeground)
+        {
+            State.foreground = color
+        }
+        else
+        {
+            State.background = color
+        }
     }
 
     changeNumbers()
@@ -285,6 +299,7 @@ module.exports = class Picker extends UI.Window
         this.on('resize-end', this.stateSet, this)
         State.on('foreground', this.change, this)
         State.on('background', this.change, this)
+        State.on('isForeground', this.change, this)
     }
 
     change()

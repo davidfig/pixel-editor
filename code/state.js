@@ -13,6 +13,7 @@ class State extends Events
         this.load()
         this.state.lastFiles = this.state.lastFiles || []
         this.state.windows = this.state.windows || {}
+        this.state.relative = this.state.relative || 'top-left'
         this.state.cursorX = this.state.cursorY = 0
         this.state.cursorSizeX = this.state.cursorSizeY = 1
     }
@@ -184,6 +185,17 @@ class State extends Events
             this.save()
             this.emit('pixels')
         }
+    }
+
+    get relative()
+    {
+        return this.state.relative
+    }
+    set relative(value)
+    {
+        this.state.relative = value
+        this.save()
+        this.emit('relative')
     }
 
     save()

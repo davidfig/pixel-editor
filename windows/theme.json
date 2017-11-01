@@ -28,9 +28,11 @@
         "select-background-color": "#c9c9c9"
     },
     "Text": {
-        "foreground-color": "#ffffff",
+        "foreground-color": "0",
         "background-color": "#dddddd",
-        "corners": 0,
+        "corners": 0
+    },
+    "EditText": {
         "edit-foreground": "#ffffff",
         "edit-background": "#888888",
         "edit-foreground-select": "#ffffff",

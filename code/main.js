@@ -6,6 +6,7 @@ const UI = require('../windows/ui')
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')
+const Coords = require('./coords')
 const Sheet = require('./sheet')
 
 let renderer, loading = 2
@@ -23,6 +24,7 @@ function afterLoad()
     ui.addChild(new Toolbar())
     ui.addChild(new Palette())
     ui.addChild(new Picker())
+    ui.addChild(new Coords())
 
     renderer.interval(
         function (elapsed)

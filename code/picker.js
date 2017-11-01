@@ -4,10 +4,10 @@ const exists = require('exists')
 
 const UI = require('../windows/ui')
 const State = require('./state.js')
+const Settings = require('./settings')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300
-const BORDER = 10
 const CONTROL = 5
 const WIDTH = 4
 
@@ -19,18 +19,11 @@ module.exports = class Picker extends UI.Window
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
-        this.resize()
-        this.on('resizing', this.resize, this)
     }
 
     wordsSetup()
     {
         this.colorCurrent = State.isForeground ? State.foreground : State.background
-        let color = this.colorCurrent.toString(16)
-        while (color.length < 6)
-        {
-            color = '0' + color
-        }
         let test = this.colorCurrent.toString(16)
         while (test.length < 6)
         {
@@ -38,13 +31,13 @@ module.exports = class Picker extends UI.Window
         }
         this.hsl = TinyColor(test).toHsl()
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
-        this.hex = this.addChild(new UI.Text('#' + color, { edit: 'hex', maxCount: 7, count: 7 }))
+        this.hex = this.addChild(new UI.EditText(TinyColor(test).toHex(), { beforeText: '#', edit: 'hex', maxCount: 6, count: 6 }))
         this.hex.on('changed', this.changeHex, this)
         const style = { edit: 'number', maxCount: 3, count: 3, align: 'right', min: 0, max: 255 }
         this.part = [
-            this.addChild(new UI.Text(rgb.r, style)),
-            this.addChild(new UI.Text(rgb.g, style)),
-            this.addChild(new UI.Text(rgb.b, style))
+            this.addChild(new UI.EditText(rgb.r, style)),
+            this.addChild(new UI.EditText(rgb.g, style)),
+            this.addChild(new UI.EditText(rgb.b, style))
         ]
         this.part[0].on('changed', this.changeNumbers, this)
         this.part[1].on('changed', this.changeNumbers, this)
@@ -53,7 +46,12 @@ module.exports = class Picker extends UI.Window
 
     changeHex()
     {
-        const color = TinyColor(this.hex.text).toHex()
+        let test = this.hex.text
+        while (test.length < 6)
+        {
+            test = '0' + test
+        }
+        const color = TinyColor(test).toHex()
         if (State.isForeground)
         {
             State.foreground = color
@@ -77,16 +75,6 @@ module.exports = class Picker extends UI.Window
         }
     }
 
-    resize()
-    {
-        this.width = this.width < MIN_WIDTH ? MIN_WIDTH : this.width
-        this.height = this.height < MIN_HEIGHT ? MIN_HEIGHT : this.height
-        this.size = (this.width / WIDTH) - (WIDTH + 1) * BORDER / WIDTH
-        this.boxSize = Math.min(this.size, (this.height / 3))
-        this.bottom = this.height - this.hex.height - BORDER * 2 - this.part[0].height
-        this.dirty = true
-    }
-
     box(x, percent, reverse)
     {
         const actual = percent * (this.bottom - CONTROL * 2)
@@ -100,6 +88,12 @@ module.exports = class Picker extends UI.Window
 
     draw()
     {
+        this.width = this.width < MIN_WIDTH ? MIN_WIDTH : this.width
+        this.height = this.height < MIN_HEIGHT ? MIN_HEIGHT : this.height
+        this.size = (this.width / WIDTH) - (WIDTH + 1) * Settings.BORDER / WIDTH
+        this.boxSize = Math.min(this.size, (this.height / 3))
+        this.bottom = this.height - this.hex.height - Settings.BORDER * 3 - this.part[0].height
+
         this.colorCurrent = State.isForeground ? State.foreground : State.background
         if (this.colorCurrent === null)
         {
@@ -112,10 +106,10 @@ module.exports = class Picker extends UI.Window
         }
         this.graphics.clear()
             .beginFill(this.colorCurrent)
-            .drawRect(BORDER, BORDER * 2, this.size - BORDER, this.size - BORDER)
+            .drawRect(Settings.BORDER, Settings.BORDER * 2, this.size - Settings.BORDER, this.size - Settings.BORDER)
             .endFill()
 
-        let y = this.size * 2 + BORDER * 2
+        let y = this.size * 2 + Settings.BORDER * 2
 
         let test = this.colorCurrent.toString(16)
         while (test.length < 6)
@@ -128,40 +122,40 @@ module.exports = class Picker extends UI.Window
         for (let color of others)
         {
             this.graphics.beginFill(color)
-                .drawRect(BORDER, y, this.size - BORDER, this.size - BORDER)
+                .drawRect(Settings.BORDER, y, this.size - Settings.BORDER, this.size - Settings.BORDER)
                 .endFill()
-            y += this.size + BORDER
+            y += this.size + Settings.BORDER
         }
 
-        for (let y = BORDER; y <= this.bottom - BORDER; y++)
+        for (let y = Settings.BORDER; y <= this.bottom - Settings.BORDER; y++)
         {
-            let percent = (y - BORDER * 2) / this.bottom
+            let percent = (y - Settings.BORDER * 2) / this.bottom
             percent = percent > 1 ? 1 : percent
 
             // h
             this.graphics.beginFill(this.changeColor(percent * 360, this.hsl.s, this.hsl.l))
-                .drawRect(BORDER + this.size, y, this.size, 1)
+                .drawRect(Settings.BORDER + this.size, y, this.size, 1)
                 .endFill()
 
             // s
             this.graphics.beginFill(this.changeColor(this.hsl.h, percent, this.hsl.l))
-                .drawRect(BORDER * 2 + this.size * 2, y, this.size, 1)
+                .drawRect(Settings.BORDER * 2 + this.size * 2, y, this.size, 1)
                 .endFill()
 
             // l
             this.graphics.beginFill(this.changeColor(this.hsl.h, this.hsl.s, percent))
-                .drawRect(BORDER * 3 + this.size * 3, y, this.size, 1)
+                .drawRect(Settings.BORDER * 3 + this.size * 3, y, this.size, 1)
                 .endFill()
         }
-        this.box(BORDER + this.size, this.hsl.h / 360, this.hsl.l < 0.5)
-        this.box(BORDER * 2 + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
-        this.box(BORDER * 3 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
+        this.box(Settings.BORDER + this.size, this.hsl.h / 360, this.hsl.l < 0.5)
+        this.box(Settings.BORDER * 2 + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
+        this.box(Settings.BORDER * 3 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
         let x = this.width / 2 - this.part[0].width / 2
         const spacing = 10
-        this.part[0].position.set(x - this.part[0].width - spacing, this.height - BORDER - this.hex.height)
-        this.part[1].position.set(x, this.height - BORDER - this.hex.height)
-        this.part[2].position.set(x + this.part[1].width + spacing, this.height - BORDER - this.hex.height)
-        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.height - BORDER * 2 - this.hex.height - this.part[0].height)
+        this.part[0].position.set(x - this.part[0].width - spacing, this.height - Settings.BORDER - this.hex.height)
+        this.part[1].position.set(x, this.height - Settings.BORDER - this.hex.height)
+        this.part[2].position.set(x + this.part[1].width + spacing, this.height - Settings.BORDER - this.hex.height)
+        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.height - Settings.BORDER * 2 - this.hex.height - this.part[0].height)
         this.words()
         super.draw()
     }
@@ -173,7 +167,7 @@ module.exports = class Picker extends UI.Window
         {
             color = '0' + color
         }
-        this.hex.text = '#' + color
+        this.hex.text = color
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
         this.part[0].text = rgb.r
         this.part[1].text = rgb.g
@@ -193,13 +187,13 @@ module.exports = class Picker extends UI.Window
 
         let percent = y / this.bottom
         percent = percent > 1 ? 1 : percent
-        if (x > BORDER && x < BORDER + this.size)
+        if (x > Settings.BORDER && x < Settings.BORDER + this.size)
         {
-            if (y > this.size * 2 + BORDER * 2 && y < this.size * 3 + BORDER * 2)
+            if (y > this.size * 2 + Settings.BORDER * 2 && y < this.size * 3 + Settings.BORDER * 2)
             {
                 this.hsl.s *= 0.9
             }
-            else if (y > this.size * 3 + BORDER * 3 && y < this.size * 4 + BORDER * 3)
+            else if (y > this.size * 3 + Settings.BORDER * 3 && y < this.size * 4 + Settings.BORDER * 3)
             {
                 this.hsl.s *= 1.1
             }
@@ -211,17 +205,17 @@ module.exports = class Picker extends UI.Window
         }
         else
         {
-            if (y > BORDER - CONTROL && y < this.bottom - CONTROL)
+            if (y > Settings.BORDER - CONTROL && y < this.bottom - CONTROL)
             {
-                if (x > BORDER * 2 + this.size && x < BORDER + this.size * 2)
+                if (x > Settings.BORDER * 2 + this.size && x < Settings.BORDER + this.size * 2)
                 {
                     this.hsl.h = percent * 360
                 }
-                else if (x > BORDER * 3 + this.size * 2 && x < BORDER * 3 + this.size * 3)
+                else if (x > Settings.BORDER * 3 + this.size * 2 && x < Settings.BORDER * 3 + this.size * 3)
                 {
                     this.hsl.s = percent
                 }
-                else if (x > BORDER * 4 + this.size * 3 && x < BORDER * 4 + this.size * 4)
+                else if (x > Settings.BORDER * 4 + this.size * 3 && x < Settings.BORDER * 4 + this.size * 4)
                 {
                     this.hsl.l = percent
                 }

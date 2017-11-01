@@ -312,4 +312,4 @@ class PixelEditor extends Pixel
     }
 }
 
-module.exports = PixelEditor
+module.exports = new PixelEditor()

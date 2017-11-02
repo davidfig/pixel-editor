@@ -6,6 +6,7 @@ const FontSize = require('calc-fontsize')
 const Input = require('yy-input')
 
 const UI = require('../windows/ui')
+const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
 const Settings = require('./settings')
@@ -102,14 +103,6 @@ module.exports = class Palette extends UI.Window
             {
                 block.texture = PIXI.Texture.WHITE
                 block.tint = color
-                if (color === State.color)
-                {
-                    const extra = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                    extra.anchor.set(0.5)
-                    extra.tint = (color === 0) ? 0xffffff : 0
-                    extra.width = extra.height = block.width / 3
-                    extra.position.set(block.x + block.width / 2, block.y + block.height / 2)
-                }
             }
             else
             {
@@ -133,18 +126,18 @@ module.exports = class Palette extends UI.Window
                 block.tint = line[i]
                 if (line[i] === State.color)
                 {
-                    const extra = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                    extra.anchor.set(0.5)
-                    extra.tint = (line[i] === 0) ? 0xffffff : 0
-                    extra.width = extra.height = block.width / 3
-                    extra.position.set(block.x + block.width / 2, block.y + block.height / 2)
+                    const extra = new PIXI.Sprite(PIXI.Texture.WHITE)
+                    this.blocks.addChildAt(extra, this.blocks.children.indexOf(block))
+                    extra.tint = 0
+                    extra.width = extra.height = block.width + SPACING * 1
+                    extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
                 }
                 if (first)
                 {
-                    const fill = line[i] === 0 ? 'white' : 'black'
-                    const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 3 : 0, { fontSize, fill }))
+                    const fill = line[i] !== 0 ? 'white' : 'black'
+                    const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 4 : 0, { fontSize, fill }))
                     text.anchor.set(0.5)
-                    text.position.set(x * width + SPACING / 2 + width / 2, y * width + width / 2 + yStart)
+                    text.position.set(block.x + block.width / 2, block.y + block.height / 2)
                 }
                 x++
                 if (x === WIDTH && i !== line.length - 1)
@@ -169,38 +162,39 @@ module.exports = class Palette extends UI.Window
         return TinyColor(test).toHsl()
     }
 
+    findColor(color)
+    {
+        for (let find of this.colors[0])
+        {
+            if (find === color)
+            {
+                return true
+            }
+        }
+    }
+
     updateColors()
     {
-        function find(color)
+        this.colors[0] = []
+
+        for (let frame of PixelEditor.frames)
         {
-            for (let find of this.colors[0])
+            for (let color of frame.data)
             {
-                if (find === color)
+                if (color !== null && !this.findColor(color))
                 {
-                    return true
+                    this.colors[0].push(color)
                 }
             }
         }
-
-        this.colors[0] = []
-
-        // for (let frame of _pixel.frames)
-        // {
-        //     for (let color of frame.data)
-        //     {
-        //         if (color !== null && !find(color))
-        //         {
-        //             this.colors[0].push(color)
-        //         }
-        //     }
-        // }
-        // this.colors[0].sort(
-        //     function (a, b)
-        //     {
-        //         const hslA = this.convert(a)
-        //         const hslB = this.convert(b)
-        //         return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0
-        //     })
+        const convert = this.convert
+        this.colors[0].sort(
+            function (a, b)
+            {
+                const hslA = convert(a)
+                const hslB = convert(b)
+                return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0
+            })
     }
 
 

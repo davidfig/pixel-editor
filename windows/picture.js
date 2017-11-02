@@ -6,9 +6,9 @@ const Window = require('./window')
 module.exports = class Picture extends Window
 {
     /**
-     *
      * @param {PIXI.Texture} texture
      * @param {object} [options]
+     * @param {number} [options.scale]
      */
     constructor(texture, options)
     {
@@ -18,6 +18,10 @@ module.exports = class Picture extends Window
         this.types.push('Picture')
         this._texture = texture
         this.sprite = this.addChild(new PIXI.Sprite(this._texture))
+        if (options.scale)
+        {
+            this.sprite.scale.set(options.scale)
+        }
     }
 
     /**

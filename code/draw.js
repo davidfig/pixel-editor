@@ -432,11 +432,9 @@ module.exports = class Palette extends UI.Window
                     {
                         PixelEditor.undoOne()
                     }
-                    this.dirty = true
                     break
                 case 68:
                     PixelEditor.duplicate(PixelEditor.current)
-                    this.dirty = true
                     break
                 case 65:
                     State.tool = 'select'
@@ -556,7 +554,7 @@ module.exports = class Palette extends UI.Window
     cut()
     {
         this.copy(true)
-        this.dirty = true
+        PixelEditor.save()
     }
 
     copy(clear)
@@ -619,7 +617,7 @@ module.exports = class Palette extends UI.Window
                     PixelEditor.set(x + State.cursorX, y + State.cursorY, this.clipboard.data[i++], true)
                 }
             }
-            this.dirty = true
+            PixelEditor.save()
         }
     }
 
@@ -633,7 +631,6 @@ module.exports = class Palette extends UI.Window
                     const current = PixelEditor.get(State.cursorX, State.cursorY)
                     const color = (current !== State.foreground) ? State.foreground : State.background
                     PixelEditor.set(State.cursorX, State.cursorY, color)
-                    this.dirty = true
                     return color
                 }
                 else
@@ -666,7 +663,7 @@ module.exports = class Palette extends UI.Window
                             PixelEditor.set(x, y, color, true)
                         }
                     }
-                    this.dirty = true
+                    PixelEditor.save()
                 }
                 break
 
@@ -683,7 +680,6 @@ module.exports = class Palette extends UI.Window
                     }
                 }
                 PixelEditor.save()
-                this.dirty = true
                 break
 
             case 'line':
@@ -692,7 +688,7 @@ module.exports = class Palette extends UI.Window
             case 'fill':
                 PixelEditor.undoSave()
                 this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
-                this.dirty = true
+                PixelEditor.save()
                 break
         }
     }
@@ -745,6 +741,7 @@ module.exports = class Palette extends UI.Window
         }
         State.on('tool', () => this.tool())
         PixelEditor.on('changed', () => this.dirty = true)
+        State.on('last-file', () => this.dirty = true)
     }
 
     dragged()

@@ -275,7 +275,7 @@ class PixelEditor extends Pixel
         try
         {
             const load = jsonfile.readFileSync(this.filename)
-            if (!load.frames.length || !load.animations)
+            if (!load.frames.length || !load.animations || !load.frames[0].width || !load.frames[0].height)
             {
                 return
             }
@@ -311,6 +311,7 @@ class PixelEditor extends Pixel
         {
             jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
         }
+        this.emit('changed')
     }
 
     getData()

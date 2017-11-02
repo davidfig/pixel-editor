@@ -1,12 +1,18 @@
 const exists = require('exists')
 const Input = require('yy-input')
-
+const PIXI = require('pixi.js')
+const RenderSheet = require('yy-rendersheet')
+const Pixel = require('yy-pixel').Pixel
 const Settings = require('./settings')
 const UI = require('../windows/UI')
 const State = require('./state')
-const Sheet = require('./sheet')
 let Main
-const BUTTONS = ['select', 'pen', 'paint']
+
+const SELECT = require('../images/select.json')
+const PEN = require('../images/paint.json')
+const PAINT = require('../images/fill.json')
+
+const BUTTONS = [SELECT, PEN, PAINT]
 
 module.exports = class Toolbar extends UI.Stack
 {
@@ -16,12 +22,15 @@ module.exports = class Toolbar extends UI.Stack
         super({ draggable: true, transparent: false, theme: { spacing: Settings.BORDER } })
         this.addChild(new UI.Spacer())
         this.buttons = []
-        for (let image of BUTTONS)
+        this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
+        for (let pixel of BUTTONS)
         {
-            const button = this.addChild(new UI.Button({ picture: Sheet.getTexture(image) }))
+            Pixel.add(pixel, this.sheet)
+            const button = this.addChild(new UI.Button({ picture: this.sheet.getTexture(pixel.name + '-0'), pictureOptions: { scale: 2 } }))
             button.on('pressed', this.pressed, this)
             this.buttons.push(button)
         }
+        this.sheet.render()
         this.buttons[0].select = true
         this.stateSetup('toolbar')
         this.input = new Input({ noPointers: true })

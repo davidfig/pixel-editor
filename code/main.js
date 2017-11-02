@@ -14,6 +14,7 @@ const Draw = require('./draw')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
+const Show = require('./show')
 
 let renderer, ui, input, loading = 2, windows = {}
 
@@ -36,7 +37,7 @@ function afterLoad()
     create()
 
     input = new Input({ noPointers: true })
-    input.on('keyup', keyup)
+    input.on('keydown', keydown)
     renderer.interval(update)
     renderer.start()
 }
@@ -47,6 +48,7 @@ function create()
 
     ui = renderer.add(new UI())
     windows.draw = ui.addChild(new Draw())
+    windows.show = ui.addChild(new Show())
     windows.toolbar = ui.addChild(new Toolbar())
     windows.palette = ui.addChild(new Palette())
     windows.picker = ui.addChild(new Picker())
@@ -61,7 +63,7 @@ function update(elapsed)
     }
 }
 
-function keyup(code, special)
+function keydown(code, special)
 {
     if (ui.editing) return
 
@@ -140,6 +142,7 @@ function load(list)
         {
             State.cursorY = 0
         }
+        PixelEditor.emit('changed')
     }
 }
 

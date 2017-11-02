@@ -13,10 +13,10 @@ function load(callback)
 {
     _sheet = new RenderSheet()
     _sheet.add('transparency', draw, measure)
-    for (let image of IMAGES)
-    {
-        _sheet.addImage(image, '../images/' + image + '.png')
-    }
+    // for (let image of IMAGES)
+    // {
+    //     _sheet.addImage(image, '../images/' + image + '.png')
+    // }
     _sheet.render(callback)
 }
 

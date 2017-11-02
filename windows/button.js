@@ -11,6 +11,7 @@ module.exports = class Button extends Window
      * @param {string} [options.text]
      * @param {string} [options.fontSize]
      * @param {texture} [options.picture]
+     * @param {object} [options.pictureOptions]
      * @param {texture} [options.select]
      */
     constructor(options)
@@ -27,7 +28,9 @@ module.exports = class Button extends Window
         }
         if (options.picture)
         {
-            this.image = this.addChild(new Picture(options.picture, { transparent: true }))
+            const pictureOptions = options.pictureOptions || {}
+            pictureOptions.transparent = exists(pictureOptions.transparent) ? pictureOptions.transparent : true
+            this.image = this.addChild(new Picture(options.picture, pictureOptions))
         }
         this._select = options.select
     }

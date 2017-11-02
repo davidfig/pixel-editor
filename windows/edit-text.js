@@ -363,7 +363,7 @@ module.exports = class Text extends Window
         }
         else if (this.edit === 'number')
         {
-            valid = '1234567890'
+            valid = '1234567890-'
         }
         else
         {

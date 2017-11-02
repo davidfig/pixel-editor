@@ -1,5 +1,4 @@
 const exists = require('exists')
-const path = require('path')
 
 const UI = require('../windows/ui')
 const State = require('./state')
@@ -17,11 +16,17 @@ module.exports = class Coords extends UI.Window
         this.stateSetup('coords')
         this.name = this.addChild(new UI.Text('', { transparent: true }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
+        this.frameWidth.on('changed', () => PixelEditor.width = parseInt(this.frameWidth.text))
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
+        this.frameHeight.on('changed', () => PixelEditor.height = parseInt(this.frameHeight.text))
         this.cursorX = this.addChild(new UI.EditText('', { beforeText: 'x: ', count: 3, edit: 'number' }))
+        this.cursorX.on('changed', this.changeCursorX, this)
         this.cursorY = this.addChild(new UI.EditText('', { beforeText: 'y: ', count: 3, edit: 'number' }))
+        this.cursorY.on('changed', this.changeCursorY, this)
         this.cursorWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
+        this.cursorWidth.on('changed', () => State.cursorSizeX = parseInt(this.cursorWidth.text))
         this.cursorHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
+        this.cursorHeight.on('changed', () => State.cursorSizeY = parseInt(this.cursorHeight.text))
         this.changed()
         this.dice = this.addChild(new Dice())
     }
@@ -98,6 +103,28 @@ module.exports = class Coords extends UI.Window
         this.cursorWidth.text = State.cursorSizeX
         this.cursorHeight.text = State.cursorSizeY
         this.dirty = true
+    }
+
+    changeCursorX()
+    {
+        let x = parseInt(this.cursorX.text)
+        switch (State.relative)
+        {
+            case 'top-right': case 'bottom-right': State.cursorX = PixelEditor.width - x - 1; break
+            case 'center': State.cursorX = x + Math.floor(PixelEditor.width / 2); break
+            default: State.cursorX = x
+        }
+    }
+
+    changeCursorY()
+    {
+        let y = parseInt(this.cursorY.text)
+        switch (State.relative)
+        {
+            case 'bottom-right': case 'bottom-left': State.cursorY = PixelEditor.height - y - 1; break
+            case 'center': State.cursorY = y + Math.floor(PixelEditor.width / 2); break
+            default: State.cursorY = y
+        }
     }
 
     dragged()

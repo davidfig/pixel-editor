@@ -19,12 +19,17 @@ let renderer, ui, input, loading = 2, windows = {}
 
 function afterLoad()
 {
-    Menu()
-
     loading--
     if (loading)
     {
         return
+    }
+
+    Menu()
+
+    if (State.lastFile)
+    {
+        PixelEditor.load(State.lastFile)
     }
 
     renderer = new Renderer({ debug: true, autoresize: true })
@@ -58,18 +63,18 @@ function update(elapsed)
 
 function keyup(code, special)
 {
-    if (ui.editing)
-    {
-        return
-    }
+    if (ui.editing) return
+
+    // reload on ctrl-r key (should be disabled when not debugging)
+    if (special.ctrl && code === 82) window.location.reload()
+
     this.shift = special.shift
     if (special.ctrl && code >= 48 && code <= 57)
     {
         let i = code === 48 ? 10 : code - 48
         if (i < State.lastFiles.length)
         {
-            // load([State.lastFiles[i]])
-            return
+            load([State.lastFiles[i]])
         }
     }
     if (special.ctrl && special.shift && code === 68)

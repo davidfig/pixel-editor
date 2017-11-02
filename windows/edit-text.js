@@ -125,7 +125,7 @@ module.exports = class Text extends Window
                     this._text = this.min + ''
                 }
             }
-            if (exists.max)
+            if (exists(this.max))
             {
                 if (current > this.max)
                 {

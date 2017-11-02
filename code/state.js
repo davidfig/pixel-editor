@@ -222,6 +222,7 @@ class State extends Events
                 this.state.lastFiles.pop()
             }
             this.save()
+            this.emit('last-file')
         }
     }
 

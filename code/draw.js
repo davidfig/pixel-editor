@@ -1,8 +1,5 @@
-const remote = require('electron').remote
-const path = require('path')
 const RenderSheet = require('yy-rendersheet')
 const PIXI = require('pixi.js')
-const TinyColor = require('tinycolor2')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 const Input = require('yy-input')
@@ -35,7 +32,6 @@ module.exports = class Palette extends UI.Window
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
         this.stuff.position.set(Settings.BORDER, Settings.BORDER)
-        this.isDown = -1
         this.input = new Input()
         this.input.on('keydown', this.keydown, this)
         this.input.on('keyup', this.keyup, this)
@@ -314,7 +310,7 @@ module.exports = class Palette extends UI.Window
         }
     }
 
-    move(x, y)
+    moveCursor(x, y)
     {
         if (this.shift)
         {
@@ -456,16 +452,16 @@ module.exports = class Palette extends UI.Window
             switch (code)
             {
                 case 37: // left
-                    this.move(-1, 0)
+                    this.moveCursor(-1, 0)
                     break
                 case 38: // up
-                    this.move(0, -1)
+                    this.moveCursor(0, -1)
                     break
                 case 39: // right
-                    this.move(1, 0)
+                    this.moveCursor(1, 0)
                     break
                 case 40: // down
-                    this.move(0, 1)
+                    this.moveCursor(0, 1)
                     break
                 case 187:
                     this.zoom(1)
@@ -918,18 +914,6 @@ function menu(caller, menu)
 
     switch (menu)
     {
-        case 'new':
-            newFile()
-            break
-
-        case 'open':
-            openFile()
-            break
-
-        case 'save':
-            saveFile()
-            break
-
         case 'duplicate':
             PixelEditor.duplicate(PixelEditor.current)
             draw()
@@ -955,40 +939,4 @@ function menu(caller, menu)
             title()
             this.dirty = true
             break
-
-        case 'paint':
-            State.tool = 'paint'
-            tool()
-            break
-
-        case 'select':
-            State.tool = 'select'
-            tool()
-            break
-
-        case 'circle':
-            State.tool = 'circle'
-            tool()
-            break
-
-        case 'ellipse':
-            State.tool = 'ellipse'
-            tool()
-            break
-
-        case 'line':
-            State.tool = 'line'
-            tool()
-            break
-
-        case 'fill':
-            State.tool = 'fill'
-            tool()
-            break
-
-    }
-}
-
-init()
-
 */

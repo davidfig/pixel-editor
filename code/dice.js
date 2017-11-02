@@ -22,6 +22,7 @@ module.exports = class Dice extends UI.Window
             this.dice.push(dice)
         }
         this.on('click', this.clicked, this)
+        State.on('relative', this.draw, this)
     }
 
     draw()

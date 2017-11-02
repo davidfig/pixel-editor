@@ -102,6 +102,14 @@ module.exports = class Palette extends UI.Window
             {
                 block.texture = PIXI.Texture.WHITE
                 block.tint = color
+                if (color === State.color)
+                {
+                    const extra = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+                    extra.anchor.set(0.5)
+                    extra.tint = (color === 0) ? 0xffffff : 0
+                    extra.width = extra.height = block.width / 3
+                    extra.position.set(block.x + block.width / 2, block.y + block.height / 2)
+                }
             }
             else
             {
@@ -123,6 +131,14 @@ module.exports = class Palette extends UI.Window
                 block.width = block.height = width - SPACING
                 block.position.set(x * width + Settings.BORDER, y * width + yStart)
                 block.tint = line[i]
+                if (line[i] === State.color)
+                {
+                    const extra = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+                    extra.anchor.set(0.5)
+                    extra.tint = (line[i] === 0) ? 0xffffff : 0
+                    extra.width = extra.height = block.width / 3
+                    extra.position.set(block.x + block.width / 2, block.y + block.height / 2)
+                }
                 if (first)
                 {
                     const fill = line[i] === 0 ? 'white' : 'black'

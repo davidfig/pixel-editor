@@ -15,7 +15,7 @@ const CIRCLE = require('../images/circle.json')
 const ELLIPSE = require('../images/ellipse.json')
 const LINE = require('../images/line.json')
 
-const BUTTONS = [SELECT, PEN, PAINT, CIRCLE, ELLIPSE, LINE]
+const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE]
 
 module.exports = class Toolbar extends UI.Stack
 {
@@ -34,8 +34,8 @@ module.exports = class Toolbar extends UI.Stack
             this.buttons.push(button)
         }
         this.sheet.render()
-        this.buttons[0].select = true
         this.stateSetup('toolbar')
+        this.changed()
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
     }
@@ -45,6 +45,15 @@ module.exports = class Toolbar extends UI.Stack
         for (let button of this.buttons)
         {
             button.select = (button === target)
+        }
+        switch (target)
+        {
+            case this.buttons[0]: State.tool = 'paint' ; break
+            case this.buttons[1]: State.tool = 'select'; break
+            case this.buttons[2]: State.tool = 'fill'; break
+            case this.buttons[3]: State.tool = 'circle'; break
+            case this.buttons[4]: State.tool = 'ellipse'; break
+            case this.buttons[5]: State.tool = 'line'; break
         }
     }
 
@@ -86,7 +95,25 @@ module.exports = class Toolbar extends UI.Stack
             this.position.set(place.x, place.y)
         }
         this.on('drag-end', this.dragged, this)
-        State.on('tool', () => this.dirty = true)
+        State.on('tool', this.changed, this)
+    }
+
+    changed()
+    {
+        for (let button of this.buttons)
+        {
+            button.select = false
+        }
+        switch (State.tool)
+        {
+            case 'paint': this.buttons[0].select = true; break
+            case 'select': this.buttons[1].select = true; break
+            case 'fill': this.buttons[2].select = true; break
+            case 'circle': this.buttons[3].select = true; break
+            case 'ellipse': this.buttons[4].select = true; break
+            case 'line': this.buttons[5].select = true; break
+        }
+        this.dirty = true
     }
 
     dragged()

@@ -151,9 +151,19 @@ module.exports = class Palette extends UI.Window
         for (let block in blocks)
         {
             const pos = block.split(',')
-            this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-            this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+            if (this.inBounds(pos))
+            {
+                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+            }
         }
+    }
+
+    inBounds(pos)
+    {
+        let x = parseInt(pos[0])
+        let y = parseInt(pos[1])
+        return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
     }
 
     // from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
@@ -194,8 +204,11 @@ module.exports = class Palette extends UI.Window
         for (let block in blocks)
         {
             const pos = block.split(',')
-            this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-            this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+            if (this.inBounds(pos))
+            {
+                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+            }
         }
     }
 

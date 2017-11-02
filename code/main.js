@@ -117,13 +117,17 @@ function toggleWindow(name)
 
 function save(filename)
 {
-    State.lastPath = path.dirname(filename)
-    if (path.extname(filename) !== '.json')
+    if (filename)
     {
-        filename += '.json'
+        State.lastPath = path.dirname(filename)
+        if (path.extname(filename) !== '.json')
+        {
+            filename += '.json'
+        }
+        State.lastFile = filename
+        PixelEditor.name = path.basename(filename, path.extname(filename))
+        PixelEditor.save(filename)
     }
-    State.lastFile = filename
-    PixelEditor.save(filename)
 }
 
 function load(list)

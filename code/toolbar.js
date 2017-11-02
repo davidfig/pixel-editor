@@ -11,8 +11,11 @@ let Main
 const SELECT = require('../images/select.json')
 const PEN = require('../images/paint.json')
 const PAINT = require('../images/fill.json')
+const CIRCLE = require('../images/circle.json')
+const ELLIPSE = require('../images/ellipse.json')
+const LINE = require('../images/line.json')
 
-const BUTTONS = [SELECT, PEN, PAINT]
+const BUTTONS = [SELECT, PEN, PAINT, CIRCLE, ELLIPSE, LINE]
 
 module.exports = class Toolbar extends UI.Stack
 {
@@ -47,7 +50,7 @@ module.exports = class Toolbar extends UI.Stack
 
     keydown(code, special)
     {
-        if (Main.isEditing) return
+        if (Main.isEditing()) return
         if (!special.ctrl && !special.shift && !special.alt)
         {
             switch (code)

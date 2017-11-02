@@ -260,7 +260,7 @@ class PixelEditor extends Pixel
     {
         if (this.redo.length)
         {
-            const redo = redo.pop()
+            const redo = this.redo.pop()
             this.frames[this.editor.current].width = redo.width
             this.frames[this.editor.current].height = redo.height
             this.frames[this.editor.current].data = redo.data
@@ -281,6 +281,7 @@ class PixelEditor extends Pixel
             }
             this.frames = load.frames
             this.animations = load.animations
+            this.name = load.name
         }
         catch (e)
         {

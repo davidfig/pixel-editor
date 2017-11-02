@@ -15,7 +15,7 @@ module.exports = class Coords extends UI.Window
     {
         super({ draggable: true, width: WIDTH })
         this.stateSetup('coords')
-        this.filename = this.addChild(new UI.Text('', { transparent: true }))
+        this.name = this.addChild(new UI.Text('', { transparent: true }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
         this.cursorX = this.addChild(new UI.EditText('', { beforeText: 'x: ', count: 3, edit: 'number' }))
@@ -28,10 +28,10 @@ module.exports = class Coords extends UI.Window
 
     draw()
     {
-        const width = Math.max(WIDTH, this.filename.width)
+        const width = Math.max(WIDTH, this.name.width)
         let y = Settings.BORDER
-        this.filename.position.set(width / 2 - this.filename.width / 2, y)
-        y += this.filename.height + Settings.BORDER
+        this.name.position.set(width / 2 - this.name.width / 2, y)
+        y += this.name.height + Settings.BORDER
         this.frameWidth.position.set(Settings.BORDER, y)
         this.frameHeight.position.set(width - Settings.BORDER - this.cursorY.width, y)
         y += this.frameWidth.height + Settings.BORDER
@@ -62,11 +62,12 @@ module.exports = class Coords extends UI.Window
         State.on('cursorSizeY', this.changed, this)
         State.on('last-file', this.changed, this)
         State.on('relative', this.changed, this)
+        PixelEditor.on('changed', this.changed, this)
     }
 
     changed()
     {
-        this.filename.text = path.basename(PixelEditor.filename, path.extname(PixelEditor.filename))
+        this.name.text = PixelEditor.name
         this.frameWidth.text = PixelEditor.width
         this.frameHeight.text = PixelEditor.height
         let x, y

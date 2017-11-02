@@ -25,6 +25,7 @@ module.exports = class Palette extends UI.Window
         Main = require('./main')
         super({ clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
         this.stateSetup('palette')
+        this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
         this.palettes()
         this.on('click', this.click, this)
@@ -54,35 +55,41 @@ module.exports = class Palette extends UI.Window
 
     drawBlocks()
     {
-        const width = (this.width / WIDTH) - (Settings.BORDER * 1.5 / WIDTH)
+        this.main.removeChildren()
         this.blocks.removeChildren()
 
+        const width = (this.width / WIDTH) - (Settings.BORDER * 1.5 / WIDTH)
         const fontSize = FontSize('8', { width, height: width * 0.75 })
+        let yStart = Settings.BORDER
 
-        let yStart = 30
-
-        this.foregroundColor = this.blocks.addChild(new PIXI.Sprite(State.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
+        this.foregroundColor = this.main.addChild(new PIXI.Sprite(State.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
         this.foregroundColor.width = this.foregroundColor.height = width * 2 - SPACING
-        this.foregroundColor.position.set(Settings.BORDER, Settings.BORDER + yStart)
+        this.foregroundColor.position.set(Settings.BORDER, yStart)
         if (State.foreground !== null)
         {
             this.foregroundColor.tint = State.foreground
         }
-        this.backgroundColor = this.blocks.addChild(new PIXI.Sprite(State.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
+        this.backgroundColor = this.main.addChild(new PIXI.Sprite(State.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
         this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
-        this.backgroundColor.position.set(Settings.BORDER + width * 2, Settings.BORDER + yStart)
+        this.backgroundColor.position.set(Settings.BORDER + width * 2, yStart)
         if (State.background !== null)
         {
             this.backgroundColor.tint = State.background
         }
-
         const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         block.anchor.set(0.5)
         block.width = block.height = width / 3
         const choose = State.isForeground ? this.foregroundColor : this.backgroundColor
         block.position.set(choose.x + choose.width / 2, this.foregroundColor.y + this.foregroundColor.height / 2)
         this.activeColor = block
-        this.setActiveColor()
+        if (State.color === 0 || State.color === null)
+        {
+            this.activeColor.tint = 0xffffff
+        }
+        else
+        {
+            this.activeColor.tint = 0
+        }
 
         const colors = [0, 0xffffff, null]
         for (let i = 0; i < colors.length; i++)
@@ -90,7 +97,7 @@ module.exports = class Palette extends UI.Window
             const color = colors[i]
             const block = this.blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
             block.width = block.height = width * 1.25 - SPACING
-            block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, Settings.BORDER + width / 3 + yStart)
+            block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, width / 3 + yStart)
             if (color !== null)
             {
                 block.texture = PIXI.Texture.WHITE
@@ -114,14 +121,14 @@ module.exports = class Palette extends UI.Window
             {
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
                 block.width = block.height = width - SPACING
-                block.position.set(x * width + Settings.BORDER, y * width + Settings.BORDER + yStart)
+                block.position.set(x * width + Settings.BORDER, y * width + yStart)
                 block.tint = line[i]
                 if (first)
                 {
                     const fill = line[i] === 0 ? 'white' : 'black'
                     const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 3 : 0, { fontSize, fill }))
                     text.anchor.set(0.5)
-                    text.position.set(x * width + SPACING / 2 + width / 2, y * width + Settings.BORDER + width / 2 + yStart)
+                    text.position.set(x * width + SPACING / 2 + width / 2, y * width + width / 2 + yStart)
                 }
                 x++
                 if (x === WIDTH && i !== line.length - 1)
@@ -181,32 +188,18 @@ module.exports = class Palette extends UI.Window
     }
 
 
-    setActiveColor()
-    {
-        if (State.color === 0)
-        {
-            this.activeColor.tint = 0xffffff
-        }
-        else
-        {
-            this.activeColor.tint = 0
-        }
-    }
-
     click(e)
     {
         const point = e.data.global
         if (this.foregroundColor.containsPoint(point) && !State.isForeground)
         {
             State.isForeground = true
-            this.setActiveColor()
             this.dirty = true
             return
         }
         if (this.backgroundColor.containsPoint(point) && State.isForeground)
         {
             State.isForeground = false
-            this.setActiveColor()
             this.dirty = true
             return
         }

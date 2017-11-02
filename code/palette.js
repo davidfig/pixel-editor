@@ -140,10 +140,10 @@ module.exports = class Palette extends UI.Window
                     extra.width = extra.height = block.width + SPACING * 1
                     extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
                 }
-                if (first)
+                if (first && i <= 10 - 4)
                 {
                     const fill = line[i] !== 0 ? 'white' : 'black'
-                    const text = this.blocks.addChild(new PIXI.Text(i !== 9 ? i + 4 : 0, { fontSize, fill }))
+                    const text = this.blocks.addChild(new PIXI.Text(i !== 10 - 4? i + 4 : 0, { fontSize, fill }))
                     text.anchor.set(0.5)
                     text.position.set(block.x + block.width / 2, block.y + block.height / 2)
                 }
@@ -284,6 +284,11 @@ module.exports = class Palette extends UI.Window
                         State.color = this.colors[0][code - 52]
                     }
                     break
+                case 48:
+                    if (exists(this.colors[0][10 - 4]))
+                    {
+                        State.color = this.colors[0][10 - 4]
+                    }
             }
         }
     }

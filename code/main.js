@@ -2,6 +2,7 @@ const Renderer = require('yy-renderer')
 const FontFaceObserver = require('fontfaceobserver')
 const Input = require('yy-input')
 const remote = require('electron').remote
+const path = require('path')
 
 const UI = require('../windows/ui')
 const Toolbar = require('./toolbar')
@@ -11,12 +12,15 @@ const Coords = require('./coords')
 const Sheet = require('./sheet')
 const Draw = require('./draw')
 const State = require('./state')
+const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
 
-let renderer, ui, input, loading = 2
+let renderer, ui, input, loading = 2, windows = {}
 
 function afterLoad()
 {
+    Menu()
+
     loading--
     if (loading)
     {
@@ -24,27 +28,32 @@ function afterLoad()
     }
 
     renderer = new Renderer({ debug: true, autoresize: true })
-    ui = renderer.add(new UI())
-    ui.addChild(new Draw())
-    ui.addChild(new Toolbar())
-    ui.addChild(new Palette())
-    ui.addChild(new Picker())
-    ui.addChild(new Coords())
+    create()
 
     input = new Input({ noPointers: true })
     input.on('keyup', keyup)
-    renderer.interval(
-        function (elapsed)
-        {
-            if (ui.update(elapsed))
-            {
-                renderer.dirty = true
-            }
-        }
-    )
+    renderer.interval(update)
     renderer.start()
+}
 
-    Menu()
+function create()
+{
+    renderer.clear()
+
+    ui = renderer.add(new UI())
+    windows.draw = ui.addChild(new Draw())
+    windows.toolbar = ui.addChild(new Toolbar())
+    windows.palette = ui.addChild(new Palette())
+    windows.picker = ui.addChild(new Picker())
+    windows.coords = ui.addChild(new Coords())
+}
+
+function update(elapsed)
+{
+    if (ui.update(elapsed))
+    {
+        renderer.dirty = true
+    }
 }
 
 function keyup(code, special)
@@ -76,13 +85,13 @@ function keyup(code, special)
                 remote.app.quit()
                 break
             case 83:
-                File.saveFile()
+                saveFile()
                 break
             case 79:
-                File.openFile()
+                openFile()
                 break
             case 78:
-                File.newFile()
+                newFile()
                 break
         }
     }
@@ -94,8 +103,56 @@ function isEditing()
 }
 
 
+function toggleWindow(name)
+{
+    windows[name].visible = !windows[name].visible
+}
+
+function save(filename)
+{
+    State.lastPath = path.dirname(filename)
+    if (path.extname(filename) !== '.json')
+    {
+        filename += '.json'
+    }
+    State.lastFile = filename
+    PixelEditor.save(filename)
+}
+
+function load(list)
+{
+    if (list && list.length)
+    {
+        const filename = list[0]
+        PixelEditor.load(filename)
+        State.lastFile = filename
+        State.current = 0
+    }
+}
+
+function newFile()
+{
+    PixelEditor.create()
+    State.lastFile = PixelEditor.filename
+    State.current = 0
+}
+
+function saveFile()
+{
+    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, save)
+}
+
+function openFile()
+{
+    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, load)
+}
+
 module.exports = {
-    isEditing
+    isEditing,
+    toggleWindow,
+    saveFile,
+    openFile,
+    newFile
 }
 
 const font = new FontFaceObserver('bitmap')

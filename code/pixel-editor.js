@@ -11,6 +11,11 @@ class PixelEditor extends Pixel
     constructor(filename)
     {
         super()
+        this.create(filename)
+    }
+
+    create(filename)
+    {
         if (!filename)
         {
             this.frames = [{ width: DEFAULT[0], height: DEFAULT[1], data: [] }]
@@ -264,12 +269,9 @@ class PixelEditor extends Pixel
         }
     }
 
-    load(eventType, filename)
+    load(filename)
     {
-        if (eventType === 'rename')
-        {
-            this.filename = filename
-        }
+        this.filename = filename || this.filename
         try
         {
             const load = jsonfile.readFileSync(this.filename)

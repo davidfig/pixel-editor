@@ -3,6 +3,8 @@ const app = remote.app
 const Menu = remote.Menu
 const path = require('path')
 
+let Main
+
 const State = require('./state')
 
 let _template = []
@@ -30,17 +32,18 @@ function view(label, items)
     _template.push({ label, submenu })
     for (let item of items)
     {
-        // submenu.push({ label: item[0], type: 'checkbox', checked: true, click: (menuItem) => menuItem.checked ? _windows[item[1]].show() : _windows[item[1]].hide() })
+        submenu.push({ label: item[0], type: 'checkbox', checked: true, click: () => Main.toggleWindow(item[1]) })
     }
 }
 
 module.exports = function ()
 {
+    Main = require('./main')
     _template = []
     const list = [
-        ['&New (Ctrl-N)', 'new'],
-        ['&Save... (Ctrl-S)', 'save'],
-        ['&Open... (Ctrl-O)'],
+        ['&New (Ctrl-N)', Main.newFile],
+        ['&Save... (Ctrl-S)', Main.saveFile],
+        ['&Open... (Ctrl-O)', Main.openFile],
         ['separator']]
     for (let i = 1; i < State.lastFiles.length; i++)
     {
@@ -67,15 +70,15 @@ module.exports = function ()
         ['&Line (L)', () => State.tools = 'line'],
         ['&Fill (F)', () => State.tools = 'fill']
     ])
-    // view('&View', [
-    //     ['&Animation', 'animation'],
-    //     ['Coor&dinates', 'coords'],
-    //     ['&Palette', 'palette'],
-    //     ['&Color Picker', 'picker'],
-    //     ['&Frame Selector', 'show'],
-    //     ['&Tools', 'tools'],
-    //     ['&Editor', 'zoom'],
-    // ])
+    view('&View', [
+        // ['&Animation', 'animation'],
+        ['Coor&dinates', 'coords'],
+        ['&Palette', 'palette'],
+        ['&Color Picker', 'picker'],
+        // ['&Frame Selector', 'show'],
+        ['&Toolbar', 'toolbar'],
+        ['&Editor', 'draw'],
+    ])
     append('F&rame', [
         ['&Duplicate (Ctrl-D)', 'duplicate'],
         ['D&elete', 'delete'],

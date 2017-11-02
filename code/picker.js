@@ -84,7 +84,7 @@ module.exports = class Picker extends UI.Window
 
     box(x, percent, reverse)
     {
-        const actual = percent * (this.bottom - CONTROL * 2)
+        const actual = Settings.BORDER + percent * (this.bottom - Settings.BORDER * 3)
         this.graphics.beginFill(reverse ? 0xffffff : 0)
             .drawRect(x, actual, this.size, CONTROL)
             .drawRect(x + this.boxSize - CONTROL, actual, CONTROL, CONTROL * 2)
@@ -188,7 +188,8 @@ module.exports = class Picker extends UI.Window
         let x = point.x
         let y = point.y
 
-        let percent = y / this.bottom
+        let percent = y / (this.bottom - Settings.BORDER)
+        percent = percent < 0 ? 0 : percent
         percent = percent > 1 ? 1 : percent
         if (x > Settings.BORDER && x < Settings.BORDER + this.size)
         {
@@ -208,7 +209,7 @@ module.exports = class Picker extends UI.Window
         }
         else
         {
-            if (y > Settings.BORDER - CONTROL && y < this.bottom - CONTROL)
+            if (y < this.bottom)
             {
                 if (x > Settings.BORDER * 2 + this.size && x < Settings.BORDER + this.size * 2)
                 {

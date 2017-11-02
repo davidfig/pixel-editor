@@ -5,19 +5,14 @@ const State = require('./state')
 
 const SIZE = 100
 
-const IMAGES = ['select', 'pen', 'paint']
-
 let _sheet
 
 function load(callback)
 {
     _sheet = new RenderSheet()
     _sheet.add('transparency', draw, measure)
-    // for (let image of IMAGES)
-    // {
-    //     _sheet.addImage(image, '../images/' + image + '.png')
-    // }
     _sheet.render(callback)
+    State.on('transparentColor', () => _sheet.render())
 }
 
 function convert(color)

@@ -109,6 +109,14 @@ module.exports = class Palette extends UI.Window
                 block.texture = Sheet.getTexture('transparency')
                 block.isTransparent = true
             }
+            if (color === State.color)
+            {
+                const extra = new PIXI.Sprite(PIXI.Texture.WHITE)
+                this.blocks.addChildAt(extra, this.blocks.children.indexOf(block))
+                extra.tint = color === 0 ? 0xffffff : 0
+                extra.width = extra.height = block.width + SPACING * 1
+                extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
+            }
             const fill = color === 0 ? 'white' : 'black'
             const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
             text.anchor.set(0.5)
@@ -271,7 +279,10 @@ module.exports = class Palette extends UI.Window
                     State.color = null
                     break
                 case 52: case 53: case 54: case 55: case 56: case 57: case 58:
-                    State.color = this.colors[code - 52]
+                    if (exists(this.colors[0][code - 52]))
+                    {
+                        State.color = this.colors[0][code - 52]
+                    }
                     break
             }
         }

@@ -294,6 +294,7 @@ class PixelEditor extends Pixel
             this.editor.current = 0
             this.save()
         }
+        this.emit('changed')
     }
 
     save(filename)

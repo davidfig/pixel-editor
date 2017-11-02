@@ -748,6 +748,7 @@ module.exports = class Palette extends UI.Window
             State.on(state, () => this.dirty = true)
         }
         State.on('tool', () => this.tool())
+        PixelEditor.on('changed', () => this.dirty = true)
     }
 
     dragged()
@@ -758,18 +759,6 @@ module.exports = class Palette extends UI.Window
 
 
 /*
-
-function zoom(delta)
-{
-    this.zoom += delta
-    this.zoom = this.zoom < 1 ? 1 : this.zoom
-    const window = remote.getCurrentWindow()
-    window.setContentSize(Math.ceil(this.zoom * PixelEditor.width), Math.ceil(this.zoom * PixelEditor.height))
-    frame()
-    draw()
-    cursor()
-    View.render()
-}
 
 function downMouse(x, y)
 {
@@ -869,51 +858,6 @@ function upMouse()
 
     }
     this.selecting = this.dragging = false
-}
-
-function save(filename)
-{
-    State.lastPath = path.dirname(filename)
-    if (path.extname(filename) !== '.json')
-    {
-        filename += '.json'
-    }
-    State.lastFile = filename
-    State.save()
-    PixelEditor.save(filename)
-    title()
-    ipcRenderer.send('reset')
-}
-
-function load(list)
-{
-    const filename = list[0]
-    PixelEditor = new PixelEditor(filename)
-    State.lastFile = filename
-    State.current = 0
-    title()
-    resize()
-    ipcRenderer.send('reset')
-}
-
-function newFile()
-{
-    PixelEditor = new PixelEditor()
-    State.lastFile = PixelEditor.filename
-    State.current = 0
-    title()
-    resize()
-    ipcRenderer.send('reset')
-}
-
-function saveFile()
-{
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, save)
-}
-
-function openFile()
-{
-    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, load)
 }
 
 function convert(color)

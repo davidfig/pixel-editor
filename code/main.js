@@ -1,6 +1,7 @@
 const Renderer = require('yy-renderer')
 const FontFaceObserver = require('fontfaceobserver')
 const Input = require('yy-input')
+const remote = require('electron').remote
 
 const UI = require('../windows/ui')
 const Toolbar = require('./toolbar')
@@ -10,6 +11,7 @@ const Coords = require('./coords')
 const Sheet = require('./sheet')
 const Draw = require('./draw')
 const State = require('./state')
+const Menu = require('./menu')
 
 let renderer, ui, input, loading = 2
 
@@ -20,8 +22,8 @@ function afterLoad()
     {
         return
     }
-    renderer = new Renderer({ debug: true })
 
+    renderer = new Renderer({ debug: true, autoresize: true })
     ui = renderer.add(new UI())
     ui.addChild(new Draw())
     ui.addChild(new Toolbar())
@@ -41,6 +43,8 @@ function afterLoad()
         }
     )
     renderer.start()
+
+    Menu()
 }
 
 function keyup(code, special)
@@ -69,16 +73,16 @@ function keyup(code, special)
         switch (code)
         {
             case 81:
-                // quite
+                remote.app.quit()
                 break
             case 83:
-                // saveFile()
+                File.saveFile()
                 break
             case 79:
-                // openFile()
+                File.openFile()
                 break
             case 78:
-                // newFile()
+                File.newFile()
                 break
         }
     }
@@ -88,6 +92,7 @@ function isEditing()
 {
     return ui.editing
 }
+
 
 module.exports = {
     isEditing

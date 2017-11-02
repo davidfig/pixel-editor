@@ -132,6 +132,14 @@ function load(list)
         PixelEditor.load(filename)
         State.lastFile = filename
         State.current = 0
+        if (State.cursorX >= PixelEditor.width)
+        {
+            State.cursorX = 0
+        }
+        if (State.cursorY >= PixelEditor.height)
+        {
+            State.cursorY = 0
+        }
     }
 }
 
@@ -157,7 +165,8 @@ module.exports = {
     toggleWindow,
     saveFile,
     openFile,
-    newFile
+    newFile,
+    load
 }
 
 const font = new FontFaceObserver('bitmap')

@@ -47,7 +47,7 @@ module.exports = function ()
         ['separator']]
     for (let i = 1; i < State.lastFiles.length; i++)
     {
-        list.push(['&' + i + '. ' + path.basename(State.lastFiles[i], '.json') + ' (Ctrl+' + i + ')', 'open***' + State.lastFiles[i]])
+        list.push(['&' + i + '. ' + path.basename(State.lastFiles[i], '.json') + ' (Ctrl+' + i + ')', () => Main.load([State.lastFiles[i]])])
     }
     if (State.lastFiles.length)
     {

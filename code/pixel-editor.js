@@ -275,6 +275,10 @@ class PixelEditor extends Pixel
         try
         {
             const load = jsonfile.readFileSync(this.filename)
+            if (!load.frames.length || !load.animations)
+            {
+                return
+            }
             this.frames = load.frames
             this.animations = load.animations
         }

@@ -166,6 +166,55 @@ module.exports = class Palette extends UI.Window
         return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
     }
 
+    circleCursor3(color)
+    {
+        this.cursorBlock.lineStyle(0)
+        this.cursorBlock.position.set(0, 0)
+        let x0 = State.cursorX
+        let y0 = State.cursorY
+        let x = State.cursorSizeX - 1
+        let y = 0
+        let dx = 1
+        let dy = 1
+        let err = dx - (State.cursorSize << 1)
+        const blocks = []
+
+        while (x >= y)
+        {
+            blocks[(x0 + x) + ',' + (y0 + y)] = true
+            blocks[(x0 + y) + ',' + (y0 + x)] = true
+            blocks[(x0 - y) + ',' + (y0 + x)] = true
+            blocks[(x0 - x) + ',' + (y0 + y)] = true
+            blocks[(x0 - x) + ',' + (y0 - y)] = true
+            blocks[(x0 - y) + ',' + (y0 - x)] = true
+            blocks[(x0 + y) + ',' + (y0 - x)] = true
+            blocks[(x0 + x) + ',' + (y0 - y)] = true
+
+            if (err <= 0)
+            {
+                y++
+                err += dy
+                dy += 2
+            }
+            if (err > 0)
+            {
+                x--
+                dx += 2
+                err += (State.cursorSizeX << 1) + dx
+            }
+        }
+        this.stamp = []
+        for (let block in blocks)
+        {
+            const pos = block.split(',')
+            if (this.inBounds(pos))
+            {
+                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+            }
+        }
+    }
+
     // from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
     circleCursor(color)
     {
@@ -193,11 +242,11 @@ module.exports = class Palette extends UI.Window
             y++
             if (decisionOver2 <= 0)
             {
-                decisionOver2 += 2 * y + 1 // Change in decision criterion for y -> y+1
+                decisionOver2 += 2 * y + 1
             } else
             {
                 x--
-                decisionOver2 += 2 * (y - x) + 1 // Change for y -> y+1, x -> x-1
+                decisionOver2 += 2 * (y - x) + 1
             }
         }
         this.stamp = []
@@ -262,11 +311,11 @@ module.exports = class Palette extends UI.Window
         }
     }
 
-    singleCursor()
+    fillCursor()
     {
         const color = State.foreground === null ? CURSOR_COLOR : State.foreground
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(5, color)
+        this.cursorBlock.lineStyle(10, color)
         this.cursorBlock.drawRect(0, 0, this.zoom, this.zoom)
     }
 
@@ -414,7 +463,7 @@ module.exports = class Palette extends UI.Window
                 break
 
             case 'fill':
-                this.singleCursor()
+                this.fillCursor()
                 break
         }
     }
@@ -474,11 +523,9 @@ module.exports = class Palette extends UI.Window
                 case 40: // down
                     this.moveCursor(0, 1)
                     break
-                case 187:
-                    this.zoom(1)
+                case 187: // -
                     break
-                case 189:
-                    this.zoom(-1)
+                case 189: // =
                     break
                 case 32: // space
                     this.space()

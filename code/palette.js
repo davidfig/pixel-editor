@@ -99,6 +99,7 @@ module.exports = class Palette extends UI.Window
             else
             {
                 block.texture = Sheet.getTexture('transparency')
+                block.isTransparent = true
             }
             const fill = color === 0 ? 'white' : 'black'
             const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))

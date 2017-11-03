@@ -63,12 +63,12 @@ function menu()
         ['&Paste (Ctrl-V)'],
     ])
     append('&Tools', [
-        ['&Paint (B)', () => State.tools = 'paint'],
-        ['&Select (V)', () => State.tools = 'select'],
-        ['&Circle (C)', () => State.tools = 'circle'],
-        ['&Ellipse (E)', () => State.tools = 'ellipse'],
-        ['&Line (L)', () => State.tools = 'line'],
-        ['&Fill (F)', () => State.tools = 'fill']
+        ['&Paint (B)', () => State.tool = 'paint'],
+        ['&Select (V)', () => State.tool = 'select'],
+        ['&Circle (C)', () => State.tool = 'circle'],
+        ['&Ellipse (E)', () => State.tool = 'ellipse'],
+        ['&Line (L)', () => State.tool = 'line'],
+        ['&Fill (F)', () => State.tool = 'fill']
     ])
     view('&View', [
         // ['&Animation', 'animation'],

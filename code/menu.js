@@ -36,7 +36,7 @@ function view(label, items)
     }
 }
 
-module.exports = function ()
+function menu()
 {
     Main = require('./main')
     _template = []
@@ -86,3 +86,7 @@ module.exports = function ()
     ])
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template))
 }
+
+State.on('last-file', menu)
+
+module.exports = menu

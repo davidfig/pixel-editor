@@ -32,6 +32,41 @@ class State extends Events
         }
     }
 
+    mainResize(object)
+    {
+        const main = this.state.main
+        if (!main.maximize)
+        {
+            const size = object.sender.getContentSize()
+            main.width = size[0]
+            main.height = size[1]
+            this.save()
+        }
+    }
+
+    mainMove(object)
+    {
+        const main = this.state.main
+        const window = object.sender
+        const position = window.getPosition()
+        main.x = position[0]
+        main.y = position[1]
+        this.save()
+    }
+
+    setupMain(window)
+    {
+        let main = this.state.main
+        if (!main)
+        {
+            main = this.state.main = {}
+        }
+        window.on('maximize', () => { main.maximize = true; this.save() })
+        window.on('unmaximize', () => { main.maximize = false; this.save() })
+        window.on('resize', this.mainResize.bind(this))
+        window.on('move', this.mainMove.bind(this))
+    }
+
     set(name, x, y, width, height)
     {
         this.state.windows[name] = { x, y, width, height }

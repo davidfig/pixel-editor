@@ -3,15 +3,30 @@ const app = electron.app
 const url = require('url')
 const path = require('path')
 
+const State = require('./code/state')
+
 let _main
 
 const BACKGROUND = '#aaaaaa'
 
 function init()
 {
-    _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
+    const main = State.state.main
+    if (main)
+    {
+        _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND, width: Math.round(main.width), height: Math.round(main.height), x: Math.round(main.x), y: Math.round(main.y), })
+        if (main.maximize)
+        {
+            _main.maximize()
+        }
+    }
+    else
+    {
+        _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
+    }
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'html', 'main.html'), protocol: 'file:', slashes: true }))
     _main.toggleDevTools()
+    State.setupMain(_main)
 }
 
 app.on('ready', init)

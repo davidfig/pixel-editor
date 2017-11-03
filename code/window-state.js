@@ -2,7 +2,7 @@ const electron = require('electron')
 const path = require('path')
 const jsonfile = require('jsonfile')
 
-class State
+module.exports = class WindowState
 {
     constructor(name)
     {
@@ -120,5 +120,3 @@ class State
         jsonfile.writeFileSync('default-window-state.json', list)
     }
 }
-
-module.exports = State

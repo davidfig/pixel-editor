@@ -18,7 +18,7 @@ module.exports = class UI extends PIXI.Container
     layout()
     {
         this.editing = false
-        let dirty
+        let dirty, dirtyRenderer
         const queue = [...this.children]
         let i = 0
         while (i < queue.length)
@@ -34,12 +34,21 @@ module.exports = class UI extends PIXI.Container
                 {
                     dirty = true
                 }
+                if (w.dirtyRenderer)
+                {
+                    w.dirtyRenderer = false
+                    dirtyRenderer = true
+                }
                 queue.push(...w.children)
             }
             i++
         }
         if (!dirty)
         {
+            if (dirtyRenderer)
+            {
+                return 1
+            }
             return false
         }
         for (i = queue.length - 1; i >= 0; i--)
@@ -76,20 +85,19 @@ module.exports = class UI extends PIXI.Container
 
     update()
     {
-        if (this.layout())
+        const result = this.layout()
+        if (result === true)
         {
-            this.save()
             return this.draw()
+        }
+        else if (result === 1)
+        {
+            return true
         }
         else
         {
             return false
         }
-    }
-
-    save()
-    {
-
     }
 }
 

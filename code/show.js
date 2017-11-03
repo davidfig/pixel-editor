@@ -7,21 +7,20 @@ const PixelEditor = require('./pixel-editor')
 const UI = require('../windows/ui')
 const State = require('./state')
 const Settings = require('./settings')
-let Main
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
 
 const COLOR_SELECTED = 0x888888
 
-module.exports = class Palette extends UI.Window
+module.exports = class Show extends UI.Window
 {
     constructor()
     {
-        Main = require('./main')
         super({ clickable: true, draggable: true, resizeable: true })
         this.stateSetup('show')
         this.pixels = this.addChild(new PIXI.Container())
+        this.buttons = []
     }
 
     measure()
@@ -60,13 +59,14 @@ module.exports = class Palette extends UI.Window
             sheet.render()
             pixel.scale.set(scale)
             pixel.frame(i)
+            pixel.current = i
             pixel.position.set(xStart, yStart)
             // const n = this.pixels.addChild(new PIXI.Text(i, { fontFamily: 'bitmap', fontSize: '20px', fill: 0 }))
             // n.anchor.set(0, 1)
             // n.position.set(xStart, yStart + State.pixels * PixelEditor.height)
             yEnd = pixel.height > yEnd ? pixel.height : yEnd
-            // this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
-            xStart += Settings.BORDER + pixel.width
+            this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
+            xStart += pixel.width
         }
         super.draw()
     }
@@ -96,118 +96,97 @@ module.exports = class Palette extends UI.Window
     {
         State.set(this.name, this.x, this.y, this.width, this.height)
     }
-}
 
-/*
-
-const Settings.BORDER = 10
-
-let _sheet,
-    State,
-    _pixel,
-    _pixels,
-    this.buttons,
-    _name,
-    _spacer,
-    _canvas,
-    this.selector,
-    _dragging
-
-function init()
-{
-    Input.init(_canvas, { keyDown, down, up, move })
-    pixelChange()
-    resize()
-    window.addEventListener('resize', resize)
-    ipcRenderer.on('state', stateChange)
-    ipcRenderer.on('pixel', pixelChange)
-    ipcRenderer.on('reset', reset)
-    remote.getCurrentWindow().show()
-}
-
-function down(x, y)
-{
-    y -= _spacer.offsetHeight + _name.offsetHeight
-    for (let button of this.buttons)
+    down(e)
     {
-        if (x >= button.x1 && x <= button.x2 && y >= button.y1 && y <= button.y2)
-        {
-            if (PixelEditor.current !== button.current)
-            {
-                PixelEditor.current = button.current
-                _name.innerHTML = button.current
-                resize()
-                ipcRenderer.send('pixel')
-            }
-            const pixel = this.buttons[button.current].pixel
-            _dragging = { pixel, current: button.current, x, y, originalX: pixel.x, originalY: pixel.y }
-            return
-        }
-    }
-}
-
-function move(x, y)
-{
-    if (_dragging)
-    {
-        const width = 10
-        y -= _spacer.offsetHeight + _name.offsetHeight
-        _dragging.pixel.x = _dragging.originalX + (x - _dragging.x)
-        _dragging.pixel.y = _dragging.originalY + (y - _dragging.y)
-        let found = false
+        const point = this.toLocal(e.data.global)
         for (let button of this.buttons)
         {
-            if (x < (button.x1 + button.x2) / 2)
+            if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2)
             {
-                if (button.current === _dragging.current || button.current - 1 === _dragging.current)
+                if (PixelEditor.current !== button.current)
                 {
-                    this.selector.x = _dragging.originalX
-                    this.selector.width = State.pixels * PixelEditor.width + Settings.BORDER
-                    _dragging.drop = _dragging.current
+                    PixelEditor.current = button.current
+                    // _name.innerHTML = button.current
+                    this.dirty = true
+                }
+                const pixel = this.buttons[button.current].pixel
+                this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
+                return
+            }
+        }
+        super.down(e)
+    }
+
+    move(e)
+    {
+        if (this.dragging)
+        {
+            const point = this.toLocal(e.data.global)
+            const width = 10
+            this.dragging.pixel.x = this.dragging.originalX + (point.x - this.dragging.x)
+            this.dragging.pixel.y = this.dragging.originalY + (point.y - this.dragging.y)
+            let found = false
+            for (let button of this.buttons)
+            {
+                if (point.x < (button.x1 + button.x2) / 2)
+                {
+                    if (button.current === this.dragging.current || button.current - 1 === this.dragging.current)
+                    {
+                        this.selector.x = this.dragging.originalX
+                        this.selector.width = this.dragging.pixel.width
+                        this.dragging.drop = this.dragging.current
+                    }
+                    else
+                    {
+                        this.selector.x = button.x1 - width / 2
+                        this.selector.width = width
+                        this.dragging.drop = button.current
+                    }
+                    found = true
+                    break
+                }
+            }
+            if (!found)
+            {
+                if (this.dragging.current === this.buttons.length - 1)
+                {
+                    this.selector.x = this.dragging.originalX
+                    this.selector.width = this.dragging.pixel.width
+                    this.dragging.drop = this.dragging.current
                 }
                 else
                 {
-                    this.selector.x = button.x1 - width / 2
+                    this.selector.x = this.buttons[this.buttons.length - 1].x2
                     this.selector.width = width
-                    _dragging.drop = button.current
+                    this.dragging.drop = this.buttons.length
                 }
-                found = true
-                break
             }
+            this.dirtyRenderer = true
         }
-        if (!found)
+        else
         {
-            if (_dragging.current === this.buttons.length - 1)
-            {
-                this.selector.x = _dragging.originalX
-                this.selector.width = State.pixels * PixelEditor.width + Settings.BORDER
-                _dragging.drop = _dragging.current
-            }
-            else
-            {
-                this.selector.x = this.buttons[this.buttons.length - 1].x2 + PixelEditor.width
-                this.selector.width = width
-                _dragging.drop = this.buttons.length
-            }
+            super.move(e)
         }
-        View.render()
     }
-}
 
-function up()
-{
-    if (_dragging)
+    up(e)
     {
-        if (_dragging.drop)
+        if (this.dragging)
         {
-            if (_dragging.drop !== _dragging.current)
+            if (this.dragging.drop)
             {
-                PixelEditor.move(_dragging.current, _dragging.drop)
-                ipcRenderer.send('pixel')
+                if (this.dragging.drop !== this.dragging.current)
+                {
+                    PixelEditor.move(this.dragging.current, this.dragging.drop)
+                }
             }
+            this.dragging = null
+            this.dirty = true
         }
-        _dragging = null
-        resize()
+        else
+        {
+            super.move(e)
+        }
     }
 }
-*/

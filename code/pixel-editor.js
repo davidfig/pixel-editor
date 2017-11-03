@@ -289,6 +289,7 @@ class PixelEditor extends Pixel
         try
         {
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
+            this.editor.current = 0
         }
         catch (e)
         {

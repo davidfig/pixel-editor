@@ -2,6 +2,7 @@ const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
+const Input = require('yy-input')
 
 const PixelEditor = require('./pixel-editor')
 const UI = require('../windows/ui')
@@ -21,6 +22,8 @@ module.exports = class Show extends UI.Window
         this.stateSetup('show')
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []
+        this.input = new Input()
+        this.input.on('keydown', this.keydown, this)
     }
 
     measure()
@@ -43,7 +46,7 @@ module.exports = class Show extends UI.Window
         this.buttons = []
         const data = PixelEditor.getData()
         const scale = this.measure()
-        let xStart = Settings.BORDER, yStart = Settings.BORDER, yEnd = 0
+        let xStart = Settings.BORDER, yStart = Settings.BORDER
         for (let i = 0; i < PixelEditor.frames.length; i++)
         {
             if (i === PixelEditor.current && PixelEditor.frames.length > 1)
@@ -61,40 +64,13 @@ module.exports = class Show extends UI.Window
             pixel.frame(i)
             pixel.current = i
             pixel.position.set(xStart, yStart)
-            // const n = this.pixels.addChild(new PIXI.Text(i, { fontFamily: 'bitmap', fontSize: '20px', fill: 0 }))
-            // n.anchor.set(0, 1)
-            // n.position.set(xStart, yStart + State.pixels * PixelEditor.height)
-            yEnd = pixel.height > yEnd ? pixel.height : yEnd
+            const pad = 5
+            const number = this.pixels.addChild(new UI.Text(i, { theme: { 'text-padding-left': pad, 'text-padding-right': pad, 'text-padding-top': pad, 'text-padding-bottom': pad } }))
+            number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += pixel.width
         }
         super.draw()
-    }
-
-    stateSetup(name)
-    {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.position.set(place.x, place.y)
-            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.width = MIN_WIDTH
-            this.height = MIN_HEIGHT
-        }
-        this.on('drag-end', this.dragged, this)
-        this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', () => this.dirty = true)
-        State.on('last-file', () => this.dirty = true)
-    }
-
-    dragged()
-    {
-        State.set(this.name, this.x, this.y, this.width, this.height)
     }
 
     down(e)
@@ -186,7 +162,64 @@ module.exports = class Show extends UI.Window
         }
         else
         {
-            super.move(e)
+            super.up(e)
         }
+    }
+
+    keydown(code, special)
+    {
+        if (special.ctrl)
+        {
+            if (code === 37)
+            {
+                if (PixelEditor.current === 0)
+                {
+                    PixelEditor.current = PixelEditor.frames.length - 1
+                }
+                else
+                {
+                    PixelEditor.current--
+                }
+                this.dirty = true
+            }
+            else if (code === 39)
+            {
+                if (PixelEditor.current === PixelEditor.frames.length - 1)
+                {
+                    PixelEditor.current = 0
+                }
+                else
+                {
+                    PixelEditor.current++
+                }
+                this.dirty = true
+            }
+        }
+    }
+
+    stateSetup(name)
+    {
+        this.name = name
+        const place = State.get(this.name)
+        if (exists(place))
+        {
+            this.position.set(place.x, place.y)
+            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
+            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
+        }
+        else
+        {
+            this.width = MIN_WIDTH
+            this.height = MIN_HEIGHT
+        }
+        this.on('drag-end', this.dragged, this)
+        this.on('resize-end', this.dragged, this)
+        PixelEditor.on('changed', () => this.dirty = true)
+        State.on('last-file', () => this.dirty = true)
+    }
+
+    dragged()
+    {
+        State.set(this.name, this.x, this.y, this.width, this.height)
     }
 }

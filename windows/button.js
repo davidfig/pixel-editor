@@ -9,7 +9,7 @@ module.exports = class Button extends Window
     /**
      * @param {object} [options]
      * @param {string} [options.text]
-     * @param {string} [options.fontSize]
+     * @param {object} [options.textOptions]
      * @param {texture} [options.picture]
      * @param {object} [options.pictureOptions]
      * @param {texture} [options.select]
@@ -22,9 +22,11 @@ module.exports = class Button extends Window
         options.cursor = exists(options.cursor) ? options.cursor : 'pointer'
         super(options)
         this.types.push('Button')
-        if (options.text)
+        if (exists(options.text))
         {
-            this.label = this.addChild(new Text(options.text, { transparent: true, fontSize: options.fontSize }))
+            const textOptions = options.textOptions || {}
+            textOptions.transparent = exists(textOptions.transparent) ? textOptions.transparent : true
+            this.label = this.addChild(new Text(options.text, textOptions))
         }
         if (options.picture)
         {
@@ -33,6 +35,7 @@ module.exports = class Button extends Window
             this.image = this.addChild(new Picture(options.picture, pictureOptions))
         }
         this._select = options.select
+        this.layout()
     }
 
     get select()

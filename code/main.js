@@ -15,6 +15,7 @@ const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
 const Show = require('./show')
+const Animation = require('./animation')
 
 let renderer, ui, input, loading = 2, windows = {}
 
@@ -53,6 +54,7 @@ function create()
     windows.palette = ui.addChild(new Palette())
     windows.picker = ui.addChild(new Picker())
     windows.coords = ui.addChild(new Coords())
+    // windows.animation = ui.addChild(new Animation())
 }
 
 function update(elapsed)

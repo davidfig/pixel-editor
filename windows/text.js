@@ -25,6 +25,7 @@ module.exports = class Text extends Window
         this._wrap = options.wrap
         this._count = options.count
         this.words = this.addChild(new PIXI.Text(text))
+        this.layout()
     }
 
     get wrap()

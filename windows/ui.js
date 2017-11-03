@@ -39,8 +39,8 @@ module.exports = class UI extends PIXI.Container
                     w.dirtyRenderer = false
                     dirtyRenderer = true
                 }
-                queue.push(...w.children)
             }
+            queue.push(...w.children)
             i++
         }
         if (!dirty)
@@ -77,8 +77,8 @@ module.exports = class UI extends PIXI.Container
                     dirty = true
                     w.dirty = false
                 }
-                queue.push(...w.children)
             }
+            queue.push(...w.children)
         }
         return dirty
     }

@@ -184,7 +184,6 @@ module.exports = class Palette extends UI.Window
     updateColors()
     {
         this.colors[0] = []
-
         for (let frame of PixelEditor.frames)
         {
             for (let color of frame.data)
@@ -250,6 +249,7 @@ module.exports = class Palette extends UI.Window
         this.on('drag-end', this.dragged, this)
         State.on('foreground', () => this.dirty = true)
         State.on('background', () => this.dirty = true)
+        PixelEditor.on('changed', () => this.dirty = true)
     }
 
     dragged()

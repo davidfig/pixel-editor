@@ -42,7 +42,7 @@ function menu()
     _template = []
     const list = [
         ['&New (Ctrl-N)', Main.newFile],
-        ['&Save... (Ctrl-S)', Main.saveFile],
+        ['&Save As... (Ctrl-S)', Main.saveFile],
         ['&Open... (Ctrl-O)', Main.openFile],
         ['separator']]
     for (let i = 1; i < State.lastFiles.length; i++)

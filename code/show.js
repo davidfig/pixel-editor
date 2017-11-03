@@ -35,7 +35,7 @@ module.exports = class Show extends UI.Window
             height = frame.height > height ? frame.height : height
         }
         const scaleX = (this.width - Settings.BORDER * 2) / width
-        const scaleY = (this.height - Settings.BORDER * 2) / height
+        const scaleY = (this.height - Settings.BORDER * 3 - 20) / height
         return Math.min(scaleX, scaleY)
     }
 

@@ -164,6 +164,16 @@ class PixelEditor extends Pixel
         }
     }
 
+    get maxWidth()
+    {
+        let width = 0
+        for (let frame of this.frames)
+        {
+            width = frame.width > width ? frame.width : width
+        }
+        return width
+    }
+
     get width()
     {
         return this.frames[this.editor.current].width
@@ -186,6 +196,16 @@ class PixelEditor extends Pixel
             this.frames[this.editor.current].width = value
             this.save()
         }
+    }
+
+    get maxHeight()
+    {
+        let height = 0
+        for (let frame of this.frames)
+        {
+            height = frame.height > height ? frame.height : height
+        }
+        return height
     }
 
     get height()

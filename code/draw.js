@@ -50,8 +50,8 @@ module.exports = class Palette extends UI.Window
         {
             this.zoom = w
         }
-        State.cursorSizeX = (State.cursorSizeX >= PixelEditor.width) ? PixelEditor.width - 1 : State.cursorSizeX
-        State.cursorSizeY = (State.cursorSizeX >= PixelEditor.height) ? PixelEditor.height - 1 : State.cursorSizeY
+        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
+        State.cursorSizeY = (State.cursorSizeX > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
 
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST})
         this.sprite.removeChildren()
@@ -565,6 +565,7 @@ module.exports = class Palette extends UI.Window
     {
         switch (State.tool)
         {
+            case 'select':
             case 'paint':
                 if (State.cursorSizeX < 0)
                 {
@@ -911,53 +912,6 @@ function upMouse()
 
     }
     this.selecting = this.dragging = false
-}
-
-function convert(color)
-{
-    let test = color.toString(16)
-    while (test.length < 6)
-    {
-        test = '0' + test
-    }
-    return TinyColor(test).toHsl()
-}
-
-function color(color)
-{
-    const colors = []
-    function find(color)
-    {
-        for (let find of colors)
-        {
-            if (find === color)
-            {
-                return true
-            }
-        }
-    }
-    for (let frame of PixelEditor.frames)
-    {
-        for (let color of frame.data)
-        {
-            if (color !== null && !find(color))
-            {
-                colors.push(color)
-            }
-        }
-    }
-    colors.sort(
-        function (a, b)
-        {
-            const hslA = convert(a)
-            const hslB = convert(b)
-            return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0
-        })
-    if (color < colors.length)
-    {
-        State.foreground = colors[color]
-        ipcRenderer.send('state')
-    }
 }
 
 function menu(caller, menu)

@@ -16,9 +16,9 @@ module.exports = class Coords extends UI.Window
         this.stateSetup('coords')
         this.nameText = this.addChild(new UI.Text('', { transparent: true }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
-        this.frameWidth.on('changed', () => PixelEditor.width = parseInt(this.frameWidth.text))
+        this.frameWidth.on('changed', this.changeFrameWidth, this)
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
-        this.frameHeight.on('changed', () => PixelEditor.height = parseInt(this.frameHeight.text))
+        this.frameHeight.on('changed', this.changeFrameHeight, this)
         this.cursorX = this.addChild(new UI.EditText('', { beforeText: 'x: ', count: 3, edit: 'number' }))
         this.cursorX.on('changed', this.changeCursorX, this)
         this.cursorY = this.addChild(new UI.EditText('', { beforeText: 'y: ', count: 3, edit: 'number' }))
@@ -103,6 +103,18 @@ module.exports = class Coords extends UI.Window
         this.cursorWidth.text = State.cursorSizeX
         this.cursorHeight.text = State.cursorSizeY
         this.dirty = true
+    }
+
+    changeFrameWidth()
+    {
+        const width = parseInt(this.frameWidth.text)
+        PixelEditor.width = width
+    }
+
+    changeFrameHeight()
+    {
+        const height = parseInt(this.frameHeight.text)
+        PixelEditor.height = height
     }
 
     changeCursorX()

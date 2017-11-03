@@ -3,6 +3,7 @@ const FontFaceObserver = require('fontfaceobserver')
 const Input = require('yy-input')
 const remote = require('electron').remote
 const path = require('path')
+const ClipBoard = require('electron').clipboard
 
 const UI = require('../windows/ui')
 const Toolbar = require('./toolbar')
@@ -54,7 +55,7 @@ function create()
     windows.palette = ui.addChild(new Palette())
     windows.picker = ui.addChild(new Picker())
     windows.coords = ui.addChild(new Coords())
-    // windows.animation = ui.addChild(new Animation())
+    windows.animation = ui.addChild(new Animation())
 }
 
 function update(elapsed)
@@ -101,6 +102,9 @@ function keydown(code, special)
                 break
             case 78:
                 newFile()
+                break
+            case 191: // '/' to add to clipboard the data indexed by color
+                ClipBoard.writeText(PixelEditor.export())
                 break
         }
     }

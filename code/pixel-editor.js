@@ -3,6 +3,7 @@ const fs = require('fs')
 const jsonfile = require('jsonfile')
 const path = require('path')
 const Pixel = require('yy-pixel').Pixel
+const exists = require('exists')
 
 const DEFAULT = [15, 15]
 
@@ -340,6 +341,37 @@ class PixelEditor extends Pixel
     {
         return { name: this.name, frames: this.frames, animations: this.animations }
     }
-}
 
+    export()
+    {
+        const result = { data: [], colors: [] }
+        const frame = this.frames[this.editor.current]
+        for (let y = 0; y < frame.height; y++)
+        {
+            for (let x = 0; x < frame.width; x++)
+            {
+                let index
+                const color = this.get(x, y)
+                if (color !== null)
+                {
+                    for (let i = 0; i < result.colors.length; i++)
+                    {
+                        if (result.colors[i] === color)
+                        {
+                            index = i
+                            break
+                        }
+                    }
+                    if (!exists(index))
+                    {
+                        result.colors.push(color)
+                        index = result.colors.length - 1
+                    }
+                }
+                result.data.push(index)
+            }
+        }
+        return JSON.stringify(result, null, 0).replace(/"/g, '\'')
+    }
+}
 module.exports = new PixelEditor()

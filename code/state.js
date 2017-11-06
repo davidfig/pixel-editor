@@ -92,6 +92,20 @@ class State extends Events
         }
     }
 
+    get openCircle()
+    {
+        return this.state.openCircle
+    }
+    set openCircle(value)
+    {
+        if (this.state.openCircle !== value)
+        {
+            this.state.openCircle = value
+            this.save()
+            this.emit('open-circle')
+        }
+    }
+
     get transparentColor()
     {
         return this.state.transparentColor

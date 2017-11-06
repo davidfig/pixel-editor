@@ -36,6 +36,17 @@ module.exports = class Picture extends Window
         this.dirty = true
     }
 
+    get texture()
+    {
+        return this._texture
+    }
+    set texture(value)
+    {
+        this._texture = value
+        this.sprite.texture = this._texture
+        this.dirty = true
+    }
+
     get width()
     {
         return this._windowWidth || (this.sprite.width + this.get('spacing') * 2)

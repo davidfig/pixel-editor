@@ -33,6 +33,7 @@ module.exports = class Toolbar extends UI.Stack
             button.on('pressed', this.pressed, this)
             this.buttons.push(button)
         }
+        this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
         this.sheet.render()
         this.stateSetup('toolbar')
         this.changed()
@@ -51,7 +52,17 @@ module.exports = class Toolbar extends UI.Stack
             case this.buttons[0]: State.tool = 'paint' ; break
             case this.buttons[1]: State.tool = 'select'; break
             case this.buttons[2]: State.tool = 'fill'; break
-            case this.buttons[3]: State.tool = 'circle'; break
+            case this.buttons[3]:
+                if (State.tool === 'circle')
+                {
+                    State.openCircle = !State.openCircle
+                }
+                else
+                {
+                    State.tool = 'circle'
+                }
+                this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
+                break
             case this.buttons[4]: State.tool = 'ellipse'; break
             case this.buttons[5]: State.tool = 'line'; break
         }

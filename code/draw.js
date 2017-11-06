@@ -190,21 +190,34 @@ module.exports = class Palette extends UI.Window
 
             while (x >= y)
             {
-                for (let i = 0; i <= x; i++)
+                if (State.openCircle)
                 {
-                    blocks[(x0 + x - i) + ',' + (y0 + y + even)] = true
-                    blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = true
-                    blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = true
-                    blocks[(x0 - x - even + i) + ',' + (y0 - y)] = true
-                    blocks[(x0 + x - i) + ',' + (y0 - y)] = true
+                    blocks[(x0 + x) + ',' + (y0 + y + even)] = true
+                    blocks[(x0 + y) + ',' + (y0 + x + even)] = true
+                    blocks[(x0 - y - even) + ',' + (y0 + x + even)] = true
+                    blocks[(x0 - x - even) + ',' + (y0 + y + even)] = true
+                    blocks[(x0 - x - even) + ',' + (y0 - y)] = true
+                    blocks[(x0 - y - even) + ',' + (y0 - x)] = true
+                    blocks[(x0 + y) + ',' + (y0 - x)] = true
+                    blocks[(x0 + x) + ',' + (y0 - y)] = true
                 }
-                for (let i = 0; i <= y; i++)
+                else
                 {
-                    blocks[(x0 + y - i) + ',' + (y0 + x + even)] = true
-                    blocks[(x0 - y - even + i) + ',' + (y0 - x)] = true
-                    blocks[(x0 + y - i) + ',' + (y0 - x)] = true
+                    for (let i = 0; i <= x; i++)
+                    {
+                        blocks[(x0 + x - i) + ',' + (y0 + y + even)] = true
+                        blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = true
+                        blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = true
+                        blocks[(x0 - x - even + i) + ',' + (y0 - y)] = true
+                        blocks[(x0 + x - i) + ',' + (y0 - y)] = true
+                    }
+                    for (let i = 0; i <= y; i++)
+                    {
+                        blocks[(x0 + y - i) + ',' + (y0 + x + even)] = true
+                        blocks[(x0 - y - even + i) + ',' + (y0 - x)] = true
+                        blocks[(x0 + y - i) + ',' + (y0 - x)] = true
+                    }
                 }
-
                 y++
                 if (decisionOver2 <= 0)
                 {
@@ -216,6 +229,10 @@ module.exports = class Palette extends UI.Window
                     decisionOver2 += 2 * (y - x) + 1
                 }
             }
+        }
+        if (State.cursorSizeX === 3 && State.openCircle)
+        {
+            blocks[x0 + ',' + y0] = false
         }
         if (State.cursorSizeX === 4)
         {
@@ -816,9 +833,9 @@ module.exports = class Palette extends UI.Window
 
     floodFill(x, y, check)
     {
-        if (check !== State.foreground && PixelEditor.get(x, y) === check)
+        if (check !== State.color && PixelEditor.get(x, y) === check)
         {
-            PixelEditor.set(x, y, State.foreground, true)
+            PixelEditor.set(x, y, State.color, true)
             if (y > 0)
             {
                 this.floodFill(x, y - 1, check)
@@ -863,6 +880,7 @@ module.exports = class Palette extends UI.Window
         State.on('tool', () => this.tool())
         PixelEditor.on('changed', () => this.dirty = true)
         State.on('last-file', () => this.dirty = true)
+        State.on('open-circle', () => this.dirty = true)
     }
 
     dragged()

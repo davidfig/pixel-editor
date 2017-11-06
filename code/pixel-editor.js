@@ -292,10 +292,10 @@ class PixelEditor extends Pixel
 
     load(filename)
     {
-        this.filename = filename || this.filename
+        filename = filename || this.filename
         try
         {
-            const load = jsonfile.readFileSync(this.filename)
+            const load = jsonfile.readFileSync(filename)
             if (!load.frames.length || !load.animations || !load.frames[0].width || !load.frames[0].height)
             {
                 return
@@ -306,7 +306,9 @@ class PixelEditor extends Pixel
         }
         catch (e)
         {
+            return
         }
+        this.filename = filename
         try
         {
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))

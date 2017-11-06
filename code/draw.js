@@ -103,48 +103,86 @@ module.exports = class Palette extends UI.Window
         this.cursorBlock.position.set(0, 0)
         let xc = State.cursorX
         let yc = State.cursorY
-        let rx = State.cursorSizeX
-        let ry = State.cursorSizeY
-        let x = 0, y = ry
-        let p = (ry * ry) - (rx * rx * ry) + ((rx * rx) / 4)
+        let width = State.cursorSizeX
+        let height = State.cursorSizeY
+        let a2 = width * width
+        let b2 = height * height
+        let fa2 = 4 * a2, fb2 = 4 * b2
+        let x, y, sigma
+
         const blocks = {}
-        while ((2 * x * ry * ry) < (2 * y * rx * rx))
+        if (width === 1)
         {
-            for (let i = 0; i < x * 2; i++)
+            height--
+            for (let y = -height / 2; y <= height / 2; y++)
             {
-                blocks[(xc - x + i) + ',' + (yc - y)] = true
-                blocks[(xc - x + i) + ',' + (yc + y)] = true
-            }
-            if (p < 0)
-            {
-                x = x + 1
-                p = p + (2 * ry * ry * x) + (ry * ry)
-            }
-            else
-            {
-                x = x + 1
-                y = y - 1
-                p = p + (2 * ry * ry * x + ry * ry) - (2 * rx * rx * y)
+                blocks[xc + ',' + (yc + y)] = true
             }
         }
-        p = (x + 0.5) * (x + 0.5) * ry * ry + (y - 1) * (y - 1) * rx * rx - rx * rx * ry * ry
-        while (y >= 0)
+        else if (height === 1)
         {
-            for (let i = 0; i < x * 2; i++)
+            width--
+            for (let x = -width / 2; x <= width / 2; x++)
             {
-                blocks[(xc - x + i) + ',' + (yc - y)] = true
-                blocks[(xc - x + i) + ',' + (yc + y)] = true
+                blocks[(xc + x) + ',' + yc] = true
             }
-            if (p > 0)
+        }
+        else
+        {
+            width = Math.floor(State.cursorSizeX / 2)
+            const evenX = State.cursorSizeX % 2 === 0 ? 1 : 0
+            height = Math.floor(State.cursorSizeY / 2)
+            const evenY = State.cursorSizeY % 2 === 0 ? 1 : 0
+            for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
             {
-                y = y - 1
-                p = p - (2 * rx * rx * y) + (rx * rx)
+                if (State.openEllipse)
+                {
+                    blocks[(xc - x + evenX) + ',' + (yc - y)] = true // 2
+                    blocks[(xc + x) + ',' + (yc - y)] = true // 1
+
+                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = true // 3
+                    blocks[(xc + x) + ',' + (yc + y - evenY)] = true // 4
+                }
+                else
+                {
+                    for (let xx = -x + evenX; xx <= x; xx++)
+                    {
+                        blocks[(xc + xx) + ',' + (yc - y)] = true
+                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = true
+                    }
+                }
+                if (sigma >= 0)
+                {
+                    sigma += fa2 * (1 - y)
+                    y--
+                }
+                sigma += b2 * ((4 * x) + 6)
             }
-            else
+
+            for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
             {
-                y = y - 1
-                x = x + 1
-                p = p + (2 * ry * ry * x) - (2 * rx * rx * y) - (rx * rx)
+                if (State.openEllipse)
+                {
+                    blocks[(xc - x + evenX) + ',' + (yc - y)] = true // 2
+                    blocks[(xc + x) + ',' + (yc - y)] = true // 1
+
+                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = true // 3
+                    blocks[(xc + x) + ',' + (yc + y - evenY)] = true // 4
+                }
+                else
+                {
+                    for (let xx = -x + evenX; xx <= x; xx++)
+                    {
+                        blocks[(xc + xx) + ',' + (yc - y)] = true
+                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = true
+                    }
+                }
+                if (sigma >= 0)
+                {
+                    sigma += fb2 * (1 - x)
+                    x--
+                }
+                sigma += a2 * ((4 * y) + 6)
             }
         }
         this.stamp = []
@@ -252,52 +290,6 @@ module.exports = class Palette extends UI.Window
                     this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
                     this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
                 }
-            }
-        }
-    }
-
-    // from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-    circleCursor2(color)
-    {
-        this.cursorBlock.lineStyle(0)
-        this.cursorBlock.position.set(0, 0)
-        let x0 = State.cursorX
-        let y0 = State.cursorY
-        let x = State.cursorSizeX
-        let y = 0
-        let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-
-        const blocks = {}
-        while (x >= y)
-        {
-            for (let i = 0; i < x * 2; i++)
-            {
-                blocks[(-x + x0 + i) + ',' + (y + y0)] = true
-                blocks[(-x + x0 + i) + ',' + (-y + y0)] = true
-            }
-            for (let i = 0; i < y * 2; i++)
-            {
-                blocks[(-y + x0 + i) + ',' + (x + y0)] = true
-                blocks[(-y + x0 + i) + ',' + (-x + y0)] = true
-            }
-            y++
-            if (decisionOver2 <= 0)
-            {
-                decisionOver2 += 2 * y + 1
-            } else
-            {
-                x--
-                decisionOver2 += 2 * (y - x) + 1
-            }
-        }
-        this.stamp = []
-        for (let block in blocks)
-        {
-            const pos = block.split(',')
-            if (this.inBounds(pos))
-            {
-                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
             }
         }
     }
@@ -881,6 +873,7 @@ module.exports = class Palette extends UI.Window
         PixelEditor.on('changed', () => this.dirty = true)
         State.on('last-file', () => this.dirty = true)
         State.on('open-circle', () => this.dirty = true)
+        State.on('open-ellipse', () => this.dirty = true)
     }
 
     dragged()

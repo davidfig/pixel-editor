@@ -34,6 +34,7 @@ module.exports = class Toolbar extends UI.Stack
             this.buttons.push(button)
         }
         this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
+        this.buttons[4].picture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
         this.sheet.render()
         this.stateSetup('toolbar')
         this.changed()
@@ -63,7 +64,17 @@ module.exports = class Toolbar extends UI.Stack
                 }
                 this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
                 break
-            case this.buttons[4]: State.tool = 'ellipse'; break
+            case this.buttons[4]:
+                if (State.tool === 'ellipse')
+                {
+                    State.openEllipse = !State.openEllipse
+                }
+                else
+                {
+                    State.tool = 'ellipse'
+                }
+                this.buttons[4].picture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
+                break
             case this.buttons[5]: State.tool = 'line'; break
         }
     }

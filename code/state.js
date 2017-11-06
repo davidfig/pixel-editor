@@ -105,6 +105,19 @@ class State extends Events
             this.emit('open-circle')
         }
     }
+    get openEllipse()
+    {
+        return this.state.openEllipse
+    }
+    set openEllipse(value)
+    {
+        if (this.state.openEllipse !== value)
+        {
+            this.state.openEllipse = value
+            this.save()
+            this.emit('open-ellipse')
+        }
+    }
 
     get transparentColor()
     {

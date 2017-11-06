@@ -166,57 +166,81 @@ module.exports = class Palette extends UI.Window
         return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
     }
 
-    circleCursor3(color)
+    circleCursor(color)
     {
         this.cursorBlock.lineStyle(0)
         this.cursorBlock.position.set(0, 0)
         let x0 = State.cursorX
         let y0 = State.cursorY
-        let x = State.cursorSizeX - 1
-        let y = 0
-        let dx = 1
-        let dy = 1
-        let err = dx - (State.cursorSize << 1)
-        const blocks = []
-
-        while (x >= y)
+        const blocks = {}
+        if (State.cursorSizeX === 3)
         {
-            blocks[(x0 + x) + ',' + (y0 + y)] = true
-            blocks[(x0 + y) + ',' + (y0 + x)] = true
-            blocks[(x0 - y) + ',' + (y0 + x)] = true
-            blocks[(x0 - x) + ',' + (y0 + y)] = true
-            blocks[(x0 - x) + ',' + (y0 - y)] = true
-            blocks[(x0 - y) + ',' + (y0 - x)] = true
-            blocks[(x0 + y) + ',' + (y0 - x)] = true
-            blocks[(x0 + x) + ',' + (y0 - y)] = true
+            blocks[x0 + ',' + (y0 - 1)] = true
+            blocks[x0 + ',' + y0] = true
+            blocks[x0 + ',' + (y0 + 1)] = true
+            blocks[(x0 - 1) + ',' + y0] = true
+            blocks[(x0 + 1) + ',' + y0] = true
+        }
+        else
+        {
+            let x = Math.ceil(State.cursorSizeX / 2) - 1
+            const even = State.cursorSizeX % 2 === 0 ? 1 : 0
+            let y = 0
+            let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
 
-            if (err <= 0)
+            while (x >= y)
             {
+                for (let i = 0; i <= x; i++)
+                {
+                    blocks[(x0 + x - i) + ',' + (y0 + y + even)] = true
+                    blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = true
+                    blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = true
+                    blocks[(x0 - x - even + i) + ',' + (y0 - y)] = true
+                    blocks[(x0 + x - i) + ',' + (y0 - y)] = true
+                }
+                for (let i = 0; i <= y; i++)
+                {
+                    blocks[(x0 + y - i) + ',' + (y0 + x + even)] = true
+                    blocks[(x0 - y - even + i) + ',' + (y0 - x)] = true
+                    blocks[(x0 + y - i) + ',' + (y0 - x)] = true
+                }
+
                 y++
-                err += dy
-                dy += 2
+                if (decisionOver2 <= 0)
+                {
+                    decisionOver2 += 2 * y + 1
+                }
+                else
+                {
+                    x--
+                    decisionOver2 += 2 * (y - x) + 1
+                }
             }
-            if (err > 0)
-            {
-                x--
-                dx += 2
-                err += (State.cursorSizeX << 1) + dx
-            }
+        }
+        if (State.cursorSizeX === 4)
+        {
+            blocks[(x0 - 2) + ',' + (y0 - 1)] = false
+            blocks[(x0 + 1) + ',' + (y0 - 1)] = false
+            blocks[(x0 - 2) + ',' + (y0 + 2)] = false
+            blocks[(x0 + 1) + ',' + (y0 + 2)] = false
         }
         this.stamp = []
         for (let block in blocks)
         {
-            const pos = block.split(',')
-            if (this.inBounds(pos))
+            if (blocks[block])
             {
-                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+                const pos = block.split(',')
+                if (this.inBounds(pos))
+                {
+                    this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                    this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
+                }
             }
         }
     }
 
     // from https://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-    circleCursor(color)
+    circleCursor2(color)
     {
         this.cursorBlock.lineStyle(0)
         this.cursorBlock.position.set(0, 0)

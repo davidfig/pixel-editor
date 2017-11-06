@@ -15,8 +15,8 @@ class State extends Events
         this.state.lastFiles = this.state.lastFiles || []
         this.state.windows = this.state.windows || {}
         this.state.relative = this.state.relative || 'top-left'
-        this.state.cursorX = this.state.cursorY = 0
-        this.state.cursorSizeX = this.state.cursorSizeY = 1
+        // this.state.cursorX = this.state.cursorY = 0
+        // this.state.cursorSizeX = this.state.cursorSizeY = 1
         this.state.transparentColor = exists(this.state.transparentColor) ? this.state.transparentColor : 0x888888
     }
 

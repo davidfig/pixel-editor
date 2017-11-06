@@ -539,6 +539,8 @@ module.exports = class Palette extends UI.Window
                 case 27:
                     this.clear()
                     break
+                case 8:
+                    this.clearBox()
             }
             if (this.spacing)
             {
@@ -663,6 +665,40 @@ module.exports = class Palette extends UI.Window
                 }
             }
         }
+    }
+
+    clearBox()
+    {
+        PixelEditor.undoSave()
+        switch (State.tool)
+        {
+            case 'select':
+            case 'fill':
+            case 'paint':
+                for (let y = State.cursorY; y < State.cursorY + State.cursorSizeY; y++)
+                {
+                    for (let x = State.cursorX; x < State.cursorX + State.cursorSizeX; x++)
+                    {
+                        if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
+                        {
+                            PixelEditor.set(x, y, null, true)
+                        }
+                    }
+                }
+                break
+            case 'ellipse':
+            case 'circle':
+            case 'line':
+                for (let block of this.stamp)
+                {
+                    if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
+                    {
+                        PixelEditor.set(block.x, block.y, null, true)
+                    }
+                }
+                break
+        }
+        PixelEditor.save()
     }
 
     paste()
@@ -810,144 +846,3 @@ module.exports = class Palette extends UI.Window
         State.set(this.name, this.x, this.y, this.width, this.height)
     }
 }
-
-
-/*
-
-function downMouse(x, y)
-{
-    const xx = Math.floor(x / this.zoom)
-    const yy = Math.floor(y / this.zoom)
-    switch (State.tool)
-    {
-        case 'paint':
-            const current = PixelEditor.get(xx, yy)
-            const color = (current !== State.foreground) ? State.foreground : State.background
-            PixelEditor.set(xx, yy, color)
-            this.dirty = true
-            _isDown = { color, x: xx, y: yy }
-            break
-
-        case 'fill':
-            PixelEditor.undoSave()
-            floodFill(xx, yy, PixelEditor.get(xx, yy))
-            this.dirty = true
-            break
-
-        case 'ellipse':
-        case 'circle':
-            space()
-            break
-
-        case 'select':
-            if (xx >= State.cursorX && xx <= State.cursorX + State.cursorSizeX && yy >= State.cursorY && yy <= State.cursorY + State.cursorSizeY)
-            {
-                this.dragging = { x: xx, y: yy, data: PixelEditor.data.slice(0) }
-            }
-            else
-            {
-                this.selecting = true
-                State.cursorX = xx
-                State.cursorY = yy
-            }
-            break
-    }
-}
-
-function moveMouse(x, y)
-{
-    const xx = Math.floor(x / this.zoom)
-    const yy = Math.floor(y / this.zoom)
-    switch (State.tool)
-    {
-        case 'paint':
-            if (_isDown !== -1)
-            {
-                if (_isDown.x !== xx || _isDown.y !== yy)
-                {
-                    PixelEditor.set(xx, yy, _isDown.color)
-                    this.dirty = true
-                }
-            }
-            break
-
-        case 'ellipse':
-        case 'circle':
-            State.cursorX = Math.floor(x / this.zoom)
-            State.cursorY = Math.floor(y / this.zoom)
-            cursor()
-            View.render()
-            break
-
-        case 'select':
-            if (this.selecting)
-            {
-                State.cursorSizeX = xx - State.cursorX
-                State.cursorSizeY = yy - State.cursorY
-                cursor()
-                View.render()
-            }
-            else if (this.dragging && (xx !== this.dragging.x || yy !== this.dragging.y))
-            {
-                State.cursorX = this.dragging.x
-                State.cursorY = this.dragging.y
-                PixelEditor.data = this.dragging.data
-                const temp = this.clipboard
-                cut()
-                State.cursorX = xx; //this.dragging.x
-                State.cursorY = yy;// - this.dragging.y
-                paste()
-                this.clipboard = temp
-                cursor()
-                this.dirty = true
-            }
-    }
-}
-
-function upMouse()
-{
-    _isDown = -1
-    if (this.dragging)
-    {
-
-    }
-    this.selecting = this.dragging = false
-}
-
-function menu(caller, menu)
-{
-    if (menu.indexOf('open***') !== -1)
-    {
-        const filename = menu.split('open***')
-        load([filename[1]])
-        return
-    }
-
-    switch (menu)
-    {
-        case 'duplicate':
-            PixelEditor.duplicate(PixelEditor.current)
-            draw()
-            this.dirty = true
-            break
-
-        case 'delete':
-            if (PixelEditor.frames.length > 1)
-            {
-                const current = PixelEditor.current === 0 ? 0 : PixelEditor.current - 1
-                PixelEditor.delete(PixelEditor.current)
-                PixelEditor.current = current
-                draw()
-                title()
-                this.dirty = true
-            }
-            break
-
-        case 'frame':
-            PixelEditor.blank()
-            PixelEditor.current = PixelEditor.frames.length - 1
-            draw()
-            title()
-            this.dirty = true
-            break
-*/

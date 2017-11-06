@@ -1,11 +1,8 @@
 const exists = require('exists')
-const ClipBoard = require('electron').clipboard
-const Input = require('yy-input')
 
 const UI = require('../windows/ui')
 const State = require('./state')
 const Settings = require('./settings')
-const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
 
 const WIDTH = 200
@@ -29,12 +26,8 @@ module.exports = class Coords extends UI.Window
         this.cursorWidth.on('changed', () => State.cursorSizeX = parseInt(this.cursorWidth.text))
         this.cursorHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
         this.cursorHeight.on('changed', () => State.cursorSizeY = parseInt(this.cursorHeight.text))
-        this.button = this.addChild(new UI.Button({ text: 'c' }))
-        this.button.on('clicked', this.copy, this)
         this.changed()
         this.dice = this.addChild(new Dice())
-        this.input = new Input({ noPointers: true })
-        this.input.on('keydown', this.keydown, this)
     }
 
     draw()
@@ -47,7 +40,6 @@ module.exports = class Coords extends UI.Window
         this.frameHeight.position.set(width - Settings.BORDER - this.cursorY.width, y)
         y += this.frameWidth.height + Settings.BORDER
         this.dice.position.set(width / 2 - this.dice.width / 2, y)
-        this.button.position.set(width - this.button.width - Settings.BORDER, y)
         y += this.dice.height + Settings.BORDER
         this.cursorX.position.set(Settings.BORDER, y)
         this.cursorY.position.set(width - Settings.BORDER - this.cursorY.width, y)
@@ -149,25 +141,5 @@ module.exports = class Coords extends UI.Window
     dragged()
     {
         State.set(this.name, this.x, this.y)
-    }
-
-    copy()
-    {
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-        {
-            ClipBoard.writeText('put(' + State.cursorX + ', ' + State.cursorY + ')')
-        }
-        else
-        {
-            ClipBoard.writeText('rectFill(' + State.cursorX + ', ' + State.cursorY + ', ' + State.cursorSizeX + ', ' + State.cursorSizeY + ')')
-        }
-    }
-
-    keydown(code)
-    {
-        if (code === 190)
-        {
-            this.copy()
-        }
     }
 }

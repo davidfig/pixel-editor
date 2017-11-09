@@ -97,9 +97,9 @@ module.exports = class Picker extends UI.Window
 
     layout()
     {
-        this.size = (this.width / WIDTH) //- (WIDTH + 1) * Settings.BORDER / WIDTH
+        this.size = (this.width / WIDTH) - (WIDTH + 1) * Settings.BORDER / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
-        this.bottomY = this.height - this.hex.height - Settings.BORDER * 3 - this.part[0].height
+        this.bottomY = this.bottom - this.hex.height - Settings.BORDER * 3 - this.part[0].height
         if (State.color === null)
         {
             this.isTransparent = true
@@ -108,12 +108,13 @@ module.exports = class Picker extends UI.Window
         {
             this.isTransparent = false
         }
+        let boxHeight = this.size
+        boxHeight = boxHeight * 4 > (this.bottomY - Settings.BORDER) ? (this.bottomY - Settings.BORDER) / 4 : boxHeight
         this.graphics.clear()
             .beginFill(State.color)
-            .drawRect(Settings.BORDER, Settings.BORDER * 2, this.size - Settings.BORDER, this.size - Settings.BORDER)
+            .drawRect(0, Settings.BORDER, this.size - Settings.BORDER, boxHeight - Settings.BORDER)
             .endFill()
-
-        let y = this.size * 2 + Settings.BORDER * 2
+        let y = boxHeight * 2
         let test = (State.color === null ? State.transparentColor : State.color).toString(16)
         while (test.length < 6)
         {
@@ -125,40 +126,40 @@ module.exports = class Picker extends UI.Window
         for (let color of others)
         {
             this.graphics.beginFill(color)
-                .drawRect(Settings.BORDER, y, this.size - Settings.BORDER, this.size - Settings.BORDER)
+                .drawRect(0, y, this.size - Settings.BORDER, boxHeight - Settings.BORDER)
                 .endFill()
-            y += this.size + Settings.BORDER
+            y += boxHeight
         }
 
-        for (let y = Settings.BORDER; y <= this.bottomY - Settings.BORDER; y++)
+        for (let y = Settings.BORDER; y <= this.bottomY - Settings.BORDER * 2; y++)
         {
             let percent = (y - Settings.BORDER * 2) / this.bottomY
             percent = percent > 1 ? 1 : percent
 
             // h
             this.graphics.beginFill(this.changeColor(percent * 360, this.hsl.s, this.hsl.l))
-                .drawRect(Settings.BORDER + this.size, y, this.size, 1)
+                .drawRect(this.size, y, this.size, 1)
                 .endFill()
 
             // s
             this.graphics.beginFill(this.changeColor(this.hsl.h, percent, this.hsl.l))
-                .drawRect(Settings.BORDER * 2 + this.size * 2, y, this.size, 1)
+                .drawRect(Settings.BORDER + this.size * 2, y, this.size, 1)
                 .endFill()
 
             // l
             this.graphics.beginFill(this.changeColor(this.hsl.h, this.hsl.s, percent))
-                .drawRect(Settings.BORDER * 3 + this.size * 3, y, this.size, 1)
+                .drawRect(Settings.BORDER * 2 + this.size * 3, y, this.size, 1)
                 .endFill()
         }
-        this.box(Settings.BORDER + this.size, this.hsl.h / 360, this.hsl.l < 0.5)
-        this.box(Settings.BORDER * 2 + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
-        this.box(Settings.BORDER * 3 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
-        let x = this.width / 2 - this.part[0].width / 2
+        this.box(this.size, this.hsl.h / 360, this.hsl.l < 0.5)
+        this.box(Settings.BORDER + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
+        this.box(Settings.BORDER * 2 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
+        let x = this.center.x - this.part[0].width / 2
         const spacing = 10
-        this.part[0].position.set(x - this.part[0].width - spacing, this.height - Settings.BORDER - this.hex.height)
-        this.part[1].position.set(x, this.height - Settings.BORDER - this.hex.height)
-        this.part[2].position.set(x + this.part[1].width + spacing, this.height - Settings.BORDER - this.hex.height)
-        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.height - Settings.BORDER * 2 - this.hex.height - this.part[0].height)
+        this.part[0].position.set(x - this.part[0].width - spacing, this.bottom - this.hex.height)
+        this.part[1].position.set(x, this.bottom - this.hex.height)
+        this.part[2].position.set(x + this.part[1].width + spacing, this.bottom - this.hex.height)
+        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.bottom - Settings.BORDER - this.hex.height - this.part[0].height)
         this.words()
         super.layout()
     }

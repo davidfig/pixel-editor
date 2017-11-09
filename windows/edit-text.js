@@ -45,7 +45,8 @@ module.exports = class Text extends Window
         this.wordsEdit = this.addChild(new PIXI.Container())
         this.interactive = true
         this.on('click', this.startEdit, this)
-        this.input = new Input()
+
+        this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keyDown, this)
         this.input.on('down', this.down, this)
         this.layout()
@@ -247,19 +248,19 @@ module.exports = class Text extends Window
             this.words.visible = true
             this.wordsEdit.visible = false
             this.words.tint = this._color || this.get('foreground-color')
-            switch (this.align)
-            {
-                case 'middle':
-                case 'center':
-                    this.words.x = this.width / 2 - this.words.width / 2
-                    break
-                case 'left':
-                    this.words.x = 0
-                    break
-                case 'right':
-                    this.words.x = this.width - this.words.width
-                    break
-            }
+            // switch (this.align)
+            // {
+            //     case 'middle':
+            //     case 'center':
+            //         // this.words.x = this.words.width / 2 - this.words.width / 2
+            //         break
+            //     case 'left':
+            //         this.words.x = 0
+            //         break
+            //     case 'right':
+            //         // this.words.x = this.width - this.words.width
+            //         break
+            // }
         }
         super.layout()
     }
@@ -543,21 +544,21 @@ module.exports = class Text extends Window
                             this.cursorPlace++
                             this.cursorPlace = this.cursorPlace > this._text.length ? this._text.length : this.cursorPlace
                         }
-                        this.dirty = true
+                        this.layout()
                         data.event.stopPropagation()
                         break
 
                     case 13:
                         this.editing = false
                         this.emit('changed', this)
-                        this.dirty = true
+                        this.layout()
                         data.event.stopPropagation()
                         break
 
                     case 27:
                         this.editing = false
                         this.words.text = this.original
-                        this.dirty = true
+                        this.layout()
                         data.event.stopPropagation()
                         break
 
@@ -577,7 +578,7 @@ module.exports = class Text extends Window
             {
                 this.editing = false
                 this.emit('changed', this)
-                this.dirty = true
+                this.layout()
             }
         }
     }

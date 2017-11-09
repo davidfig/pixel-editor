@@ -300,10 +300,10 @@ module.exports = class Window extends PIXI.Container
         if (this.fit)
         {
             const spacing = this.get('spacing') * 2
-            this._wbs = { x1: Infinity, y1: Infinity, x2: 0, y2: 0 }
-            this.getSize()
-            this._windowWidth = this._wbs.x2 - this._wbs.x1 + spacing
-            this._windowHeight = this._wbs.y2 - this._wbs.y1 + spacing
+            // this._wbs = { x1: Infinity, y1: Infinity, x2: 0, y2: 0 }
+            // this.getSize()
+            this._windowWidth = this.content.width + spacing //this._wbs.x2 - this._wbs.x1 + spacing
+            this._windowHeight = this.content.height + spacing //this._wbs.y2 - this._wbs.y1 + spacing
         }
         this.drawWindowShape()
     }

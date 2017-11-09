@@ -15,10 +15,12 @@ module.exports = class Picker extends UI.Window
 {
     constructor()
     {
-        super({ clickable: true, draggable: true, resizeable: true })
+        super({ clickable: true, draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
+        this.on('resizing', this.layout, this)
+        this.layout()
     }
 
     wordsSetup()
@@ -84,7 +86,7 @@ module.exports = class Picker extends UI.Window
 
     box(x, percent, reverse)
     {
-        const actual = Settings.BORDER + percent * (this.bottom - Settings.BORDER * 3)
+        const actual = percent * (this.bottomY - Settings.BORDER)
         this.graphics.beginFill(reverse ? 0xffffff : 0)
             .drawRect(x, actual, this.size, CONTROL)
             .drawRect(x + this.boxSize - CONTROL, actual, CONTROL, CONTROL * 2)
@@ -93,13 +95,11 @@ module.exports = class Picker extends UI.Window
             .endFill()
     }
 
-    draw()
+    layout()
     {
-        this.width = this.width < MIN_WIDTH ? MIN_WIDTH : this.width
-        this.height = this.height < MIN_HEIGHT ? MIN_HEIGHT : this.height
-        this.size = (this.width / WIDTH) - (WIDTH + 1) * Settings.BORDER / WIDTH
+        this.size = (this.width / WIDTH) //- (WIDTH + 1) * Settings.BORDER / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
-        this.bottom = this.height - this.hex.height - Settings.BORDER * 3 - this.part[0].height
+        this.bottomY = this.height - this.hex.height - Settings.BORDER * 3 - this.part[0].height
         if (State.color === null)
         {
             this.isTransparent = true
@@ -130,9 +130,9 @@ module.exports = class Picker extends UI.Window
             y += this.size + Settings.BORDER
         }
 
-        for (let y = Settings.BORDER; y <= this.bottom - Settings.BORDER; y++)
+        for (let y = Settings.BORDER; y <= this.bottomY - Settings.BORDER; y++)
         {
-            let percent = (y - Settings.BORDER * 2) / this.bottom
+            let percent = (y - Settings.BORDER * 2) / this.bottomY
             percent = percent > 1 ? 1 : percent
 
             // h
@@ -160,7 +160,7 @@ module.exports = class Picker extends UI.Window
         this.part[2].position.set(x + this.part[1].width + spacing, this.height - Settings.BORDER - this.hex.height)
         this.hex.position.set(this.width / 2 - this.hex.width / 2, this.height - Settings.BORDER * 2 - this.hex.height - this.part[0].height)
         this.words()
-        super.draw()
+        super.layout()
     }
 
     words()
@@ -188,7 +188,7 @@ module.exports = class Picker extends UI.Window
         let x = point.x
         let y = point.y
 
-        let percent = y / (this.bottom - Settings.BORDER)
+        let percent = y / (this.bottomY - Settings.BORDER)
         percent = percent < 0 ? 0 : percent
         percent = percent > 1 ? 1 : percent
         if (x > Settings.BORDER && x < Settings.BORDER + this.size)
@@ -209,7 +209,7 @@ module.exports = class Picker extends UI.Window
         }
         else
         {
-            if (y < this.bottom)
+            if (y < this.bottomY)
             {
                 if (x > Settings.BORDER * 2 + this.size && x < Settings.BORDER + this.size * 2)
                 {
@@ -302,7 +302,7 @@ module.exports = class Picker extends UI.Window
 
     change()
     {
-        this.draw()
+        this.layout()
     }
 
     stateSet()

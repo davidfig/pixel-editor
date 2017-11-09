@@ -292,7 +292,7 @@ module.exports = class Window extends PIXI.Container
         sizes.x1 = (x < sizes.x1) ? x : sizes.x1
         sizes.x2 = (x + width > sizes.x2) ? x + width : sizes.x2
         sizes.y1 = (y < sizes.y1) ? y : sizes.y1
-        sizes.y2 = (y + width > sizes.y2) ? y + height : sizes.y2
+        sizes.y2 = (y + height > sizes.y2) ? y + height : sizes.y2
     }
 
     layout()

@@ -4,8 +4,6 @@ const pointInTriangle = require('point-in-triangle')
 
 const THEME = require('./theme.json')
 
-const MINIMUM_SIZE = 50
-
 module.exports = class Window extends PIXI.Container
 {
     /**
@@ -13,14 +11,9 @@ module.exports = class Window extends PIXI.Container
      * @param {number} [options.width]
      * @param {number} [options.height]
      * @param {boolean} [options.fullscreen]
-     * @param {number} [options.background]
      * @param {boolean} [options.draggable]
      * @param {boolean} [options.resizeable]
      * @param {boolean} [options.clickable]
-     * @param {boolean} [options.clip]
-     * @param {boolean} [options.spacing]
-     * @param {boolean} [options.cursor]
-     * @param {boolean} [options.radius]
      * @param {object} [options.theme]
      */
     constructor(options)
@@ -28,23 +21,18 @@ module.exports = class Window extends PIXI.Container
         super()
         this.types = ['Window']
         options = options || {}
-        this.sg = this.addChild(new PIXI.Graphics())
-        this.g = this.addChild(new PIXI.Graphics())
-        this._windowWidth = options.width
-        this._windowHeight = options.height
-        this._background = options.background
+        this.sg = super.addChild(new PIXI.Graphics())
+        this.g = super.addChild(new PIXI.Graphics())
+        this.content = super.addChild(new PIXI.Container())
+        const mask = this.content.addChild(new PIXI.Graphics())
+        this.content.mask = mask
         this._resizeable = options.resizeable
         this._clickable = options.clickable
-        this._radius = options.radius
         this.theme = options.theme || {}
         this.cursor = options.cursor
-        if (exists(options.spacing))
-        {
-            this.spacing = options.spacing
-        }
-        this.draggable = exists(options.draggable) ? options.draggable : false
-        this.clip = typeof options.clip === 'undefined' ? false : options.clip
-        this.transparent = options.transparent
+        this.draggable = options.draggable
+        this._windowWidth = options.width || this.get('minimum-width')
+        this._windowHeight = options.height || this.get('minimum-height')
         this.dirty = true
 
         this.changeInteractive()
@@ -72,13 +60,12 @@ module.exports = class Window extends PIXI.Container
         }
     }
 
-    get(name, type)
+    get(name)
     {
         let result = exists(this.theme[name]) ? this.theme[name] : this._get(name)
-        switch (type)
+        if (name.indexOf('color') !== -1)
         {
-            case 'color':
-                result = isNaN(result) ? parseInt(result.substring(1), 16) : result
+            result = isNaN(result) ? parseInt(result.substring(1), 16) : result
         }
         return result
     }
@@ -102,16 +89,6 @@ module.exports = class Window extends PIXI.Container
                 return THEME[current][name]
             }
         }
-    }
-
-    get radius()
-    {
-        return this._radius || this.get('corners')
-    }
-    set radius(value)
-    {
-        this._radius = value
-        this.dirty = true
     }
 
     get resizeable()
@@ -144,23 +121,13 @@ module.exports = class Window extends PIXI.Container
         this.changeInteractive()
     }
 
-    get background()
-    {
-        return exists(this._background) ? this._background : this.get('background-color', 'color')
-    }
-    set background(value)
-    {
-        this._background = value
-        this.dirty = true
-    }
-
     set width(value)
     {
         this._windowWidth = value
     }
     get width()
     {
-        return this._windowWidth || this.calculateWidth()
+        return this._windowWidth
     }
 
     set height(value)
@@ -169,23 +136,14 @@ module.exports = class Window extends PIXI.Container
     }
     get height()
     {
-        return this._windowHeight || this.calculateHeight()
+        return this._windowHeight
     }
 
-    calculateWidth()
+    draw()
     {
-        return 0
-    }
-    calculateHeight()
-    {
-        return 0
-    }
-
-    draw(isDown, shadowOff)
-    {
-        const background = exists(this._background) ? this._background : this.get('background-color', 'color')
+        const background = this.get('background-color')
         const radius = this.get('corners')
-        if ((!this.shadowOff && !shadowOff) && !this.transparent && this.get('shadow-size'))
+        if (!this.transparent)
         {
             const size = this.get('shadow-size')
             this.sg
@@ -193,7 +151,6 @@ module.exports = class Window extends PIXI.Container
                 .beginFill(0, this.get('shadow-alpha'))
                 .drawRoundedRect(-size, -size, this.width + size * 2, this.height + size * 2, radius)
                 .endFill()
-            // this.sg.filters = [new PIXI.filters.BlurFilter(this.get('shadow-blur'))]
             this.sg.visible = true
         }
         else
@@ -205,32 +162,6 @@ module.exports = class Window extends PIXI.Container
             .beginFill(background, this.transparent ? 0 : 1)
             .drawRoundedRect(0, 0, this.width, this.height, this.get('corners'))
             .endFill()
-        if (this.isDown || isDown)
-        {
-            const size = this.get('selected-border-size') / 2
-            this.g
-                .lineStyle(size, this.get('selected-border-color', 'color'))
-                .drawRoundedRect(size, size, this.width - size * 2, this.height - size * 2, radius)
-        }
-        if (this.clip)
-        {
-            if (!this.clipMask)
-            {
-                this.clipMask = this.g.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-            }
-            this.clipMask.visible = true
-            this.clipMask.width = this.width
-            this.clipMask.height = this.height
-            this.g.mask = this.clipMask
-        }
-        else
-        {
-            this.g.mask = null
-            if (this.clipMask)
-            {
-                this.clipMask.visible = false
-            }
-        }
         if (this.resizeable)
         {
             const size = this.get('resize-border-size')
@@ -241,6 +172,12 @@ module.exports = class Window extends PIXI.Container
                 .lineTo(this.width - size, this.height)
                 .endFill()
         }
+        const spacing = this.get('spacing')
+        this.content.mask
+            .clear()
+            .beginFill(0xffffff)
+            .drawRect(spacing, spacing, this.width - spacing * 2, this.height - spacing * 2)
+            .endFill()
     }
 
     down(e)
@@ -249,7 +186,7 @@ module.exports = class Window extends PIXI.Container
         if (this.resizeable)
         {
             const size = this.get('resize-border-size')
-            const local = this.toLocal(point)
+            const local = super.toLocal(point)
             if (pointInTriangle([local.x, local.y], [[this.width, this.height - size], [this.width, this.y + this.height], [this.width - size, this.height]]))
             {
                 this.isDown = { x: point.x, y: point.y }
@@ -280,10 +217,12 @@ module.exports = class Window extends PIXI.Container
         }
         if (this.resizing && this.isDown)
         {
+            const minWidth = this.get('minimum-width')
+            const minHeight = this.get('minimum-height')
             this._windowWidth = this.resizing.width + e.data.global.x - this.isDown.x
-            this._windowWidth = this._windowWidth < MINIMUM_SIZE ? MINIMUM_SIZE : this._windowWidth
+            this._windowWidth = this._windowWidth < minWidth ? minWidth : this._windowWidth
             this._windowHeight = this.resizing.height + e.data.global.y - this.isDown.y
-            this._windowHeight = this._windowHeight < MINIMUM_SIZE ? MINIMUM_SIZE : this._windowHeight
+            this._windowHeight = this._windowHeight < minHeight ? minHeight : this._windowHeight
             this.dirty = true
             this.emit('resizing', this)
             e.stopPropagation()
@@ -292,14 +231,14 @@ module.exports = class Window extends PIXI.Container
         {
             this.x = e.data.global.x + this.isDown.x
             this.y = e.data.global.y + this.isDown.y
-            this.dirty = true
+            this.dirtyRenderer = true
             e.stopPropagation()
         }
         else if (this.draggable)
         {
             const point = e.data.global
             const size = this.get('resize-border-size')
-            const local = this.toLocal(point)
+            const local = super.toLocal(point)
             if (pointInTriangle([local.x, local.y], [[this.width, this.height - size], [this.width, this.y + this.height], [this.width - size, this.height]]))
             {
                 this.oldCursor = this.cursor
@@ -314,57 +253,28 @@ module.exports = class Window extends PIXI.Container
         {
             this.resizing = false
             this.isDown = false
-            this.dirty = true
+            this.dirtyRenderer = true
             this.emit('resize-end')
         }
         if (this.draggable && this.isDown)
         {
             this.isDown = false
-            this.dirty = true
+            this.dirtyRenderer = true
             this.emit('drag-end')
         }
     }
 
     layout() {}
 
-    // if (this.fit)
-    // {
-    //     const measuring = {left: Infinity, right: 0, top: Infinity, bottom: 0}
-    //     for (let w of this.children)
-    //     {
-    //         if (w.types)
-    //         {
-    //             measuring.left = (w.x < measuring.left) ? w.x : measuring.left
-    //             measuring.right = (w.x + w.width > measuring.right) ? w.x + w.width : measuring.right
-    //             measuring.top = (w.y < measuring.top) ? w.y : measuring.top
-    //             measuring.bottom = (w.y + w.height > measuring.bottom) ? w.y + w.height : measuring.bottom
-    //         }
-    //     }
-    //     this._windowWidth = measuring.right - measuring.left + this.spacing * 2
-    //     this.height = measuring.bottom - measuring.top + this.spacing * 2
-    //     if (measuring.left !== this.spacing)
-    //     {
-    //         for (let w of this.children)
-    //         {
-    //             if (w.types)
-    //             {
-    //                 w.x += this.spacing - measuring.left
-    //             }
-    //         }
-    //     }
-    //     if (measuring.top !== this.spacing)
-    //     {
-    //         for (let w of this.children)
-    //         {
-    //             if (w.types)
-    //             {
-    //                 w.y += this.spacing - measuring.top
-    //             }
-    //         }
-    //     }
-    //     for (let w of this.children)
-    //     {
-    //         if (w.types) w.layout()
-    //     }
-    // }
+    addChild() { return this.content.addChild(...arguments) }
+    addChildAt() { return this.content.addChild(...arguments) }
+    removeChildren() { return this.content.removeChildren(...arguments) }
+    removeChildAt() { return this.content.removeChildAt(...arguments) }
+    removeChild() { return this.content.removeChild(...arguments) }
+    setChildIndex() { return this.content.setChildIndex(...arguments) }
+    swapChildren() { return this.content.swapChildren(...arguments) }
+    toLocal() { return this.content.toLocal(...arguments) }
+    toGlobal() { return this.content.toGlobal(...arguments) }
+    getChild() { return this.content.getChild(...arguments) }
+    getChildAt() { return this.content.getChildAt(...arguments) }
 }

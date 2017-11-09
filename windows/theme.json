@@ -8,7 +8,7 @@
         "spacing": 10,
         "selected-border-size": 2,
         "selected-border-color": "#aaaaaa",
-        "resize-border-size": 25,
+        "resize-border-size": 20,
         "resize-border-color": "#aaaaaa",
         "text-padding-left": 0,
         "text-padding-right": 0,
@@ -16,7 +16,9 @@
         "text-padding-bottom": 0,
         "shadow-size": 2,
         "shadow-alpha": 0.15,
-        "shadow-blur": 2
+        "shadow-blur": 2,
+        "minimum-width": 20,
+        "minimum-height": 20
     },
     "Button": {
         "foreground-color": 0,
@@ -33,10 +35,10 @@
         "corners": 0
     },
     "EditText": {
-        "edit-foreground": "#ffffff",
-        "edit-background": "#888888",
-        "edit-foreground-select": "#ffffff",
-        "edit-background-select": "#000000"
+        "edit-foreground-color": "#ffffff",
+        "edit-background-color": "#888888",
+        "edit-foreground-select-color": "#ffffff",
+        "edit-background-select-color": "#000000"
     },
     "Stack": {
         "transparent": true
@@ -52,5 +54,7 @@
     },
     "Spacer": {
         "spacing": 0
+    },
+    "Scroll": {
     }
 }

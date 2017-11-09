@@ -85,12 +85,13 @@ class PixelEditor extends Pixel
         }
     }
 
-    delete(index)
+    remove(index)
     {
         if (index < this.frames.length && this.frames.length > 1)
         {
             this.frames.splice(index, 1)
             this.editor.frames.splice(index, 1)
+            this.current = (index < this.frames.length) ? index : 0
             this.save()
         }
     }

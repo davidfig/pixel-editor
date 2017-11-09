@@ -81,7 +81,7 @@ function menu()
     ])
     append('F&rame', [
         ['&Duplicate (Ctrl-D)', 'duplicate'],
-        ['D&elete', 'delete'],
+        ['D&elete', () => Main.remove()],
         ['&New Frame', 'frame']
     ])
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template))

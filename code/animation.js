@@ -13,7 +13,7 @@ const Settings = require('./settings')
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
 
-module.exports = class Show extends UI.Window
+module.exports = class Show extends UI.Scroll
 {
     constructor()
     {
@@ -57,7 +57,7 @@ module.exports = class Show extends UI.Window
         this.pixel.anchor.set(0.5)
         sheet.render()
         const scale = this.measure()
-        this.pixel.scale.set(scale)
+        this.pixel.scale.set(scale * 5)
         this.pixel.frame(0)
         this.pixel.position.set(this.width / 2, this.maxHeight * scale / 2 + Settings.BORDER)
         this.buttons.y = this.pixel.y + this.maxHeight * scale / 2 + Settings.BORDER

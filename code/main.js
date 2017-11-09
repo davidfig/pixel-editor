@@ -173,13 +173,19 @@ function openFile()
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, load)
 }
 
+function remove()
+{
+    PixelEditor.remove(PixelEditor.current)
+}
+
 module.exports = {
     isEditing,
     toggleWindow,
     saveFile,
     openFile,
     newFile,
-    load
+    load,
+    remove
 }
 
 const font = new FontFaceObserver('bitmap')

@@ -15,7 +15,6 @@ module.exports = class Text extends Window
      *
      * @param {string} text
      * @param {object} [options]
-    //  * @param {number} [options.wrap]
      * @param {string} [options.align=left] (middle or center, left, right) horizontal align
      * @param {string} [options.edit] (number, hex) type of characters allowed
      * @param {number} [options.min] minimum number of type is number
@@ -25,16 +24,17 @@ module.exports = class Text extends Window
      * @param {object} [options.theme]
      * @param {string} [options.beforeText] add text before edit box
      * @param {string} [options.afterText] add text after edit box
+     * @param {boolean} [options.fit=true]
      */
     constructor(text, options)
     {
         options = options || {}
         options.transparent = exists(options.transparent) ? options.transparent : false
         super(options)
+        this.fit = exists(options.fit) ? options.fit : true
         this.types.push('Text', 'EditText')
-        this.text = text
+        this._text = text
         this._align = options.align
-        this._wrap = options.wrap
         this._maxCount = options.maxCount
         this._count = options.count
         this.beforeText = options.beforeText || ''
@@ -43,36 +43,12 @@ module.exports = class Text extends Window
         this.max = options.max
         this.words = this.addChild(new PIXI.Text(text))
         this.wordsEdit = this.addChild(new PIXI.Container())
-        this.edit = options.edit
-        this.editLineStyle = options.editLineStyle || 'dashed'
+        this.interactive = true
         this.on('click', this.startEdit, this)
         this.input = new Input()
         this.input.on('keydown', this.keyDown, this)
         this.input.on('down', this.down, this)
-    }
-
-    get wrap()
-    {
-        return exists(this._wrap) ? this._wrap : this.get('wrap')
-    }
-    set wrap(value)
-    {
-        this._wrap = value
-        this.dirty = true
-    }
-
-    get edit()
-    {
-        return this._edit
-    }
-    set edit(value)
-    {
-        this._edit = value
-        this.interactive = value ? true : false
-        if (value && !this.wordsEdit)
-        {
-            this.wordsEdit.visible = false
-        }
+        this.layout()
     }
 
     get align()
@@ -82,7 +58,7 @@ module.exports = class Text extends Window
     set align(value)
     {
         this._align = value
-        this.dirty = true
+        this.layout()
     }
 
     get count()
@@ -92,17 +68,7 @@ module.exports = class Text extends Window
     set count(value)
     {
         this._count = value
-        this.dirty = true
-    }
-
-    get width()
-    {
-        return this._windowWidth || this.words.width
-    }
-
-    get height()
-    {
-        return this._windowWidth || this.words.height
+        this.layout()
     }
 
     set text(value)
@@ -134,7 +100,7 @@ module.exports = class Text extends Window
             }
         }
         this._cursorPlace = (this.cursorPlace >= this._text.length) ? this._text.length : this.cursorPlace
-        this.dirty = true
+        this.layout()
     }
     get text()
     {
@@ -165,16 +131,6 @@ module.exports = class Text extends Window
     get cursorPlace()
     {
         return this._cursorPlace
-    }
-
-    set editLineStyle(value)
-    {
-        this._editLineStyle = value
-        this.dirty = true
-    }
-    get editLineStyle()
-    {
-        return this._editLineStyle
     }
 
     layout()
@@ -219,26 +175,10 @@ module.exports = class Text extends Window
             text = this._text
         }
         this.words.text = this.beforeText + text + this.afterText
-        // if (this._wrap || !this.width || this.words.width > this.width || this.words.width > this._wrap)
-        // {
-        //     this.words.style.wordWrap = true
-        //     this.words.style.wordWrapWidth = (this._wrap || this.width) + this.get('text-padding-left') + this.get('text-padding-right')
-        // }
-        // else
-        // {
-        //     this.words.style.wordWrap = false
-        // }
         this.styles = {
             fontFamily: this.words.style.fontFamily,
             fontSize: this.words.style.fontSize,
-            // wordWrap: this.words.style.wordWrap,
-            // wordWrapWidth: this.words.style.wordWrapWidth
         }
-    }
-
-    draw()
-    {
-        super.draw()
         let cursorStart = 0
         if (this.editing)
         {
@@ -251,7 +191,7 @@ module.exports = class Text extends Window
             {
                 styleStatic[entry] = this.styles[entry]
             }
-            styleStatic.fill = this.get('foreground-color', 'color')
+            styleStatic.fill = this.get('foreground-color')
             if (this.beforeText)
             {
                 for (let i = 0; i < this.beforeText.length; i++)
@@ -271,11 +211,11 @@ module.exports = class Text extends Window
                 }
                 if (i < this._text.length && this.select.indexOf(i) !== -1)
                 {
-                    style.fill = this.get('edit-foreground-select', 'color')
+                    style.fill = this.get('edit-foreground-select-color')
                 }
                 else
                 {
-                    style.fill = this.get('edit-foreground', 'color')
+                    style.fill = this.get('edit-foreground-color')
                 }
                 const bg = this.wordsEdit.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
                 const show = (i < this._text.length) ? this._text[i] : ' '
@@ -285,7 +225,7 @@ module.exports = class Text extends Window
                 letter.x = bg.x = x
                 bg.width = letter.width
                 bg.height = letter.height
-                bg.tint = (this.select.indexOf(i) !== -1) ? this.get('edit-background', 'color') : this.get('edit-background-select', 'color')
+                bg.tint = (this.select.indexOf(i) !== -1) ? this.get('edit-background-color') : this.get('edit-background-select-color')
                 x += letter.width
             }
             if (!this.select.length)
@@ -294,7 +234,7 @@ module.exports = class Text extends Window
                 this.textCursor.height = this.lastHeight || this.wordsEdit.height
                 this.lastHeight = !this.lastHeight || this.textCursor.height > this.lastHeight ? this.textCursor.height : this.lastHeight
                 this.textCursor.width = CURSOR_WIDTH
-                this.textCursor.tint = this.get('edit-foreground', 'color')
+                this.textCursor.tint = this.get('edit-foreground-color')
                 this.textCursor.x = cursorStart
                 for (let i = 0; i < this.cursorPlace; i++)
                 {
@@ -306,7 +246,7 @@ module.exports = class Text extends Window
         {
             this.words.visible = true
             this.wordsEdit.visible = false
-            this.words.tint = this._color || this.get('foreground-color', 'color')
+            this.words.tint = this._color || this.get('foreground-color')
             switch (this.align)
             {
                 case 'middle':
@@ -321,6 +261,7 @@ module.exports = class Text extends Window
                     break
             }
         }
+        super.layout()
     }
 
     startEdit(e)
@@ -336,7 +277,7 @@ module.exports = class Text extends Window
                 this.select.push(i)
             }
             this.cursorPlace = this._text.length
-            this.dirty = true
+            this.layout()
         }
         else
         {
@@ -347,7 +288,7 @@ module.exports = class Text extends Window
                 {
                     const local = letter.toLocal(e.data.global)
                     this.cursorPlace = letter.index + (local.x > letter.width / 2 ? 1 : 0)
-                    this.dirty = true
+                    this.layout()
                     return
                 }
             }
@@ -388,7 +329,7 @@ module.exports = class Text extends Window
                             this.cursorPlace = this.select[0] + 1
                             this.text = this._text.slice(0, this.select[0]) + letter + this._text.slice(this.select[this.select.length - 1] + 1)
                             this.select = []
-                            this.dirty = true
+                            this.layout()
                         }
                     }
                     else
@@ -397,7 +338,7 @@ module.exports = class Text extends Window
                         {
                             this.text = this._text.substr(0, this.cursorPlace) + letter + this._text.substr(this.cursorPlace)
                             this.cursorPlace++
-                            this.dirty = true
+                            this.layout()
                             data.event.stopPropagation()
                         }
                     }
@@ -425,7 +366,7 @@ module.exports = class Text extends Window
                             {
                                 this.select = [this.cursorPlace - 1]
                                 this.cursorPlace--
-                                this.dirty = true
+                                this.layout()
                                 data.event.stopPropagation()
                                 return
                             }
@@ -441,7 +382,7 @@ module.exports = class Text extends Window
                                 this.select.unshift(this.cursorPlace - 1)
                             }
                             this.cursorPlace--
-                            this.dirty = true
+                            this.layout()
                             data.event.stopPropagation()
                             return
                         }
@@ -453,7 +394,7 @@ module.exports = class Text extends Window
                             {
                                 this.select = [this.cursorPlace]
                                 this.cursorPlace++
-                                this.dirty = true
+                                this.layout()
                                 data.event.stopPropagation()
                                 return
                             }
@@ -469,7 +410,7 @@ module.exports = class Text extends Window
                                 this.select.push(this.cursorPlace)
                             }
                             this.cursorPlace++
-                            this.dirty = true
+                            this.layout()
                             data.event.stopPropagation()
                             return
                         }
@@ -488,7 +429,7 @@ module.exports = class Text extends Window
                             this.cursorPlace = this.select[0]
                             this.text = this._text.slice(0, this.select[0]) + this._text.slice(this.select[this.select.length - 1] + 1)
                             this.select = []
-                            this.dirty = true
+                            this.layout()
                             data.event.stopPropagation()
                             return
                         }
@@ -505,7 +446,7 @@ module.exports = class Text extends Window
                                 start--
                             }
                             this.text = '' + this._text.slice(0, start) + this._text.slice(end)
-                            this.dirty = true
+                            this.layout()
                             this.cursorPlace = start
                             data.event.stopPropagation()
                             return
@@ -546,7 +487,7 @@ module.exports = class Text extends Window
                             this.cursorPlace = this.select[0]
                             this.text = this._text.slice(0, this.select[0]) + this._text.slice(this.select[this.select.length - 1] + 1)
                             this.select = []
-                            this.dirty = true
+                            this.layout()
                         }
                         data.event.stopPropagation()
                         break
@@ -562,7 +503,7 @@ module.exports = class Text extends Window
                             this.cursorPlace = this.select[0]
                             this.text = this._text.slice(0, this.select[0]) + this._text.slice(this.select[this.select.length - 1] + 1)
                             this.select = []
-                            this.dirty = true
+                            this.layout()
                             data.event.stopPropagation()
                             return
                         }
@@ -571,7 +512,7 @@ module.exports = class Text extends Window
                             if (this.cursorPlace > 0)
                             {
                                 this.text = this._text.slice(0, this.cursorPlace - 1) + this._text.slice(this.cursorPlace)
-                                this.dirty = true
+                                this.layout()
                                 data.event.stopPropagation()
                                 return
                             }
@@ -588,7 +529,7 @@ module.exports = class Text extends Window
                             this.cursorPlace--
                             this.cursorPlace = this.cursorPlace < 0 ? 0 : this.cursorPlace
                         }
-                        this.dirty = true
+                        this.layout()
                         data.event.stopPropagation()
                         break
 

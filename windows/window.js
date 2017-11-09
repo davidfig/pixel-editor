@@ -14,6 +14,7 @@ module.exports = class Window extends PIXI.Container
      * @param {boolean} [options.draggable]
      * @param {boolean} [options.resizeable]
      * @param {boolean} [options.clickable]
+     * @param {number} [options.fit]
      * @param {object} [options.theme]
      */
     constructor(options)
@@ -33,7 +34,7 @@ module.exports = class Window extends PIXI.Container
         this.draggable = options.draggable
         this._windowWidth = options.width || this.get('minimum-width')
         this._windowHeight = options.height || this.get('minimum-height')
-        this.dirty = true
+        this.drawWindowShape()
 
         this.changeInteractive()
         this.on('pointerdown', this.down, this)
@@ -124,32 +125,44 @@ module.exports = class Window extends PIXI.Container
     set width(value)
     {
         this._windowWidth = value
+        this.drawWindowShape()
     }
     get width()
     {
         return this._windowWidth
     }
 
+    get center()
+    {
+        const spacing = this.get('spacing') * 2
+        return { x: (this._windowWidth - spacing) / 2, y: (this._windowHeight - spacing) / 2}
+    }
+
+    get left() { return 0 }
+    get top() { return 0 }
+    get right() { return this._windowWidth - this.get('spacing') * 2 }
+    get bottom() { return this._windowHeight - this.get('spacing') * 2 }
+
     set height(value)
     {
         this._windowHeight = value
+        this.drawWindowShape()
     }
     get height()
     {
         return this._windowHeight
     }
 
-    draw()
+    drawWindowShape()
     {
         const background = this.get('background-color')
         const radius = this.get('corners')
         if (!this.transparent)
         {
-            const size = this.get('shadow-size')
             this.sg
                 .clear()
                 .beginFill(0, this.get('shadow-alpha'))
-                .drawRoundedRect(-size, -size, this.width + size * 2, this.height + size * 2, radius)
+                .drawRoundedRect(0, 0, this._windowWidth, this._windowHeight, radius)
                 .endFill()
             this.sg.visible = true
         }
@@ -157,27 +170,30 @@ module.exports = class Window extends PIXI.Container
         {
             this.sg.visible = false
         }
+        const shadow = this.get('shadow-size')
         this.g
             .clear()
             .beginFill(background, this.transparent ? 0 : 1)
-            .drawRoundedRect(0, 0, this.width, this.height, this.get('corners'))
+            .drawRoundedRect(shadow, shadow, this._windowWidth - shadow * 2, this._windowHeight - shadow * 2, this.get('corners'))
             .endFill()
         if (this.resizeable)
         {
             const size = this.get('resize-border-size')
             this.g
                 .beginFill(this.get('resize-border-color', 'color'))
-                .moveTo(this.width, this.height - size)
-                .lineTo(this.width, this.height)
-                .lineTo(this.width - size, this.height)
+                .moveTo(this._windowWidth, this._windowHeight - size)
+                .lineTo(this._windowWidth, this._windowHeight)
+                .lineTo(this._windowWidth - size, this._windowHeight)
                 .endFill()
         }
         const spacing = this.get('spacing')
         this.content.mask
             .clear()
             .beginFill(0xffffff)
-            .drawRect(spacing, spacing, this.width - spacing * 2, this.height - spacing * 2)
+            .drawRect(0, 0, this._windowWidth - spacing * 2, this._windowHeight - spacing * 2)
             .endFill()
+        this.content.position.set(spacing, spacing)
+        this.dirty = true
     }
 
     down(e)
@@ -187,10 +203,10 @@ module.exports = class Window extends PIXI.Container
         {
             const size = this.get('resize-border-size')
             const local = super.toLocal(point)
-            if (pointInTriangle([local.x, local.y], [[this.width, this.height - size], [this.width, this.y + this.height], [this.width - size, this.height]]))
+            if (pointInTriangle([local.x, local.y], [[this._windowWidth, this._windowHeight - size], [this._windowWidth, this.y + this._windowHeight], [this._windowWidth - size, this._windowHeight]]))
             {
                 this.isDown = { x: point.x, y: point.y }
-                this.resizing = { width: this.width, height: this.height }
+                this.resizing = { width: this._windowWidth, height: this._windowHeight }
                 e.stopPropagation
                 return
             }
@@ -223,7 +239,7 @@ module.exports = class Window extends PIXI.Container
             this._windowWidth = this._windowWidth < minWidth ? minWidth : this._windowWidth
             this._windowHeight = this.resizing.height + e.data.global.y - this.isDown.y
             this._windowHeight = this._windowHeight < minHeight ? minHeight : this._windowHeight
-            this.dirty = true
+            this.drawWindowShape()
             this.emit('resizing', this)
             e.stopPropagation()
         }
@@ -239,7 +255,7 @@ module.exports = class Window extends PIXI.Container
             const point = e.data.global
             const size = this.get('resize-border-size')
             const local = super.toLocal(point)
-            if (pointInTriangle([local.x, local.y], [[this.width, this.height - size], [this.width, this.y + this.height], [this.width - size, this.height]]))
+            if (pointInTriangle([local.x, local.y], [[this._windowWidth, this._windowHeight - size], [this._windowWidth, this.y + this._windowHeight], [this._windowWidth - size, this._windowHeight]]))
             {
                 this.oldCursor = this.cursor
                 this.cursor = 'se-resize'
@@ -264,7 +280,41 @@ module.exports = class Window extends PIXI.Container
         }
     }
 
-    layout() {}
+    getSize()
+    {
+        const child = this.content
+        const sizes = this._wbs
+        let x, y
+        if (child.anchor)
+        {
+            x = child.x + child.x * child.anchor.x
+            y = child.y + child.y * child.anchor.y
+        }
+        else
+        {
+            x = child.x
+            y = child.y
+        }
+        const width = child.width
+        const height = child.height
+        sizes.x1 = (x < sizes.x1) ? x : sizes.x1
+        sizes.x2 = (x + width > sizes.x2) ? x + width : sizes.x2
+        sizes.y1 = (y < sizes.y1) ? y : sizes.y1
+        sizes.y2 = (y + width > sizes.y2) ? y + height : sizes.y2
+    }
+
+    layout()
+    {
+        if (this.fit)
+        {
+            const spacing = this.get('spacing') * 2
+            this._wbs = { x1: Infinity, y1: Infinity, x2: 0, y2: 0 }
+            this.getSize()
+            this._windowWidth = this._wbs.x2 - this._wbs.x1 + spacing
+            this._windowHeight = this._wbs.y2 - this._wbs.y1 + spacing
+        }
+        this.drawWindowShape()
+    }
 
     addChild() { return this.content.addChild(...arguments) }
     addChildAt() { return this.content.addChild(...arguments) }

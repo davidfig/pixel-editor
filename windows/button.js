@@ -21,6 +21,7 @@ module.exports = class Button extends Window
         options.clickable = exists(options.clickable) ? options.clickable : true
         options.cursor = exists(options.cursor) ? options.cursor : 'pointer'
         super(options)
+        this.fit = true
         this.types.push('Button')
         if (exists(options.text))
         {
@@ -139,14 +140,15 @@ module.exports = class Button extends Window
     {
         if (this.label)
         {
-            this.label.x = this.width / 2 - this.label.width / 2
-            this.label.y = this.height / 2 - this.label.height / 2
+            this.label.x = this.center.x - this.label.width / 2
+            this.label.y = this.center.y - this.label.height / 2
         }
         if (this.image)
         {
-            this.image.x = this.width / 2 - this.image.width / 2
-            this.image.y = this.height / 2 - this.image.height / 2
+            this.image.x = this.center.x - this.image.width / 2
+            this.image.y = this.center.y - this.image.height / 2
         }
+        super.layout()
     }
 
     draw()

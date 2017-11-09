@@ -32,7 +32,8 @@
     "Text": {
         "foreground-color": "0",
         "background-color": "#dddddd",
-        "corners": 0
+        "corners": 0,
+        "spacing": 3
     },
     "EditText": {
         "edit-foreground-color": "#ffffff",

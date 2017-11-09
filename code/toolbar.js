@@ -3,9 +3,10 @@ const Input = require('yy-input')
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
-const Settings = require('./settings')
+
 const UI = require('../windows/UI')
 const State = require('./state')
+const Settings = require('./settings')
 let Main
 
 const SELECT = require('../images/select.json')
@@ -17,12 +18,12 @@ const LINE = require('../images/line.json')
 
 const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE]
 
-module.exports = class Toolbar extends UI.Stack
+module.exports = class Toolbar extends UI.Window
 {
     constructor()
     {
         Main = require('./main')
-        super({ draggable: true, transparent: false, theme: { spacing: Settings.BORDER } })
+        super({ draggable: true, theme: { fit: true } })
         this.addChild(new UI.Spacer())
         this.buttons = []
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
@@ -106,6 +107,18 @@ module.exports = class Toolbar extends UI.Stack
                     break
             }
         }
+    }
+
+    layout()
+    {
+        let y = 0
+        const spacing = Settings.BORDER
+        for (let child of this.content.children)
+        {
+            child.position.set(0, y)
+            y += child.height + spacing
+        }
+        super.layout()
     }
 
     stateSetup(name)

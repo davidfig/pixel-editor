@@ -1,4 +1,3 @@
 module.exports = {
-    BORDER: 10
-
+    BORDER: 5
 }

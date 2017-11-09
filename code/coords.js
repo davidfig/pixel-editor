@@ -8,14 +8,13 @@ const Settings = require('./settings')
 const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
 
-const WIDTH = 200
-
 module.exports = class Coords extends UI.Window
 {
     constructor()
     {
-        super({ draggable: true, width: WIDTH })
+        super({ draggable: true })
         this.stateSetup('coords')
+        this.fit = true
         this.nameText = this.addChild(new UI.Text('', { transparent: true }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameWidth.on('changed', this.changeFrameWidth, this)
@@ -35,28 +34,29 @@ module.exports = class Coords extends UI.Window
         this.dice = this.addChild(new Dice())
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
+        this.layout()
     }
 
-    draw()
+    layout()
     {
-        const width = Math.max(WIDTH, this.nameText.width)
-        let y = Settings.BORDER
-        this.nameText.position.set(width / 2 - this.nameText.width / 2, y)
+        const width = 200
+        const center = width / 2
+        let y = 0
+        this.nameText.position.set(center - this.nameText.width / 2, y)
         y += this.nameText.height + Settings.BORDER
-        this.frameWidth.position.set(Settings.BORDER, y)
-        this.frameHeight.position.set(width - Settings.BORDER - this.cursorY.width, y)
+        this.frameWidth.position.set(0, y)
+        this.frameHeight.position.set(width - this.cursorY.width, y)
         y += this.frameWidth.height + Settings.BORDER
-        this.dice.position.set(width / 2 - this.dice.width / 2, y)
+        this.dice.position.set(center - this.dice.width / 2, y)
         this.button.position.set(width - this.button.width - Settings.BORDER, y)
         y += this.dice.height + Settings.BORDER
-        this.cursorX.position.set(Settings.BORDER, y)
-        this.cursorY.position.set(width - Settings.BORDER - this.cursorY.width, y)
+        this.cursorX.position.set(0, y)
+        this.cursorY.position.set(width - this.cursorY.width, y)
         y += this.cursorX.height + Settings.BORDER
-        this.cursorWidth.position.set(Settings.BORDER, y)
-        this.cursorHeight.position.set(width - Settings.BORDER - this.cursorHeight.width, y)
+        this.cursorWidth.position.set(0, y)
+        this.cursorHeight.position.set(width  - this.cursorHeight.width, y)
         y += this.cursorWidth.height + Settings.BORDER
-        this.height = y
-        super.draw()
+        super.layout()
     }
 
     stateSetup(name)

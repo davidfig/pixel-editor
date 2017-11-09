@@ -2,7 +2,6 @@ const PIXI = require('pixi.js')
 
 const UI = require('../windows/ui')
 const State = require('./state')
-const Settings = require('./settings')
 
 const DICE = 50
 const DICE_COLOR = [0x888888, 0xaa0000]
@@ -12,7 +11,7 @@ module.exports = class Dice extends UI.Window
 {
     constructor()
     {
-        super({ width: DICE, height: DICE, clickable: true, theme: { 'background-color': '#eeeeee' }})
+        super({ width: DICE, height: DICE, clickable: true, theme: { 'background-color': '#eeeeee', 'spacing': 2 }})
         this.dice = []
         for (let i = 0; i < 5; i++)
         {
@@ -22,18 +21,18 @@ module.exports = class Dice extends UI.Window
             this.dice.push(dice)
         }
         this.on('click', this.clicked, this)
-        State.on('relative', this.draw, this)
+        State.on('relative', this.layout, this)
+        this.layout()
     }
 
-    draw()
+    layout()
     {
-        super.draw()
         const border = SIZE
         this.dice[0].position.set(border, border)
-        this.dice[1].position.set(DICE - border, border)
-        this.dice[2].position.set(DICE / 2, DICE / 2)
-        this.dice[3].position.set(border, DICE - border)
-        this.dice[4].position.set(DICE - border, DICE - border)
+        this.dice[1].position.set(this.right - border, border)
+        this.dice[2].position.set(this.center.x, this.center.y)
+        this.dice[3].position.set(border, this.bottom - border)
+        this.dice[4].position.set(this.right - border, this.bottom - border)
         for (let dice of this.dice)
         {
             dice.tint = DICE_COLOR[0]
@@ -46,6 +45,8 @@ module.exports = class Dice extends UI.Window
             case 'bottom-left': this.dice[3].tint = DICE_COLOR[1]; break
             case 'bottom-right': this.dice[4].tint = DICE_COLOR[1]; break
         }
+        this.dirty = true
+        super.layout()
     }
 
     clicked(e)

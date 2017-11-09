@@ -15,10 +15,10 @@ module.exports = class UI extends PIXI.Container
         this.theme = options.theme || THEME
     }
 
-    layout()
+    check()
     {
         this.editing = false
-        let dirty, dirtyRenderer
+        let dirty
         const queue = [...this.children]
         let i = 0
         while (i < queue.length)
@@ -33,71 +33,18 @@ module.exports = class UI extends PIXI.Container
                 if (w.dirty)
                 {
                     dirty = true
-                }
-                if (w.dirtyRenderer)
-                {
-                    w.dirtyRenderer = false
-                    dirtyRenderer = true
-                }
-            }
-            queue.push(...w.children)
-            i++
-        }
-        if (!dirty)
-        {
-            if (dirtyRenderer)
-            {
-                return 1
-            }
-            return false
-        }
-        for (i = queue.length - 1; i >= 0; i--)
-        {
-            const w = queue[i]
-            if (w.types)
-            {
-                queue[i].layout()
-            }
-        }
-        return true
-    }
-
-    draw()
-    {
-        let dirty
-        const queue = [...this.children]
-        while (queue.length)
-        {
-            const w = queue.pop()
-            if (w.types)
-            {
-                if (w.dirty)
-                {
-                    w.draw()
-                    dirty = true
                     w.dirty = false
                 }
             }
             queue.push(...w.children)
+            i++
         }
         return dirty
     }
 
     update()
     {
-        const result = this.layout()
-        if (result === true)
-        {
-            return this.draw()
-        }
-        else if (result === 1)
-        {
-            return true
-        }
-        else
-        {
-            return false
-        }
+        return true//this.check()
     }
 }
 

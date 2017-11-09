@@ -9,33 +9,22 @@ module.exports = class Text extends Window
      *
      * @param {string} text
      * @param {object} [options]
-    //  * @param {number} [options.wrap]
      * @param {string} [options.align=left] (middle or center, left, right) horizontal align
      * @param {number} [options.count] number of characters to show
+     * @param {boolean} [options.fit=true]
      * @param {object} [options.theme]
      */
     constructor(text, options)
     {
         options = options || {}
-        options.transparent = exists(options.transparent) ? options.transparent : false
         super(options)
+        this.fit = true
         this.types.push('Text')
-        this.text = text
+        this._text = text
         this._align = options.align
-        this._wrap = options.wrap
         this._count = options.count
         this.words = this.addChild(new PIXI.Text(text))
         this.layout()
-    }
-
-    get wrap()
-    {
-        return exists(this._wrap) ? this._wrap : this.get('wrap')
-    }
-    set wrap(value)
-    {
-        this._wrap = value
-        this.dirty = true
     }
 
     get align()
@@ -45,7 +34,7 @@ module.exports = class Text extends Window
     set align(value)
     {
         this._align = value
-        this.dirty = true
+        this.layout()
     }
 
     get count()
@@ -55,23 +44,13 @@ module.exports = class Text extends Window
     set count(value)
     {
         this._count = value
-        this.dirty = true
-    }
-
-    get width()
-    {
-        return this._windowWidth || this.words.width
-    }
-
-    get height()
-    {
-        return this._windowWidth || this.words.height
+        this.layout()
     }
 
     set text(value)
     {
         this._text = '' + value
-        this.dirty = true
+        this.layout()
     }
     get text()
     {
@@ -120,13 +99,7 @@ module.exports = class Text extends Window
             text = this._text
         }
         this.words.text = text
-    }
-
-    draw()
-    {
-        super.draw()
-        this.words.visible = true
-        this.words.tint = this._color || this.get('foreground-color', 'color')
+        this.words.tint = this.get('foreground-color')
         switch (this.align)
         {
             case 'middle':
@@ -140,5 +113,6 @@ module.exports = class Text extends Window
                 this.words.x = this.width - this.words.width
                 break
         }
+        super.layout()
     }
 }

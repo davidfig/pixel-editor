@@ -65,7 +65,7 @@ module.exports = class Stack extends Window
     layout()
     {
         const spacing = this.get('spacing')
-        let width = spacing, height = spacing, largestWidth = 0, largestHeight = 0
+        let width = 0, height = 0, largestWidth = 0, largestHeight = 0
         for (let w of this.children)
         {
             if (w.types)
@@ -153,5 +153,6 @@ module.exports = class Stack extends Window
                 }
             }
         }
+        super.layout()
     }
 }

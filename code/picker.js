@@ -19,7 +19,6 @@ module.exports = class Picker extends UI.Window
         this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
-        this.on('resizing', this.layout, this)
         this.layout()
     }
 

@@ -24,6 +24,7 @@ module.exports = class Show extends UI.Window
         this.buttons = []
         this.input = new Input()
         this.input.on('keydown', this.keydown, this)
+        this.layout()
     }
 
     measure()
@@ -35,11 +36,11 @@ module.exports = class Show extends UI.Window
             height = frame.height > height ? frame.height : height
         }
         const scaleX = (this.width - Settings.BORDER * 2) / width
-        const scaleY = (this.height - Settings.BORDER * 3 - 20) / height
+        const scaleY = (this.height - Settings.BORDER * 3 - 30) / height
         return Math.min(scaleX, scaleY)
     }
 
-    draw()
+    layout()
     {
         const sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         this.pixels.removeChildren()
@@ -64,13 +65,12 @@ module.exports = class Show extends UI.Window
             pixel.frame(i)
             pixel.current = i
             pixel.position.set(xStart, yStart)
-            const pad = 5
-            const number = this.pixels.addChild(new UI.Text(i, { theme: { 'text-padding-left': pad, 'text-padding-right': pad, 'text-padding-top': pad, 'text-padding-bottom': pad } }))
+            const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
             number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += pixel.width
         }
-        super.draw()
+        super.layout()
     }
 
     down(e)
@@ -84,7 +84,7 @@ module.exports = class Show extends UI.Window
                 {
                     PixelEditor.current = button.current
                     // _name.innerHTML = button.current
-                    this.dirty = true
+                    this.layout()
                 }
                 const pixel = this.buttons[button.current].pixel
                 this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
@@ -138,7 +138,7 @@ module.exports = class Show extends UI.Window
                     this.dragging.drop = this.buttons.length
                 }
             }
-            this.dirtyRenderer = true
+            this.dirty = true
         }
         else
         {
@@ -180,7 +180,7 @@ module.exports = class Show extends UI.Window
                 {
                     PixelEditor.current--
                 }
-                this.dirty = true
+                this.layout()
             }
             else if (code === 39)
             {
@@ -192,7 +192,7 @@ module.exports = class Show extends UI.Window
                 {
                     PixelEditor.current++
                 }
-                this.dirty = true
+                this.layout()
             }
         }
     }
@@ -214,8 +214,8 @@ module.exports = class Show extends UI.Window
         }
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', () => this.dirty = true)
-        State.on('last-file', () => this.dirty = true)
+        PixelEditor.on('changed', () => this.layout())
+        State.on('last-file', () => this.layout())
     }
 
     dragged()

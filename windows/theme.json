@@ -17,8 +17,8 @@
         "shadow-size": 2,
         "shadow-alpha": 0.15,
         "shadow-blur": 2,
-        "minimum-width": 20,
-        "minimum-height": 20
+        "minimum-width": 50,
+        "minimum-height": 50
     },
     "Button": {
         "foreground-color": 0,

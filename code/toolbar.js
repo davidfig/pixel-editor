@@ -120,12 +120,11 @@ module.exports = class Toolbar extends UI.Window
 
     layout()
     {
-        let y = 0
-        const spacing = Settings.BORDER
-        for (let child of this.content.children)
+        let y = Settings.BORDER
+        for (let child of this.buttons)
         {
-            child.position.set(0, y)
-            y += child.height + spacing
+            child.y = y
+            y += child.height + Settings.BORDER
         }
         super.layout()
     }

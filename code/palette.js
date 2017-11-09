@@ -30,7 +30,6 @@ module.exports = class Palette extends UI.Window
         this.blocks = this.addChild(new PIXI.Container())
         this.palettes()
         this.on('click', this.click, this)
-        this.on('resizing', this.layout, this)
         this.input = new Input({noPointers: true})
         this.input.on('keydown', this.keydown, this)
         this.layout()

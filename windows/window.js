@@ -231,7 +231,7 @@ module.exports = class Window extends PIXI.Container
             this._windowWidth = this._windowWidth < minWidth ? minWidth : this._windowWidth
             this._windowHeight = this.resizing.height + e.data.global.y - this.isDown.y
             this._windowHeight = this._windowHeight < minHeight ? minHeight : this._windowHeight
-            this.drawWindowShape()
+            this.layout()
             this.emit('resizing', this)
             e.stopPropagation()
         }
@@ -289,10 +289,8 @@ module.exports = class Window extends PIXI.Container
         }
         const width = child.width
         const height = child.height
-        sizes.x1 = (x < sizes.x1) ? x : sizes.x1
-        sizes.x2 = (x + width > sizes.x2) ? x + width : sizes.x2
-        sizes.y1 = (y < sizes.y1) ? y : sizes.y1
-        sizes.y2 = (y + height > sizes.y2) ? y + height : sizes.y2
+        sizes.x = (x + width > sizes.x) ? x + width : sizes.x
+        sizes.y = (y + height > sizes.y) ? y + height : sizes.y
     }
 
     layout()
@@ -300,10 +298,10 @@ module.exports = class Window extends PIXI.Container
         if (this.fit)
         {
             const spacing = this.get('spacing') * 2
-            // this._wbs = { x1: Infinity, y1: Infinity, x2: 0, y2: 0 }
-            // this.getSize()
-            this._windowWidth = this.content.width + spacing //this._wbs.x2 - this._wbs.x1 + spacing
-            this._windowHeight = this.content.height + spacing //this._wbs.y2 - this._wbs.y1 + spacing
+            this._wbs = { x: 0, y: 0 }
+            this.getSize()
+            this._windowWidth = this.content.width + spacing //this._wbs.x + spacing * 2 //this._wbs.x2 - this._wbs.x1 + spacing
+            this._windowHeight = this.content.height + spacing // this._wbs.y + spacing * 2  //this._wbs.y2 - this._wbs.y1 + spacing
         }
         this.drawWindowShape()
     }

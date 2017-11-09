@@ -31,15 +31,16 @@ module.exports = class Palette extends UI.Window
         this.sprite = this.stuff.addChild(new PIXI.Container())
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
-        this.stuff.position.set(Settings.BORDER, Settings.BORDER)
-        this.input = new Input()
+        this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
         this.input.on('keyup', this.keyup, this)
+        this.layout()
     }
 
-    draw()
+    layout()
     {
-        let width = this.width - Settings.BORDER * 2, height = this.height - Settings.BORDER * 2
+        const spacing = this.get('spacing') * 2
+        let width = this.width - spacing, height = this.height - spacing
         let w = width / PixelEditor.width
         let h = height / PixelEditor.height
         if (PixelEditor.width * h < width)
@@ -63,7 +64,7 @@ module.exports = class Palette extends UI.Window
         this.transparency()
         this.frame()
         this.cursorDraw()
-        super.draw()
+        super.layout()
     }
 
     transparency()
@@ -467,7 +468,7 @@ module.exports = class Palette extends UI.Window
             State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
             State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
         }
-        this.dirty = true
+        this.layout()
     }
 
     cursorDraw()
@@ -644,7 +645,7 @@ module.exports = class Palette extends UI.Window
                 this.line = null
                 break
         }
-        this.dirty = true
+        this.layout()
     }
 
     cut()
@@ -867,13 +868,13 @@ module.exports = class Palette extends UI.Window
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
         for (let state of states)
         {
-            State.on(state, () => this.dirty = true)
+            State.on(state, () => this.layout())
         }
         State.on('tool', () => this.tool())
-        PixelEditor.on('changed', () => this.dirty = true)
-        State.on('last-file', () => this.dirty = true)
-        State.on('open-circle', () => this.dirty = true)
-        State.on('open-ellipse', () => this.dirty = true)
+        PixelEditor.on('changed', () => this.layout())
+        State.on('last-file', () => this.layout())
+        State.on('open-circle', () => this.layout())
+        State.on('open-ellipse', () => this.layout())
     }
 
     dragged()

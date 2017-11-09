@@ -1,6 +1,7 @@
 const exists = require('exists')
 const ClipBoard = require('electron').clipboard
 const Input = require('yy-input')
+const PIXI = require('pixi.js')
 
 const UI = require('../windows/ui')
 const State = require('./state')
@@ -15,7 +16,7 @@ module.exports = class Coords extends UI.Window
         super({ draggable: true })
         this.stateSetup('coords')
         this.fit = true
-        this.nameText = this.addChild(new UI.Text('', { transparent: true }))
+        this.nameText = this.addChild(new PIXI.Text('', this.fontStyle()))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameWidth.on('changed', this.changeFrameWidth, this)
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))

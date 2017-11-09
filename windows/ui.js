@@ -44,17 +44,12 @@ module.exports = class UI extends PIXI.Container
 
     update()
     {
-        return true//this.check()
+        return this.check()
     }
 }
 
 module.exports.Window = require('./window')
-module.exports.Stack = require('./stack')
 module.exports.Button = require('./button')
-module.exports.Spacer = require('./spacer')
-module.exports.Dialog = require('./dialog')
-module.exports.Text= require('./text')
 module.exports.EditText= require('./edit-text')
-module.exports.Picture = require('./picture')
 module.exports.Tree = require('./tree')
 module.exports.Scroll = require('./scroll')

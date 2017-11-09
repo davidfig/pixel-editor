@@ -34,6 +34,7 @@ module.exports = class Window extends PIXI.Container
         this.draggable = options.draggable
         this._windowWidth = options.width || this.get('minimum-width')
         this._windowHeight = options.height || this.get('minimum-height')
+        this.fit = options.fit
         this.drawWindowShape()
 
         this.changeInteractive()
@@ -155,25 +156,16 @@ module.exports = class Window extends PIXI.Container
 
     drawWindowShape()
     {
-        const background = this.get('background-color')
-        const radius = this.get('corners')
-        if (!this.transparent)
-        {
-            this.sg
-                .clear()
-                .beginFill(0, this.get('shadow-alpha'))
-                .drawRoundedRect(0, 0, this._windowWidth, this._windowHeight, radius)
-                .endFill()
-            this.sg.visible = true
-        }
-        else
-        {
-            this.sg.visible = false
-        }
+        this.sg
+            .clear()
+            .beginFill(0, this.get('shadow-alpha'))
+            .drawRoundedRect(0, 0, this._windowWidth, this._windowHeight, this.get('corners'))
+            .endFill()
+        this.sg.visible = true
         const shadow = this.get('shadow-size')
         this.g
             .clear()
-            .beginFill(background, this.transparent ? 0 : 1)
+            .beginFill(this.get('background-color'))
             .drawRoundedRect(shadow, shadow, this._windowWidth - shadow * 2, this._windowHeight - shadow * 2, this.get('corners'))
             .endFill()
         if (this.resizeable)
@@ -247,7 +239,7 @@ module.exports = class Window extends PIXI.Container
         {
             this.x = e.data.global.x + this.isDown.x
             this.y = e.data.global.y + this.isDown.y
-            this.dirtyRenderer = true
+            this.dirty = true
             e.stopPropagation()
         }
         else if (this.draggable)
@@ -314,6 +306,15 @@ module.exports = class Window extends PIXI.Container
             this._windowHeight = this._wbs.y2 - this._wbs.y1 + spacing
         }
         this.drawWindowShape()
+    }
+
+    fontStyle()
+    {
+        const style = {}
+        style.fontFamily = this.get('font-family')
+        style.fontSize = this.get('font-size')
+        style.fill = this.get('foreground-color')
+        return style
     }
 
     addChild() { return this.content.addChild(...arguments) }

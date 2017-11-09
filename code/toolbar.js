@@ -1,7 +1,8 @@
 const exists = require('exists')
 const Input = require('yy-input')
 const PIXI = require('pixi.js')
-const RenderSheet = require('yy-rendersheet')
+// const RenderSheet = require('yy-rendersheet')
+const RenderSheet = require('../../components/rendersheet')
 const Pixel = require('yy-pixel').Pixel
 
 const UI = require('../windows/UI')
@@ -23,24 +24,32 @@ module.exports = class Toolbar extends UI.Window
     constructor()
     {
         Main = require('./main')
-        super({ draggable: true, theme: { fit: true } })
-        this.addChild(new UI.Spacer())
+        super({ draggable: true })
+        this.fit = true
         this.buttons = []
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         for (let pixel of BUTTONS)
         {
             Pixel.add(pixel, this.sheet)
-            const button = this.addChild(new UI.Button({ picture: this.sheet.getTexture(pixel.name + '-0'), pictureOptions: { scale: 2 } }))
+        }
+        this.sheet.render()
+        for (let pixel of BUTTONS)
+        {
+            const sprite = this.sheet.get(pixel.name + '-0')
+            sprite.anchor.set(0)
+            sprite.scale.set(2)
+            const button = this.addChild(new UI.Button({ sprite }))
             button.on('pressed', this.pressed, this)
             this.buttons.push(button)
         }
-        this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
-        this.buttons[4].picture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
+        this.buttons[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
+        this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
         this.sheet.render()
         this.stateSetup('toolbar')
         this.changed()
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
+        this.layout()
     }
 
     pressed(target)
@@ -63,7 +72,7 @@ module.exports = class Toolbar extends UI.Window
                 {
                     State.tool = 'circle'
                 }
-                this.buttons[3].picture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
+                this.buttons[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
                 break
             case this.buttons[4]:
                 if (State.tool === 'ellipse')
@@ -74,7 +83,7 @@ module.exports = class Toolbar extends UI.Window
                 {
                     State.tool = 'ellipse'
                 }
-                this.buttons[4].picture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
+                this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
                 break
             case this.buttons[5]: State.tool = 'line'; break
         }

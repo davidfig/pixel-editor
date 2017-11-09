@@ -27,7 +27,7 @@
         "text-padding-right": 20,
         "text-padding-top": 10,
         "text-padding-bottom": 10,
-        "select-background-color": "#c9c9c9"
+        "background-select-color": "#c9c9c9"
     },
     "Text": {
         "foreground-color": "0",

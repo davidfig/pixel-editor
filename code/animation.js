@@ -5,7 +5,7 @@ const Pixel = require('../../components/pixel/pixel')
 const exists = require('exists')
 const Loop = require('yy-loop')
 
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Settings = require('./settings')
@@ -13,7 +13,7 @@ const Settings = require('./settings')
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
 
-module.exports = class Show extends UI.Scroll
+module.exports = class Show extends UI.Window
 {
     constructor()
     {

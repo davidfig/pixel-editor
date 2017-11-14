@@ -2,10 +2,9 @@ const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
-const Input = require('yy-input')
 
 const PixelEditor = require('./pixel-editor')
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state')
 const Settings = require('./settings')
 
@@ -19,12 +18,9 @@ module.exports = class Show extends UI.Window
     constructor()
     {
         super({ clickable: true, draggable: true, resizeable: true })
-        this.stateSetup('show')
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []
-        this.input = new Input()
-        this.input.on('keydown', this.keydown, this)
-        this.layout()
+        this.stateSetup('show')
     }
 
     measure()
@@ -73,9 +69,9 @@ module.exports = class Show extends UI.Window
         super.layout()
     }
 
-    down(e)
+    down(x, y, data)
     {
-        const point = this.toLocal(e.data.global)
+        const point = this.toLocal({ x, y })
         for (let button of this.buttons)
         {
             if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2)
@@ -91,14 +87,14 @@ module.exports = class Show extends UI.Window
                 return
             }
         }
-        super.down(e)
+        super.down(x, y, data)
     }
 
-    move(e)
+    move(x, y, data)
     {
         if (this.dragging)
         {
-            const point = this.toLocal(e.data.global)
+            const point = this.toLocal({x, y})
             const width = 10
             this.dragging.pixel.x = this.dragging.originalX + (point.x - this.dragging.x)
             this.dragging.pixel.y = this.dragging.originalY + (point.y - this.dragging.y)
@@ -142,11 +138,11 @@ module.exports = class Show extends UI.Window
         }
         else
         {
-            super.move(e)
+            super.move(x, y, data)
         }
     }
 
-    up(e)
+    up(x, y, data)
     {
         if (this.dragging)
         {
@@ -162,7 +158,7 @@ module.exports = class Show extends UI.Window
         }
         else
         {
-            super.up(e)
+            super.up(x, y, data)
         }
     }
 

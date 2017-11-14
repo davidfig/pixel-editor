@@ -5,7 +5,7 @@ const exists = require('exists')
 const FontSize = require('calc-fontsize')
 const Input = require('yy-input')
 
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
@@ -25,14 +25,13 @@ module.exports = class Palette extends UI.Window
     {
         Main = require('./main')
         super({ clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
-        this.stateSetup('palette')
         this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
         this.palettes()
         this.on('click', this.click, this)
         this.input = new Input({noPointers: true})
         this.input.on('keydown', this.keydown, this)
-        this.layout()
+        this.stateSetup('palette')
     }
 
     palettes()

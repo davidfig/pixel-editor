@@ -1,9 +1,6 @@
 const exists = require('exists')
-const ClipBoard = require('electron').clipboard
 const Input = require('yy-input')
-const PIXI = require('pixi.js')
-
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state')
 const Settings = require('./settings')
 const Dice = require('./dice')
@@ -13,10 +10,8 @@ module.exports = class Coords extends UI.Window
 {
     constructor()
     {
-        super({ draggable: true })
-        this.stateSetup('coords')
-        this.fit = true
-        this.nameText = this.addChild(new PIXI.Text('', this.fontStyle()))
+        super({ draggable: true, fit: true })
+        this.nameText = this.addChild(new UI.Text('', { place: 'top-center' }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameWidth.on('changed', this.changeFrameWidth, this)
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
@@ -35,7 +30,7 @@ module.exports = class Coords extends UI.Window
         this.dice = this.addChild(new Dice())
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
-        this.layout()
+        this.stateSetup('coords')
     }
 
     layout()
@@ -156,11 +151,11 @@ module.exports = class Coords extends UI.Window
     {
         if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
         {
-            ClipBoard.writeText('put(' + State.cursorX + ', ' + State.cursorY + ')')
+            // ClipBoard.writeText('put(' + State.cursorX + ', ' + State.cursorY + ')')
         }
         else
         {
-            ClipBoard.writeText('rectFill(' + State.cursorX + ', ' + State.cursorY + ', ' + State.cursorSizeX + ', ' + State.cursorSizeY + ')')
+            // ClipBoard.writeText('rectFill(' + State.cursorX + ', ' + State.cursorY + ', ' + State.cursorSizeX + ', ' + State.cursorSizeY + ')')
         }
     }
 

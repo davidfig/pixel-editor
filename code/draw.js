@@ -5,10 +5,9 @@ const exists = require('exists')
 const Input = require('yy-input')
 
 const Sheet = require('./sheet')
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
-const Settings = require('./settings')
 let Main
 
 const CURSOR_COLOR = 0xff0000
@@ -19,13 +18,12 @@ const DOTTED = 10
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
 
-module.exports = class Palette extends UI.Window
+module.exports = class Draw extends UI.Window
 {
     constructor()
     {
         Main = require('./main')
         super({ clickable: true, draggable: true, resizeable: true })
-        this.stateSetup('draw')
         this.stuff = this.addChild(new PIXI.Container())
         this.blocks = this.stuff.addChild(new PIXI.Container())
         this.sprite = this.stuff.addChild(new PIXI.Container())
@@ -34,7 +32,7 @@ module.exports = class Palette extends UI.Window
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
         this.input.on('keyup', this.keyup, this)
-        this.layout()
+        this.stateSetup('draw')
     }
 
     layout()

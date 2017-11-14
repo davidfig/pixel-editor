@@ -1,6 +1,6 @@
 const exists = require('exists')
 
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state')
 const Settings = require('./settings')
 const PixelEditor = require('./pixel-editor')

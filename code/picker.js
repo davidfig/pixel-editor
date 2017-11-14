@@ -2,7 +2,7 @@ const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 
-const UI = require('../windows/ui')
+const UI = require('../../components/ui')
 const State = require('./state.js')
 const Settings = require('./settings')
 
@@ -16,10 +16,9 @@ module.exports = class Picker extends UI.Window
     constructor()
     {
         super({ clickable: true, draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
-        this.stateSetup('picker')
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
-        this.layout()
+        this.stateSetup('picker')
     }
 
     wordsSetup()
@@ -182,12 +181,8 @@ module.exports = class Picker extends UI.Window
         return parseInt(TinyColor({ h, s, l }).toHex(), 16)
     }
 
-    down(e, notDown)
+    down(x, y, data, notDown)
     {
-        const point = this.toLocal(e.data.global)
-        let x = point.x
-        let y = point.y
-
         let percent = y / (this.bottomY - Settings.BORDER)
         percent = percent < 0 ? 0 : percent
         percent = percent > 1 ? 1 : percent

@@ -5,7 +5,7 @@ const PIXI = require('pixi.js')
 const RenderSheet = require('../../components/rendersheet')
 const Pixel = require('yy-pixel').Pixel
 
-const UI = require('../windows/UI')
+const UI = require('../../components/ui')
 const State = require('./state')
 const Settings = require('./settings')
 let Main
@@ -19,13 +19,12 @@ const LINE = require('../images/line.json')
 
 const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE]
 
-module.exports = class Toolbar extends UI.Window
+module.exports = class Toolbar extends UI.Stack
 {
     constructor()
     {
         Main = require('./main')
-        super({ draggable: true })
-        this.fit = true
+        super({ draggable: true, fit: true, transparent: false, theme: { spacing: 10, between: 5 } })
         this.buttons = []
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         for (let pixel of BUTTONS)
@@ -38,18 +37,17 @@ module.exports = class Toolbar extends UI.Window
             const sprite = this.sheet.get(pixel.name + '-0')
             sprite.anchor.set(0)
             sprite.scale.set(2)
-            const button = this.addChild(new UI.Button({ sprite }))
+            const button = this.add(new UI.Button({ sprite }))
             button.on('pressed', this.pressed, this)
             this.buttons.push(button)
         }
         this.buttons[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
         this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
         this.sheet.render()
-        this.stateSetup('toolbar')
         this.changed()
         this.input = new Input({ noPointers: true })
         this.input.on('keydown', this.keydown, this)
-        this.layout()
+        this.stateSetup('toolbar')
     }
 
     pressed(target)
@@ -116,17 +114,6 @@ module.exports = class Toolbar extends UI.Window
                     break
             }
         }
-    }
-
-    layout()
-    {
-        let y = Settings.BORDER
-        for (let child of this.buttons)
-        {
-            child.y = y
-            y += child.height + Settings.BORDER
-        }
-        super.layout()
     }
 
     stateSetup(name)

@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "C:\\Users\\dsfig\\programming\\components\\ui"
 		}
 	],
 	"settings": {}

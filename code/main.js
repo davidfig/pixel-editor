@@ -1,6 +1,5 @@
 const Renderer = require('yy-renderer')
 const FontFaceObserver = require('fontfaceobserver')
-const Input = require('yy-input')
 const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
@@ -38,8 +37,6 @@ function afterLoad()
     renderer = new Renderer({ debug: true, autoresize: true })
     create()
 
-    input = new Input({ noPointers: true })
-    input.on('keydown', keydown)
     renderer.interval(update)
     renderer.start()
 }
@@ -56,6 +53,8 @@ function create()
     windows.picker = ui.addChild(new Picker())
     windows.coords = ui.addChild(new Coords())
     // windows.animation = ui.addChild(new Animation())
+
+    ui.addListener('keydown', keydown)
 }
 
 function update(elapsed)

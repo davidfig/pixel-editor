@@ -40,7 +40,7 @@ module.exports = class Picker extends UI.Window
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
         this.hex = this.addChild(new UI.EditText(TinyColor(test).toHex(), { beforeText: '#', edit: 'hex', maxCount: 6, count: 6 }))
         this.hex.on('changed', this.changeHex, this)
-        const style = { edit: 'number', maxCount: 3, count: 3, align: 'right', min: 0, max: 255 }
+        const style = { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255 }
         this.part = [
             this.addChild(new UI.EditText(rgb.r, style)),
             this.addChild(new UI.EditText(rgb.g, style)),
@@ -198,7 +198,7 @@ module.exports = class Picker extends UI.Window
             }
             else if (!notDown)
             {
-                super.down(e)
+                super.down(x, y, data)
                 return
             }
         }
@@ -220,13 +220,13 @@ module.exports = class Picker extends UI.Window
                 }
                 else if (!notDown)
                 {
-                    super.down(e)
+                    super.down(x, y, data)
                     return
                 }
             }
             else if (!notDown)
             {
-                super.down(e)
+                super.down(x, y, data)
                 return
             }
         }
@@ -249,19 +249,19 @@ module.exports = class Picker extends UI.Window
         this.isPicker = true
     }
 
-    move(e)
+    move(x, y, data)
     {
         if (this.isPicker)
         {
-            this.down(e, true)
+            this.down(x, y, data, true)
         }
         else
         {
-            super.move(e)
+            super.move(x, y, data)
         }
     }
 
-    up(e)
+    up(x, y, data)
     {
         if (this.isPicker)
         {
@@ -269,7 +269,7 @@ module.exports = class Picker extends UI.Window
         }
         else
         {
-            super.up(e)
+            super.up(x, y, data)
         }
     }
 

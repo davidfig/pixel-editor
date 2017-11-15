@@ -1,5 +1,4 @@
 const exists = require('exists')
-const Input = require('yy-input')
 const PIXI = require('pixi.js')
 // const RenderSheet = require('yy-rendersheet')
 const RenderSheet = require('../../components/rendersheet')
@@ -7,7 +6,6 @@ const Pixel = require('yy-pixel').Pixel
 
 const UI = require('../../components/ui')
 const State = require('./state')
-const Settings = require('./settings')
 let Main
 
 const SELECT = require('../images/select.json')
@@ -45,8 +43,6 @@ module.exports = class Toolbar extends UI.Stack
         this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
         this.sheet.render()
         this.changed()
-        this.input = new Input({ noPointers: true })
-        this.input.on('keydown', this.keydown, this)
         this.stateSetup('toolbar')
     }
 

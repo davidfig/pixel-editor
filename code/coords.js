@@ -1,5 +1,4 @@
 const exists = require('exists')
-const Input = require('yy-input')
 const UI = require('../../components/ui')
 const State = require('./state')
 const Settings = require('./settings')
@@ -28,8 +27,6 @@ module.exports = class Coords extends UI.Window
         this.button.on('clicked', this.copy, this)
         this.changed()
         this.dice = this.addChild(new Dice())
-        this.input = new Input({ noPointers: true })
-        this.input.on('keydown', this.keydown, this)
         this.stateSetup('coords')
     }
 

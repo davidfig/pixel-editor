@@ -2,7 +2,6 @@ const RenderSheet = require('yy-rendersheet')
 const PIXI = require('pixi.js')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
-const Input = require('yy-input')
 
 const Sheet = require('./sheet')
 const UI = require('../../components/ui')
@@ -29,9 +28,6 @@ module.exports = class Draw extends UI.Window
         this.sprite = this.stuff.addChild(new PIXI.Container())
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
-        this.input = new Input({ noPointers: true })
-        this.input.on('keydown', this.keydown, this)
-        this.input.on('keyup', this.keyup, this)
         this.stateSetup('draw')
     }
 

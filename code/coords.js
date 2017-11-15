@@ -10,7 +10,7 @@ module.exports = class Coords extends UI.Window
     constructor()
     {
         super({ draggable: true, fit: true })
-        this.nameText = this.addChild(new UI.Text('', { place: 'top-center' }))
+        this.nameText = this.addChild(new UI.Text('', { place: 'top-center', theme: { spacing: 2 } }))
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameWidth.on('changed', this.changeFrameWidth, this)
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))

@@ -23,11 +23,10 @@ module.exports = class Palette extends UI.Window
     constructor()
     {
         Main = require('./main')
-        super({ clickable: true, draggable: true, resizeable: true, width: 100, height: 100 })
+        super({ draggable: true, resizeable: true, width: 100, height: 100 })
         this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
         this.palettes()
-        this.on('click', this.click, this)
         this.stateSetup('palette')
     }
 
@@ -110,7 +109,7 @@ module.exports = class Palette extends UI.Window
                 const extra = new PIXI.Sprite(PIXI.Texture.WHITE)
                 this.blocks.addChildAt(extra, this.blocks.children.indexOf(block))
                 extra.tint = color === 0 ? 0xffffff : 0
-                extra.width = extra.height = block.width + SPACING * 1
+                extra.width = extra.height = block.width + SPACING
                 extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
             }
             const fill = color === 0 ? 'white' : 'black'
@@ -127,7 +126,7 @@ module.exports = class Palette extends UI.Window
             {
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
                 block.width = block.height = width - SPACING
-                block.position.set(x * width, y * width + yStart)
+                block.position.set(SPACING / 2 + x * width, y * width + yStart)
                 block.tint = line[i]
                 if (line[i] === State.color)
                 {
@@ -202,30 +201,31 @@ module.exports = class Palette extends UI.Window
     }
 
 
-    click(e)
+    down(x, y, data)
     {
-        const point = e.data.global
+        const point = {x, y}
         if (this.foregroundColor.containsPoint(point) && !State.isForeground)
         {
             State.isForeground = true
-            this.dirty = true
-            return
+            this.layout()
+            return true
         }
         if (this.backgroundColor.containsPoint(point) && State.isForeground)
         {
             State.isForeground = false
-            this.dirty = true
-            return
+            this.layout()
+            return true
         }
         for (let block of this.blocks.children)
         {
             if (block.containsPoint(point))
             {
                 State.color = (block.isTransparent) ? null : block.tint
-                this.dirty = true
-                return
+                this.layout()
+                return true
             }
         }
+        super.down(x, y, data)
     }
 
     stateSetup(name)

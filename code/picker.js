@@ -40,7 +40,7 @@ module.exports = class Picker extends UI.Window
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
         this.hex = this.addChild(new UI.EditText(TinyColor(test).toHex(), { beforeText: '#', edit: 'hex', maxCount: 6, count: 6 }))
         this.hex.on('changed', this.changeHex, this)
-        const style = { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255 }
+        const style = { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right' }
         this.part = [
             this.addChild(new UI.EditText(rgb.r, style)),
             this.addChild(new UI.EditText(rgb.g, style)),

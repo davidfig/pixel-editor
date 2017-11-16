@@ -55,13 +55,14 @@ class PixelEditor extends Pixel
         if (typeof index !== 'undefined')
         {
             this.frames.splice(index, 0, add)
-            this.editor.frames.splice(index, 0, add)
+            this.editor.frames.splice(index, 0, { undo: [], redo: [] })
         }
         else
         {
             this.frames.push(add)
-            this.editor.frames.push(add)
+            this.editor.frames.push({ undo: [], redo: [] })
         }
+        this.save()
     }
 
     remove(index)

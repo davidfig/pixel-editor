@@ -90,16 +90,19 @@ function keydown(code, special)
     {
         switch (code)
         {
-            case 81:
+            case 81: // ctrl-q
                 remote.app.quit()
                 break
-            case 83:
+            case 83: // ctrl-s
                 saveFile()
                 break
-            case 79:
+            case 70: // ctrl-f
+                add()
+                break
+            case 79: // ctrl-o
                 openFile()
                 break
-            case 78:
+            case 78: // ctrl-n
                 newFile()
                 break
             case 191: // '/' to add to clipboard the data indexed by color
@@ -177,6 +180,11 @@ function remove()
     PixelEditor.remove(PixelEditor.current)
 }
 
+function add()
+{
+    PixelEditor.add()
+}
+
 module.exports = {
     isEditing,
     toggleWindow,
@@ -184,7 +192,8 @@ module.exports = {
     openFile,
     newFile,
     load,
-    remove
+    remove,
+    add
 }
 
 const font = new FontFaceObserver('bitmap')

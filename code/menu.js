@@ -82,7 +82,7 @@ function menu()
     append('F&rame', [
         ['&Duplicate (Ctrl-D)', 'duplicate'],
         ['D&elete', () => Main.remove()],
-        ['&New Frame', 'frame']
+        ['&New Frame (Ctrl-F)', () => Main.add()]
     ])
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template))
 }

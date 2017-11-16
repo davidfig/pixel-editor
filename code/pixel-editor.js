@@ -78,7 +78,7 @@ class PixelEditor extends Pixel
         if (index < this.frames.length)
         {
             const frame = this.frames[index]
-            this.frames.push({ width: frame.width, height: frame.height, data: frame.data })
+            this.frames.push({ width: frame.width, height: frame.height, data: frame.data.slice(0) })
             const editor = this.editor.frames[index]
             this.editor.frames.push({ undo: editor.undo, redo: editor.redo })
             this.save()

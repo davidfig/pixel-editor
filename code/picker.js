@@ -15,7 +15,7 @@ module.exports = class Picker extends UI.Window
 {
     constructor()
     {
-        super({ clickable: true, draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
+        super({ draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
         this.graphics = this.addChild(new PIXI.Graphics())
         this.wordsSetup()
         this.stateSetup('picker')
@@ -95,7 +95,7 @@ module.exports = class Picker extends UI.Window
 
     layout()
     {
-        this.size = (this.width / WIDTH) - (WIDTH + 1) * Settings.BORDER / WIDTH
+        this.size = this.right / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
         this.bottomY = this.bottom - this.hex.height - Settings.BORDER * 3 - this.part[0].height
         if (State.color === null)
@@ -183,38 +183,38 @@ module.exports = class Picker extends UI.Window
 
     down(x, y, data, notDown)
     {
-        let percent = y / (this.bottomY - Settings.BORDER)
+        const point = this.toLocal({ x, y })
+        let percent = point.y / (this.bottomY - Settings.BORDER)
         percent = percent < 0 ? 0 : percent
         percent = percent > 1 ? 1 : percent
-        if (x > Settings.BORDER && x < Settings.BORDER + this.size)
+        if (point.x > Settings.BORDER && point.x < Settings.BORDER + this.size)
         {
-            if (y > this.size * 2 + Settings.BORDER * 2 && y < this.size * 3 + Settings.BORDER * 2)
+            if (point.y > this.size * 2 + Settings.BORDER * 2 && point.y < this.size * 3 + Settings.BORDER * 2)
             {
                 this.hsl.s *= 0.9
             }
-            else if (y > this.size * 3 + Settings.BORDER * 3 && y < this.size * 4 + Settings.BORDER * 3)
+            else if (y > this.size * 3 + Settings.BORDER * 3 && point.y < this.size * 4 + Settings.BORDER * 3)
             {
                 this.hsl.s *= 1.1
             }
             else if (!notDown)
             {
-                super.down(x, y, data)
-                return
+                return super.down(x, y, data)
             }
         }
         else
         {
-            if (y < this.bottomY)
+            if (point.y < this.bottomY)
             {
-                if (x > Settings.BORDER * 2 + this.size && x < Settings.BORDER + this.size * 2)
+                if (point.x > Settings.BORDER * 2 + this.size && point.x < Settings.BORDER + this.size * 2)
                 {
                     this.hsl.h = percent * 360
                 }
-                else if (x > Settings.BORDER * 3 + this.size * 2 && x < Settings.BORDER * 3 + this.size * 3)
+                else if (point.x > Settings.BORDER * 3 + this.size * 2 && point.x < Settings.BORDER * 3 + this.size * 3)
                 {
                     this.hsl.s = percent
                 }
-                else if (x > Settings.BORDER * 4 + this.size * 3 && x < Settings.BORDER * 4 + this.size * 4)
+                else if (point.x > Settings.BORDER * 4 + this.size * 3 && point.x < Settings.BORDER * 4 + this.size * 4)
                 {
                     this.hsl.l = percent
                 }
@@ -245,8 +245,9 @@ module.exports = class Picker extends UI.Window
                 State.background = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
             }
         }
-        this.dirty = true
+        this.layout()
         this.isPicker = true
+        return true
     }
 
     move(x, y, data)
@@ -305,39 +306,3 @@ module.exports = class Picker extends UI.Window
         State.set(this.name, this.x, this.y, this.width, this.height)
     }
 }
-
-// function rgb(value)
-// {
-//     const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
-//     rgb.r = value.r || rgb.r
-//     rgb.g = value.g || rgb.g
-//     rgb.b = value.b || rgb.b
-//     const color = TinyColor(rgb).toHex()
-//     if (State..isForeground)
-//     {
-//         State..foreground = color
-//     }
-//     else
-//     {
-//         State..background = color
-//     }
-//     this.hsl = null
-//     this.dirty = true
-// }
-
-// function hex(value)
-// {
-//     const color = parseInt(value, 16)
-//     if (State.isForeground)
-//     {
-//         State.foreground = color
-//     }
-//     else
-//     {
-//         State..background = color
-//     }
-//     ipcRenderer.send('state')
-//     this.hsl = null
-//     draw()
-//     View.render()
-// }

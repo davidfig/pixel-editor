@@ -244,9 +244,9 @@ module.exports = class Palette extends UI.Window
             this.height = MIN_HEIGHT
         }
         this.on('drag-end', this.dragged, this)
-        State.on('foreground', () => this.dirty = true)
-        State.on('background', () => this.dirty = true)
-        PixelEditor.on('changed', () => this.dirty = true)
+        State.on('foreground', this.layout, this)
+        State.on('background', this.layout, this)
+        PixelEditor.on('changed', this.layout, this)
     }
 
     dragged()

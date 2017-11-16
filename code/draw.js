@@ -557,7 +557,7 @@ module.exports = class Draw extends UI.Window
                     break
                 case 32: // space
                     this.space()
-                    this.spacing = true
+                    this.spacingOn = true
                     this.lastX = State.cursorX
                     this.lastY = State.cursorY
                     break
@@ -570,7 +570,7 @@ module.exports = class Draw extends UI.Window
                 case 8:
                     this.clearBox()
             }
-            if (this.spacing)
+            if (this.spacingOn)
             {
                 if (State.cursorX !== this.lastX || State.cursorY !== this.lastY)
                 {
@@ -582,11 +582,11 @@ module.exports = class Draw extends UI.Window
 
     keyup(code)
     {
-        if (this.spacing)
+        if (this.spacingOn)
         {
             if (code === 32)
             {
-                this.spacing = false
+                this.spacingOn = false
             }
         }
     }

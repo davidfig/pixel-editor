@@ -192,7 +192,14 @@ class PixelEditor extends Pixel
     }
     get(x, y)
     {
-        return this.data[x + y * this.width]
+        if (x >= 0 && y >= 0 && x < this.width && y < this.height)
+        {
+            return this.data[x + y * this.width]
+        }
+        else
+        {
+            return null
+        }
     }
 
     get data()
@@ -248,6 +255,62 @@ class PixelEditor extends Pixel
             }
             this.frames[this.editor.current].data = data
             this.frames[this.editor.current].width = value
+            this.save()
+        }
+    }
+
+    adjustWidth(width, align)
+    {
+        if (this.width !== width)
+        {
+            let start = 0
+            if (align === 'center')
+            {
+                start = Math.floor(this.width / 2) - Math.floor(width / 2)
+            }
+            else if (align === 'right')
+            {
+                start = this.width - width
+            }
+            this.undoSave()
+            const data = []
+            for (let y = 0; y < this.height; y++)
+            {
+                for (let x = start; x < width + start; x++)
+                {
+                    data[x - start + y * width] = this.get(x, y)
+                }
+            }
+            this.frames[this.editor.current].data = data
+            this.frames[this.editor.current].width = width
+            this.save()
+        }
+    }
+
+    adjustHeight(height, align)
+    {
+        if (this.height !== height)
+        {
+            let start = 0
+            if (align === 'center')
+            {
+                start = Math.floor(this.height / 2) - Math.floor(height / 2)
+            }
+            else if (align === 'bottom')
+            {
+                start = this.height - height
+            }
+            this.undoSave()
+            const data = []
+            for (let y = start; y < height + start; y++)
+            {
+                for (let x = 0; x < this.width; x++)
+                {
+                    data[x + (y - start) * this.width] = this.get(x, y)
+                }
+            }
+            this.frames[this.editor.current].data = data
+            this.frames[this.editor.current].height = height
             this.save()
         }
     }

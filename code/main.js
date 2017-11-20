@@ -67,8 +67,6 @@ function update(elapsed)
 
 function keydown(code, special)
 {
-    if (ui.editing) return
-
     // reload on ctrl-r key (should be disabled when not debugging)
     if (special.ctrl && code === 82) window.location.reload()
 

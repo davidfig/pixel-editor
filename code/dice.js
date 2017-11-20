@@ -11,7 +11,7 @@ module.exports = class Dice extends UI.Window
 {
     constructor()
     {
-        super({ width: DICE, height: DICE, clickable: true, theme: { 'background-color': '#eeeeee', 'spacing': 2 }})
+        super({ width: DICE, height: DICE, theme: { 'background-color': '#eeeeee', 'spacing': 2 }})
         this.dice = []
         for (let i = 0; i < 5; i++)
         {
@@ -20,12 +20,12 @@ module.exports = class Dice extends UI.Window
             dice.width = dice.height = SIZE
             this.dice.push(dice)
         }
-        this.on('click', this.clicked, this)
         State.on('relative', this.layout, this)
+        this.draw()
         this.layout()
     }
 
-    layout()
+    draw()
     {
         const border = SIZE
         this.dice[0].position.set(border, border)
@@ -46,14 +46,14 @@ module.exports = class Dice extends UI.Window
             case 'bottom-right': this.dice[4].tint = DICE_COLOR[1]; break
         }
         this.dirty = true
-        super.layout()
     }
 
-    clicked(e)
+    down(x, y)
     {
+        const point = {x, y}
         for (let i = 0; i < this.dice.length; i++)
         {
-            if (this.dice[i].containsPoint(e.data.global))
+            if (this.dice[i].containsPoint(point))
             {
                 switch (i)
                 {
@@ -63,7 +63,7 @@ module.exports = class Dice extends UI.Window
                     case 3: State.relative = 'bottom-left'; break
                     case 4: State.relative = 'bottom-right'; break
                 }
-                this.dirty = true
+                this.draw()
             }
         }
     }

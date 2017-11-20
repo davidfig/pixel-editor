@@ -108,13 +108,39 @@ module.exports = class Coords extends UI.Window
     changeFrameWidth()
     {
         const width = parseInt(this.frameWidth.text)
-        PixelEditor.width = width
+        let relative
+        if (State.relative.indexOf('center') !== -1)
+        {
+            relative = 'center'
+        }
+        else if (State.relative.indexOf('right') !== -1)
+        {
+            relative = 'right'
+        }
+        else
+        {
+            relative = 'left'
+        }
+        PixelEditor.adjustWidth(width, relative)
     }
 
     changeFrameHeight()
     {
         const height = parseInt(this.frameHeight.text)
-        PixelEditor.height = height
+        let relative
+        if (State.relative.indexOf('center') !== -1)
+        {
+            relative = 'center'
+        }
+        else if (State.relative.indexOf('bottom') !== -1)
+        {
+            relative = 'bottom'
+        }
+        else
+        {
+            relative = 'top'
+        }
+        PixelEditor.adjustHeight(height, relative)
     }
 
     changeCursorX()

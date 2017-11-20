@@ -80,13 +80,14 @@ function menu()
         ['&Editor', 'draw'],
     ])
     append('F&rame', [
-        ['&Duplicate (Ctrl-D)', () => Main.duplicate()],
+        ['&Duplicate (Ctrl-d)', () => Main.duplicate()],
         ['D&elete', () => Main.remove()],
-        ['&New Frame (Ctrl-F)', () => Main.add()],
+        ['&New Frame (Ctrl-f)', () => Main.add()],
         ['separator'],
-        ['&Rotate Frame', () => Main.rotate()],
-        ['Flip &Horizontal', () => Main.flipHorizontal()],
-        ['Flip &Vertical', () => Main.flipVertical()]
+        ['&Rotate Frame (Ctrl-.)', () => Main.rotate()],
+        ['&Rotate Frame (Ctrl-,)', () => Main.rotate(true)],
+        ['Flip &Horizontal (Ctrl-h)', () => Main.flipHorizontal()],
+        ['Flip &Vertical (Ctrl-b)', () => Main.flipVertical()]
     ])
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template))
 }

@@ -106,8 +106,21 @@ function keydown(code, special)
             case 191: // '/' to add to clipboard the data indexed by color
                 ClipBoard.writeText(PixelEditor.export())
                 break
+            case 188: // ,
+                rotate(true)
+                break
+            case 190: // .
+                rotate()
+                break
+            case 72: // h
+                flipHorizontal()
+                break
+            case 66: // b
+                flipVertical()
+                break
         }
     }
+    // console.log(code)
 }
 
 function isEditing()
@@ -188,9 +201,9 @@ function duplicate()
     PixelEditor.duplicate()
 }
 
-function rotate()
+function rotate(reverse)
 {
-    PixelEditor.rotate()
+    PixelEditor.rotate(reverse)
 }
 
 function flipHorizontal()

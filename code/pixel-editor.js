@@ -113,16 +113,16 @@ class PixelEditor extends Pixel
         }
     }
 
-    rotate()
+    rotate(reverse)
     {
         this.undoSave()
         const data = []
         for (let y = 0; y < this.height; y++)
         {
-            const x2 = this.height - y - 1
+            const x2 = (reverse) ? y : this.height - y - 1
             for (let x = 0; x < this.width; x++)
             {
-                const y2 = x * this.height
+                const y2 = (reverse) ? (this.width - x - 1) * this.height : x * this.height
                 data[x2 + y2] = this.get(x, y)
             }
         }

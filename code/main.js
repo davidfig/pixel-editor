@@ -17,7 +17,7 @@ const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
 
-let renderer, ui, input, loading = 2, windows = {}
+let renderer, ui, loading = 2, windows = {}
 
 function afterLoad()
 {
@@ -185,6 +185,26 @@ function add()
     PixelEditor.add()
 }
 
+function duplicate()
+{
+    PixelEditor.duplicate()
+}
+
+function rotate()
+{
+    PixelEditor.rotate()
+}
+
+function flipHorizontal()
+{
+    PixelEditor.flipHorizontal()
+}
+
+function flipVertical()
+{
+    PixelEditor.flipVertical()
+}
+
 module.exports = {
     isEditing,
     toggleWindow,
@@ -193,7 +213,11 @@ module.exports = {
     newFile,
     load,
     remove,
-    add
+    add,
+    duplicate,
+    rotate,
+    flipHorizontal,
+    flipVertical
 }
 
 const font = new FontFaceObserver('bitmap')

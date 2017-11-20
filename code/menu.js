@@ -60,7 +60,7 @@ function menu()
     append('&Edit', [
         ['&Copy (Ctrl-C)'],
         ['C&ut (Ctrl-X)'],
-        ['&Paste (Ctrl-V)'],
+        ['&Paste (Ctrl-V)']
     ])
     append('&Tools', [
         ['&Paint (B)', () => State.tool = 'paint'],
@@ -80,9 +80,13 @@ function menu()
         ['&Editor', 'draw'],
     ])
     append('F&rame', [
-        ['&Duplicate (Ctrl-D)', 'duplicate'],
+        ['&Duplicate (Ctrl-D)', () => Main.duplicate()],
         ['D&elete', () => Main.remove()],
-        ['&New Frame (Ctrl-F)', () => Main.add()]
+        ['&New Frame (Ctrl-F)', () => Main.add()],
+        ['separator'],
+        ['&Rotate Frame', () => Main.rotate()],
+        ['Flip &Horizontal', () => Main.flipHorizontal()],
+        ['Flip &Vertical', () => Main.flipVertical()]
     ])
     Menu.setApplicationMenu(Menu.buildFromTemplate(_template))
 }

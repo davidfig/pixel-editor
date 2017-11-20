@@ -498,7 +498,6 @@ module.exports = class Draw extends UI.Window
 
     keydown(code, special)
     {
-        if (Main.isEditing()) return
         this.shift = special.shift
         if (special.ctrl)
         {

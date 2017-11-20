@@ -34,7 +34,7 @@ class PixelEditor extends Pixel
             while (fs.existsSync(filename))
             this.filename = filename
             this.name = path.basename(filename, '.json')
-            this.editor = { current: 0, frames: [{ undo: [], redo: [] }] }
+            this.editor = { zoom: 10, current: 0, frames: [{ undo: [], redo: [] }] }
             this.save()
         }
         else
@@ -369,6 +369,16 @@ class PixelEditor extends Pixel
         this.save()
     }
 
+    get zoom()
+    {
+        return this.editor.zoom
+    }
+    set zoom(value)
+    {
+        this.editor.zoom = value
+        this.save()
+    }
+
     undoSave()
     {
         while (this.undo.length > 10000)
@@ -429,6 +439,7 @@ class PixelEditor extends Pixel
         {
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
             this.editor.current = 0
+            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : 10
         }
         catch (e)
         {
@@ -439,6 +450,7 @@ class PixelEditor extends Pixel
                 this.editor.frames.push({ undo: [], redo: [] })
             }
             this.editor.current = 0
+            this.editor.zoom = 10
             this.save()
         }
         this.emit('changed')

@@ -21,6 +21,9 @@ module.exports = class Show extends UI.Window
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []
         this.stateSetup('show')
+        this.zoom = this.windowGraphics.addChild(new UI.EditText(PixelEditor.zoom, { beforeText: 'zoom: ', count: 2 }))
+        this.zoom.position.set(10, -this.zoom.height + this.get('shadow-size'))
+        this.zoom.on('changed', () => PixelEditor.zoom = parseInt(this.zoom.text))
     }
 
     measure()
@@ -42,10 +45,17 @@ module.exports = class Show extends UI.Window
         this.pixels.removeChildren()
         this.buttons = []
         const data = PixelEditor.getData()
-        const scale = this.measure()
-        let xStart = Settings.BORDER, yStart = Settings.BORDER
+        const scale = PixelEditor.zoom
+        let xStart = 0, yStart = 0
+        let biggest = 0
         for (let i = 0; i < PixelEditor.frames.length; i++)
         {
+            if (xStart + scale * PixelEditor.width > this.width - Settings.BORDER * 2)
+            {
+                yStart += biggest
+                xStart = 0
+                biggest = 0
+            }
             if (i === PixelEditor.current && PixelEditor.frames.length > 1)
             {
                 this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
@@ -53,7 +63,6 @@ module.exports = class Show extends UI.Window
                 this.selector.position.set(xStart, yStart)
                 this.selector.width = scale * PixelEditor.width
                 this.selector.height = scale * PixelEditor.height
-                // _name.innerHTML = i
             }
             const pixel = this.pixels.addChild(new Pixel(data, sheet))
             sheet.render()
@@ -61,11 +70,13 @@ module.exports = class Show extends UI.Window
             pixel.frame(i)
             pixel.current = i
             pixel.position.set(xStart, yStart)
-            const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
-            number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
+            // const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
+            // number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += pixel.width
+            biggest = scale * PixelEditor.height > biggest ? scale * PixelEditor.height : biggest
         }
+
         super.layout()
     }
 

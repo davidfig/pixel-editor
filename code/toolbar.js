@@ -85,7 +85,6 @@ module.exports = class Toolbar extends UI.Stack
 
     keydown(code, special)
     {
-        if (Main.isEditing()) return
         if (!special.ctrl && !special.shift && !special.alt)
         {
             switch (code)

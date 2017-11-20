@@ -123,12 +123,6 @@ function keydown(code, special)
     // console.log(code)
 }
 
-function isEditing()
-{
-    return ui.editing
-}
-
-
 function toggleWindow(name)
 {
     windows[name].visible = !windows[name].visible
@@ -217,7 +211,6 @@ function flipVertical()
 }
 
 module.exports = {
-    isEditing,
     toggleWindow,
     saveFile,
     openFile,

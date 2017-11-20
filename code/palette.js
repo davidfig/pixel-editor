@@ -256,7 +256,6 @@ module.exports = class Palette extends UI.Window
 
     keydown(code, special)
     {
-        if (Main.isEditing()) return
         if (!special.ctrl && !special.alt && !special.shift)
         {
             switch (code)

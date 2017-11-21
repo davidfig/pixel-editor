@@ -56,11 +56,13 @@ class PixelEditor extends Pixel
         {
             this.frames.splice(index, 0, add)
             this.editor.frames.splice(index, 0, { undo: [], redo: [] })
+            this.current = index
         }
         else
         {
             this.frames.push(add)
             this.editor.frames.push({ undo: [], redo: [] })
+            this.current = this.frames.length - 1
         }
         this.save()
     }
@@ -82,6 +84,7 @@ class PixelEditor extends Pixel
             this.frames.push({ width: frame.width, height: frame.height, data: frame.data.slice(0) })
             const editor = this.editor.frames[index]
             this.editor.frames.push({ undo: editor.undo, redo: editor.redo })
+            this.current = this.frames.length - 1
             this.save()
         }
     }
@@ -95,6 +98,11 @@ class PixelEditor extends Pixel
             this.current = (index < this.frames.length) ? index : 0
             this.save()
         }
+    }
+
+    get count()
+    {
+        return this.frames.length
     }
 
     move(index, newIndex)

@@ -25,6 +25,8 @@ module.exports = class Coords extends UI.Window
         this.cursorHeight.on('changed', () => State.cursorSizeY = parseInt(this.cursorHeight.text))
         this.button = this.addChild(new UI.Button({ text: 'c' }))
         this.button.on('clicked', this.copy, this)
+        this.zoom = this.addChild(new UI.EditText(PixelEditor.zoom, { beforeText: 'zoom: ', count: 2 }))
+        this.zoom.on('changed', () => PixelEditor.zoom = parseInt(this.zoom.text))
         this.changed()
         this.dice = this.addChild(new Dice())
         this.stateSetup('coords')
@@ -49,6 +51,7 @@ module.exports = class Coords extends UI.Window
         this.cursorWidth.position.set(0, y)
         this.cursorHeight.position.set(width  - this.cursorHeight.width, y)
         y += this.cursorWidth.height + Settings.BORDER
+        this.zoom.position.set(center - this.zoom.width / 2, y)
         super.layout()
     }
 

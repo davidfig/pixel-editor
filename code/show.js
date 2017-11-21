@@ -21,9 +21,6 @@ module.exports = class Show extends UI.Window
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []
         this.stateSetup('show')
-        this.zoom = this.windowGraphics.addChild(new UI.EditText(PixelEditor.zoom, { beforeText: 'zoom: ', count: 2 }))
-        this.zoom.position.set(10, -this.zoom.height + this.get('shadow-size'))
-        this.zoom.on('changed', () => PixelEditor.zoom = parseInt(this.zoom.text))
     }
 
     measure()
@@ -70,13 +67,15 @@ module.exports = class Show extends UI.Window
             pixel.frame(i)
             pixel.current = i
             pixel.position.set(xStart, yStart)
-            // const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
-            // number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
+            const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
+            number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
+            number.position.set(xStart + pixel.width - number.width, yStart)
+            number.alpha = 0.25
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += pixel.width
             biggest = scale * PixelEditor.height > biggest ? scale * PixelEditor.height : biggest
         }
-
+        this.dirty = true
         super.layout()
     }
 
@@ -90,12 +89,11 @@ module.exports = class Show extends UI.Window
                 if (PixelEditor.current !== button.current)
                 {
                     PixelEditor.current = button.current
-                    // _name.innerHTML = button.current
                     this.layout()
                 }
                 const pixel = this.buttons[button.current].pixel
                 this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
-                return
+                return true
             }
         }
         super.down(x, y, data)
@@ -157,15 +155,15 @@ module.exports = class Show extends UI.Window
     {
         if (this.dragging)
         {
-            if (this.dragging.drop)
-            {
-                if (this.dragging.drop !== this.dragging.current)
-                {
-                    PixelEditor.move(this.dragging.current, this.dragging.drop)
-                }
-            }
+            // if (this.dragging.drop)
+            // {
+            //     if (this.dragging.drop !== this.dragging.current)
+            //     {
+            //         PixelEditor.move(this.dragging.current, this.dragging.drop)
+            //     }
+            // }
             this.dragging = null
-            this.dirty = true
+            this.layout()
         }
         else
         {

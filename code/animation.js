@@ -1,7 +1,6 @@
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
-// const Pixel = require('yy-pixel').Pixel
-const Pixel = require('../../components/pixel/pixel')
+const Pixel = require('yy-pixel')
 const exists = require('exists')
 const Loop = require('yy-loop')
 
@@ -17,7 +16,7 @@ module.exports = class Show extends UI.Window
 {
     constructor()
     {
-        super({ clickable: true, draggable: true, resizeable: true })
+        super({ draggable: true, resizeable: true })
         this.buttons = this.addChild(new PIXI.Container())
         this.pixels = this.addChild(new PIXI.Container())
         this.timeText = this.addChild(new UI.EditText(150, { beforeText: 'time: ', count: 4, edit: 'number' }))
@@ -33,20 +32,6 @@ module.exports = class Show extends UI.Window
     {
         this.drawButtons()
         this.drawAnimation()
-    }
-
-    measure()
-    {
-        let width = 0, height = 0
-        for (let frame of PixelEditor.frames)
-        {
-            width = frame.width > width ? frame.width : width
-            height = frame.height > height ? frame.height : height
-        }
-        this.maxHeight = height
-        const scaleX = (this.width - Settings.BORDER * 2) / width
-        const scaleY = (this.height - Settings.BORDER * 2 - this.maxY - this.timeText.height - Settings.BORDER * 2) / height
-        return Math.min(scaleX, scaleY)
     }
 
     drawAnimation()

@@ -184,7 +184,7 @@ module.exports = class Palette extends UI.Window
         {
             for (let color of frame.data)
             {
-                if (color !== null && !this.findColor(color))
+                if (color !== null && color !== 0xffffff && color !== 0 && !this.findColor(color))
                 {
                     this.colors[0].push(color)
                 }

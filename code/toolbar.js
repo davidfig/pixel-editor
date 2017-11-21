@@ -1,12 +1,10 @@
 const exists = require('exists')
 const PIXI = require('pixi.js')
-// const RenderSheet = require('yy-rendersheet')
-const RenderSheet = require('../../components/rendersheet')
+const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
 
 const UI = require('../../components/ui')
 const State = require('./state')
-let Main
 
 const SELECT = require('../images/select.json')
 const PEN = require('../images/paint.json')
@@ -21,7 +19,6 @@ module.exports = class Toolbar extends UI.Stack
 {
     constructor()
     {
-        Main = require('./main')
         super({ draggable: true, fit: true, transparent: false, theme: { spacing: 10, between: 5 } })
         this.buttons = []
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })

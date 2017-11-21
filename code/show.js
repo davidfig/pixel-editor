@@ -17,7 +17,7 @@ module.exports = class Show extends UI.Window
 {
     constructor()
     {
-        super({ clickable: true, draggable: true, resizeable: true })
+        super({ draggable: true, resizeable: true, overflow: 'y' })
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []
         this.stateSetup('show')
@@ -75,7 +75,6 @@ module.exports = class Show extends UI.Window
             xStart += pixel.width
             biggest = scale * PixelEditor.height > biggest ? scale * PixelEditor.height : biggest
         }
-        this.dirty = true
         super.layout()
     }
 

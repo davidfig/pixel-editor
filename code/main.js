@@ -52,7 +52,7 @@ function create()
     windows.palette = ui.addChild(new Palette())
     windows.picker = ui.addChild(new Picker())
     windows.coords = ui.addChild(new Coords())
-    // windows.animation = ui.addChild(new Animation())
+    windows.animation = ui.addChild(new Animation())
 
     ui.addListener('keydown', keydown)
 }

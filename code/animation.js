@@ -1,6 +1,6 @@
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
-const Pixel = require('yy-pixel')
+const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
@@ -12,72 +12,82 @@ const Settings = require('./settings')
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
 
-module.exports = class Show extends UI.Window
+const BUTTONS = require('../images/animation.json')
+
+module.exports = class Animation extends UI.Window
 {
     constructor()
     {
         super({ draggable: true, resizeable: true })
         this.buttons = this.addChild(new PIXI.Container())
-        this.pixels = this.addChild(new PIXI.Container())
-        this.timeText = this.addChild(new UI.EditText(150, { beforeText: 'time: ', count: 4, edit: 'number' }))
-        this.stateSetup('animation')
         this.numbers = [true]
         this.current = 0
         this.time = 0
         this.loop = new Loop({ pauseOnBlur: true })
         this.loop.interval(this.update.bind(this))
+        this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
+        Pixel.add(BUTTONS, this.sheet)
+        this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-1') }))
+        this.play.sprite.anchor.set(0)
+        this.play.sprite.scale.set(2)
+        this.play.on('pressed', this.change, this)
+        this.playing = true
+        this.animationName = this.addChild(new UI.EditText('Animation Name'))
+        this.animationName.on('editing', this.showNames, this)
+        this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
+        this.sheet.render()
+        this.stateSetup('animation')
+        this.layout()
     }
 
-    draw()
+    layout()
     {
-        this.drawButtons()
         this.drawAnimation()
+        this.drawPlay()
+        super.layout()
+    }
+
+    change()
+    {
+        if (this.playing)
+        {
+            this.playing = false
+            this.play.sprite.texture = this.sheet.getTexture('animation-0')
+        }
+        else
+        {
+            this.playing = true
+            this.play.sprite.texture = this.sheet.getTexture('animation-1')
+        }
+        this.dirty = true
     }
 
     drawAnimation()
     {
         const sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
-        this.pixels.removeChildren()
-        this.pixel = this.pixels.addChild(new Pixel(PixelEditor.getData(), sheet))
-        this.pixel.anchor.set(0.5)
+        if (this.pixel)
+        {
+            this.pixel.destroy()
+        }
+        this.pixel = this.addChild(new Pixel(PixelEditor.getData(), sheet))
         sheet.render()
-        const scale = this.measure()
-        this.pixel.scale.set(scale * 5)
+        this.pixel.scale.set(PixelEditor.zoom)
         this.pixel.frame(0)
-        this.pixel.position.set(this.width / 2, this.maxHeight * scale / 2 + Settings.BORDER)
-        this.buttons.y = this.pixel.y + this.maxHeight * scale / 2 + Settings.BORDER
-        this.timeText.position.set(this.width / 2 - this.timeText.width / 2, this.buttons.y + this.maxY)
+        this.pixel.position.set(0, 0)
     }
 
-    drawButtons()
+    drawPlay()
     {
-        this.buttons.removeChildren()
-        const pad = 3
-        for (let i = 0; i < PixelEditor.frames.length; i++)
-        {
-            const number = this.buttons.addChild(new UI.Button({ text: i, textOptions: { 'theme': {'font-size': '1.5em' }}, theme: { 'text-padding-left': pad, 'text-padding-right': pad, 'text-padding-top': pad, 'text-padding-bottom': pad } }))
-            if (this.numbers[i])
-            {
-                number.select = true
-            }
-            number.on('click', () => { number.select = !number.select; this.numbers[i] = number.select })
-        }
-        const spacing = 5
-        this.maxY = 0
-        let x = Settings.BORDER, y = Settings.BORDER
-        for (let button of this.buttons.children)
-        {
-            if (x + button.width > this.width - Settings.BORDER)
-            {
-                x = Settings.BORDER
-                y += button.height + Settings.BORDER
-            }
-            button.position.set(x, y)
-            x += button.width + spacing
-            button.visible = y + button.height <= this.height - Settings.BORDER
-            this.maxY = y + button.height + Settings.BORDER > this.maxY ? y + button.height + Settings.BORDER : this.maxY
-        }
-        super.draw()
+        this.play.position.set(this.right - this.play.width, 0)
+        this.animationName.y = PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
+        this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
+        this.animationText.width = this.right
+        this.animationText.height = this.animationName.height
+    }
+
+    showNames()
+    {
+
     }
 
     stateSetup(name)
@@ -97,8 +107,8 @@ module.exports = class Show extends UI.Window
         }
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', () => this.dirty = true)
-        State.on('last-file', () => this.dirty = true)
+        PixelEditor.on('changed', this.layout, this)
+        State.on('last-file', this.layout, this)
     }
 
     dragged()
@@ -113,7 +123,7 @@ module.exports = class Show extends UI.Window
             if (!this.pixel.stop)
             {
                 this.pixel.update(elapsed)
-                this.dirtyRenderer = true
+                this.dirty = true
             }
         }
     }

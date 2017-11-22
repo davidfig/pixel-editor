@@ -55,6 +55,12 @@ module.exports = class Draw extends UI.Window
         super.layout()
     }
 
+    change()
+    {
+        PixelEditor.save()
+        pixelSheet.render()
+    }
+
     transparency()
     {
         this.blocks.removeChildren()
@@ -638,7 +644,7 @@ module.exports = class Draw extends UI.Window
     cut()
     {
         this.copy(true)
-        PixelEditor.save()
+        this.change()
     }
 
     copy(clear)
@@ -719,7 +725,7 @@ module.exports = class Draw extends UI.Window
                 }
                 break
         }
-        PixelEditor.save()
+        this.change()
     }
 
     paste()
@@ -735,7 +741,7 @@ module.exports = class Draw extends UI.Window
                     PixelEditor.set(x + State.cursorX, y + State.cursorY, this.clipboard.data[i++], true)
                 }
             }
-            PixelEditor.save()
+            this.change()
         }
     }
 
@@ -748,7 +754,8 @@ module.exports = class Draw extends UI.Window
                 {
                     const current = PixelEditor.get(State.cursorX, State.cursorY)
                     const color = (current !== State.foreground) ? State.foreground : State.background
-                    PixelEditor.set(State.cursorX, State.cursorY, color)
+                    PixelEditor.set(State.cursorX, State.cursorY, color, true)
+                    this.change()
                     return color
                 }
                 else
@@ -781,7 +788,7 @@ module.exports = class Draw extends UI.Window
                             PixelEditor.set(x, y, color, true)
                         }
                     }
-                    PixelEditor.save()
+                    this.change()
                 }
                 break
 
@@ -797,7 +804,7 @@ module.exports = class Draw extends UI.Window
                         PixelEditor.set(block.x, block.y, color, true)
                     }
                 }
-                PixelEditor.save()
+                pixelSheet.render(true)
                 break
 
             case 'line':
@@ -806,7 +813,7 @@ module.exports = class Draw extends UI.Window
             case 'fill':
                 PixelEditor.undoSave()
                 this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
-                PixelEditor.save()
+                this.change()
                 break
         }
     }

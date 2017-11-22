@@ -68,6 +68,7 @@ class PixelEditor extends Pixel
             this.current = this.frames.length - 1
         }
         this.save()
+        sheet.render()
     }
 
     remove(index)
@@ -89,6 +90,7 @@ class PixelEditor extends Pixel
             this.editor.frames.push({ undo: editor.undo, redo: editor.redo })
             this.current = this.frames.length - 1
             this.save()
+            sheet.render()
         }
     }
 
@@ -411,6 +413,7 @@ class PixelEditor extends Pixel
             this.frames[this.editor.current].height = undo.height
             this.frames[this.editor.current].data = undo.data
             this.save()
+            sheet.render()
         }
     }
 
@@ -424,6 +427,7 @@ class PixelEditor extends Pixel
             this.frames[this.editor.current].data = redo.data
             this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
             this.save()
+            sheet.render()
         }
     }
 

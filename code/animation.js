@@ -1,6 +1,6 @@
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
-const Pixel = require('yy-pixel').Pixel
+const Pixel = require('../../components/pixel').Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
@@ -31,12 +31,19 @@ module.exports = class Animation extends UI.Window
         this.play.sprite.anchor.set(0)
         this.play.sprite.scale.set(2)
         this.play.on('pressed', this.change, this)
+        this.play.disabled = true
         this.playing = false
         this.animationName = this.addChild(new UI.EditText('animation name...'))
         this.animationName.on('editing', this.showNames, this)
         this.animationName.on('changed', this.changeName, this)
         this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
+        this.animationText.on('changed', this.changeText, this)
         this.animationText.disabled = true
+        this.animationError = this.addChild(new UI.Text(''))
+        this.animationError['foreground-color'] = '#ff0000'
+        this.list = this.special.addChild(new UI.List({ transparent: false, theme: { between: 0, spacing: 2 } }))
+        this.list.visible = false
+        this.list.on('select', this.select, this)
         this.sheet.render()
         this.stateSetup('animation')
         this.layout()
@@ -55,11 +62,13 @@ module.exports = class Animation extends UI.Window
         {
             this.playing = false
             this.play.sprite.texture = this.sheet.getTexture('animation-0')
+            this.pixel.stop()
         }
         else
         {
             this.playing = true
             this.play.sprite.texture = this.sheet.getTexture('animation-1')
+            this.pixel.animate(this.animationName.text)
         }
         this.dirty = true
     }
@@ -68,18 +77,60 @@ module.exports = class Animation extends UI.Window
     {
         const animations = PixelEditor.animations
         const name = this.animationName.text
-        if (!name)
+        if (!name || name === 'animation name...')
         {
             return
         }
         if (!animations[name])
         {
             animations[name] = []
-            // PixelEditor.save()
+            PixelEditor.save()
         }
         else
         {
+            const text = JSON.stringify(animations[name])
+            this.animationText.text = text.substring(1, text.length - 1)
+        }
+        this.play.disabled = false
+        this.animationText.disabled = false
+        this.list.visible = false
+    }
 
+    select(item)
+    {
+        const name = item.text
+        if (!name || name === 'animation name...')
+        {
+            this.list.visible = false
+            return
+        }
+        this.animationName.text = name
+        const text = JSON.stringify(PixelEditor.animations[name])
+        this.animationText.text = text.substring(1, text.length - 1)
+        this.play.disabled = false
+        this.animationText.disabled = false
+        this.list.visible = false
+    }
+
+    changeText()
+    {
+        const animations = PixelEditor.animations
+        const name = this.animationName.text
+        try
+        {
+            const data = JSON.parse('[' + this.animationText.text + ']')
+            animations[name] = data
+            this.animationError.text = ''
+            this.animationText['foreground-color'] = '0'
+            this.animationText.layout()
+            PixelEditor.save()
+        }
+        catch (e)
+        {
+            this.animationError.text = e.message
+            this.animationText['foreground-color'] = '#ff0000'
+            this.animationText.layout()
+            this.play.disabled = true
         }
     }
 
@@ -102,13 +153,25 @@ module.exports = class Animation extends UI.Window
         this.play.position.set(this.right - this.play.width, 0)
         this.animationName.y = PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
         this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
-        this.animationText.width = this.right
-        this.animationText.height = this.animationName.height
+        this.animationText.width = this.animationError.width = this.right
+        this.animationText.height = this.animationText.height = this.animationName.height
+        this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
+        this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
+        this.list.x = this.get('spacing')
     }
 
     showNames()
     {
-
+        const animations = PixelEditor.animations
+        if (Object.keys(animations).length)
+        {
+            this.list.visible = true
+            this.list.clear()
+            for (let key in animations)
+            {
+                this.list.add(new UI.Text(key))
+            }
+        }
     }
 
     stateSetup(name)
@@ -141,9 +204,8 @@ module.exports = class Animation extends UI.Window
     {
         if (this.pixel)
         {
-            if (this.pixel.playing)
+            if (this.pixel.playing && this.pixel.update(elapsed))
             {
-                this.pixel.update(elapsed)
                 this.dirty = true
             }
         }

@@ -1,4 +1,3 @@
-const RenderSheet = require('yy-rendersheet')
 const PIXI = require('pixi.js')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
@@ -7,7 +6,7 @@ const Sheet = require('./sheet')
 const UI = require('../../components/ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
-let Main
+const pixelSheet = require('./pixel-sheet')
 
 const CURSOR_COLOR = 0xff0000
 const SHAPE_HOVER_ALPHA = 1
@@ -21,8 +20,7 @@ module.exports = class Draw extends UI.Window
 {
     constructor()
     {
-        Main = require('./main')
-        super({ clickable: true, draggable: true, resizeable: true })
+        super({ draggable: true, resizeable: true })
         this.stuff = this.addChild(new PIXI.Container())
         this.blocks = this.stuff.addChild(new PIXI.Container())
         this.sprite = this.stuff.addChild(new PIXI.Container())
@@ -47,13 +45,9 @@ module.exports = class Draw extends UI.Window
         }
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeX > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-
-        this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST})
         this.sprite.removeChildren()
-        const pixel = this.sprite.addChild(new Pixel(PixelEditor.getData(), this.sheet))
+        const pixel = this.sprite.addChild(new Pixel(PixelEditor.getData(), pixelSheet))
         pixel.scale.set(this.zoom)
-        pixel.render(true)
-        this.sheet.render()
         pixel.frame(PixelEditor.current)
         this.transparency()
         this.frame()

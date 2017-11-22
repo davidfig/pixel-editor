@@ -5,6 +5,8 @@ const path = require('path')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 
+const sheet = require('./pixel-sheet')
+
 const DEFAULT = [15, 15]
 
 class PixelEditor extends Pixel
@@ -12,6 +14,7 @@ class PixelEditor extends Pixel
     constructor(filename)
     {
         super()
+        this.sheet = sheet
         this.create(filename)
     }
 
@@ -437,6 +440,8 @@ class PixelEditor extends Pixel
             this.frames = load.frames
             this.animations = load.animations
             this.name = load.name
+            this.render(true)
+            sheet.render()
         }
         catch (e)
         {

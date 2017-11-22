@@ -1,8 +1,8 @@
 const PIXI = require('pixi.js')
-const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 
+const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
 const UI = require('../../components/ui')
 const State = require('./state')
@@ -38,7 +38,6 @@ module.exports = class Show extends UI.Window
 
     layout()
     {
-        const sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         this.pixels.removeChildren()
         this.buttons = []
         const data = PixelEditor.getData()
@@ -62,7 +61,6 @@ module.exports = class Show extends UI.Window
                 this.selector.height = scale * PixelEditor.height
             }
             const pixel = this.pixels.addChild(new Pixel(data, sheet))
-            sheet.render()
             pixel.scale.set(scale)
             pixel.frame(i)
             pixel.current = i
@@ -88,7 +86,9 @@ module.exports = class Show extends UI.Window
                 if (PixelEditor.current !== button.current)
                 {
                     PixelEditor.current = button.current
-                    this.layout()
+                    this.selector.position.set(button.x, button.y)
+                    this.selector.width = button.width
+                    this.selector.height = button.height
                 }
                 const pixel = this.buttons[button.current].pixel
                 this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
@@ -218,8 +218,8 @@ module.exports = class Show extends UI.Window
         }
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', () => this.layout())
-        State.on('last-file', () => this.layout())
+        PixelEditor.on('changed', this.layout, this)
+        State.on('last-file', this.layout, this)
     }
 
     dragged()

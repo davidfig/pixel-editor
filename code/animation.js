@@ -27,14 +27,16 @@ module.exports = class Animation extends UI.Window
         this.loop.interval(this.update.bind(this))
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         Pixel.add(BUTTONS, this.sheet)
-        this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-1') }))
+        this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
         this.play.sprite.anchor.set(0)
         this.play.sprite.scale.set(2)
         this.play.on('pressed', this.change, this)
-        this.playing = true
-        this.animationName = this.addChild(new UI.EditText('Animation Name'))
+        this.playing = false
+        this.animationName = this.addChild(new UI.EditText('animation name...'))
         this.animationName.on('editing', this.showNames, this)
+        this.animationName.on('changed', this.changeName, this)
         this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
+        this.animationText.disabled = true
         this.sheet.render()
         this.stateSetup('animation')
         this.layout()
@@ -60,6 +62,25 @@ module.exports = class Animation extends UI.Window
             this.play.sprite.texture = this.sheet.getTexture('animation-1')
         }
         this.dirty = true
+    }
+
+    changeName()
+    {
+        const animations = PixelEditor.animations
+        const name = this.animationName.text
+        if (!name)
+        {
+            return
+        }
+        if (!animations[name])
+        {
+            animations[name] = []
+            // PixelEditor.save()
+        }
+        else
+        {
+
+        }
     }
 
     drawAnimation()
@@ -120,7 +141,7 @@ module.exports = class Animation extends UI.Window
     {
         if (this.pixel)
         {
-            if (!this.pixel.stop)
+            if (this.pixel.playing)
             {
                 this.pixel.update(elapsed)
                 this.dirty = true

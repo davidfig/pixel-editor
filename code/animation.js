@@ -8,6 +8,7 @@ const UI = require('../../components/ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Settings = require('./settings')
+const sheet = require('./pixel-sheet')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
@@ -36,6 +37,7 @@ module.exports = class Animation extends UI.Window
         this.animationName = this.addChild(new UI.EditText('animation name...'))
         this.animationName.on('editing', this.showNames, this)
         this.animationName.on('changed', this.changeName, this)
+        this.animationName.on('lose-focus', () => this.list.visible = false)
         this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
         this.animationText.on('changed', this.changeText, this)
         this.animationText.disabled = true
@@ -44,9 +46,33 @@ module.exports = class Animation extends UI.Window
         this.list = this.special.addChild(new UI.List({ transparent: false, theme: { between: 0, spacing: 2 } }))
         this.list.visible = false
         this.list.on('select', this.select, this)
+        this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
+        this.newButton.on('clicked', this.reset, this)
+        this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
+        this.copyButton.on('clicked', this.copyAnimation, this)
+        this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
+        this.deleteButton.on('clicked', this.removeAnimation, this)
+        this.buttons = this.addChild(new UI.Stack([this.newButton, this.copyButton, this.deleteButton], { horizontal: true }))
+        for (let button of this.buttons.items)
+        {
+            button.sprite.anchor.set(0)
+            button.sprite.scale.set(2)
+        }
+        this.disableControls(true)
         this.sheet.render()
         this.stateSetup('animation')
         this.layout()
+        this.height = this.maxHeight
+    }
+
+    reset()
+    {
+        this.animationName.text = 'animation name...'
+        this.animationText.text = ''
+        this.animationError.text = ''
+        this.original = ''
+        this.disableControls(true)
+        this.pixel.frame(0)
     }
 
     layout()
@@ -73,27 +99,41 @@ module.exports = class Animation extends UI.Window
         this.dirty = true
     }
 
+    /**
+     * whether an active animation is selected
+     */
+    disableControls(disable)
+    {
+        this.play.disabled = disable
+        this.animationText.disabled = disable
+        for (let button of this.buttons.items)
+        {
+            button.disabled = disable
+        }
+    }
+
     changeName()
     {
         const animations = PixelEditor.animations
         const name = this.animationName.text
-        if (!name || name === 'animation name...')
+        if (!name || name === 'animation name...' || name === this.original)
         {
             return
         }
-        if (!animations[name])
+        if (this.original)
         {
-            animations[name] = []
+            animations[name] = animations[this.original]
+            delete animations[this.original]
             PixelEditor.save()
         }
         else
         {
-            const text = JSON.stringify(animations[name])
-            this.animationText.text = text.substring(1, text.length - 1)
+            this.original = name
+            animations[name] = []
+            PixelEditor.save()
         }
-        this.play.disabled = false
-        this.animationText.disabled = false
         this.list.visible = false
+        this.disableControls(false)
     }
 
     select(item)
@@ -104,12 +144,14 @@ module.exports = class Animation extends UI.Window
             this.list.visible = false
             return
         }
+        this.animationName.editing = false
         this.animationName.text = name
+        this.original = name
         const text = JSON.stringify(PixelEditor.animations[name])
         this.animationText.text = text.substring(1, text.length - 1)
-        this.play.disabled = false
         this.animationText.disabled = false
         this.list.visible = false
+        this.disableControls(false)
     }
 
     changeText()
@@ -136,13 +178,12 @@ module.exports = class Animation extends UI.Window
 
     drawAnimation()
     {
-        const sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         if (this.pixel)
         {
             this.pixel.destroy()
         }
         this.pixel = this.addChild(new Pixel(PixelEditor.getData(), sheet))
-        sheet.render()
+        this.pixel.on('stop', this.stopped, this)
         this.pixel.scale.set(PixelEditor.zoom)
         this.pixel.frame(0)
         this.pixel.position.set(0, 0)
@@ -158,6 +199,8 @@ module.exports = class Animation extends UI.Window
         this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
         this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
         this.list.x = this.get('spacing')
+        this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
+        this.maxHeight = this.buttons.y + this.buttons.height + Settings.BORDER + this.get('spacing') * 2
     }
 
     showNames()
@@ -170,6 +213,58 @@ module.exports = class Animation extends UI.Window
             for (let key in animations)
             {
                 this.list.add(new UI.Text(key))
+            }
+        }
+    }
+
+    removeAnimation()
+    {
+        delete PixelEditor.animations[this.animationName.text]
+        PixelEditor.save()
+        this.reset()
+    }
+
+    copyAnimation()
+    {
+        let name = this.animationName.text
+        const dashes = name.split('-')
+        if (dashes.length > 1)
+        {
+            if (!isNaN(dashes[dashes.length - 1]))
+            {
+                const number = dashes[dashes.length - 1]
+                name = name.replace('-' + number, '-' + (parseInt(number) + 1))
+            }
+            else
+            {
+                name += '-1'
+            }
+        }
+        else
+        {
+            name += '-1'
+        }
+        PixelEditor.animations[name] = PixelEditor.animations[this.animationName.text]
+        PixelEditor.save()
+        this.animationName.text = name
+        this.animationError.text = ''
+        this.animationText['foreground-color'] = '0'
+        this.animationText.layout()
+        this.disableControls(false)
+    }
+
+    stopped()
+    {
+        this.change()
+    }
+
+    update(elapsed)
+    {
+        if (this.pixel)
+        {
+            if (this.pixel.playing && this.pixel.update(elapsed))
+            {
+                this.dirty = true
             }
         }
     }
@@ -192,22 +287,11 @@ module.exports = class Animation extends UI.Window
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.layout, this)
-        State.on('last-file', this.layout, this)
+        State.on('last-file', () => { this.layout(); this.height = this.maxHeight })
     }
 
     dragged()
     {
         State.set(this.name, this.x, this.y, this.width, this.height)
-    }
-
-    update(elapsed)
-    {
-        if (this.pixel)
-        {
-            if (this.pixel.playing && this.pixel.update(elapsed))
-            {
-                this.dirty = true
-            }
-        }
     }
 }

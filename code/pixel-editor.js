@@ -2,7 +2,7 @@ const remote = require('electron').remote
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const path = require('path')
-const Pixel = require('yy-pixel').Pixel
+const Pixel = require('../../components/pixel').Pixel
 const exists = require('exists')
 
 const sheet = require('./pixel-sheet')
@@ -59,16 +59,19 @@ class PixelEditor extends Pixel
         {
             this.frames.splice(index, 0, add)
             this.editor.frames.splice(index, 0, { undo: [], redo: [] })
+            Pixel.addFrame(index, this.getData(), sheet)
+            sheet.render()
             this.current = index
         }
         else
         {
             this.frames.push(add)
             this.editor.frames.push({ undo: [], redo: [] })
+            Pixel.addFrame(this.frames.length - 1, this.getData(), sheet)
+            sheet.render()
             this.current = this.frames.length - 1
         }
         this.save()
-        sheet.render()
     }
 
     remove(index)
@@ -88,9 +91,10 @@ class PixelEditor extends Pixel
             this.frames.push({ width: frame.width, height: frame.height, data: frame.data.slice(0) })
             const editor = this.editor.frames[index]
             this.editor.frames.push({ undo: editor.undo, redo: editor.redo })
+            Pixel.addFrame(this.frames.length - 1, this.getData(), sheet)
+            sheet.render()
             this.current = this.frames.length - 1
             this.save()
-            sheet.render()
         }
     }
 
@@ -296,6 +300,7 @@ class PixelEditor extends Pixel
             }
             this.frames[this.editor.current].data = data
             this.frames[this.editor.current].width = width
+            this.sheet.render()
             this.save()
         }
     }
@@ -324,8 +329,27 @@ class PixelEditor extends Pixel
             }
             this.frames[this.editor.current].data = data
             this.frames[this.editor.current].height = height
+            this.sheet.render()
             this.save()
         }
+    }
+
+    crop(xStart, yStart, width, height)
+    {
+        this.undoSave()
+        const data = []
+        for (let y = yStart; y < yStart + height; y++)
+        {
+            for (let x = xStart; x < xStart + width; x++)
+            {
+                data[x - xStart + (y - yStart) * width] = this.get(x, y)
+            }
+        }
+        this.frames[this.editor.current].data = data
+        this.frames[this.editor.current].width = width
+        this.frames[this.editor.current].height = height
+        this.sheet.render()
+        this.save()
     }
 
     get maxHeight()

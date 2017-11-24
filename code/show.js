@@ -39,6 +39,8 @@ module.exports = class Show extends UI.Window
     layout()
     {
         this.pixels.removeChildren()
+        this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        this.selector.tint = COLOR_SELECTED
         this.buttons = []
         const data = PixelEditor.getData()
         const scale = PixelEditor.zoom
@@ -46,32 +48,31 @@ module.exports = class Show extends UI.Window
         let biggest = 0
         for (let i = 0; i < PixelEditor.frames.length; i++)
         {
-            if (xStart + scale * PixelEditor.width > this.width - Settings.BORDER * 2)
-            {
-                yStart += biggest
-                xStart = 0
-                biggest = 0
-            }
-            if (i === PixelEditor.current && PixelEditor.frames.length > 1)
-            {
-                this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                this.selector.tint = COLOR_SELECTED
-                this.selector.position.set(xStart, yStart)
-                this.selector.width = scale * PixelEditor.width
-                this.selector.height = scale * PixelEditor.height
-            }
             const pixel = this.pixels.addChild(new Pixel(data, sheet))
             pixel.scale.set(scale)
             pixel.frame(i)
             pixel.current = i
+            if (xStart + pixel.width + Settings.BORDER > this.right)
+            {
+                yStart += biggest + Settings.BORDER
+                xStart = 0
+                biggest = 0
+            }
             pixel.position.set(xStart, yStart)
             const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
             number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
             number.position.set(xStart + pixel.width - number.width, yStart)
             number.alpha = 0.25
+            if (i === PixelEditor.current && PixelEditor.frames.length > 1)
+            {
+                this.selector.position.set(xStart, yStart)
+                this.selector.width = pixel.width
+                this.selector.height = pixel.height
+                number.alpha = 1
+            }
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
-            xStart += pixel.width
-            biggest = scale * PixelEditor.height > biggest ? scale * PixelEditor.height : biggest
+            xStart += pixel.width + Settings.BORDER
+            biggest = pixel.height > biggest ? pixel.height : biggest
         }
         super.layout()
     }

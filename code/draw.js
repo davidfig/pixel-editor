@@ -357,9 +357,9 @@ module.exports = class Draw extends UI.Window
         this.cursorBlock.drawRect(0, 0, this.zoom * x, this.zoom * y)
     }
 
-    selectCursor()
+    selectCursor(special)
     {
-        const color = State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = special ? 0xd20000 : State.foreground === null ? CURSOR_COLOR : State.foreground
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
         this.cursorBlock.lineStyle(5, color)
         const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
@@ -474,6 +474,10 @@ module.exports = class Draw extends UI.Window
                 this.selectCursor()
                 break
 
+            case 'crop':
+                this.selectCursor(true)
+                break
+
             case 'paint':
                 this.normalCursor()
                 break
@@ -568,6 +572,7 @@ module.exports = class Draw extends UI.Window
                     break
                 case 8:
                     this.clearBox()
+                    break
             }
             if (this.spacingOn)
             {
@@ -594,6 +599,7 @@ module.exports = class Draw extends UI.Window
     {
         switch (State.tool)
         {
+            case 'crop':
             case 'select':
             case 'paint':
                 if (State.cursorSizeX < 0)
@@ -604,8 +610,16 @@ module.exports = class Draw extends UI.Window
                 {
                     State.cursorY += State.cursorSizeY
                 }
-                State.cursorSizeX = 1
-                State.cursorSizeY = 1
+                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+                {
+                    State.cursorX = 0
+                    State.cursorY = 0
+                }
+                else
+                {
+                    State.cursorSizeX = 1
+                    State.cursorSizeY = 1
+                }
                 break
         }
     }
@@ -749,6 +763,12 @@ module.exports = class Draw extends UI.Window
     {
         switch (State.tool)
         {
+            case 'crop':
+                PixelEditor.crop(State.cursorX, State.cursorY, State.cursorSizeX, State.cursorSizeY)
+                State.cursorX = 0
+                State.cursorY = 0
+                break
+
             case 'paint':
                 if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
                 {
@@ -804,7 +824,7 @@ module.exports = class Draw extends UI.Window
                         PixelEditor.set(block.x, block.y, color, true)
                     }
                 }
-                pixelSheet.render(true)
+                this.change()
                 break
 
             case 'line':

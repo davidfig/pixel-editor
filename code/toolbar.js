@@ -12,8 +12,9 @@ const PAINT = require('../images/fill.json')
 const CIRCLE = require('../images/circle.json')
 const ELLIPSE = require('../images/ellipse.json')
 const LINE = require('../images/line.json')
+const CROP = require('../images/crop.json')
 
-const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE]
+const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP]
 
 module.exports = class Toolbar extends UI.Stack
 {
@@ -77,6 +78,7 @@ module.exports = class Toolbar extends UI.Stack
                 this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
                 break
             case this.buttons[5]: State.tool = 'line'; break
+            case this.buttons[6]: State.tool = 'crop'; break
         }
     }
 
@@ -103,6 +105,9 @@ module.exports = class Toolbar extends UI.Stack
                     break
                 case 69:
                     State.tool = 'ellipse'
+                    break
+                case 82:
+                    State.tool = 'crop'
                     break
             }
         }

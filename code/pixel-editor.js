@@ -8,6 +8,7 @@ const exists = require('exists')
 const sheet = require('./pixel-sheet')
 
 const DEFAULT = [15, 15]
+const UNDO_SIZE = 50
 
 class PixelEditor extends Pixel
 {
@@ -418,11 +419,11 @@ class PixelEditor extends Pixel
 
     undoSave()
     {
-        while (this.undo.length > 10000)
+        this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
+        while (this.undo.length > UNDO_SIZE)
         {
             this.undo.shift()
         }
-        this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
         this.redo = []
         this.save()
     }
@@ -481,6 +482,16 @@ class PixelEditor extends Pixel
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
             this.editor.current = 0
             this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : 10
+            for (let frame of this.editor.frames)
+            {
+                if (frame.undo.length > UNDO_SIZE)
+                {
+                    while (frame.undo.length > UNDO_SIZE)
+                    {
+                        frame.undo.shift()
+                    }
+                }
+            }
         }
         catch (e)
         {

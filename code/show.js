@@ -38,6 +38,12 @@ module.exports = class Show extends UI.Window
 
     layout()
     {
+        super.layout()
+        this.redraw()
+    }
+
+    redraw()
+    {
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
@@ -74,7 +80,6 @@ module.exports = class Show extends UI.Window
             xStart += pixel.width + Settings.BORDER
             biggest = pixel.height > biggest ? pixel.height : biggest
         }
-        super.layout()
     }
 
     down(x, y, data)
@@ -163,7 +168,7 @@ module.exports = class Show extends UI.Window
             //     }
             // }
             this.dragging = null
-            this.layout()
+            this.redraw()
         }
         else
         {
@@ -185,7 +190,6 @@ module.exports = class Show extends UI.Window
                 {
                     PixelEditor.current--
                 }
-                this.layout()
             }
             else if (code === 39)
             {
@@ -197,7 +201,6 @@ module.exports = class Show extends UI.Window
                 {
                     PixelEditor.current++
                 }
-                this.layout()
             }
         }
     }
@@ -219,8 +222,8 @@ module.exports = class Show extends UI.Window
         }
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', this.layout, this)
-        State.on('last-file', this.layout, this)
+        PixelEditor.on('changed', this.redraw, this)
+        State.on('last-file', this.redraw, this)
     }
 
     dragged()

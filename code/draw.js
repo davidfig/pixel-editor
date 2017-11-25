@@ -27,9 +27,17 @@ module.exports = class Draw extends UI.Window
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
+        this.redraw()
+        this.redraw()
     }
 
     layout()
+    {
+        super.layout()
+        this.redraw()
+    }
+
+    redraw()
     {
         const spacing = this.get('spacing') * 2
         let width = this.width - spacing, height = this.height - spacing
@@ -52,7 +60,6 @@ module.exports = class Draw extends UI.Window
         this.transparency()
         this.frame()
         this.cursorDraw()
-        super.layout()
     }
 
     change()
@@ -462,7 +469,7 @@ module.exports = class Draw extends UI.Window
             State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
             State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
         }
-        this.layout()
+        this.redraw()
     }
 
     cursorDraw()
@@ -652,7 +659,7 @@ module.exports = class Draw extends UI.Window
                 this.line = null
                 break
         }
-        this.layout()
+        this.redraw()
     }
 
     cut()
@@ -882,13 +889,13 @@ module.exports = class Draw extends UI.Window
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
         for (let state of states)
         {
-            State.on(state, () => this.layout())
+            State.on(state, () => this.redraw())
         }
         State.on('tool', () => this.tool())
-        PixelEditor.on('changed', () => this.layout())
-        State.on('last-file', () => this.layout())
-        State.on('open-circle', () => this.layout())
-        State.on('open-ellipse', () => this.layout())
+        PixelEditor.on('changed', () => this.redraw())
+        State.on('last-file', () => this.redraw())
+        State.on('open-circle', () => this.redraw())
+        State.on('open-ellipse', () => this.redraw())
     }
 
     dragged()

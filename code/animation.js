@@ -75,10 +75,16 @@ module.exports = class Animation extends UI.Window
         this.pixel.frame(0)
     }
 
-    layout()
+    draw()
     {
         this.drawAnimation()
         this.drawPlay()
+
+    }
+
+    layout()
+    {
+        this.draw()
         super.layout()
     }
 
@@ -287,7 +293,7 @@ module.exports = class Animation extends UI.Window
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.layout, this)
-        State.on('last-file', () => { this.layout(); this.height = this.maxHeight })
+        State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
     }
 
     dragged()

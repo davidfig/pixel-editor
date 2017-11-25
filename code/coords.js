@@ -79,28 +79,9 @@ module.exports = class Coords extends UI.Window
         this.frameWidth.text = PixelEditor.width
         this.frameHeight.text = PixelEditor.height
         let x, y
-        switch (State.relative)
-        {
-            case 'top-right':
-                x = PixelEditor.width - State.cursorX - 1
-                y = State.cursorY
-                break
-            case 'center':
-                x = State.cursorX - Math.floor(PixelEditor.width / 2)
-                y = State.cursorY - Math.floor(PixelEditor.height / 2)
-                break
-            case 'bottom-left':
-                x = State.cursorX
-                y = PixelEditor.height - State.cursorY - 1
-                break
-            case 'bottom-right':
-                x = PixelEditor.width - State.cursorX - 1
-                y = PixelEditor.height - State.cursorY - 1
-                break
-            default:
-                x = State.cursorX
-                y = State.cursorY
-        }
+        const split = State.relative.split('-')
+        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - Math.floor(PixelEditor.width / 2)
+        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? PixelEditor.height - State.cursorY : State.cursorY - Math.floor(PixelEditor.height / 2)
         this.cursorX.text = x
         this.cursorY.text = y
         this.cursorWidth.text = State.cursorSizeX
@@ -112,11 +93,12 @@ module.exports = class Coords extends UI.Window
     {
         const width = parseInt(this.frameWidth.text)
         let relative
-        if (State.relative.indexOf('center') !== -1)
+        const split = State.relative.split('-')
+        if (split[1] === 'center')
         {
             relative = 'center'
         }
-        else if (State.relative.indexOf('right') !== -1)
+        else if (split[1] === 'right')
         {
             relative = 'right'
         }
@@ -131,11 +113,12 @@ module.exports = class Coords extends UI.Window
     {
         const height = parseInt(this.frameHeight.text)
         let relative
-        if (State.relative.indexOf('center') !== -1)
+        const split = State.relative.split('-')
+        if (split[0] === 'center')
         {
             relative = 'center'
         }
-        else if (State.relative.indexOf('bottom') !== -1)
+        else if (split[0] === 'bottom')
         {
             relative = 'bottom'
         }
@@ -148,24 +131,16 @@ module.exports = class Coords extends UI.Window
 
     changeCursorX()
     {
-        let x = parseInt(this.cursorX.text)
-        switch (State.relative)
-        {
-            case 'top-right': case 'bottom-right': State.cursorX = PixelEditor.width - x - 1; break
-            case 'center': State.cursorX = x + Math.floor(PixelEditor.width / 2); break
-            default: State.cursorX = x
-        }
+        const x = parseInt(this.cursorX.text)
+        const split = State.relative.split('-')
+        State.cursorX = split[1] === 'right' ? PixelEditor.width - x - 1 : split[1] === 'center' ? x + Math.floor(PixelEditor.width / 2) : x
     }
 
     changeCursorY()
     {
-        let y = parseInt(this.cursorY.text)
-        switch (State.relative)
-        {
-            case 'bottom-right': case 'bottom-left': State.cursorY = PixelEditor.height - y - 1; break
-            case 'center': State.cursorY = y + Math.floor(PixelEditor.width / 2); break
-            default: State.cursorY = y
-        }
+        const y = parseInt(this.cursorY.text)
+        const split = State.relative.split('-')
+        State.cursorY = split[0] === 'bottom' ? PixelEditor.height - y - 1 : split[0] === 'center' ? y + Math.floor(PixelEditor.height / 2) : y
     }
 
     dragged()

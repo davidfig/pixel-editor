@@ -52,7 +52,7 @@ module.exports = class Draw extends UI.Window
             this.zoom = w
         }
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-        State.cursorSizeY = (State.cursorSizeX > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
+        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
         this.sprite.removeChildren()
         const pixel = this.sprite.addChild(new Pixel(PixelEditor.getData(), pixelSheet))
         pixel.scale.set(this.zoom)

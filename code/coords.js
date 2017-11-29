@@ -81,7 +81,7 @@ module.exports = class Coords extends UI.Window
         let x, y
         const split = State.relative.split('-')
         x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - Math.floor(PixelEditor.width / 2)
-        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? PixelEditor.height - State.cursorY : State.cursorY - Math.floor(PixelEditor.height / 2)
+        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - Math.floor(PixelEditor.height / 2)
         this.cursorX.text = x
         this.cursorY.text = y
         this.cursorWidth.text = State.cursorSizeX

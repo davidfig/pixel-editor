@@ -127,6 +127,7 @@ class PixelEditor extends Pixel
             }
             this.frames.splice(newIndex, 0, frame)
             this.editor.frames.splice(newIndex, 0, editor)
+            sheet.render()
             this.save()
         }
     }
@@ -149,6 +150,7 @@ class PixelEditor extends Pixel
         const swap = current.height
         current.height = current.width
         current.width = swap
+        sheet.render()
         this.save()
     }
 
@@ -164,6 +166,7 @@ class PixelEditor extends Pixel
             }
         }
         this.data = data
+        sheet.render()
         this.save()
     }
 
@@ -179,6 +182,7 @@ class PixelEditor extends Pixel
             }
         }
         this.data = data
+        sheet.render()
         this.save()
     }
 

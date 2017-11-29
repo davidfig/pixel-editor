@@ -779,6 +779,7 @@ module.exports = class Draw extends UI.Window
             case 'paint':
                 if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
                 {
+                    PixelEditor.undoSave()
                     const current = PixelEditor.get(State.cursorX, State.cursorY)
                     const color = (current !== State.foreground) ? State.foreground : State.background
                     PixelEditor.set(State.cursorX, State.cursorY, color, true)

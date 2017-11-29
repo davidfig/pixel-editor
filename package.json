@@ -26,9 +26,10 @@
     "yy-input": "^0.9.0",
     "yy-loop": "^0.3.5",
     "yy-misc": "^1.0.1",
-    "yy-pixel": "^1.1.7",
+    "yy-pixel": "^1.2.0",
     "yy-random": "^1.2.0",
     "yy-renderer": "^2.4.1",
-    "yy-rendersheet": "^3.3.1"
+    "yy-rendersheet": "^3.3.1",
+    "yy-ui": "^0.1.0"
   }
 }

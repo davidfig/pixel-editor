@@ -3,7 +3,7 @@ const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
 const Pixel = require('yy-pixel').Pixel
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 
 const SELECT = require('../images/select.json')

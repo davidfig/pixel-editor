@@ -4,7 +4,7 @@ const Pixel = require('../../components/pixel').Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Settings = require('./settings')

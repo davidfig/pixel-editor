@@ -3,7 +3,7 @@ const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 
 const Sheet = require('./sheet')
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')

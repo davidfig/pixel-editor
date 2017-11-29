@@ -1,6 +1,6 @@
 const PIXI = require('pixi.js')
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 
 const DICE = 50

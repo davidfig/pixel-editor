@@ -2,7 +2,7 @@ const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state.js')
 const Settings = require('./settings')
 

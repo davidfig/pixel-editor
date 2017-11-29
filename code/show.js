@@ -4,7 +4,7 @@ const exists = require('exists')
 
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 const Settings = require('./settings')
 

@@ -4,7 +4,7 @@ const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')

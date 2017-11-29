@@ -4,7 +4,7 @@ const Color = require('yy-color')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
 
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')

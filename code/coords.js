@@ -1,5 +1,5 @@
 const exists = require('exists')
-const UI = require('../../components/ui')
+const UI = require('yy-ui')
 const State = require('./state')
 const Settings = require('./settings')
 const Dice = require('./dice')

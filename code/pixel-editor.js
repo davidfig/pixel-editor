@@ -2,7 +2,7 @@ const remote = require('electron').remote
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const path = require('path')
-const Pixel = require('../../components/pixel').Pixel
+const Pixel = require('yy-pixel').Pixel
 const exists = require('exists')
 
 const sheet = require('./pixel-sheet')

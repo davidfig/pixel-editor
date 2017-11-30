@@ -5,6 +5,7 @@ const path = require('path')
 const ClipBoard = require('electron').clipboard
 
 const UI = require('yy-ui')
+// const UI = require('../../components/ui')
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')
@@ -16,6 +17,7 @@ const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
+const Export = require('./export')
 
 let renderer, ui, loading = 2, windows = {}
 
@@ -210,11 +212,19 @@ function flipVertical()
     PixelEditor.flipVertical()
 }
 
+function exportFile()
+{
+    ui.addChild(new Export())
+    // const filename = remote.dialog.showSaveDialog(remote.getCurrentWindow(), { buttonLabel: 'export' })
+
+}
+
 module.exports = {
     toggleWindow,
     saveFile,
     openFile,
     newFile,
+    exportFile,
     load,
     remove,
     add,

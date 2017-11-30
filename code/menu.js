@@ -44,6 +44,7 @@ function menu()
         ['&New (Ctrl-N)', Main.newFile],
         ['&Save As... (Ctrl-S)', Main.saveFile],
         ['&Open... (Ctrl-O)', Main.openFile],
+        ['&Export... (Ctrl-E)', Main.exportFile],
         ['separator']]
     for (let i = 1; i < State.lastFiles.length; i++)
     {

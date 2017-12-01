@@ -1,6 +1,7 @@
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
-const Pixel = require('yy-pixel').Pixel
+// const Pixel = require('yy-pixel').Pixel
+const Pixel = require('../../components/pixel').Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
@@ -204,7 +205,7 @@ module.exports = class Animation extends UI.Window
     drawPlay()
     {
         this.play.position.set(this.right - this.play.width, 0)
-        this.animationName.y = PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
+        this.animationName.y = this.pixel.y + (1 - this.pixel.anchor.y) * PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
         this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
         this.animationText.width = this.animationError.width = this.right
         this.animationText.height = this.animationText.height = this.animationName.height

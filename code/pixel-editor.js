@@ -115,6 +115,26 @@ class PixelEditor extends Pixel
         return this.frames.length
     }
 
+    get largestWidth()
+    {
+        let width = 0
+        for (let frame of this.frames)
+        {
+            width = frame.width > width ? frame.width : width
+        }
+        return width
+    }
+
+    get largestHeight()
+    {
+        let height = 0
+        for (let frame of this.frames)
+        {
+            height = frame.height > height ? frame.width : height
+        }
+        return height
+    }
+
     move(index, newIndex)
     {
         if (index < this.frames.length)

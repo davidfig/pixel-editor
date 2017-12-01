@@ -192,7 +192,10 @@ module.exports = class Animation extends UI.Window
         this.pixel.on('stop', this.stopped, this)
         this.pixel.scale.set(PixelEditor.zoom)
         this.pixel.frame(0)
-        this.pixel.position.set(0, 0)
+        const split = State.relative.split('-')
+        this.pixel.anchor.x = split[1] === 'left' ? 0 : split[1] === 'right' ? 1 : 0.5
+        this.pixel.anchor.y = split[0] === 'top' ? 0 : split[0] === 'bottom' ? 1 : 0.5
+        this.pixel.position.set(PixelEditor.largestWidth * PixelEditor.zoom * this.pixel.anchor.x, PixelEditor.largestHeight * PixelEditor.zoom * this.pixel.anchor.y)
     }
 
     drawPlay()

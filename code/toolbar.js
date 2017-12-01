@@ -13,8 +13,9 @@ const CIRCLE = require('../images/circle.json')
 const ELLIPSE = require('../images/ellipse.json')
 const LINE = require('../images/line.json')
 const CROP = require('../images/crop.json')
+const SAMPLE = require('../images/sample.json')
 
-const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP]
+const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP, SAMPLE]
 
 module.exports = class Toolbar extends UI.Stack
 {
@@ -79,6 +80,7 @@ module.exports = class Toolbar extends UI.Stack
                 break
             case this.buttons[5]: State.tool = 'line'; break
             case this.buttons[6]: State.tool = 'crop'; break
+            case this.buttons[7]: State.tool = 'sample'; break
         }
     }
 
@@ -108,6 +110,9 @@ module.exports = class Toolbar extends UI.Stack
                     break
                 case 82:
                     State.tool = 'crop'
+                    break
+                case 83:
+                    State.tool = 'sample'
                     break
             }
         }
@@ -139,6 +144,8 @@ module.exports = class Toolbar extends UI.Stack
             case 'circle': this.buttons[3].select = true; break
             case 'ellipse': this.buttons[4].select = true; break
             case 'line': this.buttons[5].select = true; break
+            case 'crop': this.buttons[6].select = true; break
+            case 'sample': this.buttons[7].select = true; break
         }
         this.dirty = true
     }

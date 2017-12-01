@@ -345,9 +345,9 @@ module.exports = class Draw extends UI.Window
         }
     }
 
-    fillCursor()
+    fillCursor(reverse)
     {
-        const color = State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = reverse ? 0x888888 : State.foreground === null ? CURSOR_COLOR : State.foreground
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
         this.cursorBlock.lineStyle(10, color)
         this.cursorBlock.drawRect(0, 0, this.zoom, this.zoom)
@@ -482,6 +482,10 @@ module.exports = class Draw extends UI.Window
 
             case 'crop':
                 this.selectCursor(true)
+                break
+
+            case 'sample':
+                this.fillCursor(true)
                 break
 
             case 'paint':
@@ -841,6 +845,10 @@ module.exports = class Draw extends UI.Window
                 PixelEditor.undoSave()
                 this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
                 this.change()
+                break
+
+            case 'sample':
+                State.color = PixelEditor.get(State.cursorX, State.cursorY)
                 break
         }
     }

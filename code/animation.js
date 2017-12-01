@@ -59,6 +59,9 @@ module.exports = class Animation extends UI.Window
             button.sprite.anchor.set(0)
             button.sprite.scale.set(2)
         }
+        this.animationTime = this.addChild(new UI.EditText('150', { afterText: 'ms' }))
+        this.time = 150
+        this.animationTime.on('changed', this.changeTime, this)
         this.disableControls(true)
         this.sheet.render()
         this.stateSetup('animation')
@@ -146,6 +149,12 @@ module.exports = class Animation extends UI.Window
         this.disableControls(false)
     }
 
+    changeTime(value)
+    {
+        this.time = parseInt(this.animationTime.text)
+        this.drawAnimation()
+    }
+
     select(item)
     {
         const name = item.text
@@ -192,7 +201,7 @@ module.exports = class Animation extends UI.Window
         {
             this.pixel.destroy()
         }
-        this.pixel = this.addChild(new Pixel(PixelEditor.getData(), sheet))
+        this.pixel = this.addChild(new Pixel(PixelEditor.getData(), sheet, this.time))
         this.pixel.on('stop', this.stopped, this)
         this.pixel.scale.set(PixelEditor.zoom)
         this.pixel.frame(0)
@@ -212,7 +221,8 @@ module.exports = class Animation extends UI.Window
         this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
         this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
         this.list.x = this.get('spacing')
-        this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
+        this.animationTime.y = this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
+        this.animationTime.x = this.buttons.x + this.buttons.width + Settings.BORDER
         this.maxHeight = this.buttons.y + this.buttons.height + Settings.BORDER + this.get('spacing') * 2
     }
 

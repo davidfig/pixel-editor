@@ -1,7 +1,7 @@
 const PIXI = require('pixi.js')
 const RenderSheet = require('yy-rendersheet')
-// const Pixel = require('yy-pixel').Pixel
-const Pixel = require('../../components/pixel').Pixel
+const Pixel = require('yy-pixel').Pixel
+// const Pixel = require('../../components/pixel').Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 

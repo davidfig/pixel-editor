@@ -28,7 +28,6 @@ module.exports = class Draw extends UI.Window
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
         this.redraw()
-        this.redraw()
     }
 
     layout()

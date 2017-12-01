@@ -93,7 +93,7 @@ module.exports = class Picker extends UI.Window
             .endFill()
     }
 
-    layout()
+    draw()
     {
         this.size = this.right / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
@@ -159,7 +159,12 @@ module.exports = class Picker extends UI.Window
         this.part[2].position.set(x + this.part[1].width + spacing, this.bottom - this.hex.height)
         this.hex.position.set(this.width / 2 - this.hex.width / 2, this.bottom - Settings.BORDER - this.hex.height - this.part[0].height)
         this.words()
+    }
+
+    layout()
+    {
         super.layout()
+        this.draw()
     }
 
     words()
@@ -245,7 +250,7 @@ module.exports = class Picker extends UI.Window
                 State.background = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
             }
         }
-        this.layout()
+        this.draw()
         this.isPicker = true
         return true
     }
@@ -291,14 +296,9 @@ module.exports = class Picker extends UI.Window
         }
         this.on('drag-end', this.stateSet, this)
         this.on('resize-end', this.stateSet, this)
-        State.on('foreground', this.change, this)
-        State.on('background', this.change, this)
-        State.on('isForeground', this.change, this)
-    }
-
-    change()
-    {
-        this.layout()
+        State.on('foreground', this.draw, this)
+        State.on('background', this.draw, this)
+        State.on('isForeground', this.draw, this)
     }
 
     stateSet()

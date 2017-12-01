@@ -9,7 +9,6 @@ const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
 const Settings = require('./settings')
-let Main
 
 const COLORS_PER_LINE = 10
 
@@ -22,7 +21,6 @@ module.exports = class Palette extends UI.Window
 {
     constructor()
     {
-        Main = require('./main')
         super({ draggable: true, resizeable: true, width: 100, height: 100 })
         this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
@@ -42,11 +40,16 @@ module.exports = class Palette extends UI.Window
         this.colors[2] = [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff, 0xffaa00]
     }
 
-    layout()
+    draw()
     {
         this.updateColors()
         this.drawBlocks()
+    }
+
+    layout()
+    {
         super.layout()
+        this.draw()
     }
 
     drawBlocks()
@@ -244,9 +247,10 @@ module.exports = class Palette extends UI.Window
             this.height = MIN_HEIGHT
         }
         this.on('drag-end', this.dragged, this)
-        State.on('foreground', this.layout, this)
-        State.on('background', this.layout, this)
-        PixelEditor.on('changed', this.layout, this)
+        State.on('foreground', this.draw, this)
+        State.on('background', this.draw, this)
+        State.on('isForeground', this.draw, this)
+        PixelEditor.on('changed', this.draw, this)
     }
 
     dragged()

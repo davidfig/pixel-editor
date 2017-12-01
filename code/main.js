@@ -149,7 +149,11 @@ function load(list)
 {
     if (list && list.length)
     {
-        const filename = list[0]
+        let filename = list[0]
+        if (filename.indexOf('.editor.'))
+        {
+            filename = filename.replace('.editor.', '')
+        }
         PixelEditor.load(filename)
         State.lastFile = filename
         State.current = 0

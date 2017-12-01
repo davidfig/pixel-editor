@@ -534,11 +534,17 @@ class PixelEditor extends Pixel
 
     save(filename)
     {
+        const changed = this.filename !== filename
         this.filename = filename || this.filename
         jsonfile.writeFileSync(this.filename, { name: this.name, frames: this.frames, animations: this.animations })
         if (this.editor)
         {
             jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
+        }
+        if (changed)
+        {
+            Pixel.add(this.getData(), sheet)
+            sheet.render()
         }
         this.emit('changed')
     }

@@ -79,7 +79,10 @@ module.exports = class Animation extends UI.Window
     {
         this.drawAnimation()
         this.drawPlay()
-
+        if (this.playing)
+        {
+            this.change()
+        }
     }
 
     layout()
@@ -297,6 +300,7 @@ module.exports = class Animation extends UI.Window
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.layout, this)
         State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
+        State.on('relative', this.drawAnimation, this)
     }
 
     dragged()

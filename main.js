@@ -25,7 +25,7 @@ function init()
         _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
     }
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'html', 'main.html'), protocol: 'file:', slashes: true }))
-    _main.toggleDevTools()
+    // _main.toggleDevTools()
     State.setupMain(_main)
 }
 

@@ -11,7 +11,7 @@ module.exports = class Dice extends UI.Window
 {
     constructor()
     {
-        super({ width: DICE, height: DICE, theme: { 'background-color': '#eeeeee', 'spacing': 2 }})
+        super({ width: DICE, height: DICE, theme: { 'title-bar': 0, 'background-color': '#eeeeee', 'spacing': 2 }})
         this.dice = []
         for (let i = 0; i < 9; i++)
         {

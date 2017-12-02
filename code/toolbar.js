@@ -21,7 +21,7 @@ module.exports = class Toolbar extends UI.Stack
 {
     constructor()
     {
-        super({ draggable: true, fit: true, transparent: false, theme: { spacing: 10, between: 5 } })
+        super({ draggable: true, fit: true, transparent: false, theme: { 'title-bar': 10, spacing: 10, between: 5 } })
         this.buttons = []
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         for (let pixel of BUTTONS)

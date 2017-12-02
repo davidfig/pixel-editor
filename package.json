@@ -31,6 +31,6 @@
     "yy-random": "^1.2.0",
     "yy-renderer": "^2.4.1",
     "yy-rendersheet": "^3.3.1",
-    "yy-ui": "^0.2.0"
+    "yy-ui": "^0.3.0"
   }
 }

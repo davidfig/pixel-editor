@@ -11,6 +11,8 @@ module.exports = class Coords extends UI.Window
     {
         super({ draggable: true, fit: true })
         this.nameText = this.addChild(new UI.Text('', { place: 'top-center', theme: { spacing: 2 } }))
+        this.frame = this.addChild(new UI.EditText('0', { beforeText: 'frame: ', edit: 'number' }))
+        this.frame.on('changed', this.changeFrame, this)
         this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
         this.frameWidth.on('changed', this.changeFrameWidth, this)
         this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
@@ -39,6 +41,8 @@ module.exports = class Coords extends UI.Window
         let y = 0
         this.nameText.position.set(center - this.nameText.width / 2, y)
         y += this.nameText.height + Settings.BORDER
+        this.frame.position.set(center - this.frame.width / 2, y)
+        y += this.frame.height + Settings.BORDER
         this.frameWidth.position.set(0, y)
         this.frameHeight.position.set(width - this.cursorY.width, y)
         y += this.frameWidth.height + Settings.BORDER
@@ -76,6 +80,7 @@ module.exports = class Coords extends UI.Window
     changed()
     {
         this.nameText.text = PixelEditor.name
+        this.frame.text = PixelEditor.current
         this.frameWidth.text = PixelEditor.width
         this.frameHeight.text = PixelEditor.height
         let x, y
@@ -87,6 +92,15 @@ module.exports = class Coords extends UI.Window
         this.cursorWidth.text = State.cursorSizeX
         this.cursorHeight.text = State.cursorSizeY
         this.dirty = true
+    }
+
+    changeFrame()
+    {
+        const number = parseInt(this.frame.text)
+        if (!isNaN(number) && number >= 0 && number < PixelEditor.frames.length)
+        {
+            PixelEditor.current = number
+        }
     }
 
     changeFrameWidth()

@@ -97,7 +97,7 @@ module.exports = class Coords extends UI.Window
     changeFrame()
     {
         const number = parseInt(this.frame.text)
-        if (!isNaN(number) && number >= 0 && number < PixelEditor.frames.length)
+        if (!isNaN(number) && number >= 0 && number < PixelEditor.imageData.length)
         {
             PixelEditor.current = number
         }

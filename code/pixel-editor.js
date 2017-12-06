@@ -2,7 +2,8 @@ const remote = require('electron').remote
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const path = require('path')
-const Pixel = require('yy-pixel').Pixel
+const Settings = require('./settings')
+const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 
 const sheet = require('./pixel-sheet')
@@ -23,12 +24,8 @@ class PixelEditor extends Pixel
     {
         if (!filename)
         {
-            this.frames = [{ width: DEFAULT[0], height: DEFAULT[1], data: [] }]
-            this.animations = {'idle': [[0,0]]}
-            for (let i = 0; i < DEFAULT[0] * DEFAULT[1]; i++)
-            {
-                this.frames[0].data[i] = null
-            }
+            this.imageData = [[DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]]
+            this.animations = { 'idle': [[0, 0]] }
             let i = 0
             do
             {
@@ -38,7 +35,7 @@ class PixelEditor extends Pixel
             while (fs.existsSync(filename))
             this.filename = filename
             this.name = path.basename(filename, '.json')
-            this.editor = { zoom: 10, current: 0, frames: [{ undo: [], redo: [] }] }
+            this.editor = { zoom: 10, current: 0, imageData: [{ undo: [], redo: [] }] }
             this.save()
         }
         else
@@ -47,30 +44,55 @@ class PixelEditor extends Pixel
             this.load()
             this.name = this.name || path.basename(filename, '.json')
         }
+        this.createCanvases()
+    }
+
+    createCanvases()
+    {
+        this.canvases = []
+        for (let frame of this.imageData)
+        {
+            const canvas = document.createElement('canvas')
+            canvas.width = frame[0]
+            canvas.height = frame[1]
+            canvas.c = canvas.getContext('2d')
+            const image = new Image()
+            image.src = frame[2]
+            image.onload = () => canvas.c.drawImage(0, 0, image)
+        }
+    }
+
+    blank(width, height)
+    {
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        return this.canvasURL(canvas)
+    }
+
+    canvasURL(canvas)
+    {
+        return canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '')
     }
 
     add(index)
     {
-        const add = { width: DEFAULT[0], height: DEFAULT[1], data: [] }
-        for (let i = 0; i < DEFAULT[0] * DEFAULT[0]; i++)
-        {
-            add.data[i] = null
-        }
+        const add = [DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]
         if (typeof index !== 'undefined')
         {
-            this.frames.splice(index, 0, add)
-            this.editor.frames.splice(index, 0, { undo: [], redo: [] })
+            this.imageData.splice(index, 0, add)
+            this.editor.imageData.splice(index, 0, { undo: [], redo: [] })
             Pixel.addFrame(index, this.getData(), sheet)
             sheet.render()
             this.current = index
         }
         else
         {
-            this.frames.push(add)
-            this.editor.frames.push({ undo: [], redo: [] })
-            Pixel.addFrame(this.frames.length - 1, this.getData(), sheet)
+            this.imageData.push(add)
+            this.editor.imageData.push({ undo: [], redo: [] })
+            Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
             sheet.render()
-            this.current = this.frames.length - 1
+            this.current = this.imageData.length - 1
         }
         this.save()
     }
@@ -79,48 +101,48 @@ class PixelEditor extends Pixel
     {
         if (index < this.frames.length)
         {
-            this.frames.splice(index, 1)
+            this.imageData.splice(index, 1)
             this.save()
         }
     }
 
     duplicate(index)
     {
-        if (index < this.frames.length)
+        if (index < this.imageData.length)
         {
-            const frame = this.frames[index]
-            this.frames.push({ width: frame.width, height: frame.height, data: frame.data.slice(0) })
-            const editor = this.editor.frames[index]
-            this.editor.frames.push({ undo: editor.undo, redo: editor.redo })
-            Pixel.addFrame(this.frames.length - 1, this.getData(), sheet)
+            const frame = this.imageData[index]
+            this.imageData.push([frame[0], frame[1], frame[2].slice(0)])
+            const editor = this.editor.imageData[index]
+            this.editor.imageData.push({ undo: editor.undo, redo: editor.redo })
+            Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
             sheet.render()
-            this.current = this.frames.length - 1
+            this.current = this.imageData.length - 1
             this.save()
         }
     }
 
     remove(index)
     {
-        if (index < this.frames.length && this.frames.length > 1)
+        if (index < this.imageData.length && this.imageData.length > 1)
         {
-            this.frames.splice(index, 1)
-            this.editor.frames.splice(index, 1)
-            this.current = (index < this.frames.length) ? index : 0
+            this.imageData.splice(index, 1)
+            this.editor.imageData.splice(index, 1)
+            this.current = (index < this.imageData.length) ? index : 0
             this.save()
         }
     }
 
     get count()
     {
-        return this.frames.length
+        return this.imageData.length
     }
 
     get largestWidth()
     {
         let width = 0
-        for (let frame of this.frames)
+        for (let frame of this.imageData)
         {
-            width = frame.width > width ? frame.width : width
+            width = frame[0] > width ? frame[0] : width
         }
         return width
     }
@@ -128,25 +150,25 @@ class PixelEditor extends Pixel
     get largestHeight()
     {
         let height = 0
-        for (let frame of this.frames)
+        for (let frame of this.imageData)
         {
-            height = frame.height > height ? frame.width : height
+            height = frame[1] > height ? frame[1] : height
         }
         return height
     }
 
     move(index, newIndex)
     {
-        if (index < this.frames.length)
+        if (index < this.imageData.length)
         {
-            const frame = this.frames.splice(index, 1)[0]
-            const editor = this.editor.frames.splice(index, 1)[0]
+            const frame = this.imageData.splice(index, 1)[0]
+            const editor = this.editor.imageData.splice(index, 1)[0]
             if (newIndex > index)
             {
                 newIndex--
             }
-            this.frames.splice(newIndex, 0, frame)
-            this.editor.frames.splice(newIndex, 0, editor)
+            this.imageData.splice(newIndex, 0, frame)
+            this.editor.imageData.splice(newIndex, 0, editor)
             sheet.render()
             this.save()
         }
@@ -154,6 +176,8 @@ class PixelEditor extends Pixel
 
     rotate(reverse)
     {
+        console.log('not working...')
+        return
         this.undoSave()
         const data = []
         for (let y = 0; y < this.height; y++)
@@ -165,18 +189,21 @@ class PixelEditor extends Pixel
                 data[x2 + y2] = this.get(x, y)
             }
         }
-        const current = this.frames[this.editor.current]
+        const current = this.imageData[this.editor.current]
         current.data = data
-        const swap = current.height
-        current.height = current.width
-        current.width = swap
+        const swap = current[1]
+        current[1] = current[0]
+        current[0] = swap
         sheet.render()
         this.save()
     }
 
     flipHorizontal()
     {
+        console.log('not working...')
+        return
         this.undoSave()
+        const canvas = document.createElement('canvas')
         const data = []
         for (let y = 0; y < this.height; y++)
         {
@@ -192,6 +219,8 @@ class PixelEditor extends Pixel
 
     flipVertical()
     {
+        console.log('not working...')
+        return
         this.undoSave()
         const data = []
         for (let y = 0; y < this.height; y++)
@@ -204,17 +233,6 @@ class PixelEditor extends Pixel
         this.data = data
         sheet.render()
         this.save()
-    }
-
-    blank()
-    {
-        const data = []
-        for (let i = 0; i < this.width * this.height; i++)
-        {
-            data.push(null)
-        }
-        this.frames.push({ width: this.width, height: this.height, data })
-        this.editor.frames.push({ undo: [], redo: [] })
     }
 
     set(x, y, value, noUndo)
@@ -236,22 +254,12 @@ class PixelEditor extends Pixel
     {
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
-            return this.data[x + y * this.width]
+            return this.canvases[this.current].c.getImageData(x, y, 1, 1)
         }
         else
         {
             return null
         }
-    }
-
-    get data()
-    {
-        return this.frames[this.editor.current].data
-    }
-    set data(value)
-    {
-        this.frames[this.editor.current].data = value
-        this.save()
     }
 
     get current()
@@ -270,7 +278,7 @@ class PixelEditor extends Pixel
     get maxWidth()
     {
         let width = 0
-        for (let frame of this.frames)
+        for (let frame of this.imageData)
         {
             width = frame.width > width ? frame.width : width
         }
@@ -279,13 +287,15 @@ class PixelEditor extends Pixel
 
     get width()
     {
-        return this.frames[this.editor.current].width
+        return this.imageData[this.editor.current][0]
     }
     set width(value)
     {
         value = parseInt(value)
         if (this.width !== value && !isNaN(value) && value > 0)
         {
+            console.log('...not working')
+            return
             this.undoSave()
             const data = []
             for (let y = 0; y < this.height; y++)
@@ -303,6 +313,8 @@ class PixelEditor extends Pixel
 
     adjustWidth(width, align)
     {
+        console.log('...not working')
+        return
         if (this.width !== width)
         {
             let start = 0
@@ -332,6 +344,8 @@ class PixelEditor extends Pixel
 
     adjustHeight(height, align)
     {
+        console.log('...not working')
+        return
         if (this.height !== height)
         {
             let start = 0
@@ -361,6 +375,8 @@ class PixelEditor extends Pixel
 
     crop(xStart, yStart, width, height)
     {
+        console.log('...not working')
+        return
         this.undoSave()
         const data = []
         for (let y = yStart; y < yStart + height; y++)
@@ -380,7 +396,7 @@ class PixelEditor extends Pixel
     get maxHeight()
     {
         let height = 0
-        for (let frame of this.frames)
+        for (let frame of this.imageData)
         {
             height = frame.height > height ? frame.height : height
         }
@@ -389,10 +405,12 @@ class PixelEditor extends Pixel
 
     get height()
     {
-        return this.frames[this.editor.current].height
+        return this.imageData[this.editor.current][1]
     }
     set height(value)
     {
+        console.log('...not working')
+        return
         value = parseInt(value)
         if (this.height !== value && !isNaN(value) && value > 0)
         {
@@ -413,21 +431,21 @@ class PixelEditor extends Pixel
 
     get undo()
     {
-        return this.editor.frames[this.editor.current].undo
+        return this.editor.imageData[this.editor.current].undo
     }
     set undo(value)
     {
-        this.editor.frames[this.editor.current].undo = value
+        this.editor.imageData[this.editor.current].undo = value
         this.save()
     }
 
     get redo()
     {
-        return this.editor.frames[this.editor.current].redo
+        return this.editor.imageData[this.editor.current].redo
     }
     set redo(value)
     {
-        this.editor.frames[this.editor.current].redo = value
+        this.editor.imageData[this.editor.current].redo = value
         this.save()
     }
 
@@ -443,7 +461,9 @@ class PixelEditor extends Pixel
 
     undoSave()
     {
-        this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
+        console.log('...not working')
+        return
+        this.undo.push({ width: this.width, height: this.height, data: this.data })
         while (this.undo.length > UNDO_SIZE)
         {
             this.undo.shift()
@@ -454,6 +474,8 @@ class PixelEditor extends Pixel
 
     undoOne()
     {
+        console.log('...not working')
+        return
         if (this.undo.length)
         {
             this.redo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
@@ -468,6 +490,8 @@ class PixelEditor extends Pixel
 
     redoOne()
     {
+        console.log('...not working')
+        return
         if (this.redo.length)
         {
             const redo = this.redo.pop()
@@ -486,11 +510,11 @@ class PixelEditor extends Pixel
         try
         {
             const load = jsonfile.readFileSync(filename)
-            if (!load.frames.length || !load.animations || !load.frames[0].width || !load.frames[0].height)
+            if (!load.imageData.length || !load.animations || load.imageData[0].length !== 3)
             {
                 return
             }
-            this.frames = load.frames
+            this.imageData = load.imageData
             this.animations = load.animations
             this.name = load.name
             this.render(true)
@@ -506,7 +530,7 @@ class PixelEditor extends Pixel
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
             this.editor.current = 0
             this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : 10
-            for (let frame of this.editor.frames)
+            for (let frame of this.editor.imageData)
             {
                 if (frame.undo.length > UNDO_SIZE)
                 {
@@ -521,9 +545,9 @@ class PixelEditor extends Pixel
         {
             this.editor = {}
             this.editor.frames = []
-            for (let i = 0; i < this.frames.length; i++)
+            for (let i = 0; i < this.imageData.length; i++)
             {
-                this.editor.frames.push({ undo: [], redo: [] })
+                this.editor.imageData.push({ undo: [], redo: [] })
             }
             this.editor.current = 0
             this.editor.zoom = 10
@@ -536,7 +560,7 @@ class PixelEditor extends Pixel
     {
         const changed = this.filename !== filename
         this.filename = filename || this.filename
-        jsonfile.writeFileSync(this.filename, { name: this.name, frames: this.frames, animations: this.animations })
+        jsonfile.writeFileSync(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
         if (this.editor)
         {
             jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
@@ -551,39 +575,8 @@ class PixelEditor extends Pixel
 
     getData()
     {
-        return { name: this.name, frames: this.frames, animations: this.animations }
-    }
-
-    export()
-    {
-        const result = { data: [], colors: [] }
-        const frame = this.frames[this.editor.current]
-        for (let y = 0; y < frame.height; y++)
-        {
-            for (let x = 0; x < frame.width; x++)
-            {
-                let index
-                const color = this.get(x, y)
-                if (color !== null)
-                {
-                    for (let i = 0; i < result.colors.length; i++)
-                    {
-                        if (result.colors[i] === color)
-                        {
-                            index = i
-                            break
-                        }
-                    }
-                    if (!exists(index))
-                    {
-                        result.colors.push(color)
-                        index = result.colors.length - 1
-                    }
-                }
-                result.data.push(index)
-            }
-        }
-        return JSON.stringify(result, null, 0).replace(/"/g, '\'')
+        return { name: this.name, imageData: this.imageData, animations: this.animations }
     }
 }
+
 module.exports = new PixelEditor()

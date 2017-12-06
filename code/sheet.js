@@ -1,4 +1,6 @@
-const RenderSheet = require('yy-rendersheet')
+const Settings = require('./settings')
+
+const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Color = require('yy-color')
 
 const State = require('./state')

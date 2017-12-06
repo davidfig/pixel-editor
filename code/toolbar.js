@@ -1,7 +1,9 @@
+const Settings = require('./settings')
+
 const exists = require('exists')
 const PIXI = require('pixi.js')
-const RenderSheet = require('yy-rendersheet')
-const Pixel = require('yy-pixel').Pixel
+const RenderSheet = require(Settings.YY_RENDERSHEET)
+const Pixel = require(Settings.YY_PIXEL).Pixel
 
 const UI = require('yy-ui')
 const State = require('./state')
@@ -28,7 +30,11 @@ module.exports = class Toolbar extends UI.Stack
         {
             Pixel.add(pixel, this.sheet)
         }
-        this.sheet.render()
+        this.sheet.render(() => this.afterLoad())
+    }
+
+    afterLoad()
+    {
         for (let pixel of BUTTONS)
         {
             const sprite = this.sheet.get(pixel.name + '-0')
@@ -40,7 +46,6 @@ module.exports = class Toolbar extends UI.Stack
         }
         this.buttons[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
         this.buttons[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
-        this.sheet.render()
         this.changed()
         this.stateSetup('toolbar')
     }

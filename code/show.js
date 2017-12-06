@@ -1,12 +1,12 @@
 const PIXI = require('pixi.js')
-const Pixel = require('yy-pixel').Pixel
+const Settings = require('./settings')
+const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
 const UI = require('yy-ui')
 const State = require('./state')
-const Settings = require('./settings')
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
@@ -26,7 +26,7 @@ module.exports = class Show extends UI.Window
     measure()
     {
         let width = 0, height = 0
-        for (let frame of PixelEditor.frames)
+        for (let frame of PixelEditor.imageData)
         {
             width += frame.width
             height = frame.height > height ? frame.height : height
@@ -52,7 +52,7 @@ module.exports = class Show extends UI.Window
         const scale = PixelEditor.zoom
         let xStart = 0, yStart = 0
         let biggest = 0
-        for (let i = 0; i < PixelEditor.frames.length; i++)
+        for (let i = 0; i < PixelEditor.imageData.length; i++)
         {
             const pixel = this.pixels.addChild(new Pixel(data, sheet))
             pixel.scale.set(scale)
@@ -69,7 +69,7 @@ module.exports = class Show extends UI.Window
             number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
             number.position.set(xStart + pixel.width - number.width, yStart)
             number.alpha = 0.25
-            if (i === PixelEditor.current && PixelEditor.frames.length > 1)
+            if (i === PixelEditor.current && PixelEditor.imageData.length > 1)
             {
                 this.selector.position.set(xStart, yStart)
                 this.selector.width = pixel.width
@@ -184,7 +184,7 @@ module.exports = class Show extends UI.Window
             {
                 if (PixelEditor.current === 0)
                 {
-                    PixelEditor.current = PixelEditor.frames.length - 1
+                    PixelEditor.current = PixelEditor.imageData.length - 1
                 }
                 else
                 {
@@ -193,7 +193,7 @@ module.exports = class Show extends UI.Window
             }
             else if (code === 39)
             {
-                if (PixelEditor.current === PixelEditor.frames.length - 1)
+                if (PixelEditor.current === PixelEditor.imageData.length - 1)
                 {
                     PixelEditor.current = 0
                 }

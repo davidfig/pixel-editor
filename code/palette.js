@@ -183,7 +183,8 @@ module.exports = class Palette extends UI.Window
     updateColors()
     {
         this.colors[0] = []
-        for (let frame of PixelEditor.frames)
+console.log('...not working'); return
+        for (let frame of PixelEditor.imageData)
         {
             for (let color of frame.data)
             {

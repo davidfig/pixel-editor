@@ -4,6 +4,7 @@ const url = require('url')
 const path = require('path')
 
 const State = require('./code/state')
+const Settings = require('./code/settings')
 
 let _main
 
@@ -25,7 +26,10 @@ function init()
         _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
     }
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'html', 'main.html'), protocol: 'file:', slashes: true }))
-    // _main.toggleDevTools()
+    if (Settings.DEBUG)
+    {
+        _main.toggleDevTools()
+    }
     State.setupMain(_main)
 }
 

@@ -1,14 +1,14 @@
+const Settings = require('./settings')
+
 const PIXI = require('pixi.js')
-const RenderSheet = require('yy-rendersheet')
-const Pixel = require('yy-pixel').Pixel
-// const Pixel = require('../../components/pixel').Pixel
+const RenderSheet = require(Settings.YY_RENDERSHEET)
+const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
 const UI = require('yy-ui')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
-const Settings = require('./settings')
 const sheet = require('./pixel-sheet')
 
 const MIN_WIDTH = 200

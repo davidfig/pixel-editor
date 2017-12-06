@@ -1,5 +1,6 @@
 const PIXI = require('pixi.js')
-const Pixel = require('yy-pixel').Pixel
+const Settings = require('./settings')
+const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 
 const Sheet = require('./sheet')

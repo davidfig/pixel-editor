@@ -569,6 +569,7 @@ class PixelEditor extends Pixel
             this.name = load.name
             this.render(true)
             this.createCanvases()
+            sheet.render(() => this.emit('changed'))
         }
         catch (e)
         {

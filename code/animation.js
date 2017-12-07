@@ -63,7 +63,11 @@ module.exports = class Animation extends UI.Window
         this.time = 150
         this.animationTime.on('changed', this.changeTime, this)
         this.disableControls(true)
-        this.sheet.render()
+        this.sheet.render(this.afterLoad.bind(this))
+    }
+
+    afterLoad()
+    {
         this.stateSetup('animation')
         this.layout()
         this.height = this.maxHeight

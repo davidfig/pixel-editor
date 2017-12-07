@@ -180,8 +180,6 @@ class PixelEditor extends Pixel
 
     rotate(reverse)
     {
-        console.log('not working...')
-        return
         this.undoSave()
         const data = []
         for (let y = 0; y < this.height; y++)
@@ -204,10 +202,7 @@ class PixelEditor extends Pixel
 
     flipHorizontal()
     {
-        console.log('not working...')
-        return
         this.undoSave()
-        const canvas = document.createElement('canvas')
         const data = []
         for (let y = 0; y < this.height; y++)
         {
@@ -216,15 +211,18 @@ class PixelEditor extends Pixel
                 data[this.width - x - 1 + y * this.width] = this.get(x, y)
             }
         }
-        this.data = data
-        sheet.render()
+        for (let y = 0; y < this.height; y++)
+        {
+            for (let x = 0; x < this.width; x++)
+            {
+                this.set(x, y, data[x + y * this.width], true)
+            }
+        }
         this.save()
     }
 
     flipVertical()
     {
-        console.log('not working...')
-        return
         this.undoSave()
         const data = []
         for (let y = 0; y < this.height; y++)
@@ -234,8 +232,13 @@ class PixelEditor extends Pixel
                 data[x + (this.height - y - 1) * this.width] = this.get(x, y)
             }
         }
-        this.data = data
-        sheet.render()
+        for (let y = 0; y < this.height; y++)
+        {
+            for (let x = 0; x < this.width; x++)
+            {
+                this.set(x, y, data[x + y * this.width], true)
+            }
+        }
         this.save()
     }
 
@@ -267,6 +270,7 @@ class PixelEditor extends Pixel
             this.save()
         }
     }
+
     get(x, y)
     {
         function hex(n)
@@ -311,34 +315,36 @@ class PixelEditor extends Pixel
 
     get width()
     {
-        return this.imageData[this.editor.current][0]
+        return this.imageData[this.current][0]
     }
     set width(value)
     {
         value = parseInt(value)
         if (this.width !== value && !isNaN(value) && value > 0)
         {
-            console.log('...not working')
-            return
             this.undoSave()
             const data = []
             for (let y = 0; y < this.height; y++)
             {
                 for (let x = 0; x < value; x++)
                 {
-                    data[x + y * value] = (x < this.width) ? this.get(x, y) : null
+                    data[x + y * value] = (x < this.width) ? this.get(x, y) : '00000000'
                 }
             }
-            this.imageData[this.editor.current].data = data
-            this.imageData[this.editor.current].width = value
+            this.canvases[this.current].width = this.imageData[this.current][0] = value
+            for (let y = 0; y < this.height; y++)
+            {
+                for (let x = 0; x < value; x++)
+                {
+                    this.set(x, y, data[x + y * value], true)
+                }
+            }
             this.save()
         }
     }
 
     adjustWidth(width, align)
     {
-        console.log('...not working')
-        return
         if (this.width !== width)
         {
             let start = 0
@@ -359,17 +365,20 @@ class PixelEditor extends Pixel
                     data[x - start + y * width] = this.get(x, y)
                 }
             }
-            this.frames[this.editor.current].data = data
-            this.frames[this.editor.current].width = width
-            this.sheet.render()
+            this.canvases[this.current].width = this.imageData[this.current][0] = width
+            for (let y = 0; y < this.height; y++)
+            {
+                for (let x = 0; x < width; x++)
+                {
+                    this.set(x, y, data[x + y * width], true)
+                }
+            }
             this.save()
         }
     }
 
     adjustHeight(height, align)
     {
-        console.log('...not working')
-        return
         if (this.height !== height)
         {
             let start = 0
@@ -390,17 +399,20 @@ class PixelEditor extends Pixel
                     data[x + (y - start) * this.width] = this.get(x, y)
                 }
             }
-            this.frames[this.editor.current].data = data
-            this.frames[this.editor.current].height = height
-            this.sheet.render()
+            this.canvases[this.current].height = this.imageData[this.current][1] = height
+            for (let y = 0; y < height; y++)
+            {
+                for (let x = 0; x < this.width; x++)
+                {
+                    this.set(x, y, data[x + y * this.width], true)
+                }
+            }
             this.save()
         }
     }
 
     crop(xStart, yStart, width, height)
     {
-        console.log('...not working')
-        return
         this.undoSave()
         const data = []
         for (let y = yStart; y < yStart + height; y++)
@@ -410,10 +422,15 @@ class PixelEditor extends Pixel
                 data[x - xStart + (y - yStart) * width] = this.get(x, y)
             }
         }
-        this.frames[this.editor.current].data = data
-        this.frames[this.editor.current].width = width
-        this.frames[this.editor.current].height = height
-        this.sheet.render()
+        this.imageData[this.editor.current][0] = this.canvases[this.current].width = width
+        this.imageData[this.editor.current][1] = this.canvases[this.current].height = height
+        for (let y = 0; y < height; y++)
+        {
+            for (let x = 0; x < width; x++)
+            {
+                this.set(x, y, data[x + y * width], true)
+            }
+        }
         this.save()
     }
 
@@ -433,8 +450,6 @@ class PixelEditor extends Pixel
     }
     set height(value)
     {
-        console.log('...not working')
-        return
         value = parseInt(value)
         if (this.height !== value && !isNaN(value) && value > 0)
         {
@@ -447,8 +462,14 @@ class PixelEditor extends Pixel
                     data[x + y * this.width] = (y < this.height) ? this.get(x, y) : null
                 }
             }
-            this.frames[this.editor.current].data = data
-            this.frames[this.editor.current].height = value
+            this.imageData[this.current].height = this.canvases[this.current].height = value
+            for (let y = 0; y < value; y++)
+            {
+                for (let x = 0; x < this.width; x++)
+                {
+                    this.set(x, y, data[x + y * this.width], true)
+                }
+            }
             this.save()
         }
     }
@@ -498,33 +519,38 @@ class PixelEditor extends Pixel
     {
         if (this.undo.length)
         {
-            this.redo.push({ width: this.width, height: this.height, data: this.canvases[this.current].image.src })
+            this.redo.push({ width: this.width, height: this.height, data: this.imageData[this.current][2] })
             const undo = this.undo.pop()
             this.imageData[this.current][0] = undo.width
             this.imageData[this.current][1] = undo.height
             this.imageData[this.current][2] = undo.data
-            const canvas = this.canvases[this.current]
-            canvas.width = undo.width
-            canvas.height = undo.height
-            canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
-            canvas.image.src = PNG_HEADER + undo.data
-            this.save()
+            this.changeCanvas(undo.width, undo.height)
         }
+    }
+
+    changeCanvas(width, height)
+    {
+        const canvas = this.canvases[this.current]
+        if (exists(width))
+        {
+            canvas.width = width
+            canvas.height = height
+        }
+        canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
+        canvas.image.src = PNG_HEADER + this.imageData[this.current][2]
+        this.save()
     }
 
     redoOne()
     {
-        console.log('...not working')
-        return
         if (this.redo.length)
         {
             const redo = this.redo.pop()
-            this.frames[this.current].width = redo.width
-            this.frames[this.current].height = redo.height
-            this.frames[this.current].data = redo.data
-            this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
-            this.save()
-            sheet.render()
+            this.imageData[this.current][0] = redo.width
+            this.imageData[this.current][1] = redo.height
+            this.imageData[this.current][2] = redo.data
+            this.undo.push({ width: this.width, height: this.height, data: this.imageData[this.current][2] })
+            this.changeCanvas(redo.width, redo.height)
         }
     }
 

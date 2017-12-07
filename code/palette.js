@@ -16,6 +16,7 @@ const MIN_WIDTH = 250
 const MIN_HEIGHT = 200
 const WIDTH = 10
 const SPACING = 5
+const SELECTED = 3
 
 module.exports = class Palette extends UI.Window
 {
@@ -24,6 +25,7 @@ module.exports = class Palette extends UI.Window
         super({ draggable: true, resizeable: true, width: 100, height: 100 })
         this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
+        this.selected = this.addChild(new PIXI.Graphics())
         this.palettes()
         this.stateSetup('palette')
     }
@@ -42,6 +44,7 @@ module.exports = class Palette extends UI.Window
 
     draw()
     {
+        this.selected.clear()
         this.updateColors()
         this.drawBlocks()
     }
@@ -78,20 +81,10 @@ module.exports = class Palette extends UI.Window
         this.backgroundColor.tint = parseInt(State.background.substr(0, 6), 16)
         this.backgroundColor.alpha = parseInt(State.background.substr(6), 16) / 255
 
-        const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-        block.anchor.set(0.5)
-        block.width = block.height = width / 3
         const choose = State.isForeground ? this.foregroundColor : this.backgroundColor
-        block.position.set(choose.x + choose.width / 2, this.foregroundColor.y + this.foregroundColor.height / 2)
-        this.activeColor = block
-        if (State.color === '000000ff' || State.color.substr(6) === '00')
-        {
-            this.activeColor.tint = 0xffffff
-        }
-        else
-        {
-            this.activeColor.tint = 0
-        }
+        this.selected.beginFill((State.color === '000000ff' || State.color.substr(6) === '00') ? 0xffffff : 0)
+            .drawRect(choose.x + choose.width / 2 - width / 3 / 2, choose.y + choose.height / 2 - width / 3 / 2, width / 3, width / 3)
+            .endFill()
 
         const colors = ['000000ff', 'ffffffff', '00000000']
         for (let i = 0; i < colors.length; i++)
@@ -113,11 +106,8 @@ module.exports = class Palette extends UI.Window
             }
             if (color === State.color)
             {
-                const extra = new PIXI.Sprite(PIXI.Texture.WHITE)
-                this.blocks.addChildAt(extra, this.blocks.children.indexOf(block))
-                extra.tint = color === 0 ? 0xffffff : 0
-                extra.width = extra.height = block.width + SPACING
-                extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
+                this.selected.lineStyle(SELECTED, color === '000000ff' ? 0xffffff : 0)
+                    .drawRect(block.x - SELECTED / 2, block.y - SELECTED / 2, block.width + SELECTED, block.height + SELECTED)
             }
             const fill = color === '000000ff' ? 'white' : 'black'
             const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
@@ -139,13 +129,11 @@ module.exports = class Palette extends UI.Window
                 block.position.set(SPACING / 2 + x * width, y * width + yStart)
                 behind.position = block.position
                 block.tint = parseInt(line[i].substr(0, 6), 16)
+                block.alpha = parseInt(line[i].substr(6), 16) / 0xff
                 if (line[i] === State.color)
                 {
-                    const extra = new PIXI.Sprite(PIXI.Texture.WHITE)
-                    this.blocks.addChildAt(extra, this.blocks.children.indexOf(block))
-                    extra.tint = 0
-                    extra.width = extra.height = block.width + SPACING * 1
-                    extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
+                    this.selected.lineStyle(SELECTED, 0)
+                        .drawRect(block.x - SELECTED / 2, block.y - SELECTED / 2, block.width + SELECTED, block.height + SELECTED)
                 }
                 if (first && i <= 10 - 4)
                 {

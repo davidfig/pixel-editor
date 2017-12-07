@@ -94,8 +94,10 @@ module.exports = class Draw extends UI.Window
         }
     }
 
-    ellipseCursor(color)
+    ellipseCursor()
     {
+        const color = parseInt(State.color.substr(0, 6), 16)
+        const alpha = parseInt(State.color.substr(6), 16) / 255
         this.cursorBlock.lineStyle(0)
         this.cursorBlock.position.set(0, 0)
         let xc = State.cursorX
@@ -201,8 +203,10 @@ module.exports = class Draw extends UI.Window
         return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
     }
 
-    circleCursor(color)
+    circleCursor()
     {
+        const color = parseInt(State.color.substr(0, 6), 16)
+        const alpha = parseInt(State.color.substr(6), 16) / 255
         this.cursorBlock.lineStyle(0)
         this.cursorBlock.position.set(0, 0)
         let x0 = State.cursorX
@@ -284,7 +288,7 @@ module.exports = class Draw extends UI.Window
                 const pos = block.split(',')
                 if (this.inBounds(pos))
                 {
-                    this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                    this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
                     this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
                 }
             }
@@ -343,7 +347,7 @@ module.exports = class Draw extends UI.Window
 
     fillCursor(reverse)
     {
-        const color = reverse ? 0x888888 : State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = reverse ? 0x888888 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0,6), 16)
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
         this.cursorBlock.lineStyle(10, color)
         this.cursorBlock.drawRect(0, 0, this.zoom, this.zoom)
@@ -351,7 +355,7 @@ module.exports = class Draw extends UI.Window
 
     normalCursor()
     {
-        const color = State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
         this.cursorBlock.lineStyle(5, color)
         const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
@@ -361,7 +365,7 @@ module.exports = class Draw extends UI.Window
 
     selectCursor(special)
     {
-        const color = special ? 0xd20000 : State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = special ? 0xd20000 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
         this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
         this.cursorBlock.lineStyle(5, color)
         const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
@@ -489,15 +493,15 @@ module.exports = class Draw extends UI.Window
                 break
 
             case 'circle':
-                this.circleCursor(State.foreground)
+                this.circleCursor()
                 break
 
             case 'ellipse':
-                this.ellipseCursor(State.foreground)
+                this.ellipseCursor()
                 break
 
             case 'line':
-                this.lineCursor(State.foreground)
+                this.lineCursor()
                 break
 
             case 'fill':
@@ -750,7 +754,6 @@ module.exports = class Draw extends UI.Window
 
     paste()
     {
-console.log('...needs fixing');return
         if (this.clipboard)
         {
             PixelEditor.undoSave()

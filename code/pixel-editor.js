@@ -11,6 +11,7 @@ const sheet = require('./pixel-sheet')
 
 const DEFAULT = [15, 15]
 const UNDO_SIZE = 50
+const PNG_HEADER = 'data:image/png;base64,'
 
 class PixelEditor extends Pixel
 {
@@ -58,12 +59,10 @@ class PixelEditor extends Pixel
             canvas.width = frame[0]
             canvas.height = frame[1]
             canvas.c = canvas.getContext('2d')
-            const image = new Image(frame[0], frame[1])
-            image.src = 'data:image/png;base64,' + frame[2]
-            image.onload = () => canvas.c.drawImage(image, 0, 0)
+            canvas.image = new Image()
+            canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
+            canvas.image.src = PNG_HEADER + frame[2]
             this.canvases.push(canvas)
-canvas.style.position = 'fixed'
-document.body.appendChild(canvas)
         }
     }
 
@@ -270,14 +269,20 @@ document.body.appendChild(canvas)
     }
     get(x, y)
     {
+        function hex(n)
+        {
+            const hex = n.toString(16)
+            return hex.length === 2 ? hex : '0' + hex
+        }
+
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const data = this.canvases[this.current].c.getImageData(x, y, 1, 1).data
-            return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3]
+            return hex(data[0]) + hex(data[1]) + hex(data[2]) + hex(data[3])
         }
         else
         {
-            return 0
+            return '00000000'
         }
     }
 
@@ -480,9 +485,7 @@ document.body.appendChild(canvas)
 
     undoSave()
     {
-        console.log('...not working')
-        return
-        this.undo.push({ width: this.width, height: this.height, data: this.data })
+        this.undo.push({ width: this.width, height: this.height, data: this.imageData[this.current][2] })
         while (this.undo.length > UNDO_SIZE)
         {
             this.undo.shift()
@@ -493,17 +496,19 @@ document.body.appendChild(canvas)
 
     undoOne()
     {
-        console.log('...not working')
-        return
         if (this.undo.length)
         {
-            this.redo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
+            this.redo.push({ width: this.width, height: this.height, data: this.canvases[this.current].image.src })
             const undo = this.undo.pop()
-            this.frames[this.editor.current].width = undo.width
-            this.frames[this.editor.current].height = undo.height
-            this.frames[this.editor.current].data = undo.data
+            this.imageData[this.current][0] = undo.width
+            this.imageData[this.current][1] = undo.height
+            this.imageData[this.current][2] = undo.data
+            const canvas = this.canvases[this.current]
+            canvas.width = undo.width
+            canvas.height = undo.height
+            canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
+            canvas.image.src = PNG_HEADER + undo.data
             this.save()
-            sheet.render()
         }
     }
 
@@ -514,9 +519,9 @@ document.body.appendChild(canvas)
         if (this.redo.length)
         {
             const redo = this.redo.pop()
-            this.frames[this.editor.current].width = redo.width
-            this.frames[this.editor.current].height = redo.height
-            this.frames[this.editor.current].data = redo.data
+            this.frames[this.current].width = redo.width
+            this.frames[this.current].height = redo.height
+            this.frames[this.current].data = redo.data
             this.undo.push({ width: this.width, height: this.height, data: this.data.slice(0) })
             this.save()
             sheet.render()
@@ -537,6 +542,7 @@ document.body.appendChild(canvas)
             this.animations = load.animations
             this.name = load.name
             this.render(true)
+            this.createCanvases()
         }
         catch (e)
         {

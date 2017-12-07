@@ -61,27 +61,30 @@ module.exports = class Palette extends UI.Window
         const fontSize = FontSize('8', { width, height: width * 0.75 })
         let yStart = Settings.BORDER
 
-        this.foregroundColor = this.main.addChild(new PIXI.Sprite(State.foreground === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
-        this.foregroundColor.width = this.foregroundColor.height = width * 2 - SPACING
-        this.foregroundColor.position.set(0, yStart)
-        if (State.foreground !== null)
-        {
-            this.foregroundColor.tint = parseInt(State.foreground.substr(0, 6), 16)
-        }
-        this.backgroundColor = this.main.addChild(new PIXI.Sprite(State.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
-        this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
+        const behindForeground = this.main.addChild(Sheet.get('transparency'))
+        behindForeground.anchor.set(0)
+        this.foregroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        behindForeground.width = behindForeground.height = this.foregroundColor.width = this.foregroundColor.height = width * 2 - SPACING
+        behindForeground.y = this.foregroundColor.y = yStart
+        this.foregroundColor.tint = parseInt(State.foreground.substr(0, 6), 16)
+        this.foregroundColor.alpha = parseInt(State.foreground.substr(6), 16) / 255
+
+        const behindBackground = this.main.addChild(Sheet.get('transparency'))
+        behindBackground.anchor.set(0)
+        this.backgroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        behindBackground.width = behindBackground.height = this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
         this.backgroundColor.position.set(width * 2, yStart)
-        if (State.background !== null)
-        {
-            this.backgroundColor.tint = parseInt(State.background.substr(0, 6), 16)
-        }
+        behindBackground.position = this.backgroundColor.position
+        this.backgroundColor.tint = parseInt(State.background.substr(0, 6), 16)
+        this.backgroundColor.alpha = parseInt(State.background.substr(6), 16) / 255
+
         const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         block.anchor.set(0.5)
         block.width = block.height = width / 3
         const choose = State.isForeground ? this.foregroundColor : this.backgroundColor
         block.position.set(choose.x + choose.width / 2, this.foregroundColor.y + this.foregroundColor.height / 2)
         this.activeColor = block
-        if (State.color === 0 || State.color === null)
+        if (State.color === '000000ff' || State.color.substr(6) === '00')
         {
             this.activeColor.tint = 0xffffff
         }
@@ -97,6 +100,7 @@ module.exports = class Palette extends UI.Window
             const block = this.blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
             block.width = block.height = width * 1.25 - SPACING
             block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, width / 3 + yStart)
+            block.color = color
             if (color !== '00000000')
             {
                 block.texture = PIXI.Texture.WHITE
@@ -127,9 +131,13 @@ module.exports = class Palette extends UI.Window
         {
             for (let i = 0; i < line.length; i++)
             {
+                const behind = this.blocks.addChild(Sheet.get('transparency'))
+                behind.anchor.set(0)
+                behind.color = line[i]
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-                block.width = block.height = width - SPACING
+                behind.width = behind.height = block.width = block.height = width - SPACING
                 block.position.set(SPACING / 2 + x * width, y * width + yStart)
+                behind.position = block.position
                 block.tint = parseInt(line[i].substr(0, 6), 16)
                 if (line[i] === State.color)
                 {
@@ -182,13 +190,20 @@ module.exports = class Palette extends UI.Window
 
     updateColors()
     {
-        this.colors[0] = []
-console.log('...not working'); return
-        for (let frame of PixelEditor.imageData)
+        function hex(n)
         {
-            for (let color of frame.data)
+            const hex = n.toString(16)
+            return hex.length === 2 ? hex : '0' + hex
+        }
+
+        this.colors[0] = []
+        for (let canvas of PixelEditor.canvases)
+        {
+            const data = canvas.c.getImageData(0, 0, canvas.width, canvas.height).data
+            for (let i = 0; i < data.length; i += 4)
             {
-                if (color !== null && color !== 0xffffff && color !== 0 && !this.findColor(color))
+                const color = hex(data[i]) + hex(data[i + 1]) + hex(data[i + 2]) + hex(data[i + 3])
+                if (color !== '00000000' && color !== 'ffffffff' && color !== '000000ff' && !this.findColor(color))
                 {
                     this.colors[0].push(color)
                 }
@@ -198,8 +213,10 @@ console.log('...not working'); return
         this.colors[0].sort(
             function (a, b)
             {
-                const hslA = convert(a)
-                const hslB = convert(b)
+                const colorA = parseInt(a.substr(0, 6), 16)
+                const colorB = parseInt(b.substr(0, 6), 16)
+                const hslA = convert(colorA)
+                const hslB = convert(colorB)
                 return hslA.h < hslB.h ? -1 : hslA.h > hslB.h ? 1 : hslA.l < hslB.l ? -1 : hslA.l > hslB.l - 1 ? hslA.s < hslB.s : hslA.s > hslB.s ? -1 : 0
             })
     }
@@ -224,7 +241,7 @@ console.log('...not working'); return
         {
             if (block.containsPoint(point))
             {
-                State.color = (block.isTransparent) ? null : block.tint
+                State.color = block.color
                 this.layout()
                 return true
             }
@@ -270,14 +287,13 @@ console.log('...not working'); return
                     this.dirty = true
                     break
                 case 49:
-                    State.color = 0
-                    this.dirty = true
+                    State.color = '000000ff'
                     break
                 case 50:
-                    State.color = 0xffffff
+                    State.color = 'ffffffff'
                     break
                 case 51:
-                    State.color = null
+                    State.color = '00000000'
                     break
                 case 52: case 53: case 54: case 55: case 56: case 57: case 58:
                     if (exists(this.colors[0][code - 52]))

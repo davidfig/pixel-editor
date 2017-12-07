@@ -71,17 +71,20 @@ module.exports = class Show extends UI.Window
             number.position.set(xStart + width / 2 - number.width / 2, yStart + height + Settings.BORDER)
             number.position.set(xStart + width - number.width, yStart)
             number.alpha = 0.25
-            if (i === PixelEditor.current && PixelEditor.imageData.length > 1)
-            {
-                this.selector.position.set(xStart, yStart)
-                this.selector.width = width
-                this.selector.height = height
-                number.alpha = 1
-            }
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += width + Settings.BORDER
             biggest = height > biggest ? pixel.height : biggest
         }
+        this.currentChange()
+    }
+
+    currentChange()
+    {
+        const target = this.pixels.children[1 + PixelEditor.current * 2]
+        this.selector.position.set(target.x, target.y)
+        this.selector.width = target.width
+        this.selector.height = target.height
+        this.dirty = true
     }
 
     down(x, y, data)
@@ -225,6 +228,7 @@ module.exports = class Show extends UI.Window
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.redraw, this)
+        PixelEditor.on('current', this.currentChange, this)
         State.on('last-file', this.redraw, this)
     }
 

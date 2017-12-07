@@ -299,6 +299,7 @@ class PixelEditor extends Pixel
         if (this.editor.current !== value)
         {
             this.editor.current = value
+            this.emit('current')
             this.save()
         }
     }
@@ -608,12 +609,12 @@ class PixelEditor extends Pixel
 
     save(filename)
     {
-        const changed = this.filename !== filename
+        const changed = exists(filename) && this.filename !== filename
         this.filename = filename || this.filename
-        jsonfile.writeFileSync(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
+        jsonfile.writeFile(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
         if (this.editor)
         {
-            jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
+            jsonfile.writeFile(this.filename.replace('.json', '.editor.json'), this.editor)
         }
         if (changed)
         {

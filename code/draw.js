@@ -901,6 +901,7 @@ module.exports = class Draw extends UI.Window
         }
         State.on('tool', () => this.tool())
         PixelEditor.on('changed', () => this.redraw())
+        PixelEditor.on('current', () => this.redraw())
         State.on('last-file', () => this.redraw())
         State.on('open-circle', () => this.cursorDraw())
         State.on('open-ellipse', () => this.cursorDraw())

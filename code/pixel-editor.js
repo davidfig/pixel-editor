@@ -250,8 +250,9 @@ document.body.appendChild(canvas)
             }
             const canvas = this.canvases[this.current]
             const c = canvas.c
-            const alpha = value & 0xff
-            const rgb = Color.hexToRgb(value << 8)
+            const hex = parseInt(value, 16)
+            const alpha = hex & 0xff
+            const rgb = Color.hexToRgb(hex >>> 8)
             const imageData = c.getImageData(0, 0, this.width, this.height)
             const index = (y * (imageData.width * 4)) + (x * 4)
             imageData.data[index] = rgb.r

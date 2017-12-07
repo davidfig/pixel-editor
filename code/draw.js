@@ -675,7 +675,7 @@ module.exports = class Draw extends UI.Window
             this.clipboard = { width: 1, height: 1, data: PixelEditor.get(State.cursorX, State.cursorY) }
             if (clear)
             {
-                PixelEditor.set(State.cursorX, State.cursorY, 0, true)
+                PixelEditor.set(State.cursorX, State.cursorY, '00000000', true)
             }
         }
         else
@@ -707,7 +707,7 @@ module.exports = class Draw extends UI.Window
                     this.clipboard.data.push(PixelEditor.get(x, y))
                     if (clear)
                     {
-                        PixelEditor.set(x, y, 0, true)
+                        PixelEditor.set(x, y, '00000000', true)
                     }
                 }
             }
@@ -740,7 +740,7 @@ module.exports = class Draw extends UI.Window
                 {
                     if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
                     {
-                        PixelEditor.set(block.x, block.y, 0, true)
+                        PixelEditor.set(block.x, block.y, '00000000', true)
                     }
                 }
                 break

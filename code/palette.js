@@ -115,7 +115,7 @@ module.exports = class Palette extends UI.Window
                 extra.width = extra.height = block.width + SPACING
                 extra.position.set(block.x - SPACING * 0.5, block.y - SPACING * 0.5)
             }
-            const fill = color === 0 ? 'white' : 'black'
+            const fill = color === '000000ff' ? 'white' : 'black'
             const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
             text.anchor.set(0.5)
             text.position.set(block.x + block.width / 2, block.y + block.height / 2)

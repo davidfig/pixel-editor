@@ -3,8 +3,6 @@ const Settings = require('./settings')
 const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Color = require('yy-color')
 
-const State = require('./state')
-
 const COLOR = 0x888888
 const SIZE = 100
 
@@ -54,9 +52,9 @@ function getTexture(name)
     return _sheet.getTexture(name)
 }
 
-function render()
+function render(callback)
 {
-    _sheet.render()
+    _sheet.render(callback)
 }
 
 module.exports = {

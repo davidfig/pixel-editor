@@ -55,10 +55,12 @@ module.exports = class Show extends UI.Window
         for (let i = 0; i < PixelEditor.imageData.length; i++)
         {
             const pixel = this.pixels.addChild(new Pixel(data, sheet))
+            const width = data.imageData[i][0] * scale
+            const height = data.imageData[i][1] * scale
             pixel.scale.set(scale)
             pixel.frame(i)
             pixel.current = i
-            if (xStart + pixel.width + Settings.BORDER > this.right)
+            if (xStart + width + Settings.BORDER > this.right)
             {
                 yStart += biggest + Settings.BORDER
                 xStart = 0
@@ -66,19 +68,19 @@ module.exports = class Show extends UI.Window
             }
             pixel.position.set(xStart, yStart)
             const number = this.pixels.addChild(new PIXI.Text(i, this.fontStyle()))
-            number.position.set(xStart + pixel.width / 2 - number.width / 2, yStart + pixel.height + Settings.BORDER)
-            number.position.set(xStart + pixel.width - number.width, yStart)
+            number.position.set(xStart + width / 2 - number.width / 2, yStart + height + Settings.BORDER)
+            number.position.set(xStart + width - number.width, yStart)
             number.alpha = 0.25
             if (i === PixelEditor.current && PixelEditor.imageData.length > 1)
             {
                 this.selector.position.set(xStart, yStart)
-                this.selector.width = pixel.width
-                this.selector.height = pixel.height
+                this.selector.width = width
+                this.selector.height = height
                 number.alpha = 1
             }
             this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
-            xStart += pixel.width + Settings.BORDER
-            biggest = pixel.height > biggest ? pixel.height : biggest
+            xStart += width + Settings.BORDER
+            biggest = height > biggest ? pixel.height : biggest
         }
     }
 

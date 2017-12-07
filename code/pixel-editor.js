@@ -5,6 +5,7 @@ const path = require('path')
 const Settings = require('./settings')
 const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
+const Color = require('yy-color')
 
 const sheet = require('./pixel-sheet')
 
@@ -53,12 +54,16 @@ class PixelEditor extends Pixel
         for (let frame of this.imageData)
         {
             const canvas = document.createElement('canvas')
+            canvas.style.imageRendering = 'pixelated'
             canvas.width = frame[0]
             canvas.height = frame[1]
             canvas.c = canvas.getContext('2d')
-            const image = new Image()
-            image.src = frame[2]
-            image.onload = () => canvas.c.drawImage(0, 0, image)
+            const image = new Image(frame[0], frame[1])
+            image.src = 'data:image/png;base64,' + frame[2]
+            image.onload = () => canvas.c.drawImage(image, 0, 0)
+            this.canvases.push(canvas)
+canvas.style.position = 'fixed'
+document.body.appendChild(canvas)
         }
     }
 
@@ -99,7 +104,7 @@ class PixelEditor extends Pixel
 
     remove(index)
     {
-        if (index < this.frames.length)
+        if (index < this.imageData.length)
         {
             this.imageData.splice(index, 1)
             this.save()
@@ -243,7 +248,19 @@ class PixelEditor extends Pixel
             {
                 this.undoSave()
             }
-            this.data[x + y * this.width] = value
+            const canvas = this.canvases[this.current]
+            const c = canvas.c
+            const alpha = value & 0xff
+            const rgb = Color.hexToRgb(value << 8)
+            const imageData = c.getImageData(0, 0, this.width, this.height)
+            const index = (y * (imageData.width * 4)) + (x * 4)
+            imageData.data[index] = rgb.r
+            imageData.data[index + 1] = rgb.g
+            imageData.data[index + 2] = rgb.b
+            imageData.data[index + 3] = alpha
+            c.putImageData(imageData, 0, 0)
+            this.imageData[this.current][2] = this.canvasURL(canvas)
+            Pixel.addFrame(this.current, this, this.sheet)
         }
         if (!noUndo)
         {
@@ -254,11 +271,12 @@ class PixelEditor extends Pixel
     {
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
-            return this.canvases[this.current].c.getImageData(x, y, 1, 1)
+            const data = this.canvases[this.current].c.getImageData(x, y, 1, 1).data
+            return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3]
         }
         else
         {
-            return null
+            return 0
         }
     }
 
@@ -305,8 +323,8 @@ class PixelEditor extends Pixel
                     data[x + y * value] = (x < this.width) ? this.get(x, y) : null
                 }
             }
-            this.frames[this.editor.current].data = data
-            this.frames[this.editor.current].width = value
+            this.imageData[this.editor.current].data = data
+            this.imageData[this.editor.current].width = value
             this.save()
         }
     }
@@ -518,7 +536,6 @@ class PixelEditor extends Pixel
             this.animations = load.animations
             this.name = load.name
             this.render(true)
-            sheet.render()
         }
         catch (e)
         {
@@ -544,7 +561,7 @@ class PixelEditor extends Pixel
         catch (e)
         {
             this.editor = {}
-            this.editor.frames = []
+            this.editor.imageData = []
             for (let i = 0; i < this.imageData.length; i++)
             {
                 this.editor.imageData.push({ undo: [], redo: [] })
@@ -553,7 +570,6 @@ class PixelEditor extends Pixel
             this.editor.zoom = 10
             this.save()
         }
-        this.emit('changed')
     }
 
     save(filename)
@@ -568,9 +584,8 @@ class PixelEditor extends Pixel
         if (changed)
         {
             Pixel.add(this.getData(), sheet)
-            sheet.render()
+            sheet.render(() => this.emit('changed'))
         }
-        this.emit('changed')
     }
 
     getData()

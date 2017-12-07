@@ -165,7 +165,6 @@ function load(list)
         {
             State.cursorY = 0
         }
-        PixelEditor.emit('changed')
     }
 }
 

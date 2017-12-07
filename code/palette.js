@@ -1,8 +1,8 @@
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
-const Color = require('yy-color')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
+const Color = require('yy-color')
 
 const UI = require('yy-ui')
 const PixelEditor = require('./pixel-editor')
@@ -35,9 +35,9 @@ module.exports = class Palette extends UI.Window
         for (let i = 0; i < COLORS_PER_LINE; i++)
         {
             const color = Color.blend((i + 1) / (COLORS_PER_LINE + 2), 0xffffff, 0)
-            this.colors[1].push(color)
+            this.colors[1].push(color.toString(16) + '0xff')
         }
-        this.colors[2] = [0xff0000, 0x00ff00, 0x0000ff, 0xff00ff, 0xffff00, 0x00ffff, 0xffaa00]
+        this.colors[2] = ['ff0000ff', '00ff00ff', '0000ffff', 'ff00ffff', 'ffff00ff', '00ffffff', 'ffaa00ff']
     }
 
     draw()
@@ -66,14 +66,14 @@ module.exports = class Palette extends UI.Window
         this.foregroundColor.position.set(0, yStart)
         if (State.foreground !== null)
         {
-            this.foregroundColor.tint = State.foreground
+            this.foregroundColor.tint = parseInt(State.foreground.substr(0, 6), 16)
         }
         this.backgroundColor = this.main.addChild(new PIXI.Sprite(State.background === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
         this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
         this.backgroundColor.position.set(width * 2, yStart)
         if (State.background !== null)
         {
-            this.backgroundColor.tint = State.background
+            this.backgroundColor.tint = parseInt(State.background.substr(0, 6), 16)
         }
         const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         block.anchor.set(0.5)
@@ -90,17 +90,17 @@ module.exports = class Palette extends UI.Window
             this.activeColor.tint = 0
         }
 
-        const colors = [0, 0xffffff, null]
+        const colors = ['000000ff', 'ffffffff', '00000000']
         for (let i = 0; i < colors.length; i++)
         {
             const color = colors[i]
             const block = this.blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
             block.width = block.height = width * 1.25 - SPACING
             block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, width / 3 + yStart)
-            if (color !== null)
+            if (color !== '00000000')
             {
                 block.texture = PIXI.Texture.WHITE
-                block.tint = color
+                block.tint = parseInt(color.substr(0, 6), 16)
             }
             else
             {
@@ -130,7 +130,7 @@ module.exports = class Palette extends UI.Window
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
                 block.width = block.height = width - SPACING
                 block.position.set(SPACING / 2 + x * width, y * width + yStart)
-                block.tint = line[i]
+                block.tint = parseInt(line[i].substr(0, 6), 16)
                 if (line[i] === State.color)
                 {
                     const extra = new PIXI.Sprite(PIXI.Texture.WHITE)

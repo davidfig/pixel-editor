@@ -23,9 +23,13 @@ class State extends Events
         try
         {
             this.state = jsonfile.readFileSync(this.filename)
-            if (!exists(this.state.foreground))
+            if (typeof this.state.foreground !== 'string')
             {
-                this.state.foreground = 0
+                this.state.foreground = 'ffffffff'
+            }
+            if (typeof this.state.background !== 'string')
+            {
+                this.state.background = '00000000'
             }
         }
         catch (err)

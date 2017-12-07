@@ -1,6 +1,4 @@
 const PIXI = require('pixi.js')
-const Settings = require('./settings')
-const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 
 const Sheet = require('./sheet')
@@ -24,17 +22,18 @@ module.exports = class Draw extends UI.Window
         super({ draggable: true, resizeable: true })
         this.stuff = this.addChild(new PIXI.Container())
         this.blocks = this.stuff.addChild(new PIXI.Container())
-        this.sprite = this.stuff.addChild(new PIXI.Container())
+        this.sprite = this.stuff.addChild(new PIXI.Sprite())
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
-        this.redraw()
+        this.layout()
     }
 
     layout()
     {
         super.layout()
         this.redraw()
+        this.cursorDraw()
     }
 
     redraw()
@@ -53,19 +52,15 @@ module.exports = class Draw extends UI.Window
         }
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-        this.sprite.removeChildren()
-        const pixel = this.sprite.addChild(new Pixel(PixelEditor.getData(), pixelSheet))
-        pixel.scale.set(this.zoom)
-        pixel.frame(PixelEditor.current)
+        this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
+        this.sprite.scale.set(this.zoom)
         this.transparency()
         this.frame()
-        this.cursorDraw()
     }
 
     change()
     {
         PixelEditor.save()
-        pixelSheet.render()
     }
 
     transparency()
@@ -469,7 +464,7 @@ module.exports = class Draw extends UI.Window
             State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
             State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
         }
-        this.redraw()
+        this.cursorDraw()
     }
 
     cursorDraw()
@@ -663,7 +658,7 @@ module.exports = class Draw extends UI.Window
                 this.line = null
                 break
         }
-        this.redraw()
+        this.cursorDraw()
     }
 
     cut()
@@ -680,7 +675,7 @@ module.exports = class Draw extends UI.Window
             this.clipboard = { width: 1, height: 1, data: PixelEditor.get(State.cursorX, State.cursorY) }
             if (clear)
             {
-                PixelEditor.set(State.cursorX, State.cursorY, null, true)
+                PixelEditor.set(State.cursorX, State.cursorY, 0, true)
             }
         }
         else
@@ -712,7 +707,7 @@ module.exports = class Draw extends UI.Window
                     this.clipboard.data.push(PixelEditor.get(x, y))
                     if (clear)
                     {
-                        PixelEditor.set(x, y, null, true)
+                        PixelEditor.set(x, y, 0, true)
                     }
                 }
             }
@@ -733,7 +728,7 @@ module.exports = class Draw extends UI.Window
                     {
                         if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
                         {
-                            PixelEditor.set(x, y, null, true)
+                            PixelEditor.set(x, y, State.color, true)
                         }
                     }
                 }
@@ -745,7 +740,7 @@ module.exports = class Draw extends UI.Window
                 {
                     if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
                     {
-                        PixelEditor.set(block.x, block.y, null, true)
+                        PixelEditor.set(block.x, block.y, 0, true)
                     }
                 }
                 break
@@ -755,6 +750,7 @@ module.exports = class Draw extends UI.Window
 
     paste()
     {
+console.log('...needs fixing');return
         if (this.clipboard)
         {
             PixelEditor.undoSave()
@@ -898,13 +894,13 @@ module.exports = class Draw extends UI.Window
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
         for (let state of states)
         {
-            State.on(state, () => this.redraw())
+            State.on(state, () => this.cursorDraw())
         }
         State.on('tool', () => this.tool())
         PixelEditor.on('changed', () => this.redraw())
         State.on('last-file', () => this.redraw())
-        State.on('open-circle', () => this.redraw())
-        State.on('open-ellipse', () => this.redraw())
+        State.on('open-circle', () => this.cursorDraw())
+        State.on('open-ellipse', () => this.cursorDraw())
     }
 
     dragged()

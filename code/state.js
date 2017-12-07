@@ -15,7 +15,6 @@ class State extends Events
         this.state.lastFiles = this.state.lastFiles || []
         this.state.windows = this.state.windows || {}
         this.state.relative = this.state.relative || 'top-left'
-        this.state.transparentColor = exists(this.state.transparentColor) ? this.state.transparentColor : 0x888888
     }
 
     load()
@@ -122,20 +121,6 @@ class State extends Events
             this.state.openEllipse = value
             this.save()
             this.emit('open-ellipse')
-        }
-    }
-
-    get transparentColor()
-    {
-        return this.state.transparentColor
-    }
-    set transparentColor(value)
-    {
-        if (this.state.transparentColor !== value)
-        {
-            this.state.transparentColor = value
-            this.save()
-            this.emit('transparentColor')
         }
     }
 

@@ -5,6 +5,7 @@ const Color = require('yy-color')
 
 const State = require('./state')
 
+const COLOR = 0x888888
 const SIZE = 100
 
 let _sheet
@@ -14,7 +15,6 @@ function load(callback)
     _sheet = new RenderSheet()
     _sheet.add('transparency', draw, measure)
     _sheet.render(callback)
-    State.on('transparentColor', () => _sheet.render())
 }
 
 function convert(color)
@@ -30,11 +30,11 @@ function convert(color)
 function draw(c)
 {
     const half = SIZE / 2
-    const light = convert(Color.blend(0.5, 0xffffff, State.transparentColor))
+    const light = convert(Color.blend(0.5, 0xffffff, COLOR))
     c.fillStyle = '#' + light
     c.fillRect(0, 0, half, half)
     c.fillRect(half, half, half, half)
-    c.fillStyle = '#' + convert(State.transparentColor)
+    c.fillStyle = '#' + convert(COLOR)
     c.fillRect(half, 0, half, half)
     c.fillRect(0, half, half, half)
 }

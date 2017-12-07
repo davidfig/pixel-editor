@@ -17,6 +17,7 @@ module.exports = class Picker extends UI.Window
     {
         super({ draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
         this.graphics = this.addChild(new PIXI.Graphics())
+        this.alphaCurrent = 'ff'
         this.wordsSetup()
         this.stateSetup('picker')
     }
@@ -24,13 +25,13 @@ module.exports = class Picker extends UI.Window
     wordsSetup()
     {
         let test
-        if (State.color === null)
+        if (State.color.substr(6) === 'ff')
         {
             test = State.transparentColor.toString(16)
         }
         else
         {
-            test = State.color.toString(16)
+            test = State.color
         }
         while (test.length < 6)
         {
@@ -38,17 +39,19 @@ module.exports = class Picker extends UI.Window
         }
         this.hsl = TinyColor(test).toHsl()
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
-        this.hex = this.addChild(new UI.EditText(TinyColor(test).toHex(), { beforeText: '#', edit: 'hex', maxCount: 6, count: 6 }))
+        this.stack = this.addChild(new UI.Stack())
+        this.hex = this.stack.add(new UI.EditText(TinyColor(test).toHex(), { beforeText: 'hex: #', edit: 'hex', maxCount: 6, count: 6 }))
         this.hex.on('changed', this.changeHex, this)
-        const style = { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right' }
-        this.part = [
-            this.addChild(new UI.EditText(rgb.r, style)),
-            this.addChild(new UI.EditText(rgb.g, style)),
-            this.addChild(new UI.EditText(rgb.b, style))
-        ]
-        this.part[0].on('changed', this.changeNumbers, this)
-        this.part[1].on('changed', this.changeNumbers, this)
-        this.part[2].on('changed', this.changeNumbers, this)
+        this.part = this.stack.add(new UI.Stack([
+            new UI.EditText(rgb.r, { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right', beforeText: 'r:' }),
+            new UI.EditText(rgb.g, { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right', beforeText: 'g:' }),
+            new UI.EditText(rgb.b, { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right', beforeText: 'b:' })
+        ], { horizontal: true}))
+        this.part.items[0].on('changed', this.changeNumbers, this)
+        this.part.items[1].on('changed', this.changeNumbers, this)
+        this.part.items[2].on('changed', this.changeNumbers, this)
+        this.alphaText = this.stack.add(new UI.EditText('1', { edit: 'number', count: 2, beforeText: 'alpha: ' }))
+        this.alphaText.on('changed', this.changeAlpha, this)
     }
 
     changeHex()
@@ -58,28 +61,35 @@ module.exports = class Picker extends UI.Window
         {
             test = '0' + test
         }
-        const color = TinyColor(test).toHex()
-        if (State.isForeground)
+        let color = TinyColor(test).toHex()
+        while (color.length < 6)
         {
-            State.foreground = color
+            color = '0' + color
         }
-        else
-        {
-            State.background = color
-        }
+        color += this.alphaCurrent
+        State.color = color
+    }
+
+    changeAlpha()
+    {
+        let alpha = parseFloat(this.alphaText.text)
+        alpha = alpha > 1 ? 1 : alpha
+        alpha = alpha < 0 ? 0 : alpha
+        this.alphaText.text = alpha
+        const text = Math.round((alpha * 0xff)).toString(16)
+        this.alphaCurrent = text.length < 2 ? '0' + text : text
+        State.color = State.color.substr(0, 6) + this.alphaCurrent
     }
 
     changeNumbers()
     {
-        const color = TinyColor({ r: parseInt(this.part[0].text), g: parseInt(this.part[1].text), b: parseInt(this.part[2].text) }).toHex()
-        if (State.isForeground)
+        let color = TinyColor({ r: parseInt(this.part.items[0].text), g: parseInt(this.part.items[1].text), b: parseInt(this.part.items[2].text) }).toHex()
+        while (color.length < 6)
         {
-            State.foreground = color
+            color = '0' + color
         }
-        else
-        {
-            State.background = color
-        }
+        color += this.alphaCurrent
+        State.color = color
     }
 
     box(x, percent, reverse)
@@ -97,8 +107,8 @@ module.exports = class Picker extends UI.Window
     {
         this.size = this.right / WIDTH
         this.boxSize = Math.min(this.size, (this.height / 3))
-        this.bottomY = this.bottom - this.hex.height - Settings.BORDER * 3 - this.part[0].height
-        if (State.color === null)
+        this.bottomY = this.bottom - this.stack.height - Settings.BORDER * 2
+        if (State.color === '00000000')
         {
             this.isTransparent = true
         }
@@ -108,30 +118,27 @@ module.exports = class Picker extends UI.Window
         }
         let boxHeight = this.size
         boxHeight = boxHeight * 4 > (this.bottomY - Settings.BORDER) ? (this.bottomY - Settings.BORDER) / 4 : boxHeight
+        const alpha = parseInt(State.color.substr(6), 16) / 255
         this.graphics.clear()
-            .beginFill(State.color)
-            .drawRect(0, Settings.BORDER, this.size - Settings.BORDER, boxHeight - Settings.BORDER)
+            .beginFill(parseInt(State.color.substr(0, 6), 16), alpha)
+            .drawRect(0, 0, this.size - Settings.BORDER, boxHeight - Settings.BORDER)
             .endFill()
+
         let y = boxHeight * 2
-        let test = (State.color === null ? State.transparentColor : State.color).toString(16)
-        while (test.length < 6)
-        {
-            test = '0' + test
-        }
-        this.hsl = TinyColor(test).toHsl()
+        this.hsl = TinyColor(State.color.substr(0, 6)).toHsl()
 
         const others = [this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l * 0.9), this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l * 1.1)]
         for (let color of others)
         {
-            this.graphics.beginFill(color)
+            this.graphics.beginFill(color, alpha)
                 .drawRect(0, y, this.size - Settings.BORDER, boxHeight - Settings.BORDER)
                 .endFill()
             y += boxHeight
         }
 
-        for (let y = Settings.BORDER; y <= this.bottomY - Settings.BORDER * 2; y++)
+        for (let y = 0; y <= this.bottomY; y++)
         {
-            let percent = (y - Settings.BORDER * 2) / this.bottomY
+            let percent = y / this.bottomY
             percent = percent > 1 ? 1 : percent
 
             // h
@@ -152,12 +159,7 @@ module.exports = class Picker extends UI.Window
         this.box(this.size, this.hsl.h / 360, this.hsl.l < 0.5)
         this.box(Settings.BORDER + this.size * 2, this.hsl.s, this.hsl.l < 0.5)
         this.box(Settings.BORDER * 2 + this.size * 3, this.hsl.l, this.hsl.l < 0.5)
-        let x = this.center.x - this.part[0].width / 2
-        const spacing = 10
-        this.part[0].position.set(x - this.part[0].width - spacing, this.bottom - this.hex.height)
-        this.part[1].position.set(x, this.bottom - this.hex.height)
-        this.part[2].position.set(x + this.part[1].width + spacing, this.bottom - this.hex.height)
-        this.hex.position.set(this.width / 2 - this.hex.width / 2, this.bottom - Settings.BORDER - this.hex.height - this.part[0].height)
+        this.stack.position.set(this.right / 2 - this.stack.width / 2, this.bottom - this.stack.height)
         this.words()
     }
 
@@ -176,19 +178,32 @@ module.exports = class Picker extends UI.Window
         }
         this.hex.text = color
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
-        this.part[0].text = rgb.r
-        this.part[1].text = rgb.g
-        this.part[2].text = rgb.b
+        this.part.items[0].text = rgb.r
+        this.part.items[1].text = rgb.g
+        this.part.items[2].text = rgb.b
     }
 
-    changeColor(h, s, l)
+    changeColor(h, s, l, toString)
     {
-        return parseInt(TinyColor({ h, s, l }).toHex(), 16)
+        let color = parseInt(TinyColor({ h, s, l }).toHex(), 16)
+        if (toString)
+        {
+            while (color.length < 6)
+            {
+                color = ' ' + color
+            }
+            color += this.alphaCurrent
+        }
+        return color
     }
 
     down(x, y, data, notDown)
     {
         const point = this.toLocal({ x, y })
+        if (point.y < 0)
+        {
+            return super.down(x, y, data)
+        }
         let percent = point.y / (this.bottomY - Settings.BORDER)
         percent = percent < 0 ? 0 : percent
         percent = percent > 1 ? 1 : percent
@@ -241,14 +256,7 @@ module.exports = class Picker extends UI.Window
         }
         else
         {
-            if (State.isForeground)
-            {
-                State.foreground = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
-            }
-            else
-            {
-                State.background = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l)
-            }
+            State.color = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l, true)
         }
         this.draw()
         this.isPicker = true

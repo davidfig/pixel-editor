@@ -9,6 +9,7 @@ const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
 const Settings = require('./settings')
+const PixelSheet = require('./pixel-sheet')
 
 const COLORS_PER_LINE = 10
 
@@ -37,7 +38,7 @@ module.exports = class Palette extends UI.Window
         for (let i = 0; i < COLORS_PER_LINE; i++)
         {
             const color = Color.blend((i + 1) / (COLORS_PER_LINE + 2), 0xffffff, 0)
-            this.colors[1].push(color.toString(16) + '0xff')
+            this.colors[1].push(color.toString(16) + 'ff')
         }
         this.colors[2] = ['ff0000ff', '00ff00ff', '0000ffff', 'ff00ffff', 'ffff00ff', '00ffffff', 'ffaa00ff']
     }
@@ -47,6 +48,7 @@ module.exports = class Palette extends UI.Window
         this.selected.clear()
         this.updateColors()
         this.drawBlocks()
+        this.dirty = true
     }
 
     layout()
@@ -185,15 +187,21 @@ module.exports = class Palette extends UI.Window
         }
 
         this.colors[0] = []
-        for (let canvas of PixelEditor.canvases)
+        for (let i = 0; i < PixelEditor.imageData.length; i++)
         {
-            const data = canvas.c.getImageData(0, 0, canvas.width, canvas.height).data
-            for (let i = 0; i < data.length; i += 4)
+            const texture = PixelSheet.textures[PixelEditor.name + '-' + i].texture
+            if (texture.baseTexture.hasLoaded)
             {
-                const color = hex(data[i]) + hex(data[i + 1]) + hex(data[i + 2]) + hex(data[i + 3])
-                if (color !== '00000000' && color !== 'ffffffff' && color !== '000000ff' && !this.findColor(color))
+                const canvas = texture.baseTexture.source
+                const frame = texture.frame
+                const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
+                for (let i = 0; i < data.length; i += 4)
                 {
-                    this.colors[0].push(color)
+                    const color = hex(data[i]) + hex(data[i + 1]) + hex(data[i + 2]) + hex(data[i + 3])
+                    if (color !== '00000000' && color !== 'ffffffff' && color !== '000000ff' && !this.findColor(color))
+                    {
+                        this.colors[0].push(color)
+                    }
                 }
             }
         }

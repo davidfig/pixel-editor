@@ -50,7 +50,7 @@ module.exports = class Show extends UI.Window
         this.buttons = []
         const data = PixelEditor.getData()
         const scale = PixelEditor.zoom
-        let xStart = 0, yStart = 0
+        let xStart = Settings.BORDER, yStart = Settings.BORDER
         let biggest = 0
         for (let i = 0; i < PixelEditor.imageData.length; i++)
         {
@@ -63,7 +63,7 @@ module.exports = class Show extends UI.Window
             if (xStart + width + Settings.BORDER > this.right)
             {
                 yStart += biggest + Settings.BORDER
-                xStart = 0
+                xStart = Settings.BORDER
                 biggest = 0
             }
             pixel.position.set(xStart, yStart)
@@ -81,9 +81,9 @@ module.exports = class Show extends UI.Window
     currentChange()
     {
         const target = this.pixels.children[1 + PixelEditor.current * 2]
-        this.selector.position.set(target.x, target.y)
-        this.selector.width = target.width
-        this.selector.height = target.height
+        this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
+        this.selector.width = target.width + Settings.BORDER
+        this.selector.height = target.height + Settings.BORDER
         this.dirty = true
     }
 

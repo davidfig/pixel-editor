@@ -18,6 +18,7 @@ const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
+const Settings = require('./settings')
 
 let renderer, ui, loading = 2, windows = {}
 
@@ -31,7 +32,7 @@ function afterLoad()
 
     Menu()
 
-    if (State.lastFile)
+    if (!Settings.NO_LOAD && State.lastFile)
     {
         PixelEditor.load(State.lastFile)
     }

@@ -54,7 +54,8 @@ function getTexture(name)
 
 function render(callback)
 {
-    _sheet.render(callback)
+    _sheet.once('render', callback)
+    _sheet.render()
 }
 
 module.exports = {

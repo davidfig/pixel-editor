@@ -61,6 +61,7 @@ module.exports = class Draw extends UI.Window
     change()
     {
         PixelEditor.save()
+        this.dirty = true
     }
 
     transparency()
@@ -190,7 +191,7 @@ module.exports = class Draw extends UI.Window
             const pos = block.split(',')
             if (this.inBounds(pos))
             {
-                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
                 this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
             }
         }

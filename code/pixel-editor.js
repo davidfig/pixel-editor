@@ -11,7 +11,6 @@ const sheet = require('./pixel-sheet')
 
 const DEFAULT = [15, 15]
 const UNDO_SIZE = 50
-const PNG_HEADER = 'data:image/png;base64,'
 
 class PixelEditor extends Pixel
 {
@@ -19,6 +18,8 @@ class PixelEditor extends Pixel
     {
         super()
         this.sheet = sheet
+        this.tempCanvas = document.createElement('canvas')
+        this.tempCanvas.c = this.tempCanvas.getContext('2d')
         this.create(filename)
     }
 
@@ -38,31 +39,14 @@ class PixelEditor extends Pixel
             this.filename = filename
             this.name = path.basename(filename, '.json')
             this.editor = { zoom: 10, current: 0, imageData: [{ undo: [], redo: [] }] }
-            this.save()
+            Pixel.addFrame(0, this.getData(), sheet)
+            sheet.render(() => this.save())
         }
         else
         {
             this.filename = filename
             this.load()
             this.name = this.name || path.basename(filename, '.json')
-        }
-        this.createCanvases()
-    }
-
-    createCanvases()
-    {
-        this.canvases = []
-        for (let frame of this.imageData)
-        {
-            const canvas = document.createElement('canvas')
-            canvas.style.imageRendering = 'pixelated'
-            canvas.width = frame[0]
-            canvas.height = frame[1]
-            canvas.c = canvas.getContext('2d')
-            canvas.image = new Image()
-            canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
-            canvas.image.src = PNG_HEADER + frame[2]
-            this.canvases.push(canvas)
         }
     }
 
@@ -71,34 +55,43 @@ class PixelEditor extends Pixel
         const canvas = document.createElement('canvas')
         canvas.width = width
         canvas.height = height
-        return this.canvasURL(canvas)
+        return canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '')
     }
 
-    canvasURL(canvas)
+    canvasURL(canvas, frame)
     {
-        return canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '')
+        this.tempCanvas.width = frame.width
+        this.tempCanvas.height = frame.height
+        const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height)
+        this.tempCanvas.c.putImageData(data, 0, 0)
+        return this.tempCanvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '')
     }
 
     add(index)
     {
-        const add = [DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]
+        const add = [this.width, this.height, this.blank(this.width, this.height)]
         if (typeof index !== 'undefined')
         {
             this.imageData.splice(index, 0, add)
             this.editor.imageData.splice(index, 0, { undo: [], redo: [] })
             Pixel.addFrame(index, this.getData(), sheet)
-            sheet.render()
-            this.current = index
+            sheet.render(() =>
+            {
+                this.current = index
+                this.save()
+            })
         }
         else
         {
             this.imageData.push(add)
             this.editor.imageData.push({ undo: [], redo: [] })
             Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
-            sheet.render()
-            this.current = this.imageData.length - 1
+            sheet.render(() =>
+            {
+                this.current = this.imageData.length - 1
+                this.save()
+            })
         }
-        this.save()
     }
 
     remove(index)
@@ -115,13 +108,15 @@ class PixelEditor extends Pixel
         if (index < this.imageData.length)
         {
             const frame = this.imageData[index]
-            this.imageData.push([frame[0], frame[1], frame[2].slice(0)])
-            const editor = this.editor.imageData[index]
-            this.editor.imageData.push({ undo: editor.undo, redo: editor.redo })
+            this.imageData.push([frame[0], frame[1], frame[2]])
+            this.editor.imageData.push({ undo: [], redo: [] })
             Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
-            sheet.render()
-            this.current = this.imageData.length - 1
-            this.save()
+            sheet.render(() =>
+            {
+                this.emit('changed')
+                this.current = this.imageData.length - 1
+                this.save()
+            })
         }
     }
 
@@ -132,7 +127,6 @@ class PixelEditor extends Pixel
             this.imageData.splice(index, 1)
             this.editor.imageData.splice(index, 1)
             this.current = (index < this.imageData.length) ? index : 0
-            this.save()
         }
     }
 
@@ -173,8 +167,7 @@ class PixelEditor extends Pixel
             }
             this.imageData.splice(newIndex, 0, frame)
             this.editor.imageData.splice(newIndex, 0, editor)
-            sheet.render()
-            this.save()
+            sheet.render(() => this.save())
         }
     }
 
@@ -196,8 +189,7 @@ class PixelEditor extends Pixel
         const swap = current[1]
         current[1] = current[0]
         current[0] = swap
-        sheet.render()
-        this.save()
+        sheet.render(() => this.save)
     }
 
     flipHorizontal()
@@ -250,20 +242,22 @@ class PixelEditor extends Pixel
             {
                 this.undoSave()
             }
-            const canvas = this.canvases[this.current]
-            const c = canvas.c
+            const texture = sheet.textures[this.name + '-' + this.current].texture
+            const canvas = texture.baseTexture.source
+            const c = canvas.getContext('2d')
+            const frame = texture.frame
             const hex = parseInt(value, 16)
             const alpha = hex & 0xff
             const rgb = Color.hexToRgb(hex >>> 8)
-            const imageData = c.getImageData(0, 0, this.width, this.height)
+            const imageData = c.getImageData(frame.x, frame.y, this.width, this.height)
             const index = (y * (imageData.width * 4)) + (x * 4)
             imageData.data[index] = rgb.r
             imageData.data[index + 1] = rgb.g
             imageData.data[index + 2] = rgb.b
             imageData.data[index + 3] = alpha
-            c.putImageData(imageData, 0, 0)
-            this.imageData[this.current][2] = this.canvasURL(canvas)
-            Pixel.addFrame(this.current, this, this.sheet)
+            c.putImageData(imageData, frame.x, frame.y)
+            texture.baseTexture.update()
+            this.imageData[this.current][2] = this.canvasURL(canvas, frame)
         }
         if (!noUndo)
         {
@@ -281,7 +275,11 @@ class PixelEditor extends Pixel
 
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
-            const data = this.canvases[this.current].c.getImageData(x, y, 1, 1).data
+            const texture = sheet.textures[this.name + '-' + this.current].texture
+            const canvas = texture.baseTexture.source
+            const c = canvas.getContext('2d')
+            const frame = texture.frame
+            const data = c.getImageData(frame.x + x, frame.y + y, 1, 1).data
             return hex(data[0]) + hex(data[1]) + hex(data[2]) + hex(data[3])
         }
         else
@@ -332,15 +330,21 @@ class PixelEditor extends Pixel
                     data[x + y * value] = (x < this.width) ? this.get(x, y) : '00000000'
                 }
             }
-            this.canvases[this.current].width = this.imageData[this.current][0] = value
-            for (let y = 0; y < this.height; y++)
+            this.imageData[this.current][0] = value
+            this.imageData[this.current][2] = this.blank(value, this.height)
+            Pixel.addFrame(this.current, this.getData(), sheet)
+            sheet.render(() =>
             {
-                for (let x = 0; x < value; x++)
+                for (let y = 0; y < this.height; y++)
                 {
-                    this.set(x, y, data[x + y * value], true)
+                    for (let x = 0; x < value; x++)
+                    {
+                        this.set(x, y, data[x + y * value], true)
+                    }
                 }
-            }
-            this.save()
+                this.save()
+                this.emit('changed')
+            })
         }
     }
 
@@ -366,15 +370,21 @@ class PixelEditor extends Pixel
                     data[x - start + y * width] = this.get(x, y)
                 }
             }
-            this.canvases[this.current].width = this.imageData[this.current][0] = width
-            for (let y = 0; y < this.height; y++)
+            this.imageData[this.current][0] = width
+            this.imageData[this.current][2] = this.blank(width, this.height)
+            Pixel.addFrame(this.current, this.getData(), sheet)
+            sheet.render(() =>
             {
-                for (let x = 0; x < width; x++)
+                for (let y = 0; y < this.height; y++)
                 {
-                    this.set(x, y, data[x + y * width], true)
+                    for (let x = 0; x < width; x++)
+                    {
+                        this.set(x, y, data[x + y * width], true)
+                    }
                 }
-            }
-            this.save()
+                this.save()
+                this.emit('changed')
+            })
         }
     }
 
@@ -400,15 +410,21 @@ class PixelEditor extends Pixel
                     data[x + (y - start) * this.width] = this.get(x, y)
                 }
             }
-            this.canvases[this.current].height = this.imageData[this.current][1] = height
-            for (let y = 0; y < height; y++)
+            this.imageData[this.current][1] = height
+            this.imageData[this.current][2] = this.blank(this.width, height)
+            Pixel.addFrame(this.current, this.getData(), sheet)
+            sheet.render(() =>
             {
-                for (let x = 0; x < this.width; x++)
+                for (let y = 0; y < height; y++)
                 {
-                    this.set(x, y, data[x + y * this.width], true)
+                    for (let x = 0; x < this.width; x++)
+                    {
+                        this.set(x, y, data[x + y * this.width], true)
+                    }
                 }
-            }
-            this.save()
+                this.save()
+                this.emit('changed')
+            })
         }
     }
 
@@ -423,16 +439,22 @@ class PixelEditor extends Pixel
                 data[x - xStart + (y - yStart) * width] = this.get(x, y)
             }
         }
-        this.imageData[this.editor.current][0] = this.canvases[this.current].width = width
-        this.imageData[this.editor.current][1] = this.canvases[this.current].height = height
-        for (let y = 0; y < height; y++)
+        this.imageData[this.editor.current][0] = width
+        this.imageData[this.editor.current][1] = height
+        this.imageData[this.current][2] = this.blank(width, height)
+        Pixel.addFrame(this.current, this.getData(), sheet)
+        sheet.render(() =>
         {
-            for (let x = 0; x < width; x++)
+            for (let y = 0; y < height; y++)
             {
-                this.set(x, y, data[x + y * width], true)
+                for (let x = 0; x < width; x++)
+                {
+                    this.set(x, y, data[x + y * width], true)
+                }
             }
-        }
-        this.save()
+            this.save()
+            this.emit('changed')
+        })
     }
 
     get maxHeight()
@@ -463,15 +485,21 @@ class PixelEditor extends Pixel
                     data[x + y * this.width] = (y < this.height) ? this.get(x, y) : null
                 }
             }
-            this.imageData[this.current].height = this.canvases[this.current].height = value
-            for (let y = 0; y < value; y++)
+            this.imageData[this.current].height = value
+            this.imageData[this.current][2] = this.blank(this.width, value)
+            Pixel.addFrame(this.current, this.getData(), sheet)
+            sheet.render(() =>
             {
-                for (let x = 0; x < this.width; x++)
+                for (let y = 0; y < value; y++)
                 {
-                    this.set(x, y, data[x + y * this.width], true)
+                    for (let x = 0; x < this.width; x++)
+                    {
+                        this.set(x, y, data[x + y * this.width], true)
+                    }
                 }
-            }
-            this.save()
+                this.save()
+                this.emit('changed')
+            })
         }
     }
 
@@ -525,21 +553,9 @@ class PixelEditor extends Pixel
             this.imageData[this.current][0] = undo.width
             this.imageData[this.current][1] = undo.height
             this.imageData[this.current][2] = undo.data
-            this.changeCanvas(undo.width, undo.height)
+            this.render(true)
+            sheet.render(() => this.emit('changed'))
         }
-    }
-
-    changeCanvas(width, height)
-    {
-        const canvas = this.canvases[this.current]
-        if (exists(width))
-        {
-            canvas.width = width
-            canvas.height = height
-        }
-        canvas.image.onload = () => canvas.c.drawImage(canvas.image, 0, 0)
-        canvas.image.src = PNG_HEADER + this.imageData[this.current][2]
-        this.save()
     }
 
     redoOne()
@@ -551,7 +567,8 @@ class PixelEditor extends Pixel
             this.imageData[this.current][1] = redo.height
             this.imageData[this.current][2] = redo.data
             this.undo.push({ width: this.width, height: this.height, data: this.imageData[this.current][2] })
-            this.changeCanvas(redo.width, redo.height)
+            this.render(true)
+            sheet.render(() => this.emit('changed'))
         }
     }
 
@@ -569,7 +586,6 @@ class PixelEditor extends Pixel
             this.animations = load.animations
             this.name = load.name
             this.render(true)
-            this.createCanvases()
             sheet.render(() => this.emit('changed'))
         }
         catch (e)

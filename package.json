@@ -30,7 +30,7 @@
     "yy-pixel": "^2.0.4",
     "yy-random": "^1.2.0",
     "yy-renderer": "^2.4.1",
-    "yy-rendersheet": "^3.5.0",
+    "yy-rendersheet": "^3.6.1",
     "yy-ui": "^0.3.0"
   }
 }

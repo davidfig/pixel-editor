@@ -1,6 +1,6 @@
 module.exports = {
 
-    DEBUG: true,
+    DEBUG: false,
     NO_LOAD: false,
 
     // YY_RENDERSHEET: '../../components/rendersheet/',

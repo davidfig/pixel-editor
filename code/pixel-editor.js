@@ -77,6 +77,7 @@ class PixelEditor extends Pixel
             Pixel.addFrame(index, this.getData(), sheet)
             sheet.render(() =>
             {
+                this.emit('changed')
                 this.current = index
                 this.save()
             })
@@ -88,6 +89,7 @@ class PixelEditor extends Pixel
             Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
             sheet.render(() =>
             {
+                this.emit('changed')
                 this.current = this.imageData.length - 1
                 this.save()
             })
@@ -103,21 +105,17 @@ class PixelEditor extends Pixel
         }
     }
 
-    duplicate(index)
+    duplicate()
     {
-        if (index < this.imageData.length)
+        const frame = this.imageData[this.current]
+        this.imageData.push([frame[0], frame[1], frame[2]])
+        this.editor.imageData.push({ undo: [], redo: [] })
+        Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
+        sheet.render(() =>
         {
-            const frame = this.imageData[index]
-            this.imageData.push([frame[0], frame[1], frame[2]])
-            this.editor.imageData.push({ undo: [], redo: [] })
-            Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
-            sheet.render(() =>
-            {
-                this.emit('changed')
-                this.current = this.imageData.length - 1
-                this.save()
-            })
-        }
+            this.emit('changed')
+            this.current = this.imageData.length - 1
+        })
     }
 
     remove(index)
@@ -307,7 +305,7 @@ class PixelEditor extends Pixel
         let width = 0
         for (let frame of this.imageData)
         {
-            width = frame.width > width ? frame.width : width
+            width = frame[0] > width ? frame[0] : width
         }
         return width
     }
@@ -462,7 +460,7 @@ class PixelEditor extends Pixel
         let height = 0
         for (let frame of this.imageData)
         {
-            height = frame.height > height ? frame.height : height
+            height = frame[1] > height ? frame[1] : height
         }
         return height
     }
@@ -627,10 +625,10 @@ class PixelEditor extends Pixel
     {
         const changed = exists(filename) && this.filename !== filename
         this.filename = filename || this.filename
-        jsonfile.writeFile(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
+        jsonfile.writeFileSync(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
         if (this.editor)
         {
-            jsonfile.writeFile(this.filename.replace('.json', '.editor.json'), this.editor)
+            jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
         }
         if (changed)
         {

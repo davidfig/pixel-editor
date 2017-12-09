@@ -153,7 +153,7 @@ module.exports = class Animation extends UI.Window
         this.disableControls(false)
     }
 
-    changeTime(value)
+    changeTime()
     {
         this.time = parseInt(this.animationTime.text)
         this.drawAnimation()

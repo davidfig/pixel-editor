@@ -538,7 +538,7 @@ module.exports = class Draw extends UI.Window
                     }
                     break
                 case 68:
-                    PixelEditor.duplicate(PixelEditor.current)
+                    PixelEditor.duplicate()
                     break
                 case 65:
                     State.tool = 'select'
@@ -733,7 +733,7 @@ module.exports = class Draw extends UI.Window
                     {
                         if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
                         {
-                            PixelEditor.set(x, y, State.color, true)
+                            PixelEditor.set(x, y, '00000000', true)
                         }
                     }
                 }

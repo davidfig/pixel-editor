@@ -35,7 +35,6 @@ module.exports = class Draw extends UI.Window
     {
         super.layout()
         this.redraw()
-        this.cursorDraw()
     }
 
     redraw()
@@ -58,6 +57,7 @@ module.exports = class Draw extends UI.Window
         this.sprite.scale.set(this.zoom)
         this.transparency()
         this.frame()
+        this.cursorDraw()
         this.dirty = true
     }
 

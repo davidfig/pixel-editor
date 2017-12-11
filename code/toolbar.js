@@ -4,8 +4,8 @@ const exists = require('exists')
 const PIXI = require('pixi.js')
 const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Pixel = require(Settings.YY_PIXEL).Pixel
+const UI = require(Settings.UI)
 
-const UI = require('yy-ui')
 const State = require('./state')
 
 const SELECT = require('../images/select.json')

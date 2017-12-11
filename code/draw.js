@@ -1,8 +1,10 @@
+const Settings = require('./settings')
+
 const PIXI = require('pixi.js')
 const exists = require('exists')
 
 const Sheet = require('./sheet')
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
@@ -56,6 +58,7 @@ module.exports = class Draw extends UI.Window
         this.sprite.scale.set(this.zoom)
         this.transparency()
         this.frame()
+        this.dirty = true
     }
 
     change()

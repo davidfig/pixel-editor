@@ -1,11 +1,12 @@
-const PIXI = require('pixi.js')
 const Settings = require('./settings')
+
+const PIXI = require('pixi.js')
 const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
+const UI = require(Settings.UI)
 
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
-const UI = require('yy-ui')
 const State = require('./state')
 
 const MIN_WIDTH = 100
@@ -76,6 +77,7 @@ module.exports = class Show extends UI.Window
             biggest = height > biggest ? pixel.height : biggest
         }
         this.currentChange()
+        this.dirty = true
     }
 
     currentChange()
@@ -106,7 +108,7 @@ module.exports = class Show extends UI.Window
                 return true
             }
         }
-        super.down(x, y, data)
+        return super.down(x, y, data)
     }
 
     move(x, y, data)

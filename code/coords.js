@@ -1,7 +1,8 @@
-const exists = require('exists')
-const UI = require('yy-ui')
-const State = require('./state')
 const Settings = require('./settings')
+
+const exists = require('exists')
+const UI = require(Settings.UI)
+const State = require('./state')
 const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
 
@@ -74,6 +75,7 @@ module.exports = class Coords extends UI.Window
         State.on('cursorSizeY', this.changed, this)
         State.on('last-file', this.changed, this)
         State.on('relative', this.changed, this)
+        PixelEditor.on('current', this.changed, this)
         PixelEditor.on('changed', this.changed, this)
     }
 
@@ -85,8 +87,8 @@ module.exports = class Coords extends UI.Window
         this.frameHeight.text = PixelEditor.height
         let x, y
         const split = State.relative.split('-')
-        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - Math.floor(PixelEditor.width / 2)
-        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - Math.floor(PixelEditor.height / 2)
+        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - PixelEditor.width / 2
+        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - PixelEditor.height / 2
         this.cursorX.text = x
         this.cursorY.text = y
         this.cursorWidth.text = State.cursorSizeX
@@ -147,14 +149,14 @@ module.exports = class Coords extends UI.Window
     {
         const x = parseInt(this.cursorX.text)
         const split = State.relative.split('-')
-        State.cursorX = split[1] === 'right' ? PixelEditor.width - x - 1 : split[1] === 'center' ? x + Math.floor(PixelEditor.width / 2) : x
+        State.cursorX = split[1] === 'right' ? PixelEditor.width - x - 1 : split[1] === 'center' ? x + PixelEditor.width / 2 : x
     }
 
     changeCursorY()
     {
         const y = parseInt(this.cursorY.text)
         const split = State.relative.split('-')
-        State.cursorY = split[0] === 'bottom' ? PixelEditor.height - y - 1 : split[0] === 'center' ? y + Math.floor(PixelEditor.height / 2) : y
+        State.cursorY = split[0] === 'bottom' ? PixelEditor.height - y - 1 : split[0] === 'center' ? y + PixelEditor.height / 2 : y
     }
 
     dragged()

@@ -1,6 +1,8 @@
+const Settings = require('./settings')
+
 const remote = require('electron').remote
 const path = require('path')
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const PIXI = require('pixi.js')
 const fs = require('fs')
 

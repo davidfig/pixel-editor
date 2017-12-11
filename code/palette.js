@@ -1,14 +1,15 @@
+const Settings = require('./settings')
+
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
 const Color = require('yy-color')
 
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
-const Settings = require('./settings')
 const PixelSheet = require('./pixel-sheet')
 
 const COLORS_PER_LINE = 10
@@ -242,7 +243,7 @@ module.exports = class Palette extends UI.Window
                 return true
             }
         }
-        super.down(x, y, data)
+        return super.down(x, y, data)
     }
 
     stateSetup(name)

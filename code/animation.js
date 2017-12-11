@@ -6,7 +6,7 @@ const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
 const Loop = require('yy-loop')
 
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const sheet = require('./pixel-sheet')

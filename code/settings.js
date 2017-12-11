@@ -1,6 +1,6 @@
 module.exports = {
 
-    DEBUG: false,
+    DEBUG: true,
     NO_LOAD: false,
 
     // YY_RENDERSHEET: '../../components/rendersheet/',
@@ -8,6 +8,9 @@ module.exports = {
 
     // YY_PIXEL: '../../components/pixel/',
     YY_PIXEL: 'yy-pixel',
+
+    // UI: '../../components/ui/',
+    UI: 'yy-ui',
 
     BORDER: 5
 }

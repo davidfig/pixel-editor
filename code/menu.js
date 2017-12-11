@@ -82,7 +82,7 @@ function menu()
     ])
     append('F&rame', [
         ['&Duplicate (Ctrl-d)', () => Main.duplicate()],
-        ['D&elete', () => Main.remove()],
+        ['D&elete (Ctrl-bkspc)', () => Main.remove()],
         ['&New Frame (Ctrl-f)', () => Main.add()],
         ['separator'],
         ['&Rotate Frame (Ctrl-.)', () => Main.rotate()],

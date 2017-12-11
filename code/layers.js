@@ -1,6 +1,8 @@
+const Settings = require('./settings')
+
 const exists = require('exists')
 
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const State = require('./state')
 const Settings = require('./settings')
 const PixelEditor = require('./pixel-editor')

@@ -1,6 +1,8 @@
+const Settings = require('./settings')
+
 const PIXI = require('pixi.js')
 
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const State = require('./state')
 
 const DICE = 50

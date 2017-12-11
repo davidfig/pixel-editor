@@ -2,7 +2,6 @@ const electron = require('electron')
 const path = require('path')
 const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
-const exists = require('exists')
 
 class State extends Events
 {

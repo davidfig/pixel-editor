@@ -125,6 +125,7 @@ class PixelEditor extends Pixel
             this.imageData.splice(index, 1)
             this.editor.imageData.splice(index, 1)
             this.current = (index < this.imageData.length) ? index : 0
+            this.emit('changed')
         }
     }
 
@@ -340,8 +341,7 @@ class PixelEditor extends Pixel
                         this.set(x, y, data[x + y * value], true)
                     }
                 }
-                this.save()
-                this.emit('changed')
+                this.saveAndRender()
             })
         }
     }
@@ -380,8 +380,7 @@ class PixelEditor extends Pixel
                         this.set(x, y, data[x + y * width], true)
                     }
                 }
-                this.save()
-                this.emit('changed')
+                this.saveAndRender()
             })
         }
     }
@@ -420,8 +419,7 @@ class PixelEditor extends Pixel
                         this.set(x, y, data[x + y * this.width], true)
                     }
                 }
-                this.save()
-                this.emit('changed')
+                this.saveAndRender()
             })
         }
     }
@@ -450,8 +448,7 @@ class PixelEditor extends Pixel
                     this.set(x, y, data[x + y * width], true)
                 }
             }
-            this.save()
-            this.emit('changed')
+            this.saveAndRender()
         })
     }
 
@@ -495,10 +492,19 @@ class PixelEditor extends Pixel
                         this.set(x, y, data[x + y * this.width], true)
                     }
                 }
-                this.save()
-                this.emit('changed')
+                this.saveAndRender()
             })
         }
+    }
+
+    saveAndRender()
+    {
+        Pixel.addFrame(this.current, this.getData(), sheet)
+        sheet.render(() =>
+        {
+            this.save()
+            this.emit('changed')
+        })
     }
 
     get undo()
@@ -529,6 +535,7 @@ class PixelEditor extends Pixel
     {
         this.editor.zoom = value
         this.save()
+        this.emit('changed')
     }
 
     undoSave()

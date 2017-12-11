@@ -1,11 +1,12 @@
+const Settings = require('./settings')
+
 const Renderer = require('yy-renderer')
 const FontFaceObserver = require('fontfaceobserver')
 const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
 
-const UI = require('yy-ui')
-// const UI = require('../../components/ui')
+const UI = require(Settings.UI)
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')
@@ -18,7 +19,6 @@ const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
-const Settings = require('./settings')
 
 let renderer, ui, loading = 2, windows = {}
 
@@ -91,6 +91,9 @@ function keydown(code, special)
     {
         switch (code)
         {
+            case 8:
+                remove()
+                break
             case 81: // ctrl-q
                 remote.app.quit()
                 break
@@ -174,6 +177,8 @@ function newFile()
     PixelEditor.create()
     State.lastFile = PixelEditor.filename
     State.current = 0
+    State.cursorX = State.cursorY = 0
+    State.cursorSizeX = State.cursorSizeY = 1
 }
 
 function saveFile()

@@ -1,10 +1,11 @@
+const Settings = require('./settings')
+
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 
-const UI = require('yy-ui')
+const UI = require(Settings.UI)
 const State = require('./state.js')
-const Settings = require('./settings')
 const sheet = require('./sheet')
 
 const MIN_WIDTH = 200
@@ -246,14 +247,12 @@ module.exports = class Picker extends UI.Window
                 }
                 else if (!notDown)
                 {
-                    super.down(x, y, data)
-                    return
+                    return super.down(x, y, data)
                 }
             }
             else if (!notDown)
             {
-                super.down(x, y, data)
-                return
+                return super.down(x, y, data)
             }
         }
         State.color = this.changeColor(this.hsl.h, this.hsl.s, this.hsl.l, true)

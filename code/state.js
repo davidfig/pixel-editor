@@ -82,6 +82,33 @@ class State extends Events
         return this.state.windows[name]
     }
 
+    setHidden(name, hidden)
+    {
+        this.state.windows[name].hidden = hidden
+        this.save()
+    }
+
+    getHidden(name)
+    {
+        return this.state.windows[name].hidden
+    }
+
+    toggleHidden(name)
+    {
+        this.state.windows[name].hidden = !this.state.windows[name].hidden
+        this.save()
+    }
+
+    get windows()
+    {
+        return this.state.windows
+    }
+    set windows(value)
+    {
+        this.state.window = value
+        this.save()
+    }
+
     get isForeground()
     {
         return this.state.isForeground

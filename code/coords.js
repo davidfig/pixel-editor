@@ -68,6 +68,10 @@ module.exports = class Coords extends UI.Window
         {
             this.position.set(place.x, place.y)
         }
+        if (State.getHidden(this.name))
+        {
+            this.visible = false
+        }
         this.on('drag-end', this.dragged, this)
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)

@@ -227,6 +227,10 @@ module.exports = class Show extends UI.Window
             this.width = MIN_WIDTH
             this.height = MIN_HEIGHT
         }
+        if (State.getHidden(this.name))
+        {
+            this.visible = false
+        }
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.redraw, this)

@@ -62,10 +62,12 @@ function create()
 
 function update(elapsed)
 {
+    let dirty = windows.draw.update(elapsed)
     if (ui.update(elapsed))
     {
-        renderer.dirty = true
+        dirty = true
     }
+    renderer.dirty = dirty
 }
 
 function keydown(code, special)
@@ -131,7 +133,17 @@ function keydown(code, special)
 
 function toggleWindow(name)
 {
-    windows[name].visible = !windows[name].visible
+    State.toggleHidden(name)
+    if (State.getHidden(name))
+    {
+        windows[name].visible = false
+    }
+    else
+    {
+        windows[name].visible = true
+        windows[name].layout()
+    }
+    ui.dirty = true
 }
 
 function save(filename)

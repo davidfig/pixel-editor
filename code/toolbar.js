@@ -30,6 +30,7 @@ module.exports = class Toolbar extends UI.Stack
         {
             Pixel.add(pixel, this.sheet)
         }
+        this.visible = false
         this.sheet.render(() => this.afterLoad())
     }
 
@@ -131,6 +132,7 @@ module.exports = class Toolbar extends UI.Stack
         {
             this.position.set(place.x, place.y)
         }
+        this.visible = !State.getHidden(this.name)
         this.on('drag-end', this.dragged, this)
         State.on('tool', this.changed, this)
     }

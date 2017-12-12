@@ -64,6 +64,7 @@ module.exports = class Animation extends UI.Window
         this.animationTime.on('changed', this.changeTime, this)
         this.disableControls(true)
         this.sheet.render(this.afterLoad.bind(this))
+        this.visible = false
     }
 
     afterLoad()
@@ -311,6 +312,7 @@ module.exports = class Animation extends UI.Window
             this.width = MIN_WIDTH
             this.height = MIN_HEIGHT
         }
+        this.visible = !State.getHidden(this.name)
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         PixelEditor.on('changed', this.layout, this)

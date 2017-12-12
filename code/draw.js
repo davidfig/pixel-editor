@@ -2,6 +2,7 @@ const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
 const exists = require('exists')
+const Viewport = require('pixi-viewport')
 
 const Sheet = require('./sheet')
 const UI = require(Settings.UI)
@@ -14,6 +15,7 @@ const SHAPE_HOVER_ALPHA = 1
 const BORDER = 1
 const DOTTED = 10
 
+const THRESHOLD = 5
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
 
@@ -21,35 +23,98 @@ module.exports = class Draw extends UI.Window
 {
     constructor()
     {
-        super({ draggable: true, resizeable: true })
+        const max = true
+        super({ draggable: !max, resizeable: !max, fullscreen: max })
+        this.max = max
         this.stuff = this.addChild(new PIXI.Container())
+        if (this.max)
+        {
+            this.setupViewport()
+        }
         this.blocks = this.stuff.addChild(new PIXI.Container())
         this.sprite = this.stuff.addChild(new PIXI.Sprite())
         this.grid = this.stuff.addChild(new PIXI.Graphics())
         this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
-        this.stateSetup('draw')
+        this.visible = false
         this.layout()
+        this.stateSetup('draw')
+    }
+
+    setupViewport()
+    {
+        this.vp = new Viewport(this.stuff, { noListeners: true, screenWidth: window.innerWidth, screenHeight: window.innerHeight })
+        this.vp
+            .decelerate()
+            .pinch()
+            .wheel()
+            .drag()
+    }
+
+    moveViewportCursor(x, y)
+    {
+        function clamp(n, min, max)
+        {
+            return n < min ? min : n > max ? max : n
+        }
+
+        const point = this.vp.toWorld(x, y)
+        State.cursorX = clamp(Math.floor(point.x / this.zoom), 0, PixelEditor.width - 1)
+        State.cursorY = clamp(Math.floor(point.y / this.zoom), 0, PixelEditor.height - 1)
+    }
+
+    update(elapsed)
+    {
+        if (this.vp)
+        {
+            this.vp.update(elapsed)
+            const result = this.vp.dirty
+            this.vp.dirty = false
+            return result
+        }
     }
 
     layout()
     {
-        super.layout()
-        this.redraw()
+        if (!State.getHidden('draw'))
+        {
+            super.layout()
+            if (this.max)
+            {
+                this.windowShadowGraphics.clear()
+                this.windowGraphics
+                    .clear()
+                    .beginFill(0, 0)
+                    .drawRect(0, 0, window.innerWidth, window.innerHeight)
+                    .endFill()
+            }
+            this.redraw()
+        }
     }
 
     redraw()
     {
-        const spacing = this.get('spacing') * 2
-        let width = this.width - spacing, height = this.height - spacing
-        let w = width / PixelEditor.width
-        let h = height / PixelEditor.height
-        if (PixelEditor.width * h < width)
+        if (State.getHidden('draw'))
         {
-            this.zoom = h
+            return
+        }
+        if (!this.max)
+        {
+            const spacing = this.get('spacing') * 2
+            let width = this.width - spacing, height = this.height - spacing
+            let w = width / PixelEditor.width
+            let h = height / PixelEditor.height
+            if (PixelEditor.width * h < width)
+            {
+                this.zoom = h
+            }
+            else
+            {
+                this.zoom = w
+            }
         }
         else
         {
-            this.zoom = w
+            this.zoom = 50
         }
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
@@ -514,6 +579,54 @@ module.exports = class Draw extends UI.Window
         }
     }
 
+    down(x, y, data)
+    {
+        if (!this.max)
+        {
+            return super.down(x, y, data)
+        }
+        else
+        {
+            this.saveDown = { x, y }
+            return this.vp.down(x, y, data)
+        }
+    }
+
+    up(x, y, data)
+    {
+        if (!this.max)
+        {
+            return super.up(x, y, data)
+        }
+        else
+        {
+            if (this.saveDown)
+            {
+                this.moveViewportCursor(x, y, data)
+            }
+            return this.vp.up(x, y, data)
+        }
+    }
+
+    move(x, y, data)
+    {
+        if (!this.max)
+        {
+            return super.move(x, y, data)
+        }
+        else
+        {
+            if (this.saveDown)
+            {
+                if (Math.abs(this.saveDown.x - x) > THRESHOLD || Math.abs(this.saveDown.y - y) > THRESHOLD)
+                {
+                    this.saveDown = null
+                }
+            }
+            return this.vp.move(x, y, data)
+        }
+    }
+
     keydown(code, special)
     {
         this.shift = special.shift
@@ -896,6 +1009,7 @@ module.exports = class Draw extends UI.Window
             this.width = MIN_WIDTH
             this.height = MIN_HEIGHT
         }
+        this.visible = !State.getHidden(this.name)
         this.on('drag-end', this.dragged, this)
         this.on('resize-end', this.dragged, this)
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']

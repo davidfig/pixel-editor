@@ -300,6 +300,10 @@ module.exports = class Picker extends UI.Window
             this.width = MIN_WIDTH
             this.height = MIN_HEIGHT
         }
+        if (State.getHidden(this.name))
+        {
+            this.visible = false
+        }
         this.on('drag-end', this.stateSet, this)
         this.on('resize-end', this.stateSet, this)
         State.on('foreground', this.draw, this)

@@ -4,7 +4,6 @@ const exists = require('exists')
 
 const UI = require(Settings.UI)
 const State = require('./state')
-const Settings = require('./settings')
 const PixelEditor = require('./pixel-editor')
 
 const WIDTH = 200

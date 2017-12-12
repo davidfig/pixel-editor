@@ -3,9 +3,8 @@ const app = remote.app
 const Menu = remote.Menu
 const path = require('path')
 
-let Main
-
 const State = require('./state')
+let Main
 
 let _template = []
 
@@ -32,7 +31,7 @@ function view(label, items)
     _template.push({ label, submenu })
     for (let item of items)
     {
-        submenu.push({ label: item[0], type: 'checkbox', checked: true, click: () => Main.toggleWindow(item[1]) })
+        submenu.push({ label: item[0], type: 'checkbox', checked: !State.getHidden(item[1]), click: () => Main.toggleWindow(item[1]) })
     }
 }
 
@@ -72,13 +71,13 @@ function menu()
         ['&Fill (F)', () => State.tool = 'fill']
     ])
     view('&View', [
-        // ['&Animation', 'animation'],
-        ['Coor&dinates', 'coords'],
+        ['&Editor', 'draw'],
+        ['&Info', 'coords'],
+        ['&Animation', 'animation'],
         ['&Palette', 'palette'],
         ['&Color Picker', 'picker'],
-        // ['&Frame Selector', 'show'],
+        ['&Frame Selector', 'show'],
         ['&Toolbar', 'toolbar'],
-        ['&Editor', 'draw'],
     ])
     append('F&rame', [
         ['&Duplicate (Ctrl-d)', () => Main.duplicate()],

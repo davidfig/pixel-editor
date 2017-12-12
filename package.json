@@ -20,6 +20,7 @@
     "fontfaceobserver": "^2.0.9",
     "jsonfile": "^4.0.0",
     "pixi-ease": "^0.13.6",
+    "pixi-viewport": "^0.21.3",
     "pixi.js": "^4.6.2",
     "point-in-triangle": "^1.0.1",
     "tinycolor2": "^1.4.1",
@@ -31,6 +32,6 @@
     "yy-random": "^1.2.0",
     "yy-renderer": "^2.4.1",
     "yy-rendersheet": "^3.6.1",
-    "yy-ui": "^0.3.0"
+    "yy-ui": "^0.4.1"
   }
 }

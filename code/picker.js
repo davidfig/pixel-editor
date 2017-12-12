@@ -197,7 +197,7 @@ module.exports = class Picker extends UI.Window
             color = color.toString(16)
             while (color.length < 6)
             {
-                color = ' ' + color
+                color = '0' + color
             }
             color += this.alphaCurrent
         }

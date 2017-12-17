@@ -32,6 +32,14 @@ module.exports = class Picker extends UI.Window
         this.stack = this.addChild(new UI.Stack())
         this.hex = this.stack.add(new UI.EditText(State.color.substr(0, 6), { beforeText: 'hex: #', edit: 'hex', maxCount: 6, count: 6 }))
         this.hex.on('changed', this.changeHex, this)
+        this.partHSL = this.stack.add(new UI.Stack([
+            new UI.EditText(this.hsl.h.toFixed(2), { edit: 'number', maxCount: 3, count: 3, min: 0, max: 360, align: 'right', beforeText: 'h:' }),
+            new UI.EditText(this.hsl.s.toFixed(2), { edit: 'number', maxCount: 3, count: 3, min: 0, max: 1, align: 'right', beforeText: 's:' }),
+            new UI.EditText(this.hsl.l.toFixed(2), { edit: 'number', maxCount: 3, count: 3, min: 0, max: 1, align: 'right', beforeText: 'l:' })
+        ], { horizontal: true }))
+        this.partHSL.items[0].on('changed', this.changeHSLNumbers, this)
+        this.partHSL.items[1].on('changed', this.changeHSLNumbers, this)
+        this.partHSL.items[2].on('changed', this.changeHSLNumbers, this)
         this.part = this.stack.add(new UI.Stack([
             new UI.EditText(rgb.r, { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right', beforeText: 'r:' }),
             new UI.EditText(rgb.g, { edit: 'number', maxCount: 3, count: 3, min: 0, max: 255, align: 'right', beforeText: 'g:' }),
@@ -89,6 +97,9 @@ module.exports = class Picker extends UI.Window
         State.color = State.color.substr(0, 6) + this.alphaCurrent
         this.layout()
     }
+
+    changeHSLNumbers()
+    {}
 
     changeNumbers()
     {
@@ -183,6 +194,9 @@ module.exports = class Picker extends UI.Window
     {
         this.hex.text = State.color.substr(0, 6)
         const rgb = TinyColor({ h: this.hsl.h, s: this.hsl.s, l: this.hsl.l }).toRgb()
+        this.partHSL.items[0].text = this.hsl.h
+        this.partHSL.items[1].text = this.hsl.s
+        this.partHSL.items[2].text = this.hsl.l
         this.part.items[0].text = rgb.r
         this.part.items[1].text = rgb.g
         this.part.items[2].text = rgb.b

@@ -240,8 +240,9 @@ module.exports = class Animation extends UI.Window
             this.list.clear()
             for (let key in animations)
             {
-                this.list.add(new UI.Text(key))
+                this.list.add(new UI.Text(key), true)
             }
+            this.list.layout()
         }
     }
 

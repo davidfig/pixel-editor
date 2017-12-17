@@ -67,6 +67,7 @@ function update(elapsed)
     {
         dirty = true
     }
+    PixelEditor.update(elapsed)
     renderer.dirty = dirty
 }
 

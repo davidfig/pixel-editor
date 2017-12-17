@@ -48,6 +48,19 @@ module.exports = class Draw extends UI.Window
             .pinch()
             .wheel()
             .drag()
+        const vp = PixelEditor.viewport
+        if (vp)
+        {
+            this.stuff.x = vp.x
+            this.stuff.y = vp.y
+            this.stuff.scale.set(vp.scale)
+        }
+        else
+        {
+            this.stuff.scale.set(PixelEditor.zoom)
+            this.stuff.x = window.innerWidth / 2 - PixelEditor.largestWidth / 2
+            this.stuff.y = window.innerHeight / 2 - PixelEditor.largestHeight / 2
+        }
     }
 
     moveViewportCursor(x, y)
@@ -68,7 +81,11 @@ module.exports = class Draw extends UI.Window
         {
             this.vp.update(elapsed)
             const result = this.vp.dirty
-            this.vp.dirty = false
+            if (result)
+            {
+                PixelEditor.viewport = { x: this.stuff.x, y: this.stuff.y, scale: this.stuff.scale.x }
+                this.vp.dirty = false
+            }
             return result
         }
     }

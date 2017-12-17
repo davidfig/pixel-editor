@@ -21,6 +21,7 @@ class PixelEditor extends Pixel
         this.tempCanvas = document.createElement('canvas')
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
         this.create(filename)
+        this.time = 0
     }
 
     create(filename)
@@ -40,7 +41,7 @@ class PixelEditor extends Pixel
             this.name = path.basename(filename, '.json')
             this.editor = { zoom: 10, current: 0, imageData: [{ undo: [], redo: [] }] }
             Pixel.addFrame(0, this.getData(), sheet)
-            sheet.render(() => this.save())
+            sheet.render(() => this.dirty = true)
         }
         else
         {
@@ -48,6 +49,17 @@ class PixelEditor extends Pixel
             this.load()
             this.name = this.name || path.basename(filename, '.json')
         }
+    }
+
+    set viewport(value)
+    {
+        this.editor.viewport = value
+        this.dirty = true
+    }
+
+    get viewport()
+    {
+        return this.editor.viewport
     }
 
     blank(width, height)
@@ -79,7 +91,7 @@ class PixelEditor extends Pixel
             {
                 this.emit('changed')
                 this.current = index
-                this.save()
+                this.dirty = true
             })
         }
         else
@@ -91,7 +103,7 @@ class PixelEditor extends Pixel
             {
                 this.emit('changed')
                 this.current = this.imageData.length - 1
-                this.save()
+                this.dirty = true
             })
         }
     }
@@ -101,7 +113,7 @@ class PixelEditor extends Pixel
         if (index < this.imageData.length)
         {
             this.imageData.splice(index, 1)
-            this.save()
+            this.dirty = true
         }
     }
 
@@ -166,7 +178,7 @@ class PixelEditor extends Pixel
             }
             this.imageData.splice(newIndex, 0, frame)
             this.editor.imageData.splice(newIndex, 0, editor)
-            sheet.render(() => this.save())
+            sheet.render(() => this.dirty = true)
         }
     }
 
@@ -209,7 +221,7 @@ class PixelEditor extends Pixel
                 this.set(x, y, data[x + y * this.width], true)
             }
         }
-        this.save()
+        this.dirty = true
     }
 
     flipVertical()
@@ -230,7 +242,7 @@ class PixelEditor extends Pixel
                 this.set(x, y, data[x + y * this.width], true)
             }
         }
-        this.save()
+        this.dirty = true
     }
 
     set(x, y, value, noUndo)
@@ -260,7 +272,7 @@ class PixelEditor extends Pixel
         }
         if (!noUndo)
         {
-            this.save()
+            this.dirty = true
         }
     }
 
@@ -297,7 +309,7 @@ class PixelEditor extends Pixel
         {
             this.editor.current = value
             this.emit('current')
-            this.save()
+            this.dirty = true
         }
     }
 
@@ -502,7 +514,7 @@ class PixelEditor extends Pixel
         Pixel.addFrame(this.current, this.getData(), sheet)
         sheet.render(() =>
         {
-            this.save()
+            this.dirty = true
             this.emit('changed')
         })
     }
@@ -514,7 +526,7 @@ class PixelEditor extends Pixel
     set undo(value)
     {
         this.editor.imageData[this.editor.current].undo = value
-        this.save()
+        this.dirty = true
     }
 
     get redo()
@@ -524,7 +536,7 @@ class PixelEditor extends Pixel
     set redo(value)
     {
         this.editor.imageData[this.editor.current].redo = value
-        this.save()
+        this.dirty = true
     }
 
     get zoom()
@@ -534,7 +546,7 @@ class PixelEditor extends Pixel
     set zoom(value)
     {
         this.editor.zoom = value
-        this.save()
+        this.dirty = true
         this.emit('changed')
     }
 
@@ -546,7 +558,7 @@ class PixelEditor extends Pixel
             this.undo.shift()
         }
         this.redo = []
-        this.save()
+        this.dirty = true
     }
 
     undoOne()
@@ -624,7 +636,7 @@ class PixelEditor extends Pixel
             }
             this.editor.current = 0
             this.editor.zoom = 10
-            this.save()
+            this.dirty = true
         }
     }
 
@@ -647,6 +659,17 @@ class PixelEditor extends Pixel
     getData()
     {
         return { name: this.name, imageData: this.imageData, animations: this.animations }
+    }
+
+    update(elapsed)
+    {
+        this.time += elapsed
+        if (this.dirty && this.time > Settings.SAVE_INTERVAL)
+        {
+            this.save()
+            this.time = 0
+            this.dirty = false
+        }
     }
 }
 

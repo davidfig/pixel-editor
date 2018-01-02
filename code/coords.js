@@ -1,63 +1,173 @@
-const Settings = require('./settings')
-
+const EasyEdit = require('easyedit')
 const exists = require('exists')
-const UI = require(Settings.UI)
+
 const State = require('./state')
 const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
 
-module.exports = class Coords extends UI.Window
+module.exports = class Coords
 {
-    constructor()
+    constructor(ui)
     {
-        super({ draggable: true, fit: true })
-        this.nameText = this.addChild(new UI.Text('', { place: 'top-center', theme: { spacing: 2 } }))
-        this.frame = this.addChild(new UI.EditText('0', { beforeText: 'frame: ', edit: 'number' }))
-        this.frame.on('changed', this.changeFrame, this)
-        this.frameWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
-        this.frameWidth.on('changed', this.changeFrameWidth, this)
-        this.frameHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
-        this.frameHeight.on('changed', this.changeFrameHeight, this)
-        this.cursorX = this.addChild(new UI.EditText('', { beforeText: 'x: ', count: 3, edit: 'number' }))
-        this.cursorX.on('changed', this.changeCursorX, this)
-        this.cursorY = this.addChild(new UI.EditText('', { beforeText: 'y: ', count: 3, edit: 'number' }))
-        this.cursorY.on('changed', this.changeCursorY, this)
-        this.cursorWidth = this.addChild(new UI.EditText('', { beforeText: 'w: ', count: 3, edit: 'number' }))
-        this.cursorWidth.on('changed', () => State.cursorSizeX = parseInt(this.cursorWidth.text))
-        this.cursorHeight = this.addChild(new UI.EditText('', { beforeText: 'h: ', count: 3, edit: 'number' }))
-        this.cursorHeight.on('changed', () => State.cursorSizeY = parseInt(this.cursorHeight.text))
-        this.button = this.addChild(new UI.Button({ text: 'c' }))
-        this.button.on('clicked', this.copy, this)
-        this.zoom = this.addChild(new UI.EditText(PixelEditor.zoom, { beforeText: 'zoom: ', count: 2 }))
-        this.zoom.on('changed', () => PixelEditor.zoom = parseInt(this.zoom.text))
+        this.win = ui.createWindow({ x: 10, y: 10, width: 220, resizable: false })
+        this.win.open()
+        this.content = this.win.$content[0]
+        this.content.style.margin = '0 1em'
+        this.name()
+        this.frameNumber()
+        this.frameSize()
+        this.dice = new Dice(this.content)
+        this.cursorPosition()
+        this.cursorSize()
+        this.zoom()
         this.changed()
-        this.dice = this.addChild(new Dice())
+        this.win.height = this.win.$titlebar.height() + this.content.scrollHeight + 8
         this.stateSetup('coords')
     }
 
-    layout()
+    editText(parent, label, text, styles)
     {
-        const width = 200
-        const center = width / 2
-        let y = 0
-        this.nameText.position.set(center - this.nameText.width / 2, y)
-        y += this.nameText.height + Settings.BORDER
-        this.frame.position.set(center - this.frame.width / 2, y)
-        y += this.frame.height + Settings.BORDER
-        this.frameWidth.position.set(0, y)
-        this.frameHeight.position.set(width - this.cursorY.width, y)
-        y += this.frameWidth.height + Settings.BORDER
-        this.dice.position.set(center - this.dice.width / 2, y)
-        this.button.position.set(width - this.button.width - Settings.BORDER, y)
-        y += this.dice.height + Settings.BORDER
-        this.cursorX.position.set(0, y)
-        this.cursorY.position.set(width - this.cursorY.width, y)
-        y += this.cursorX.height + Settings.BORDER
-        this.cursorWidth.position.set(0, y)
-        this.cursorHeight.position.set(width  - this.cursorHeight.width, y)
-        y += this.cursorWidth.height + Settings.BORDER
-        this.zoom.position.set(center - this.zoom.width / 2, y)
-        super.layout()
+        styles = styles || []
+        const container = document.createElement('div')
+        parent.appendChild(container)
+        for (let style in styles)
+        {
+            container.style[style] = styles[style]
+        }
+        if (label)
+        {
+            const title = document.createElement('span')
+            title.innerText = label
+            container.appendChild(title)
+        }
+        const span = document.createElement('span')
+        container.appendChild(span)
+        span.style.borderBottom = 'dotted 1px black'
+        span.innerHTML = text
+        return new EasyEdit(span)
+    }
+
+    stack(parent)
+    {
+        const stack = document.createElement('div')
+        parent.appendChild(stack)
+        stack.style.display = 'flex'
+        stack.style.justifyContent = 'space-between'
+        return stack
+    }
+
+    name()
+    {
+        this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' })
+    }
+
+    frameNumber()
+    {
+        this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' })
+        this.frameNumberEdit.on('success', (value) =>
+        {
+            const number = parseInt(value)
+            if (!isNaN(number) && number >= 0 && number < PixelEditor.imageData.length)
+            {
+                PixelEditor.current = number
+            }
+        })
+    }
+
+    frameSize()
+    {
+        const stack = this.stack(this.content)
+        this.frameWidthEdit = this.editText(stack, 'w: ', 15)
+        this.frameWidthEdit.on('success', (value) =>
+        {
+            const width = parseInt(value)
+            let relative
+            const split = State.relative.split('-')
+            if (split[1] === 'center')
+            {
+                relative = 'center'
+            }
+            else if (split[1] === 'right')
+            {
+                relative = 'right'
+            }
+            else
+            {
+                relative = 'left'
+            }
+            PixelEditor.adjustWidth(width, relative)
+        })
+
+        this.frameHeightEdit = this.editText(stack, 'h: ', 15)
+        this.frameHeightEdit.on('success', (value) =>
+        {
+            const height = parseInt(value)
+            let relative
+            const split = State.relative.split('-')
+            if (split[0] === 'center')
+            {
+                relative = 'center'
+            }
+            else if (split[0] === 'bottom')
+            {
+                relative = 'bottom'
+            }
+            else
+            {
+                relative = 'top'
+            }
+            PixelEditor.adjustHeight(height, relative)
+        })
+    }
+
+    cursorPosition()
+    {
+        const stack = this.stack(this.content)
+        this.cursorXEdit = this.editText(stack, 'x: ', 0)
+        this.cursorXEdit.on('success', (value) =>
+        {
+            const position = parseInt(value)
+            const split = State.relative.split('-')
+            State.cursorX = split[1] === 'right' ? PixelEditor.width - position - 1 : split[1] === 'center' ? position + PixelEditor.width / 2 : position
+        })
+        this.cursorYEdit = this.editText(stack, 'y: ', 0)
+        this.cursorYEdit.on('success', (value) =>
+        {
+            const position = parseInt(value)
+            const split = State.relative.split('-')
+            State.cursorY = split[0] === 'bottom' ? PixelEditor.height - position - 1 : split[0] === 'center' ? position + PixelEditor.height / 2 : position
+        })
+    }
+
+    cursorSize()
+    {
+        const stack = this.stack(this.content)
+        this.cursorSizeXEdit = this.editText(stack, 'w: ', 0)
+        this.cursorSizeXEdit.on('success', (value) => State.cursorSizeX = parseInt(value))
+        this.cursorSizeYEdit = this.editText(stack, 'h: ', 0)
+        this.cursorSizeYEdit.on('success', (value) => State.cursorSizeY = parseInt(value))
+    }
+
+    zoom()
+    {
+        this.zoomEdit = this.editText(this.content, 'zoom: ', PixelEditor.zoom, { 'text-align': 'center'})
+        this.zoomEdit.on('success', (value) => PixelEditor.zoom = parseInt(value))
+    }
+
+    changed()
+    {
+        this.nameEdit.object.innerText = PixelEditor.name
+        this.frameNumberEdit.object.innerText = PixelEditor.current
+        this.frameWidthEdit.object.innerText = PixelEditor.width
+        this.frameHeightEdit.object.innerText = PixelEditor.height
+        let x, y
+        const split = State.relative.split('-')
+        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - PixelEditor.width / 2
+        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - PixelEditor.height / 2
+        this.cursorXEdit.object.innerText = x
+        this.cursorYEdit.object.innerText = y
+        this.cursorSizeXEdit.object.innerText = State.cursorSizeX
+        this.cursorSizeYEdit.object.innerText = State.cursorSizeY
     }
 
     stateSetup(name)
@@ -66,13 +176,14 @@ module.exports = class Coords extends UI.Window
         const place = State.get(this.name)
         if (exists(place))
         {
-            this.position.set(place.x, place.y)
+            this.win.move(place.x, place.y)
         }
         if (State.getHidden(this.name))
         {
-            this.visible = false
+            this.win.el[0].display = 'none'
         }
-        this.on('drag-end', this.dragged, this)
+        this.win.el[0].addEventListener('mouseup', () => this.dragged())
+        this.win.el[0].addEventListener('touchend', () => this.dragged())
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)
@@ -83,108 +194,13 @@ module.exports = class Coords extends UI.Window
         PixelEditor.on('changed', this.changed, this)
     }
 
-    changed()
-    {
-        this.nameText.text = PixelEditor.name
-        this.frame.text = PixelEditor.current
-        this.frameWidth.text = PixelEditor.width
-        this.frameHeight.text = PixelEditor.height
-        let x, y
-        const split = State.relative.split('-')
-        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - PixelEditor.width / 2
-        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - PixelEditor.height / 2
-        this.cursorX.text = x
-        this.cursorY.text = y
-        this.cursorWidth.text = State.cursorSizeX
-        this.cursorHeight.text = State.cursorSizeY
-        this.dirty = true
-    }
-
-    changeFrame()
-    {
-        const number = parseInt(this.frame.text)
-        if (!isNaN(number) && number >= 0 && number < PixelEditor.imageData.length)
-        {
-            PixelEditor.current = number
-        }
-    }
-
-    changeFrameWidth()
-    {
-        const width = parseInt(this.frameWidth.text)
-        let relative
-        const split = State.relative.split('-')
-        if (split[1] === 'center')
-        {
-            relative = 'center'
-        }
-        else if (split[1] === 'right')
-        {
-            relative = 'right'
-        }
-        else
-        {
-            relative = 'left'
-        }
-        PixelEditor.adjustWidth(width, relative)
-    }
-
-    changeFrameHeight()
-    {
-        const height = parseInt(this.frameHeight.text)
-        let relative
-        const split = State.relative.split('-')
-        if (split[0] === 'center')
-        {
-            relative = 'center'
-        }
-        else if (split[0] === 'bottom')
-        {
-            relative = 'bottom'
-        }
-        else
-        {
-            relative = 'top'
-        }
-        PixelEditor.adjustHeight(height, relative)
-    }
-
-    changeCursorX()
-    {
-        const x = parseInt(this.cursorX.text)
-        const split = State.relative.split('-')
-        State.cursorX = split[1] === 'right' ? PixelEditor.width - x - 1 : split[1] === 'center' ? x + PixelEditor.width / 2 : x
-    }
-
-    changeCursorY()
-    {
-        const y = parseInt(this.cursorY.text)
-        const split = State.relative.split('-')
-        State.cursorY = split[0] === 'bottom' ? PixelEditor.height - y - 1 : split[0] === 'center' ? y + PixelEditor.height / 2 : y
-    }
-
     dragged()
     {
-        State.set(this.name, this.x, this.y)
-    }
-
-    copy()
-    {
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        if (this.win._moving)
         {
-            // ClipBoard.writeText('put(' + State.cursorX + ', ' + State.cursorY + ')')
-        }
-        else
-        {
-            // ClipBoard.writeText('rectFill(' + State.cursorX + ', ' + State.cursorY + ', ' + State.cursorSizeX + ', ' + State.cursorSizeY + ')')
+            State.set(this.name, this.win.x, this.win.y)
         }
     }
 
-    keydown(code)
-    {
-        if (code === 190)
-        {
-            this.copy()
-        }
-    }
+    keydown() { }
 }

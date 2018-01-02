@@ -1,11 +1,10 @@
 const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
-const exists = require('exists')
-const Viewport = require('pixi-viewport')
+const FPS = require('yy-fps')
+const Viewport = require(Settings.VIEWPORT)
 
 const Sheet = require('./sheet')
-const UI = require(Settings.UI)
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
@@ -16,50 +15,57 @@ const BORDER = 1
 const DOTTED = 10
 
 const THRESHOLD = 5
-const MIN_WIDTH = 100
-const MIN_HEIGHT = 100
 
-module.exports = class Draw extends UI.Window
+module.exports = class Draw extends PIXI.Container
 {
-    constructor()
+    constructor(body)
     {
-        const max = true
-        super({ draggable: !max, resizeable: !max, fullscreen: max })
-        this.max = max
-        this.stuff = this.addChild(new PIXI.Container())
-        if (this.max)
+        super()
+        if (Settings.DEBUG)
         {
-            this.setupViewport()
+            // this.fps = new FPS()
         }
-        this.blocks = this.stuff.addChild(new PIXI.Container())
-        this.sprite = this.stuff.addChild(new PIXI.Sprite())
-        this.grid = this.stuff.addChild(new PIXI.Graphics())
-        this.cursorBlock = this.stuff.addChild(new PIXI.Graphics())
-        this.visible = false
-        this.layout()
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        body.appendChild(this.renderer.view)
+
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        this.renderer.view.style.width = '100%'
+        this.renderer.view.style.height = '100%'
+        this.renderer.resize(window.innerWidth, window.innerHeight)
+
+        this.viewport = this.addChild(new PIXI.Container())
+        this.setupViewport()
+        this.blocks = this.vp.addChild(new PIXI.Container())
+        this.sprite = this.vp.addChild(new PIXI.Sprite())
+        this.grid = this.vp.addChild(new PIXI.Graphics())
+        this.cursorBlock = this.vp.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
+        document.body.addEventListener('keyup', (e) => this.keyup(e))
+        this.redraw()
+        PIXI.ticker.shared.add(() => this.update())
     }
 
     setupViewport()
     {
-        this.vp = new Viewport(this.stuff, { noListeners: true, screenWidth: window.innerWidth, screenHeight: window.innerHeight })
+        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight }))
         this.vp
+            .drag()
             .decelerate()
             .pinch()
             .wheel()
-            .drag()
         const vp = PixelEditor.viewport
         if (vp)
         {
-            this.stuff.x = vp.x
-            this.stuff.y = vp.y
-            this.stuff.scale.set(vp.scale)
+            this.vp.x = vp.x
+            this.vp.y = vp.y
+            this.vp.scale.set(vp.scale)
         }
         else
         {
-            this.stuff.scale.set(PixelEditor.zoom)
-            this.stuff.x = window.innerWidth / 2 - PixelEditor.largestWidth / 2
-            this.stuff.y = window.innerHeight / 2 - PixelEditor.largestHeight / 2
+            this.vp.scale.set(PixelEditor.zoom)
+            this.vp.x = window.innerWidth / 2 - PixelEditor.largestWidth / 2
+            this.vp.y = window.innerHeight / 2 - PixelEditor.largestHeight / 2
         }
     }
 
@@ -75,64 +81,40 @@ module.exports = class Draw extends UI.Window
         State.cursorY = clamp(Math.floor(point.y / this.zoom), 0, PixelEditor.height - 1)
     }
 
-    update(elapsed)
+    update()
     {
-        if (this.vp)
+        const result = this.vp.dirty
+        if (result)
         {
-            this.vp.update(elapsed)
-            const result = this.vp.dirty
-            if (result)
-            {
-                PixelEditor.viewport = { x: this.stuff.x, y: this.stuff.y, scale: this.stuff.scale.x }
-                this.vp.dirty = false
-            }
-            return result
+            PixelEditor.viewport = { x: this.vp.x, y: this.vp.y, scale: this.vp.scale.x }
+            this.vp.dirty = false
+            this.setHitArea()
+            this.renderer.render(this)
+        }
+        if (this.fps)
+        {
+            this.fps.frame()
         }
     }
 
-    layout()
+    setHitArea()
     {
-        if (!State.getHidden('draw'))
+        if (!this.vp.forceHitArea)
         {
-            super.layout()
-            if (this.max)
-            {
-                this.windowShadowGraphics.clear()
-                this.windowGraphics
-                    .clear()
-                    .beginFill(0, 0)
-                    .drawRect(0, 0, window.innerWidth, window.innerHeight)
-                    .endFill()
-            }
-            this.redraw()
+            this.vp.forceHitArea = new PIXI.Rectangle(this.vp.left, this.vp.top, this.vp.worldScreenWidth, this.vp.worldScreenHeight)
+        }
+        else
+        {
+            this.vp.forceHitArea.x = this.vp.left
+            this.vp.forceHitArea.y = this.vp.top
+            this.vp.forceHitArea.width = this.vp.worldScreenWidth
+            this.vp.forceHitArea.height = this.vp.worldScreenHeight
         }
     }
 
     redraw()
     {
-        if (State.getHidden('draw'))
-        {
-            return
-        }
-        if (!this.max)
-        {
-            const spacing = this.get('spacing') * 2
-            let width = this.width - spacing, height = this.height - spacing
-            let w = width / PixelEditor.width
-            let h = height / PixelEditor.height
-            if (PixelEditor.width * h < width)
-            {
-                this.zoom = h
-            }
-            else
-            {
-                this.zoom = w
-            }
-        }
-        else
-        {
-            this.zoom = 50
-        }
+        this.zoom = 50
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
         this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
@@ -140,13 +122,14 @@ module.exports = class Draw extends UI.Window
         this.transparency()
         this.frame()
         this.cursorDraw()
-        this.dirty = true
+        this.setHitArea()
+        this.renderer.render(this)
     }
 
     change()
     {
         PixelEditor.save()
-        this.dirty = true
+        this.redraw()
     }
 
     transparency()
@@ -644,10 +627,11 @@ module.exports = class Draw extends UI.Window
         }
     }
 
-    keydown(code, special)
+    keydown(e)
     {
-        this.shift = special.shift
-        if (special.ctrl)
+        const code = e.keyCode
+        this.shift = e.shiftKey
+        if (e.ctrlKey)
         {
             switch (code)
             {
@@ -661,7 +645,7 @@ module.exports = class Draw extends UI.Window
                     this.paste()
                     break
                 case 90:
-                    if (special.shift)
+                    if (this.shift)
                     {
                         PixelEditor.redoOne()
                     }
@@ -688,15 +672,19 @@ module.exports = class Draw extends UI.Window
             {
                 case 37: // left
                     this.moveCursor(-1, 0)
+                    e.preventDefault()
                     break
                 case 38: // up
                     this.moveCursor(0, -1)
+                    e.preventDefault()
                     break
                 case 39: // right
                     this.moveCursor(1, 0)
+                    e.preventDefault()
                     break
                 case 40: // down
                     this.moveCursor(0, 1)
+                    e.preventDefault()
                     break
                 case 187: // -
                     break
@@ -728,11 +716,11 @@ module.exports = class Draw extends UI.Window
         }
     }
 
-    keyup(code)
+    keyup(e)
     {
         if (this.spacingOn)
         {
-            if (code === 32)
+            if (e.keyCode === 32)
             {
                 this.spacingOn = false
             }
@@ -1014,36 +1002,16 @@ module.exports = class Draw extends UI.Window
     stateSetup(name)
     {
         this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.position.set(place.x, place.y)
-            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.width = MIN_WIDTH
-            this.height = MIN_HEIGHT
-        }
-        this.visible = !State.getHidden(this.name)
-        this.on('drag-end', this.dragged, this)
-        this.on('resize-end', this.dragged, this)
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
         for (let state of states)
         {
-            State.on(state, () => this.cursorDraw())
+            State.on(state, () => this.redraw())
         }
         State.on('tool', () => this.tool())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.redraw())
         State.on('last-file', () => this.redraw())
-        State.on('open-circle', () => this.cursorDraw())
-        State.on('open-ellipse', () => this.cursorDraw())
-    }
-
-    dragged()
-    {
-        State.set(this.name, this.x, this.y, this.width, this.height)
+        State.on('open-circle', () => this.redraw())
+        State.on('open-ellipse', () => this.redraw())
     }
 }

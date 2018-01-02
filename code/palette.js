@@ -6,7 +6,6 @@ const exists = require('exists')
 const FontSize = require('calc-fontsize')
 const Color = require('yy-color')
 
-const UI = require(Settings.UI)
 const PixelEditor = require('./pixel-editor')
 const State = require('./state')
 const Sheet = require('./sheet')
@@ -20,16 +19,31 @@ const WIDTH = 10
 const SPACING = 5
 const SELECTED = 3
 
-module.exports = class Palette extends UI.Window
+module.exports = class Palette extends PIXI.Container
 {
-    constructor()
+    constructor(ui)
     {
-        super({ draggable: true, resizeable: true, width: 100, height: 100 })
+        super()
+        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win.open()
+
+        this.content = this.win.$content[0]
+        this.content.style.margin = '0 0.25em'
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.content.appendChild(this.renderer.view)
+
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        this.renderer.view.style.width = '100%'
+        this.renderer.view.style.height = '100%'
+
         this.main = this.addChild(new PIXI.Container())
         this.blocks = this.addChild(new PIXI.Container())
         this.selected = this.addChild(new PIXI.Graphics())
         this.palettes()
         this.stateSetup('palette')
+
+        this.draw()
     }
 
     palettes()
@@ -49,13 +63,7 @@ module.exports = class Palette extends UI.Window
         this.selected.clear()
         this.updateColors()
         this.drawBlocks()
-        this.dirty = true
-    }
-
-    layout()
-    {
-        super.layout()
-        this.draw()
+        this.renderer.render(this)
     }
 
     drawBlocks()
@@ -63,13 +71,16 @@ module.exports = class Palette extends UI.Window
         this.main.removeChildren()
         this.blocks.removeChildren()
 
-        const width = ((this.width - this.get('spacing')) / WIDTH) - (Settings.BORDER * 2 / WIDTH)
+        const width = (this.content.offsetWidth / WIDTH)// - (Settings.BORDER * 2 / WIDTH)
+
         const fontSize = FontSize('8', { width, height: width * 0.75 })
         let yStart = Settings.BORDER
 
         const behindForeground = this.main.addChild(Sheet.get('transparency'))
         behindForeground.anchor.set(0)
         this.foregroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        this.foregroundColor.interactive = true
+        this.foregroundColor.on('pointertap', () => State.isForeground = true)
         behindForeground.width = behindForeground.height = this.foregroundColor.width = this.foregroundColor.height = width * 2 - SPACING
         behindForeground.y = this.foregroundColor.y = yStart
         this.foregroundColor.tint = parseInt(State.foreground.substr(0, 6), 16)
@@ -78,6 +89,8 @@ module.exports = class Palette extends UI.Window
         const behindBackground = this.main.addChild(Sheet.get('transparency'))
         behindBackground.anchor.set(0)
         this.backgroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        this.backgroundColor.interactive = true
+        this.backgroundColor.on('pointertap', () => State.isForeground = false)
         behindBackground.width = behindBackground.height = this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
         this.backgroundColor.position.set(width * 2, yStart)
         behindBackground.position = this.backgroundColor.position
@@ -97,6 +110,8 @@ module.exports = class Palette extends UI.Window
             block.width = block.height = width * 1.25 - SPACING
             block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, width / 3 + yStart)
             block.color = color
+            block.interactive = true
+            block.on('pointertap', () => State.color = block.color)
             if (color !== '00000000')
             {
                 block.texture = PIXI.Texture.WHITE
@@ -113,7 +128,7 @@ module.exports = class Palette extends UI.Window
                     .drawRect(block.x - SELECTED / 2, block.y - SELECTED / 2, block.width + SELECTED, block.height + SELECTED)
             }
             const fill = color === '000000ff' ? 'white' : 'black'
-            const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill }))
+            const text = this.blocks.addChild(new PIXI.Text(i + 1, { fontSize, fill, fontFamily: 'consolas' }))
             text.anchor.set(0.5)
             text.position.set(block.x + block.width / 2, block.y + block.height / 2)
         }
@@ -128,6 +143,8 @@ module.exports = class Palette extends UI.Window
                 behind.anchor.set(0)
                 behind.color = line[i]
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+                block.interactive = true
+                block.on('pointertap', () => State.color = behind.color)
                 behind.width = behind.height = block.width = block.height = width - SPACING
                 block.position.set(SPACING / 2 + x * width, y * width + yStart)
                 behind.position = block.position
@@ -218,74 +235,63 @@ module.exports = class Palette extends UI.Window
             })
     }
 
-
-    down(x, y, data)
-    {
-        const point = {x, y}
-        if (this.foregroundColor.containsPoint(point) && !State.isForeground)
-        {
-            State.isForeground = true
-            this.layout()
-            return true
-        }
-        if (this.backgroundColor.containsPoint(point) && State.isForeground)
-        {
-            State.isForeground = false
-            this.layout()
-            return true
-        }
-        for (let block of this.blocks.children)
-        {
-            if (block.containsPoint(point))
-            {
-                State.color = block.color
-                this.layout()
-                return true
-            }
-        }
-        return super.down(x, y, data)
-    }
-
     stateSetup(name)
     {
         this.name = name
         const place = State.get(this.name)
         if (exists(place))
         {
-            this.position.set(place.x, place.y)
-            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
+            this.win.move(place.x, place.y)
+            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
+            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
         }
         else
         {
-            this.width = MIN_WIDTH
-            this.height = MIN_HEIGHT
+            this.win.width = MIN_WIDTH
+            this.win.height = MIN_HEIGHT
         }
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
-            this.visible = false
+            this.win.el[0].display = 'none'
         }
-        this.on('drag-end', this.dragged, this)
+        this.win.el[0].addEventListener('mousemove', () => this.resized())
+        this.win.el[0].addEventListener('touchmove', () => this.resized())
+        this.win.el[0].addEventListener('mouseup', () => this.dragged())
+        this.win.el[0].addEventListener('touchend', () => this.dragged())
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
         PixelEditor.on('changed', this.draw, this)
     }
 
-    dragged()
+    resized()
     {
-        State.set(this.name, this.x, this.y)
+        if (this.win._resizing)
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
     }
 
-    keydown(code, special)
+    dragged()
     {
-        if (!special.ctrl && !special.alt && !special.shift)
+        if (this.win._moving)
+        {
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
+    }
+
+    keydown(e)
+    {
+        const code = e.keyCode
+        if (!e.ctrlKey && !e.altKey && !e.shiftKey)
         {
             switch (code)
             {
                 case 88:
                     State.isForeground = !State.isForeground
-                    this.dirty = true
                     break
                 case 49:
                     State.color = '000000ff'
@@ -307,6 +313,7 @@ module.exports = class Palette extends UI.Window
                     {
                         State.color = this.colors[0][10 - 4]
                     }
+                    break
             }
         }
     }

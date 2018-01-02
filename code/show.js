@@ -3,7 +3,6 @@ const Settings = require('./settings')
 const PIXI = require('pixi.js')
 const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
-const UI = require(Settings.UI)
 
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
@@ -14,10 +13,25 @@ const MIN_HEIGHT = 100
 
 const COLOR_SELECTED = 0x888888
 
-module.exports = class Show extends UI.Window
+module.exports = class Show extends PIXI.Container
 {
-    constructor()
+    constructor(ui)
     {
+        super()
+        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win.open()
+
+        this.content = this.win.$content[0]
+        this.content.style.margin = '0 0.25em'
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.content.appendChild(this.renderer.view)
+
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        this.renderer.view.style.width = '100%'
+        this.renderer.view.style.height = '100%'
+
+        return
         super({ draggable: true, resizeable: true, overflow: 'y' })
         this.pixels = this.addChild(new PIXI.Container())
         this.buttons = []

@@ -1,12 +1,11 @@
 const Settings = require('./settings')
 
-const Renderer = require('yy-renderer')
 const FontFaceObserver = require('fontfaceobserver')
 const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
+const Ventus = require('ventus-clone').default
 
-const UI = require(Settings.UI)
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')
@@ -20,7 +19,7 @@ const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
 
-let renderer, ui, loading = 2, windows = {}
+let ui, loading = 1, windows = {}
 
 function afterLoad()
 {
@@ -37,47 +36,35 @@ function afterLoad()
         PixelEditor.load(State.lastFile)
     }
 
-    renderer = new Renderer({ debug: true, autoresize: true })
     create()
-
-    renderer.interval(update)
-    renderer.start()
 }
 
 function create()
 {
-    renderer.clear()
+    windows.draw = new Draw(document.body)
 
-    ui = renderer.add(new UI())
-    windows.draw = ui.addChild(new Draw())
-    windows.show = ui.addChild(new Show())
-    windows.toolbar = ui.addChild(new Toolbar())
-    windows.palette = ui.addChild(new Palette())
-    windows.picker = ui.addChild(new Picker())
-    windows.coords = ui.addChild(new Coords())
-    windows.animation = ui.addChild(new Animation())
+    ui = new Ventus.WindowManager()
+    ui.$overlay[0].style.display = 'none'
 
-    ui.addListener('keydown', keydown)
+    windows.show = new Show(ui)
+    windows.toolbar = new Toolbar(ui)
+    windows.palette = new Palette(ui)
+    // windows.picker = ui.addChild(new Picker())
+    windows.coords = new Coords(ui)
+    windows.animation = new Animation(ui)
+
+    document.body.addEventListener('keydown', keydown)
 }
 
-function update(elapsed)
+function keydown(e)
 {
-    let dirty = windows.draw.update(elapsed)
-    if (ui.update(elapsed))
-    {
-        dirty = true
-    }
-    PixelEditor.update(elapsed)
-    renderer.dirty = dirty
-}
+    const code = e.keyCode
 
-function keydown(code, special)
-{
     // reload on ctrl-r key (should be disabled when not debugging)
-    if (special.ctrl && code === 82) window.location.reload()
+    if (e.ctrlKey && code === 82) window.location.reload()
 
-    this.shift = special.shift
-    if (special.ctrl && code >= 48 && code <= 57)
+    this.shift = e.shiftKey
+    if (e.ctrlKey && code >= 48 && code <= 57)
     {
         let i = code === 48 ? 10 : code - 48
         if (i < State.lastFiles.length)
@@ -85,12 +72,12 @@ function keydown(code, special)
             load([State.lastFiles[i]])
         }
     }
-    if (special.ctrl && special.shift && code === 68)
+    if (e.ctrlKey && e.shiftCode && code === 68)
     {
         State.createDefaults()
         return
     }
-    if (special.ctrl)
+    if (e.ctrlKey)
     {
         switch (code)
         {
@@ -128,6 +115,10 @@ function keydown(code, special)
                 flipVertical()
                 break
         }
+    }
+    for (let window in windows)
+    {
+        windows[window].keydown(e)
     }
     // console.log(code)
 }
@@ -236,8 +227,8 @@ function flipVertical()
 
 function exportFile()
 {
+// TODO
     ui.addChild(new Export())
-    // const filename = remote.dialog.showSaveDialog(remote.getCurrentWindow(), { buttonLabel: 'export' })
 
 }
 
@@ -256,6 +247,4 @@ module.exports = {
     flipVertical
 }
 
-const font = new FontFaceObserver('bitmap')
-font.load().then(afterLoad)
 Sheet.load(afterLoad)

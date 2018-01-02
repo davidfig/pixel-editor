@@ -22,6 +22,7 @@ class PixelEditor extends Pixel
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
         this.create(filename)
         this.time = 0
+        setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
     create(filename)
@@ -661,13 +662,11 @@ class PixelEditor extends Pixel
         return { name: this.name, imageData: this.imageData, animations: this.animations }
     }
 
-    update(elapsed)
+    update()
     {
-        this.time += elapsed
-        if (this.dirty && this.time > Settings.SAVE_INTERVAL)
+        if (this.dirty)
         {
             this.save()
-            this.time = 0
             this.dirty = false
         }
     }

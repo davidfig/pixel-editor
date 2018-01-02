@@ -11,6 +11,8 @@ module.exports = {
     // YY_PIXEL: '../../components/pixel/',
     YY_PIXEL: 'yy-pixel',
 
+    VIEWPORT: '../../components/pixi-viewport',
+
     // UI: '../../components/ui/',
     UI: 'yy-ui',
 

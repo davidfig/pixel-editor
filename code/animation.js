@@ -4,9 +4,7 @@ const PIXI = require('pixi.js')
 const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
-const Loop = require('yy-loop')
 
-const UI = require(Settings.UI)
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const sheet = require('./pixel-sheet')
@@ -16,62 +14,77 @@ const MIN_HEIGHT = 200
 
 const BUTTONS = require('../images/animation.json')
 
-module.exports = class Animation extends UI.Window
+module.exports = class Animation extends PIXI.Container
 {
-    constructor()
+    constructor(ui)
     {
-        super({ draggable: true, resizeable: true })
+        super()
+        this.ui = ui
+
         this.buttons = this.addChild(new PIXI.Container())
         this.numbers = [true]
         this.current = 0
         this.time = 0
-        this.loop = new Loop({ pauseOnBlur: true })
-        this.loop.interval(this.update.bind(this))
+
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         Pixel.add(BUTTONS, this.sheet)
-        this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
-        this.play.sprite.anchor.set(0)
-        this.play.sprite.scale.set(2)
-        this.play.on('pressed', this.change, this)
-        this.play.disabled = true
-        this.playing = false
-        this.animationName = this.addChild(new UI.EditText('animation name...'))
-        this.animationName.on('editing', this.showNames, this)
-        this.animationName.on('changed', this.changeName, this)
-        this.animationName.on('lose-focus', () => this.list.visible = false)
-        this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
-        this.animationText.on('changed', this.changeText, this)
-        this.animationText.disabled = true
-        this.animationError = this.addChild(new UI.Text(''))
-        this.animationError['foreground-color'] = '#ff0000'
-        this.list = this.special.addChild(new UI.List({ transparent: false, theme: { between: 0, spacing: 2 } }))
-        this.list.visible = false
-        this.list.on('select', this.select, this)
-        this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
-        this.newButton.on('clicked', this.reset, this)
-        this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
-        this.copyButton.on('clicked', this.copyAnimation, this)
-        this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
-        this.deleteButton.on('clicked', this.removeAnimation, this)
-        this.buttons = this.addChild(new UI.Stack([this.newButton, this.copyButton, this.deleteButton], { horizontal: true }))
-        for (let button of this.buttons.items)
-        {
-            button.sprite.anchor.set(0)
-            button.sprite.scale.set(2)
-        }
-        this.animationTime = this.addChild(new UI.EditText('150', { afterText: 'ms' }))
-        this.time = 150
-        this.animationTime.on('changed', this.changeTime, this)
-        this.disableControls(true)
+
+        // this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
+        // this.play.sprite.anchor.set(0)
+        // this.play.sprite.scale.set(2)
+        // this.play.on('pressed', this.change, this)
+        // this.play.disabled = true
+        // this.playing = false
+        // this.animationName = this.addChild(new UI.EditText('animation name...'))
+        // this.animationName.on('editing', this.showNames, this)
+        // this.animationName.on('changed', this.changeName, this)
+        // this.animationName.on('lose-focus', () => this.list.visible = false)
+        // this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
+        // this.animationText.on('changed', this.changeText, this)
+        // this.animationText.disabled = true
+        // this.animationError = this.addChild(new UI.Text(''))
+        // this.animationError['foreground-color'] = '#ff0000'
+        // this.list = this.special.addChild(new UI.List({ transparent: false, theme: { between: 0, spacing: 2 } }))
+        // this.list.visible = false
+        // this.list.on('select', this.select, this)
+        // this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
+        // this.newButton.on('clicked', this.reset, this)
+        // this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
+        // this.copyButton.on('clicked', this.copyAnimation, this)
+        // this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
+        // this.deleteButton.on('clicked', this.removeAnimation, this)
+        // this.buttons = this.addChild(new UI.Stack([this.newButton, this.copyButton, this.deleteButton], { horizontal: true }))
+        // for (let button of this.buttons.items)
+        // {
+        //     button.sprite.anchor.set(0)
+        //     button.sprite.scale.set(2)
+        // }
+        // this.animationTime = this.addChild(new UI.EditText('150', { afterText: 'ms' }))
+        // this.time = 150
+        // this.animationTime.on('changed', this.changeTime, this)
+        // this.disableControls(true)
         this.sheet.render(this.afterLoad.bind(this))
-        this.visible = false
     }
 
     afterLoad()
     {
+        this.win = this.ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win.open()
+
+        this.content = this.win.$content[0]
+        this.content.style.margin = '0 0.25em'
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.content.appendChild(this.renderer.view)
+
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+
+        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
+
         this.stateSetup('animation')
-        this.layout()
-        this.height = this.maxHeight
+        this.draw()
+
+        // this.height = this.maxHeight
     }
 
     reset()
@@ -87,17 +100,12 @@ module.exports = class Animation extends UI.Window
     draw()
     {
         this.drawAnimation()
-        this.drawPlay()
-        if (this.playing)
-        {
-            this.change()
-        }
-    }
-
-    layout()
-    {
-        this.draw()
-        super.layout()
+        // this.drawPlay()
+        // if (this.playing)
+        // {
+        //     this.change()
+        // }
+        this.renderer.render(this)
     }
 
     change()
@@ -304,25 +312,47 @@ module.exports = class Animation extends UI.Window
         const place = State.get(this.name)
         if (exists(place))
         {
-            this.position.set(place.x, place.y)
-            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
+            this.win.move(place.x, place.y)
+            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
+            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
         }
         else
         {
-            this.width = MIN_WIDTH
-            this.height = MIN_HEIGHT
+            this.win.width = MIN_WIDTH
+            this.win.height = MIN_HEIGHT
         }
-        this.visible = !State.getHidden(this.name)
-        this.on('drag-end', this.dragged, this)
-        this.on('resize-end', this.dragged, this)
-        PixelEditor.on('changed', this.layout, this)
-        State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        if (State.getHidden(this.name))
+        {
+            this.win.el[0].display = 'none'
+        }
+        this.win.el[0].addEventListener('mousemove', () => this.resized())
+        this.win.el[0].addEventListener('touchmove', () => this.resized())
+        this.win.el[0].addEventListener('mouseup', () => this.dragged())
+        this.win.el[0].addEventListener('touchend', () => this.dragged())
+        PixelEditor.on('changed', this.draw, this)
+        // State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
+// TODO
         State.on('relative', this.drawAnimation, this)
+    }
+
+    resized()
+    {
+        if (this.win._resizing)
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
     }
 
     dragged()
     {
-        State.set(this.name, this.x, this.y, this.width, this.height)
+        if (this.win._moving)
+        {
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
     }
+
+    keydown() { }
 }

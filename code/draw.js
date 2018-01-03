@@ -23,10 +23,10 @@ module.exports = class Draw extends PIXI.Container
         super()
         if (Settings.DEBUG)
         {
-            // this.fps = new FPS()
+            this.fps = new FPS()
         }
         this.ui = ui
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'

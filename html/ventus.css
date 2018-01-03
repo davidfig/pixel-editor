@@ -144,7 +144,7 @@
           user-select: none;
   overflow: hidden;
   position: absolute;
-  /* min-width: 200px; */
+  min-width: 60px;
   min-height: 60px;
   background-color: #cccccc;
   box-shadow: 0 0 12px 1px rgba(0, 0, 0, 0.6);

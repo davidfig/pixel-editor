@@ -22,17 +22,12 @@ module.exports = class Show extends PIXI.Container
         this.win.open()
 
         this.content = this.win.$content[0]
-        this.content.style.margin = '0 0.25em'
+        // this.content.style.margin = '0 0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
 
-        this.renderer.view.style.display = 'block'
-        this.renderer.view.style.margin = '0 auto'
-        this.renderer.view.style.width = '100%'
-        this.renderer.view.style.height = '100%'
-
         this.pixels = this.addChild(new PIXI.Container())
-        this.buttons = []
+        // this.buttons = []
         this.stateSetup('show')
         this.redraw()
     }
@@ -55,7 +50,7 @@ module.exports = class Show extends PIXI.Container
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
-        this.buttons = []
+        // this.buttons = []
         const data = PixelEditor.getData()
         const scale = PixelEditor.zoom
         let xStart = Settings.BORDER, yStart = Settings.BORDER
@@ -68,7 +63,7 @@ module.exports = class Show extends PIXI.Container
             pixel.scale.set(scale)
             pixel.frame(i)
             pixel.current = i
-            if (xStart + width + Settings.BORDER > this.right)
+            if (xStart + width + Settings.BORDER > this.content.offsetWidth / window.devicePixelRatio)
             {
                 yStart += biggest + Settings.BORDER
                 xStart = Settings.BORDER
@@ -90,7 +85,7 @@ module.exports = class Show extends PIXI.Container
                     this.selector.height = pixel.height
                 }
             })
-            this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
+            // this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
             xStart += width + Settings.BORDER
             biggest = height > biggest ? pixel.height : biggest
         }
@@ -103,6 +98,7 @@ module.exports = class Show extends PIXI.Container
         this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
         this.selector.width = target.width + Settings.BORDER
         this.selector.height = target.height + Settings.BORDER
+        this.renderer.resize(this.width + Settings.BORDER, this.height)
         this.renderer.render(this)
     }
 
@@ -236,7 +232,7 @@ module.exports = class Show extends PIXI.Container
             this.win.width = MIN_WIDTH
             this.win.height = MIN_HEIGHT
         }
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        // this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
             this.win.el[0].display = 'none'

@@ -4,6 +4,7 @@ const FontFaceObserver = require('fontfaceobserver')
 const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
+// const Ventus = require('ventus-clone').default
 const Ventus = require('ventus-clone').default
 
 const Toolbar = require('./toolbar')
@@ -41,16 +42,23 @@ function afterLoad()
 
 function create()
 {
-    windows.draw = new Draw(document.body)
 
     ui = new Ventus.WindowManager()
-    ui.$overlay[0].style.display = 'none'
+
+    ui.$overlay[0].style.opacity = 1
+    ui.$overlay[0].style.backgroundColor = 'transparent'
+    windows.draw = new Draw(ui.$overlay[0], ui)
+
+    // ui.$overlay[0].style.display = 'none'
 
     windows.show = new Show(ui)
+
     windows.toolbar = new Toolbar(ui)
     windows.palette = new Palette(ui)
     // windows.picker = ui.addChild(new Picker())
     windows.coords = new Coords(ui)
+
+    // windows.coords.win.space = windows.draw.renderer.view
     windows.animation = new Animation(ui)
 
     document.body.addEventListener('keydown', keydown)

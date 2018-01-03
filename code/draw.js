@@ -18,13 +18,14 @@ const THRESHOLD = 5
 
 module.exports = class Draw extends PIXI.Container
 {
-    constructor(body)
+    constructor(body, ui)
     {
         super()
         if (Settings.DEBUG)
         {
             // this.fps = new FPS()
         }
+        this.ui = ui
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         body.appendChild(this.renderer.view)
 
@@ -129,6 +130,7 @@ module.exports = class Draw extends PIXI.Container
     change()
     {
         PixelEditor.save()
+        PixelEditor.emit('changed')
         this.redraw()
     }
 

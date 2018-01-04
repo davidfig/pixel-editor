@@ -55,10 +55,8 @@ function create()
 
     windows.toolbar = new Toolbar(ui)
     windows.palette = new Palette(ui)
-    // windows.picker = ui.addChild(new Picker())
+    windows.picker = new Picker(ui)
     windows.coords = new Coords(ui)
-
-    // windows.coords.win.space = windows.draw.renderer.view
     windows.animation = new Animation(ui)
 
     document.body.addEventListener('keydown', keydown)

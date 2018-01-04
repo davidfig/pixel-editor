@@ -1,10 +1,8 @@
-const Settings = require('./settings')
-
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
+const RenderSheet = require('yy-rendersheet')
 
-const UI = require(Settings.UI)
 const State = require('./state.js')
 const sheet = require('./sheet')
 
@@ -13,16 +11,190 @@ const MIN_HEIGHT = 300
 const CONTROL = 5
 const WIDTH = 4
 
-module.exports = class Picker extends UI.Window
+const BAR_HEIGHT = 25
+const RADIUS = 5
+
+module.exports = class Picker
 {
-    constructor()
+    constructor(ui)
     {
-        super({ draggable: true, resizeable: true, theme: { 'minimum-width': MIN_WIDTH, 'minimum-height': MIN_HEIGHT } })
+        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win.el[0].style.opacity = 1
+        this.win.open()
+        this.ui = ui
+        this.content = this.win.$content[0]
+        this.content.style.margin = '0.5em'
+
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+
+        this.stateSetup('picker')
+        this.content.appendChild(this.renderer.view)
+
+        this.stage = new PIXI.Container()
+
+        this.sheet = new RenderSheet()
+        this.sheet.add('picker', (c) => this.drawPicker(c), () => this.measurePicker())
+        this.sheet.add('pickerCursor', (c) => this.drawPickerCursor(c), () => { return { width: RADIUS * 2 + 1, height: RADIUS * 2 + 1 } })
+        // this.sheet.add('hue', (c) => this.drawHue(c), (c) => this.measureBar(c))
+
+        // this.sheet.show = true
+
+        this.sheet.render(() => this.afterRender())
+    }
+
+    afterRender()
+    {
+        this.setupPicker()
+        // this.setupHue()
+        // this.setupAlpha()
+
+        this.renderer.render(this.stage)
+
+        return
         this.transparentBlocks = [this.addChild(sheet.get('transparency')), this.addChild(sheet.get('transparency')), this.addChild(sheet.get('transparency'))]
         this.graphics = this.addChild(new PIXI.Graphics())
         this.alphaCurrent = 'ff'
         this.wordsSetup()
-        this.stateSetup('picker')
+    }
+
+    setupPicker()
+    {
+        this.picker = this.stage.addChild(new PIXI.Container())
+        const gradient = this.picker.addChild(this.sheet.get('picker'))
+        gradient.anchor.set(0)
+        gradient.position.set(RADIUS)
+        this.picker.interactive = true
+        this.picker.on('pointerdown', () => this.isPickerDown = true)
+        // this.picker.on('pointermove', (e) => this.pickerMove(e))
+        this.picker.on('pointerup', () => this.isPickerDown = false)
+
+        this.pickerCursor = this.picker.addChild(this.sheet.get('pickerCursor'))
+
+        this.ui.$overlay[0].addEventListener('mousemove', (e) => this.pickerMove(e))
+        this.win.el[0].addEventListener('mousemove', (e) => this.pickerMove(e))
+        this.ui.$overlay[0].addEventListener('mouseup', () => this.pickerUp())
+        this.win.el[0].addEventListener('mouseup', () => this.pickerUp())
+    }
+
+    measurePicker()
+    {
+        return { width: this.content.offsetWidth - RADIUS * 2, height: this.content.offsetWidth - RADIUS * 2 }
+    }
+
+    drawPicker(c)
+    {
+        const color = '#' + State.color.substr(0, 6)
+        const translate = new TinyColor(color).toHsl()
+        const show = new TinyColor({ h: translate.h, s: 1, l: 0.5 })
+        const size = this.measurePicker().width
+        c.fillStyle = show
+        c.fillRect(0, 0, size, size)
+        let gradient = c.createLinearGradient(0, 0, size, 0)
+        gradient.addColorStop(0, 'hsl(0,0%,50%)')
+        gradient.addColorStop(1, 'hsla(0,0%,50%,0)')
+        c.fillStyle = gradient
+        c.fillRect(0, 0, size, size)
+        gradient = c.createLinearGradient(0, 0, 0, size)
+        gradient.addColorStop(0, 'hsl(0,0%,100%)')
+        gradient.addColorStop(0.5, 'hsla(0,0%,100%,0)')
+        gradient.addColorStop(0.5, 'hsla(0,0%,0%,0)')
+        gradient.addColorStop(1, 'hsl(0,0%,0%)')
+        c.fillStyle = gradient
+        c.fillRect(0, 0, size, size)
+    }
+
+    drawPickerCursor(c)
+    {
+        const middle = RADIUS + 0.5
+        c.lineWidth = '1px'
+        c.strokeStyle = 'black'
+        c.arc(middle, middle.y, RADIUS, 0, 2 * Math.PI)
+        c.stroke()
+        c.strokeStyle = 'white'
+        c.arc(middle, middle, RADIUS - 1, 0, 2 * Math.PI)
+        c.stroke()
+    }
+
+    pickerMove(e)
+    {
+        if (this.isPickerDown)
+        {
+            const size = this.content.offsetWidth - RADIUS * 2
+            const local = this.win.toLocal({ x: e.offsetX, y: e.offsetY })
+            let x = local.x - this.picker.x
+            x = x < RADIUS ? RADIUS : x > size + RADIUS ? size + RADIUS : x
+            let y = local.y - this.picker.y
+            y = y < RADIUS ? RADIUS : y > size + RADIUS ? size + RADIUS : y
+            this.pickerCursor.position.set(x, y)
+            this.renderer.render(this.stage)
+console.log(x, y)
+        }
+    }
+
+    pickerUp()
+    {
+        this.isPickerDown = false
+    }
+
+    setupHue()
+    {
+        this.hue = document.createElement('canvas')
+        this.hue.style.width = '100%'
+        // this.hue.addEventListener('mousedown', () => this.pickerDown())
+        // this.hue.addEventListener('mousemove', (e) => this.hueMove(e))
+        // this.ui.$overlay[0].addEventListener('mousemove', (e) => this.hueMove(e))
+        // this.win.el[0].addEventListener('mousemove', (e) => this.hueMove(e))
+        // this.hue.addEventListener('mouseup', () => this.hueUp())
+        // this.ui.$overlay[0].addEventListener('mouseup', () => this.hueUp())
+        // this.win.el[0].addEventListener('mouseup', () => this.hueUp())
+        this.content.appendChild(this.hue)
+        this.drawHue()
+    }
+
+    drawHue()
+    {
+        // const color = '#' + State.color.substr(0, 6)
+        this.hue.width = this.content.offsetWidth
+        this.hue.height = BAR_HEIGHT
+        const c = this.hue.getContext('2d')
+        let gradient = c.createLinearGradient(0, 0, this.size, 0)
+        gradient.addColorStop(0, '#f00')
+        gradient.addColorStop(0.1666, '#ff0')
+        gradient.addColorStop(0.3333, '#0f0')
+        gradient.addColorStop(0.5, '#0ff')
+        gradient.addColorStop(0.6666, '#00f')
+        gradient.addColorStop(0.8333, '#f0f')
+        gradient.addColorStop(1, '#f00')
+        c.fillStyle = gradient
+        c.fillRect(RADIUS, RADIUS, this.size, BAR_HEIGHT)
+    }
+
+    setupAlpha()
+    {
+        this.alpha = document.createElement('canvas')
+        this.alpha.style.width = '100%'
+        // this.alpha.addEventListener('mousedown', () => this.pickerDown())
+        // this.alpha.addEventListener('mousemove', (e) => this.alphaMove(e))
+        // this.ui.$overlay[0].addEventListener('mousemove', (e) => this.alphaMove(e))
+        // this.win.el[0].addEventListener('mousemove', (e) => this.alphaMove(e))
+        // this.alpha.addEventListener('mouseup', () => this.alphaUp())
+        // this.ui.$overlay[0].addEventListener('mouseup', () => this.alphaUp())
+        // this.win.el[0].addEventListener('mouseup', () => this.alphaUp())
+        this.content.appendChild(this.alpha)
+        this.drawAlpha()
+    }
+
+    drawAlpha()
+    {
+        const rgb = new TinyColor('#' + State.color.substr(0, 6)).toRgb()
+        this.alpha.width = this.content.offsetWidth
+        this.alpha.height = BAR_HEIGHT
+        const c = this.alpha.getContext('2d')
+        let gradient = c.createLinearGradient(0, 0, this.size, 0)
+        gradient.addColorStop(0, 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')')
+        gradient.addColorStop(1, 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0)')
+        c.fillStyle = gradient
+        c.fillRect(RADIUS, RADIUS, this.size, BAR_HEIGHT)
     }
 
     wordsSetup()
@@ -305,28 +477,53 @@ module.exports = class Picker extends UI.Window
         const place = State.get(this.name)
         if (exists(place))
         {
-            this.position.set(place.x, place.y)
-            this.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
+            this.win.move(place.x, place.y)
+            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
+            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
         }
         else
         {
-            this.width = MIN_WIDTH
-            this.height = MIN_HEIGHT
+            this.win.width = MIN_WIDTH
+            this.win.height = MIN_HEIGHT
         }
         if (State.getHidden(this.name))
         {
-            this.visible = false
+            this.win.el[0].display = 'none'
         }
-        this.on('drag-end', this.stateSet, this)
-        this.on('resize-end', this.stateSet, this)
+        this.renderer.view.width = this.content.offsetWidth
+        this.renderer.view.style.width = this.content.offsetWidth + 'px'
+        const height = this.content.offsetHeight
+        this.renderer.view.height = height
+        this.renderer.view.style.height = height + 'px'
+        this.renderer.resize(this.renderer.view.width, this.content.offsetHeight)
+
+        this.content.style.overflow = 'hidden'
+        this.win.el[0].addEventListener('mousemove', () => this.resized())
+        this.win.el[0].addEventListener('touchmove', () => this.resized())
+        this.win.el[0].addEventListener('mouseup', () => this.dragged())
+        this.win.el[0].addEventListener('touchend', () => this.dragged())
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
     }
 
-    stateSet()
+    resized()
     {
-        State.set(this.name, this.x, this.y, this.width, this.height)
+        if (this.win._resizing)
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
     }
+
+    dragged()
+    {
+        if (this.win._moving)
+        {
+            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+        }
+    }
+
+    keydown() { }
 }

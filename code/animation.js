@@ -29,6 +29,8 @@ module.exports = class Animation extends PIXI.Container
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         Pixel.add(BUTTONS, this.sheet)
 
+
+
         // this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
         // this.play.sprite.anchor.set(0)
         // this.play.sprite.scale.set(2)
@@ -72,19 +74,14 @@ module.exports = class Animation extends PIXI.Container
         this.win.open()
 
         this.content = this.win.$content[0]
-        this.content.style.margin = '0 0.25em'
+        this.content.style.margin = '0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
-
-        this.renderer.view.style.display = 'block'
-        this.renderer.view.style.margin = '0 auto'
-
-        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
 
         this.stateSetup('animation')
         this.draw()
 
-        // this.height = this.maxHeight
+        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
     }
 
     reset()
@@ -105,6 +102,9 @@ module.exports = class Animation extends PIXI.Container
         // {
         //     this.change()
         // }
+
+        // this.renderer.resize(this.width, this.maxHeight)
+        this.renderer.resize(this.width, this.height)
         this.renderer.render(this)
     }
 
@@ -301,7 +301,8 @@ module.exports = class Animation extends PIXI.Container
         {
             if (this.pixel.playing && this.pixel.update(elapsed))
             {
-                this.dirty = true
+                this.renderer.resize(this.width, this.height)
+                this.renderer.render(this)
             }
         }
     }

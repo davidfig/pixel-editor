@@ -19,6 +19,7 @@ module.exports = class Show extends PIXI.Container
     {
         super()
         this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win.el[0].style.opacity = 1
         this.win.open()
 
         this.content = this.win.$content[0]

@@ -6,13 +6,24 @@ const Color = require('yy-color')
 const COLOR = 0x888888
 const SIZE = 100
 
-let _sheet
+let _sheet, _transparent
 
 function load(callback)
 {
+    createTransparentImage()
     _sheet = new RenderSheet()
-    _sheet.add('transparency', draw, measure)
+    _sheet.add('transparency', draw, measure, SIZE)
     _sheet.render(callback)
+}
+
+function createTransparentImage()
+{
+    const size = 10
+    const canvas = document.createElement('canvas')
+    canvas.width = canvas.height = size
+    const context = canvas.getContext('2d')
+    draw(context, size)
+    _transparent = 'url("' + canvas.toDataURL() + '")'
 }
 
 function convert(color)
@@ -25,9 +36,9 @@ function convert(color)
     return color
 }
 
-function draw(c)
+function draw(c, size)
 {
-    const half = SIZE / 2
+    const half = size / 2
     const light = convert(Color.blend(0.5, 0xffffff, COLOR))
     c.fillStyle = '#' + light
     c.fillRect(0, 0, half, half)
@@ -63,6 +74,10 @@ module.exports = {
     get,
     getTexture,
     render,
+    get transparent()
+    {
+        return _transparent
+    },
     get sheet()
     {
         return _sheet

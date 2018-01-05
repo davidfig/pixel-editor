@@ -39,10 +39,10 @@ module.exports = class Toolbar extends PIXI.Container
 
     afterLoad()
     {
-        this.win = this.ui.createWindow({ resizable: false })
+        this.win = this.ui.createWindow({ resizable: false, minWidth: 0 })
         this.win.open()
 
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         this.content.style.margin = '0 0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
@@ -62,7 +62,7 @@ module.exports = class Toolbar extends PIXI.Container
         this.children[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
 
         this.win.width = this.width + 6
-        this.win.height = this.win.$titlebar[0].offsetHeight + y
+        this.win.height = this.win.winTitlebar.offsetHeight + y
         this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
 
         this.stateSetup('toolbar')
@@ -189,18 +189,9 @@ module.exports = class Toolbar extends PIXI.Container
         }
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.close()
         }
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
+        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y))
         State.on('tool', this.changed, this)
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set(this.name, this.win.x, this.win.y)
-        }
     }
 }

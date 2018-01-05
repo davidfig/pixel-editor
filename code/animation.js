@@ -12,6 +12,8 @@ const sheet = require('./pixel-sheet')
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
 
+const SPACING = 10
+
 const BUTTONS = require('../images/animation.json')
 
 module.exports = class Animation extends PIXI.Container
@@ -28,8 +30,6 @@ module.exports = class Animation extends PIXI.Container
 
         this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
         Pixel.add(BUTTONS, this.sheet)
-
-
 
         // this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
         // this.play.sprite.anchor.set(0)
@@ -73,12 +73,24 @@ module.exports = class Animation extends PIXI.Container
         this.win = this.ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
         this.win.open()
 
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         this.content.style.margin = '0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
 
+        // this.renderer.view.style.width = this.content.offsetWidth
+        // this.renderer.view.style.height = this.content.offsetHeight + 'px'
+        // const height = this.alpha.y + this.alpha.height
+        // this.renderer.view.height = height
+        // this.renderer.view.style.height = height + 'px'
+        // this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+
         this.stateSetup('animation')
+
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.renderer.view.style.width = this.content.offsetWidth + 'px'
+        this.renderer.view.style.height = this.content.offsetHeight + 'px'
+
         this.draw()
 
         PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
@@ -97,16 +109,81 @@ module.exports = class Animation extends PIXI.Container
     draw()
     {
         this.drawAnimation()
+        this.drawButtons()
+
         // this.drawPlay()
         // if (this.playing)
         // {
         //     this.change()
         // }
 
-        // this.renderer.resize(this.width, this.maxHeight)
-        this.renderer.resize(this.width, this.height)
         this.renderer.render(this)
     }
+
+    button(name)
+    {
+        const button = this.addChild(new PIXI.Container())
+        button.background = button.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        button.sprite = button.addChild(this.sheet.get(name))
+        button.sprite.anchor.set(0.5)
+        button.sprite.scale.set(2)
+        button.background.width = button.sprite.width * 1.5
+        button.background.height = button.sprite.height * 1.5
+        button.sprite.position.set(button.background.width / 2, button.background.height / 2)
+        button.interactive = true
+        button.on('pointertap', () => this.pressed(button))
+        return button
+    }
+
+    pressed(button)
+    {
+
+    }
+
+    resize()
+    {
+        const width = this.content.offsetWidth
+        for (let i = 0; i < this.buttons.children.length; i++)
+        {
+            const button = this.buttons.children[i]
+            button.x = (button.width + 2) * i
+        }
+        this.buttons.position.set(width / 2 - this.buttons.width / 2, this.pixel.largestHeight() * PixelEditor.zoom + SPACING)
+    }
+
+    drawButtons()
+    {
+        this.buttons = this.addChild(new PIXI.Container())
+        this.buttons.addChild(this.button('animation-0'))
+        this.buttons.addChild(this.button('animation-4'))
+        this.buttons.addChild(this.button('animation-3'))
+        this.buttons.addChild(this.button('animation-2'))
+
+        this.resize()
+
+        // this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
+        // this.newButton.on('clicked', this.reset, this)
+        // this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
+        // this.copyButton.on('clicked', this.copyAnimation, this)
+        // this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
+        // this.deleteButton.on('clicked', this.removeAnimation, this)
+
+    }
+
+// return
+//         this.play.position.set(this.right - this.play.width, 0)
+//         this.animationName.y = this.pixel.y + (1 - this.pixel.anchor.y) * PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
+//         this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
+//         this.animationText.width = this.animationError.width = this.right
+//         this.animationText.height = this.animationText.height = this.animationName.height
+//         this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
+//         this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
+//         this.list.x = this.get('spacing')
+//         this.animationTime.y = this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
+//         this.animationTime.x = this.buttons.x + this.buttons.width + Settings.BORDER
+//         this.maxHeight = this.buttons.y + this.buttons.height + Settings.BORDER + this.get('spacing') * 2
+
+//     }
 
     change()
     {
@@ -224,21 +301,6 @@ module.exports = class Animation extends PIXI.Container
         this.pixel.position.set(PixelEditor.largestWidth * PixelEditor.zoom * this.pixel.anchor.x, PixelEditor.largestHeight * PixelEditor.zoom * this.pixel.anchor.y)
     }
 
-    drawPlay()
-    {
-        this.play.position.set(this.right - this.play.width, 0)
-        this.animationName.y = this.pixel.y + (1 - this.pixel.anchor.y) * PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
-        this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
-        this.animationText.width = this.animationError.width = this.right
-        this.animationText.height = this.animationText.height = this.animationName.height
-        this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
-        this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
-        this.list.x = this.get('spacing')
-        this.animationTime.y = this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
-        this.animationTime.x = this.buttons.x + this.buttons.width + Settings.BORDER
-        this.maxHeight = this.buttons.y + this.buttons.height + Settings.BORDER + this.get('spacing') * 2
-    }
-
     showNames()
     {
         const animations = PixelEditor.animations
@@ -301,7 +363,6 @@ module.exports = class Animation extends PIXI.Container
         {
             if (this.pixel.playing && this.pixel.update(elapsed))
             {
-                this.renderer.resize(this.width, this.height)
                 this.renderer.render(this)
             }
         }
@@ -322,15 +383,10 @@ module.exports = class Animation extends PIXI.Container
             this.win.width = MIN_WIDTH
             this.win.height = MIN_HEIGHT
         }
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.win.display = 'none'
         }
-        this.win.el[0].addEventListener('mousemove', () => this.resized())
-        this.win.el[0].addEventListener('touchmove', () => this.resized())
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
         PixelEditor.on('changed', this.draw, this)
         // State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
 // TODO
@@ -341,7 +397,6 @@ module.exports = class Animation extends PIXI.Container
     {
         if (this.win._resizing)
         {
-            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
             this.draw()
             State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
         }

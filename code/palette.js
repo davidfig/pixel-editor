@@ -25,10 +25,9 @@ module.exports = class Palette extends PIXI.Container
     {
         super()
         this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
-        this.win.el[0].style.opacity = 1
         this.win.open()
 
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         this.content.style.margin = '0 0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
@@ -254,34 +253,19 @@ module.exports = class Palette extends PIXI.Container
         this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.close()
         }
-        this.win.el[0].addEventListener('mousemove', () => this.resized())
-        this.win.el[0].addEventListener('touchmove', () => this.resized())
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
+        this.win.on('resize', () =>
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+        })
+        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
         PixelEditor.on('changed', this.draw, this)
-    }
-
-    resized()
-    {
-        if (this.win._resizing)
-        {
-            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-            this.draw()
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-        }
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-        }
     }
 
     keydown(e)

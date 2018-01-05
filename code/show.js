@@ -19,10 +19,9 @@ module.exports = class Show extends PIXI.Container
     {
         super()
         this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
-        this.win.el[0].style.opacity = 1
         this.win.open()
 
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         // this.content.style.margin = '0 0.25em'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
@@ -236,32 +235,17 @@ module.exports = class Show extends PIXI.Container
         // this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.close()
         }
-        this.win.el[0].addEventListener('mousemove', () => this.resized())
-        this.win.el[0].addEventListener('touchmove', () => this.resized())
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
-        PixelEditor.on('changed', this.redraw, this)
-        PixelEditor.on('current', this.currentChange, this)
-        State.on('last-file', this.redraw, this)
-    }
-
-    resized()
-    {
-        if (this.win._resizing)
+        this.win.on('resize', () =>
         {
             this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
             this.redraw()
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-        }
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-        }
+        })
+        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        PixelEditor.on('changed', this.redraw, this)
+        PixelEditor.on('current', this.currentChange, this)
+        State.on('last-file', this.redraw, this)
     }
 }

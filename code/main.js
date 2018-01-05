@@ -1,11 +1,9 @@
 const Settings = require('./settings')
 
-const FontFaceObserver = require('fontfaceobserver')
 const remote = require('electron').remote
 const path = require('path')
 const ClipBoard = require('electron').clipboard
-// const Ventus = require('ventus-clone').default
-const Ventus = require('ventus-clone').default
+const WM = require(Settings.WINDOW_MANAGER)
 
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
@@ -43,13 +41,14 @@ function afterLoad()
 function create()
 {
 
-    ui = new Ventus.WindowManager()
-
-    ui.$overlay[0].style.opacity = 1
-    ui.$overlay[0].style.backgroundColor = 'transparent'
-    windows.draw = new Draw(ui.$overlay[0], ui)
-
-    // ui.$overlay[0].style.display = 'none'
+    ui = new WM({
+        backgroundColorWindow: '#cccccc',
+        maximizable: false,
+        minimizable: false,
+        titlebarHeight: '20px',
+        borderRadius: '0 0 4px 4px'
+    })
+    windows.draw = new Draw(ui.overlay, ui)
 
     windows.show = new Show(ui)
 

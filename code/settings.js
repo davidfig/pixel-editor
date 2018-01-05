@@ -16,5 +16,7 @@ module.exports = {
     // UI: '../../components/ui/',
     UI: 'yy-ui',
 
+    WINDOW_MANAGER: '../../components/window-manager',
+
     BORDER: 5
 }

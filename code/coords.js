@@ -11,7 +11,7 @@ module.exports = class Coords
     {
         this.win = ui.createWindow({ x: 10, y: 10, width: 220, resizable: false })
         this.win.open()
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         this.content.style.margin = '0 1em'
         this.name()
         this.frameNumber()
@@ -21,7 +21,7 @@ module.exports = class Coords
         this.cursorSize()
         this.zoom()
         this.changed()
-        this.win.height = this.win.$titlebar.height() + this.content.scrollHeight + 8
+        this.win.height = this.win.winTitlebar.offsetHeight + this.content.scrollHeight + 8
         this.stateSetup('coords')
     }
 
@@ -180,10 +180,9 @@ module.exports = class Coords
         }
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.close()
         }
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
+        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y))
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)
@@ -192,14 +191,6 @@ module.exports = class Coords
         State.on('relative', this.changed, this)
         PixelEditor.on('current', this.changed, this)
         PixelEditor.on('changed', this.changed, this)
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set(this.name, this.win.x, this.win.y)
-        }
     }
 
     keydown() { }

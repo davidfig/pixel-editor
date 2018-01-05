@@ -24,11 +24,9 @@ module.exports = class Picker
     constructor(ui)
     {
         this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
-        this.win.el[0].style.opacity = 1
-        this.win.el[0].style.minWidth = '200px'
         this.win.open()
         this.ui = ui
-        this.content = this.win.$content[0]
+        this.content = this.win.content
         this.content.style.margin = '0.5em'
 
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
@@ -64,6 +62,7 @@ module.exports = class Picker
         {
             if (this.dirty)
             {
+                this.change()
                 this.renderer.render(this.stage)
                 this.dirty = false
             }
@@ -151,8 +150,6 @@ module.exports = class Picker
             let y = local.y
             y = y < 0 ? 0 : y > size ? size : y
             this.pickerCursor.position.set(x, y)
-            this.change()
-
             const s = x / size
             const l = 1 - y / size
             const hue = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
@@ -221,7 +218,6 @@ module.exports = class Picker
             const original = new TinyColor(State.color).toHsl()
             const color = new TinyColor({ h, s: original.s, l: original.l }).toHex()
             State.color = color + State.color.substr(6)
-            this.change()
         }
     }
 
@@ -272,8 +268,6 @@ module.exports = class Picker
             alpha = (alpha > 255 ? 255 : alpha).toString(16)
             alpha = alpha.length === 1 ? '0' + alpha : alpha
             State.color = State.color.substr(0, 6) + alpha
-            this.dirty = true
-            this.wordsUpdate()
         }
     }
 
@@ -359,7 +353,6 @@ module.exports = class Picker
                 return
             }
             State.color = this.hexify(v.toString(16)) + State.color.substr(2)
-            this.change()
         })
         this.words.g.on('success', (value) =>
         {
@@ -370,7 +363,6 @@ module.exports = class Picker
                 return
             }
             State.color = State.color.substr(0, 2) + this.hexify(v.toString(16)) + State.color.substr(4)
-            this.change()
         })
         this.words.b.on('success', (value) =>
         {
@@ -381,7 +373,6 @@ module.exports = class Picker
                 return
             }
             State.color = State.color.substr(0, 4) + this.hexify(v.toString(16)) + State.color.substr(6)
-            this.change()
         })
         this.words.alpha.on('success', (value) =>
         {
@@ -392,7 +383,6 @@ module.exports = class Picker
                 return
             }
             State.color = State.color.substr(0, 6) + this.hexify(Math.floor(v * 255).toString(16))
-            this.change()
         })
         this.words.hex.on('success', (value) =>
         {
@@ -403,7 +393,6 @@ module.exports = class Picker
                 return
             }
             State.color = value + State.color.substr(6)
-            this.change()
         })
         this.words.h.on('success', (value) =>
         {
@@ -416,7 +405,6 @@ module.exports = class Picker
             const hsl = color.toHsl()
             hsl.h = v
             State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
-            this.change()
         })
         this.words.s.on('success', (value) =>
         {
@@ -429,7 +417,6 @@ module.exports = class Picker
             const hsl = color.toHsl()
             hsl.s = v
             State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
-            this.change()
         })
         this.words.l.on('success', (value) =>
         {
@@ -442,7 +429,6 @@ module.exports = class Picker
             const hsl = color.toHsl()
             hsl.l = v
             State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
-            this.change()
         })
     }
 
@@ -484,17 +470,34 @@ module.exports = class Picker
         }
         if (State.getHidden(this.name))
         {
-            this.win.el[0].display = 'none'
+            this.win.close()
         }
 
         this.content.style.overflow = 'hidden'
-        this.win.el[0].addEventListener('mousemove', () => this.resized())
-        this.win.el[0].addEventListener('touchmove', () => this.resized())
-        this.win.el[0].addEventListener('mouseup', () => this.dragged())
-        this.win.el[0].addEventListener('touchend', () => this.dragged())
-        State.on('foreground', () => this.change())
-        State.on('background', () => this.change())
-        State.on('isForeground', () => this.change())
+        this.win.on('resize', () =>
+        {
+            this.sheet.render(() =>
+            {
+                const size = this.size()
+                const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+                this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
+
+                this.hue.y = this.picker.y + this.picker.height + SPACING
+                this.hueCursor.x = color.h / 359 * this.content.offsetWidth - RADIUS * 2
+
+                this.alphaTransparent.width = size
+                this.alpha.y = this.hue.y + this.hue.height + SPACING
+                this.alphaCursor.x = size * parseInt(State.color.substr(6), 16) / 255
+
+                this.rendererResize()
+                this.quickSetup()
+            })
+        })
+        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        State.on('foreground', () => this.dirty = true)
+        State.on('background', () => this.dirty = true)
+        State.on('isForeground', () => this.dirty = true)
     }
 
     change()
@@ -512,7 +515,6 @@ module.exports = class Picker
         this.alpha.y = this.hue.y + this.hue.height + SPACING
         this.alphaCursor.x = size * parseInt(State.color.substr(6), 16) / 255
 
-        this.dirty = true
         this.wordsUpdate()
         this.quickSetup()
     }
@@ -543,7 +545,7 @@ module.exports = class Picker
             {
                 span.style.backgroundColor = entry.color
             }
-            clicked(span, () => { State.color = entry.result; this.change() })
+            clicked(span, () => State.color = entry.result)
         }
         return div
     }
@@ -597,39 +599,6 @@ module.exports = class Picker
         this.renderer.view.style.height = height + 'px'
         this.renderer.resize(this.content.offsetWidth, height)
         this.dirty = true
-    }
-
-    resized()
-    {
-        if (this.win._resizing)
-        {
-            this.sheet.render(() =>
-            {
-                const size = this.size()
-                const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
-                this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
-
-                this.hue.y = this.picker.y + this.picker.height + SPACING
-                this.hueCursor.x = color.h / 359 * this.content.offsetWidth - RADIUS * 2
-
-                this.alphaTransparent.width = size
-                this.alpha.y = this.hue.y + this.hue.height + SPACING
-                this.alphaCursor.x = size * parseInt(State.color.substr(6), 16) / 255
-
-                this.rendererResize()
-                this.quickSetup()
-
-                State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-            })
-        }
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
-        }
     }
 
     keydown() { }

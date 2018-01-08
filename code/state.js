@@ -29,6 +29,10 @@ class State extends Events
             {
                 this.state.background = '00000000'
             }
+            for (let name in this.state.windows)
+            {
+                if (this.state.windows[name].y < 0) this.state.windows[name].y = 0
+            }
         }
         catch (err)
         {

@@ -39,7 +39,7 @@ module.exports = class Toolbar extends PIXI.Container
 
     afterLoad()
     {
-        this.win = this.ui.createWindow({ resizable: false, minWidth: 0 })
+        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minWidth: 0 })
         this.win.open()
 
         this.content = this.win.content

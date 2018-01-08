@@ -40,11 +40,9 @@ function afterLoad()
 
 function create()
 {
-
     ui = new WM({
         backgroundColorWindow: '#cccccc',
         maximizable: false,
-        minimizable: false,
         titlebarHeight: '20px',
         borderRadius: '0 0 4px 4px'
     })

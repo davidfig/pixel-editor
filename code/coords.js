@@ -12,7 +12,7 @@ module.exports = class Coords
         this.win = ui.createWindow({ x: 10, y: 10, width: 220, resizable: false })
         this.win.open()
         this.content = this.win.content
-        this.content.style.margin = '0 1em'
+        this.content.style.padding = '0em 1em 0.5em'
         this.name()
         this.frameNumber()
         this.frameSize()
@@ -21,7 +21,7 @@ module.exports = class Coords
         this.cursorSize()
         this.zoom()
         this.changed()
-        this.win.height = this.win.winTitlebar.offsetHeight + this.content.scrollHeight + 8
+        // this.win.height = this.win.winTitlebar.offsetHeight + this.content.scrollHeight + 8
         this.stateSetup('coords')
     }
 

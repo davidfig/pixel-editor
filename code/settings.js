@@ -1,6 +1,6 @@
 module.exports = {
 
-    DEBUG: true,
+    DEBUG: false,
     NO_LOAD: false,
 
     SAVE_INTERVAL: 1000,
@@ -11,7 +11,8 @@ module.exports = {
     // YY_PIXEL: '../../components/pixel/',
     YY_PIXEL: 'yy-pixel',
 
-    VIEWPORT: '../../components/pixi-viewport',
+    // VIEWPORT: '../../components/pixi-viewport',
+    VIEWPORT: 'pixi-viewport',
 
     // UI: '../../components/ui/',
     UI: 'yy-ui',

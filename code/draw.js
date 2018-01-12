@@ -35,7 +35,6 @@ module.exports = class Draw extends PIXI.Container
         this.renderer.view.style.height = '100%'
         this.renderer.resize(window.innerWidth, window.innerHeight)
 
-        this.viewport = this.addChild(new PIXI.Container())
         this.setupViewport()
         this.blocks = this.vp.addChild(new PIXI.Container())
         this.sprite = this.vp.addChild(new PIXI.Sprite())

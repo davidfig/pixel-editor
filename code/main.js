@@ -45,7 +45,7 @@ function create()
         maximizable: false,
         titlebarHeight: '20px',
         borderRadius: '0 0 4px 4px',
-        snap: true
+        snap: { }
     })
     windows.draw = new Draw(ui.overlay, ui)
 

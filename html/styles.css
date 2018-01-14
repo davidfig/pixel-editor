@@ -8,4 +8,5 @@ body {
     padding: 0;
     user-select: none;
     font-family: consolas;
+    min-height: 100vh;
 }

@@ -7,6 +7,7 @@ const button = require('./button')
 const ICONS = require('../images/editor.json')
 
 const BUTTONS = [0, 1, 2, 3, 5, 7, 8, 9]
+const TIPS = ['draw', 'select', 'fill', 'circle', 'ellipse', 'line', 'crop', 'dropper']
 // PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP, SAMPLE]
 
 const NORMAL_COLOR = '#cfcfcf'
@@ -24,7 +25,7 @@ module.exports = class Toolbar
         for (let i = 0; i < BUTTONS.length; i++)
         {
             const index = BUTTONS[i]
-            const one = button(this.win.content, ICONS.imageData[index], { display: 'block', margin: '0.25em', backgroundColor: NORMAL_COLOR })
+            const one = button(this.win.content, ICONS.imageData[index], { display: 'block', margin: '0.25em', backgroundColor: NORMAL_COLOR }, TIPS[i])
             clicked(one, () => this.pressed(i))
             this.buttons.push(one)
         }

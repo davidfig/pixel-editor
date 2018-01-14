@@ -1,10 +1,12 @@
 const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
-const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Pixel = require(Settings.YY_PIXEL).Pixel
 const exists = require('exists')
+const clicked = require('clicked')
 
+const html = require('./html')
+const button = require('./button')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const sheet = require('./pixel-sheet')
@@ -12,33 +14,61 @@ const sheet = require('./pixel-sheet')
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 200
 
-const SPACING = 10
-
 const BUTTONS = require('../images/animation.json')
 
 module.exports = class Animation extends PIXI.Container
 {
-    constructor(ui)
+    constructor(wm)
     {
         super()
-        this.ui = ui
 
-        this.buttons = this.addChild(new PIXI.Container())
-        this.numbers = [true]
         this.current = 0
-        this.time = 0
+        this.time = 150
 
-        this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
-        Pixel.add(BUTTONS, this.sheet)
+        this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.content = this.win.content
+        this.content.style.margin = '0.25em'
+        this.content.style.height = '100%'
+        this.content.style.display = 'flex'
+        this.content.style.flexDirection = 'column'
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        const canvas = html({ parent: this.content, styles: { width: '100%' } })
+        canvas.appendChild(this.renderer.view)
+        this.createButtons()
+        this.stateSetup('animation')
+        this.draw()
+        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
+        this.win.open()
+    }
 
-        // this.play = this.addChild(new UI.Button({ sprite: this.sheet.get('animation-0') }))
-        // this.play.sprite.anchor.set(0)
-        // this.play.sprite.scale.set(2)
-        // this.play.on('pressed', this.change, this)
-        // this.play.disabled = true
-        // this.playing = false
-        // this.animationName = this.addChild(new UI.EditText('animation name...'))
-        // this.animationName.on('editing', this.showNames, this)
+    createButtons()
+    {
+        const div = html({ parent: this.content, styles: { width: '100%' } })
+        const buttons = html({ parent: div, styles: { margin: '1em auto 0.25em', textAlign: 'center' } })
+        this.play = button(buttons, BUTTONS.imageData[0], null, 'play animation')
+        clicked(this.play, () => this.change())
+
+        const newButton = button(buttons, BUTTONS.imageData[4])
+        const copyButton = button(buttons, BUTTONS.imageData[3])
+        const deleteButton = button(buttons, BUTTONS.imageData[2])
+
+        const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
+        this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1' } })
+        this.animationTime = html({ parent: stack, type: 'input', value: this.time, styles: { margin: '0.25em', width: '2em', textAlign: 'right' } })
+        this.animationTime.addEventListener('change', () => this.changeTime())
+        this.captureKey(this.animationTime)
+        html({parent: stack, html: 'ms', styles: { paddingBottom: '0.25em'}})
+        this.showNames()
+        this.animationName.addEventListener('change', () => this.changeName())
+
+        this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none' } })
+        this.animationText.addEventListener('change', () => this.changeText())
+        this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'red' }})
+        this.captureKey(this.animationText)
+        this.showText()
+
         // this.animationName.on('changed', this.changeName, this)
         // this.animationName.on('lose-focus', () => this.list.visible = false)
         // this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
@@ -65,110 +95,7 @@ module.exports = class Animation extends PIXI.Container
         // this.time = 150
         // this.animationTime.on('changed', this.changeTime, this)
         // this.disableControls(true)
-        this.sheet.render(this.afterLoad.bind(this))
-    }
 
-    afterLoad()
-    {
-        this.win = this.ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
-        this.win.open()
-
-        this.content = this.win.content
-        this.content.style.margin = '0.25em'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
-        this.content.appendChild(this.renderer.view)
-
-        // this.renderer.view.style.width = this.content.offsetWidth
-        // this.renderer.view.style.height = this.content.offsetHeight + 'px'
-        // const height = this.alpha.y + this.alpha.height
-        // this.renderer.view.height = height
-        // this.renderer.view.style.height = height + 'px'
-        // this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-
-        this.stateSetup('animation')
-
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        this.renderer.view.style.width = this.content.offsetWidth + 'px'
-        this.renderer.view.style.height = this.content.offsetHeight + 'px'
-
-        this.draw()
-
-        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
-    }
-
-    reset()
-    {
-        this.animationName.text = 'animation name...'
-        this.animationText.text = ''
-        this.animationError.text = ''
-        this.original = ''
-        this.disableControls(true)
-        this.pixel.frame(0)
-    }
-
-    draw()
-    {
-        this.drawAnimation()
-        this.drawButtons()
-
-        // this.drawPlay()
-        // if (this.playing)
-        // {
-        //     this.change()
-        // }
-
-        this.renderer.render(this)
-    }
-
-    button(name)
-    {
-        const button = this.addChild(new PIXI.Container())
-        button.background = button.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-        button.sprite = button.addChild(this.sheet.get(name))
-        button.sprite.anchor.set(0.5)
-        button.sprite.scale.set(2)
-        button.background.width = button.sprite.width * 1.5
-        button.background.height = button.sprite.height * 1.5
-        button.sprite.position.set(button.background.width / 2, button.background.height / 2)
-        button.interactive = true
-        button.on('pointertap', () => this.pressed(button))
-        return button
-    }
-
-    pressed(button)
-    {
-
-    }
-
-    resize()
-    {
-        const width = this.content.offsetWidth
-        for (let i = 0; i < this.buttons.children.length; i++)
-        {
-            const button = this.buttons.children[i]
-            button.x = (button.width + 2) * i
-        }
-        this.buttons.position.set(width / 2 - this.buttons.width / 2, this.pixel.largestHeight() * PixelEditor.zoom + SPACING)
-    }
-
-    drawButtons()
-    {
-        this.buttons = this.addChild(new PIXI.Container())
-        this.buttons.addChild(this.button('animation-0'))
-        this.buttons.addChild(this.button('animation-4'))
-        this.buttons.addChild(this.button('animation-3'))
-        this.buttons.addChild(this.button('animation-2'))
-
-        this.resize()
-
-        // this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
-        // this.newButton.on('clicked', this.reset, this)
-        // this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
-        // this.copyButton.on('clicked', this.copyAnimation, this)
-        // this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
-        // this.deleteButton.on('clicked', this.removeAnimation, this)
-
-    }
 
 // return
 //         this.play.position.set(this.right - this.play.width, 0)
@@ -185,21 +112,46 @@ module.exports = class Animation extends PIXI.Container
 
 //     }
 
-    change()
+
+    }
+
+    reset()
     {
-        if (this.playing)
+        this.animationName.text = 'animation name...'
+        this.animationText.text = ''
+        this.animationError.text = ''
+        this.original = ''
+        this.disableControls(true)
+        this.pixel.frame(0)
+    }
+
+    captureKey(div)
+    {
+        div.addEventListener('keydown', (e) =>
+        {
+            if (e.code === 'Enter')
+            {
+                e.target.blur()
+            }
+            e.stopPropagation()
+        })
+        div.addEventListener('keyup', (e) => e.stopPropagation())
+    }
+
+    change(force)
+    {
+        if (force || this.playing)
         {
             this.playing = false
-            this.play.sprite.texture = this.sheet.getTexture('animation-0')
+            this.play.image.src = 'data:image/png;base64,' + BUTTONS.imageData[0][2]
             this.pixel.stop()
         }
         else
         {
             this.playing = true
-            this.play.sprite.texture = this.sheet.getTexture('animation-1')
-            this.pixel.animate(this.animationName.text)
+            this.play.image.src = 'data:image/png;base64,' + BUTTONS.imageData[1][2]
+            this.pixel.animate(this.animationName.value)
         }
-        this.dirty = true
     }
 
     /**
@@ -241,8 +193,8 @@ module.exports = class Animation extends PIXI.Container
 
     changeTime()
     {
-        this.time = parseInt(this.animationTime.text)
-        this.drawAnimation()
+        this.time = parseInt(this.animationTime.value)
+        this.draw()
     }
 
     select(item)
@@ -266,26 +218,25 @@ module.exports = class Animation extends PIXI.Container
     changeText()
     {
         const animations = PixelEditor.animations
-        const name = this.animationName.text
+        const name = this.animationName.value
         try
         {
-            const data = JSON.parse('[' + this.animationText.text + ']')
+            const data = JSON.parse('[' + this.animationText.value + ']')
             animations[name] = data
-            this.animationError.text = ''
-            this.animationText['foreground-color'] = '0'
-            this.animationText.layout()
+            this.animationError.innerHTML = ''
             PixelEditor.save()
+            this.play.setAttribute('disabled', false)
+            this.play.style.opacity = 1
         }
         catch (e)
         {
-            this.animationError.text = e.message
-            this.animationText['foreground-color'] = '#ff0000'
-            this.animationText.layout()
-            this.play.disabled = true
+            this.animationError.innerHTML = e.message
+            this.play.setAttribute('disabled', true)
+            this.play.style.opacity = 0.25
         }
     }
 
-    drawAnimation()
+    draw()
     {
         if (this.pixel)
         {
@@ -299,20 +250,37 @@ module.exports = class Animation extends PIXI.Container
         this.pixel.anchor.x = split[1] === 'left' ? 0 : split[1] === 'right' ? 1 : 0.5
         this.pixel.anchor.y = split[0] === 'top' ? 0 : split[0] === 'bottom' ? 1 : 0.5
         this.pixel.position.set(PixelEditor.largestWidth * PixelEditor.zoom * this.pixel.anchor.x, PixelEditor.largestHeight * PixelEditor.zoom * this.pixel.anchor.y)
+
+        const width = PixelEditor.largestWidth * PixelEditor.zoom
+        const height = PixelEditor.largestHeight * PixelEditor.zoom
+        this.renderer.resize(width, height)
+        this.renderer.view.style.width = width + 'px'
+        this.renderer.view.style.height = height + 'px'
+        this.renderer.render(this)
+
+        this.change(true)
     }
 
     showNames()
     {
-        const animations = PixelEditor.animations
-        if (Object.keys(animations).length)
+        while (this.animationName.firstChild)
         {
-            this.list.visible = true
-            this.list.clear()
-            for (let key in animations)
-            {
-                this.list.add(new UI.Text(key), true)
-            }
-            this.list.layout()
+            this.animationName.removeChild(this.types.firstChild);
+        }
+        const animations = PixelEditor.animations
+        for (let type in animations)
+        {
+            const value = type.toLowerCase()
+            html({ parent: this.animationName, type: 'option', value, html: value })
+        }
+    }
+
+    showText()
+    {
+        if (this.animationName.value)
+        {
+            const text = JSON.stringify(PixelEditor.animations[this.animationName.value])
+            this.animationText.value = text.substr(1, text.length - 2)
         }
     }
 
@@ -390,7 +358,7 @@ module.exports = class Animation extends PIXI.Container
         PixelEditor.on('changed', this.draw, this)
         // State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
 // TODO
-        State.on('relative', this.drawAnimation, this)
+        State.on('relative', this.draw, this)
     }
 
     resized()

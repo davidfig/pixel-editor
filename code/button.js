@@ -2,11 +2,15 @@
 
 const html = require('./html')
 
-module.exports = function button(parent, data, styles)
+module.exports = function button(parent, data, styles, title)
 {
     const scale = 2
 
     const button = html({ parent, type: 'button', styles: { position: 'relative' } })
+    if (title)
+    {
+        button.setAttribute('title', title)
+    }
     const image = new Image()
     image.src = 'data:image/png;base64,' + data[2]
     image.width = data[0] * scale

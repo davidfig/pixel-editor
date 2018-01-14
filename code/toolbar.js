@@ -1,102 +1,54 @@
-const Settings = require('./settings')
-
 const exists = require('exists')
-const PIXI = require('pixi.js')
-const RenderSheet = require(Settings.YY_RENDERSHEET)
-const Pixel = require(Settings.YY_PIXEL).Pixel
+const clicked = require('clicked')
 
 const State = require('./state')
+const button = require('./button')
 
-const SELECT = require('../images/select.json')
-const PEN = require('../images/paint.json')
-const PAINT = require('../images/fill.json')
-const CIRCLE = require('../images/circle.json')
-const ELLIPSE = require('../images/ellipse.json')
-const LINE = require('../images/line.json')
-const CROP = require('../images/crop.json')
-const SAMPLE = require('../images/sample.json')
+const ICONS = require('../images/editor.json')
 
-const BUTTONS = [PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP, SAMPLE]
+const BUTTONS = [0, 1, 2, 3, 5, 7, 8, 9]
+// PEN, SELECT, PAINT, CIRCLE, ELLIPSE, LINE, CROP, SAMPLE]
 
-const SPACING = 5
-const SELECT_COLOR = 0x888888
-const NORMAL_COLOR = 0xeeeeee
+const NORMAL_COLOR = '#cfcfcf'
+const SELECT_COLOR = '#efefef'
 
-module.exports = class Toolbar extends PIXI.Container
+module.exports = class Toolbar
 {
     constructor(ui)
     {
-        super()
         this.ui = ui
         this.buttons = []
-        this.sheet = new RenderSheet({ scaleMode: PIXI.SCALE_MODES.NEAREST })
-        for (let pixel of BUTTONS)
-        {
-            Pixel.add(pixel, this.sheet)
-        }
-        this.sheet.render(() => this.afterLoad())
-    }
 
-    afterLoad()
-    {
         this.win = this.ui.createWindow({ minimizable: false, resizable: false, minWidth: 0 })
-        this.win.open()
 
-        this.content = this.win.content
-        this.content.style.margin = '0 0.25em'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
-        this.content.appendChild(this.renderer.view)
-
-        this.renderer.view.style.width = '100%'
-        this.renderer.view.style.height = '100%'
-        this.renderer.view.style.display = 'block'
-        this.renderer.view.style.margin = '0 auto'
-
-        let y = SPACING
-        for (let pixel of BUTTONS)
+        for (let i = 0; i < BUTTONS.length; i++)
         {
-            const button = this.button(pixel, y)
-            y += button.height + SPACING
+            const index = BUTTONS[i]
+            const one = button(this.win.content, ICONS.imageData[index], { display: 'block', margin: '0.25em', backgroundColor: NORMAL_COLOR })
+            clicked(one, () => this.pressed(i))
+            this.buttons.push(one)
         }
-        this.children[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
-        this.children[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
-
-        this.win.width = this.width + 6
-        this.win.height = this.win.winTitlebar.offsetHeight + y
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-
+        this.pressed(0)
+        this.buttons[3].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openCircle ? 4 : 3][2]
+        this.buttons[4].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openEllipse ? 6 : 5][2]
         this.stateSetup('toolbar')
-        this.changed()
+        this.win.open()
     }
 
-    button(pixel, y)
+    pressed(index)
     {
-        const button = this.addChild(new PIXI.Container())
-        button.y = y
-        button.background = button.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-        button.sprite = button.addChild(this.sheet.get(pixel.name + '-0'))
-        button.sprite.anchor.set(0.5)
-        button.sprite.scale.set(2)
-        button.background.width = button.sprite.width * 1.5
-        button.background.height = button.sprite.height * 1.5
-        button.sprite.position.set(button.background.width / 2, button.background.height / 2)
-        button.interactive = true
-        button.on('pointertap', () => this.pressed(button))
-        return button
-    }
-
-    pressed(target)
-    {
-        for (let button of this.children)
+        if (this.selected)
         {
-            button.select = (button === target)
+            this.selected.style.backgroundColor = NORMAL_COLOR
         }
-        switch (target)
+        this.buttons[index].style.backgroundColor = SELECT_COLOR
+        this.selected = this.buttons[index]
+        switch (index)
         {
-            case this.children[0]: State.tool = 'paint' ; break
-            case this.children[1]: State.tool = 'select'; break
-            case this.children[2]: State.tool = 'fill'; break
-            case this.children[3]:
+            case 0: State.tool = 'paint' ; break
+            case 1: State.tool = 'select'; break
+            case 2: State.tool = 'fill'; break
+            case 3:
                 if (State.tool === 'circle')
                 {
                     State.openCircle = !State.openCircle
@@ -105,9 +57,9 @@ module.exports = class Toolbar extends PIXI.Container
                 {
                     State.tool = 'circle'
                 }
-                this.children[3].sprite.texture = this.sheet.getTexture('circle-' + (State.openCircle ? 1 : 0))
+                this.buttons[3].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openCircle ? 4 : 3][2]
                 break
-            case this.children[4]:
+            case 4:
                 if (State.tool === 'ellipse')
                 {
                     State.openEllipse = !State.openEllipse
@@ -116,13 +68,12 @@ module.exports = class Toolbar extends PIXI.Container
                 {
                     State.tool = 'ellipse'
                 }
-                this.children[4].sprite.texture = this.sheet.getTexture('ellipse-' + (State.openEllipse ? 1 : 0))
+                this.buttons[4].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openEllipse ? 6 : 5][2]
                 break
-            case this.children[5]: State.tool = 'line'; break
-            case this.children[6]: State.tool = 'crop'; break
-            case this.children[7]: State.tool = 'sample'; break
+            case 5: State.tool = 'line'; break
+            case 6: State.tool = 'crop'; break
+            case 7: State.tool = 'sample'; break
         }
-        this.renderer.render(this)
     }
 
     keydown(e)
@@ -138,6 +89,10 @@ module.exports = class Toolbar extends PIXI.Container
                     State.tool = 'select'
                     break
                 case 67:
+                    if (State.tool === 'circle')
+                    {
+                        State.openCircle = !State.openCircle
+                    }
                     State.tool = 'circle'
                     break
                 case 76:
@@ -147,6 +102,10 @@ module.exports = class Toolbar extends PIXI.Container
                     State.tool = 'fill'
                     break
                 case 69:
+                    if (State.tool === 'ellipse')
+                    {
+                        State.openEllipse = !State.openEllipse
+                    }
                     State.tool = 'ellipse'
                     break
                 case 82:
@@ -161,22 +120,26 @@ module.exports = class Toolbar extends PIXI.Container
 
     changed()
     {
-        for (let button of this.children)
-        {
-            button.background.tint = NORMAL_COLOR
-        }
+        let index
         switch (State.tool)
         {
-            case 'paint': this.children[0].background.tint = SELECT_COLOR; break
-            case 'select': this.children[1].background.tint = SELECT_COLOR; break
-            case 'fill': this.children[2].background.tint = SELECT_COLOR; break
-            case 'circle': this.children[3].background.tint = SELECT_COLOR; break
-            case 'ellipse': this.children[4].background.tint = SELECT_COLOR; break
-            case 'line': this.children[5].background.tint = SELECT_COLOR; break
-            case 'crop': this.children[6].background.tint = SELECT_COLOR; break
-            case 'sample': this.children[7].background.tint = SELECT_COLOR; break
+            case 'paint': index = 0; break
+            case 'select': index = 1; break
+            case 'fill': index = 2; break
+            case 'circle': index = 3; break
+            case 'ellipse': index = 4; break
+            case 'line': index = 5; break
+            case 'crop': index = 6; break
+            case 'sample': index = 7; break
         }
-        this.renderer.render(this)
+        if (this.selected)
+        {
+            this.selected.style.backgroundColor = NORMAL_COLOR
+        }
+        this.buttons[index].style.backgroundColor = SELECT_COLOR
+        this.selected = this.buttons[index]
+        this.buttons[3].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openCircle ? 4 : 3][2]
+        this.buttons[4].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openEllipse ? 6 : 5][2]
     }
 
     stateSetup(name)

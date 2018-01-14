@@ -21,21 +21,20 @@
     "fontfaceobserver": "^2.0.9",
     "jsonfile": "^4.0.0",
     "pixi-ease": "^0.15.3",
-    "pixi-viewport": "^1.0.3",
+    "pixi-viewport": "^1.0.5",
     "pixi.js": "^4.6.2",
     "point-in-triangle": "^1.0.1",
-    "simple-window-manager": "^0.8.2",
+    "simple-window-manager": "^0.10.1",
     "tinycolor2": "^1.4.1",
     "underscore": "^1.8.3",
     "yy-color": "^1.0.7",
-    "yy-fps": "^0.5.3",
+    "yy-fps": "^0.6.0",
     "yy-input": "^0.11.3",
     "yy-loop": "^0.4.1",
     "yy-misc": "^1.0.1",
     "yy-pixel": "^2.3.1",
     "yy-random": "^1.2.0",
     "yy-renderer": "^2.7.1",
-    "yy-rendersheet": "^3.6.2",
-    "yy-ui": "^0.5.0"
+    "yy-rendersheet": "^3.6.2"
   }
 }

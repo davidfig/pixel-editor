@@ -11,7 +11,7 @@ const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const sheet = require('./pixel-sheet')
 
-const MIN_WIDTH = 200
+const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
 
 const BUTTONS = require('../images/animation.json')
@@ -25,7 +25,7 @@ module.exports = class Animation extends PIXI.Container
         this.current = 0
         this.time = 150
 
-        this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
         this.content.style.margin = '0.25em'
         this.content.style.height = '100%'
@@ -50,9 +50,10 @@ module.exports = class Animation extends PIXI.Container
         this.play = button(buttons, BUTTONS.imageData[0], null, 'play animation')
         clicked(this.play, () => this.change())
 
-        const newButton = button(buttons, BUTTONS.imageData[4])
-        const copyButton = button(buttons, BUTTONS.imageData[3])
-        const deleteButton = button(buttons, BUTTONS.imageData[2])
+        const newButton = button(buttons, BUTTONS.imageData[4], null, 'new animation')
+        this.renameButton = button(buttons, BUTTONS.imageData[5], null, 'rename animation')
+        this.copyButton = button(buttons, BUTTONS.imageData[3], null, 'duplicate animation')
+        this.deleteButton = button(buttons, BUTTONS.imageData[2], null, 'delete animation')
 
         const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
         this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1' } })
@@ -171,7 +172,7 @@ module.exports = class Animation extends PIXI.Container
     {
         const animations = PixelEditor.animations
         const name = this.animationName.text
-        if (!name || name === 'animation name...' || name === this.original)
+        if (!name || name === this.original)
         {
             return
         }
@@ -225,15 +226,19 @@ module.exports = class Animation extends PIXI.Container
             animations[name] = data
             this.animationError.innerHTML = ''
             PixelEditor.save()
-            this.play.setAttribute('disabled', false)
-            this.play.style.opacity = 1
+            this.disable(this.play, false)
         }
         catch (e)
         {
             this.animationError.innerHTML = e.message
-            this.play.setAttribute('disabled', true)
-            this.play.style.opacity = 0.25
+            this.disable(this.play, true)
         }
+    }
+
+    disable(button, disable)
+    {
+        button.setAttribute('disabled', disable)
+        button.style.opacity = disable ? 0.25 : 1
     }
 
     draw()
@@ -268,10 +273,23 @@ module.exports = class Animation extends PIXI.Container
             this.animationName.removeChild(this.types.firstChild);
         }
         const animations = PixelEditor.animations
-        for (let type in animations)
+        if (Object.keys(animations).length)
         {
-            const value = type.toLowerCase()
-            html({ parent: this.animationName, type: 'option', value, html: value })
+            for (let type in animations)
+            {
+                const value = type.toLowerCase()
+                html({ parent: this.animationName, type: 'option', value, html: value })
+            }
+            this.disable(this.deleteButton, false)
+            this.disable(this.renameButton, false)
+            this.disable(this.copyButton, false)
+        }
+        else
+        {
+            this.disable(this.play, true)
+            this.disable(this.deleteButton, true)
+            this.disable(this.renameButton, true)
+            this.disable(this.copyButton, true)
         }
     }
 

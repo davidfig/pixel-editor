@@ -696,6 +696,7 @@ module.exports = class Draw extends PIXI.Container
                     this.spacingOn = true
                     this.lastX = State.cursorX
                     this.lastY = State.cursorY
+                    e.preventDefault()
                     break
                 case 73:
                     State.foreground = PixelEditor.get(State.cursorX, State.cursorY)

@@ -10,6 +10,9 @@ const State = require('./state')
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
+const MAX_SCALE = 10
+const SCALE_DECREASE = -0.1
+const SPACING = 5
 
 const COLOR_SELECTED = 0x888888
 
@@ -23,8 +26,12 @@ module.exports = class Show extends PIXI.Container
 
         this.content = this.win.content
         // this.content.style.margin = '0 0.25em'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        this.renderer.view.style.width = '100%'
+        this.renderer.view.style.height = '100%'
 
         this.pixels = this.addChild(new PIXI.Container())
         // this.buttons = []
@@ -34,45 +41,59 @@ module.exports = class Show extends PIXI.Container
 
     measure()
     {
-        let width = 0, height = 0
-        for (let frame of PixelEditor.imageData)
+        let scale = MAX_SCALE, x, y, largest
+        const windowWidth = this.win.width
+        const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
+        const data = PixelEditor.imageData
+        do
         {
-            width += frame.width
-            height = frame.height > height ? frame.height : height
+            largest = 0, x = SPACING, y = SPACING
+            for (let i = 0; i < data.length; i++)
+            {
+                const width = data[i][0] * scale
+                const height = data[i][1] * scale
+                if (x + width + SPACING > windowWidth)
+                {
+                    x = SPACING
+                    y += largest + SPACING
+                    largest = 0
+                }
+                x += width + SPACING
+                largest = height > largest ? height : largest
+            }
+            scale += SCALE_DECREASE
         }
-        const scaleX = (this.width - Settings.BORDER * 2) / width
-        const scaleY = (this.height - Settings.BORDER * 3 - 30) / height
-        return Math.min(scaleX, scaleY)
+        while (scale > 0.1 && y + largest + SPACING > windowHeight)
+        this.scaler = scale
     }
 
     redraw()
     {
+        this.measure()
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
-        // this.buttons = []
-        const data = PixelEditor.getData()
-        const scale = PixelEditor.zoom
-        let xStart = Settings.BORDER, yStart = Settings.BORDER
-        let biggest = 0
-        for (let i = 0; i < PixelEditor.imageData.length; i++)
+        const data = PixelEditor.imageData
+        const scale = this.scaler
+        let x = SPACING, y = SPACING, largest = 0
+        for (let i = 0; i < data.length; i++)
         {
-            const pixel = this.pixels.addChild(new Pixel(data, sheet))
-            const width = data.imageData[i][0] * scale
-            const height = data.imageData[i][1] * scale
+            const pixel = this.pixels.addChild(new Pixel(PixelEditor, sheet))
+            const width = data[i][0] * scale
+            const height = data[i][1] * scale
             pixel.scale.set(scale)
             pixel.frame(i)
             pixel.current = i
-            if (xStart + width + Settings.BORDER > this.content.offsetWidth / window.devicePixelRatio)
+            if (x + width + SPACING > this.win.width)
             {
-                yStart += biggest + Settings.BORDER
-                xStart = Settings.BORDER
-                biggest = 0
+                x = SPACING
+                y += largest + SPACING
+                largest = 0
             }
-            pixel.position.set(xStart, yStart)
+            pixel.position.set(x, y)
             const number = this.pixels.addChild(new PIXI.Text(i, { fontSize: '1.5em', fontfamily: 'consolas' }))
-            number.position.set(xStart + width / 2 - number.width / 2, yStart + height + Settings.BORDER)
-            number.position.set(xStart + width - number.width, yStart)
+            number.position.set(x + width / 2 - number.width / 2, y + height + SPACING)
+            number.position.set(x + width - number.width, y)
             number.alpha = 0.25
             pixel.interactive = true
             pixel.on('pointertap', () =>
@@ -85,9 +106,8 @@ module.exports = class Show extends PIXI.Container
                     this.selector.height = pixel.height
                 }
             })
-            // this.buttons.push({ pixel, x1: xStart, y1: yStart - Settings.BORDER, x2: xStart + pixel.width, y2: yStart + pixel.height + Settings.BORDER, current: i })
-            xStart += width + Settings.BORDER
-            biggest = height > biggest ? pixel.height : biggest
+            x += width + SPACING
+            largest = height > largest ? pixel.height : largest
         }
         this.currentChange()
     }
@@ -98,7 +118,6 @@ module.exports = class Show extends PIXI.Container
         this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
         this.selector.width = target.width + Settings.BORDER
         this.selector.height = target.height + Settings.BORDER
-        this.renderer.resize(this.width + Settings.BORDER, this.height)
         this.renderer.render(this)
     }
 
@@ -232,7 +251,7 @@ module.exports = class Show extends PIXI.Container
             this.win.width = MIN_WIDTH
             this.win.height = MIN_HEIGHT
         }
-        // this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
             this.win.close()

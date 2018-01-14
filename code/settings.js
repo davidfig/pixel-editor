@@ -1,6 +1,6 @@
 module.exports = {
 
-    DEBUG: false,
+    DEBUG: true,
     NO_LOAD: false,
 
     SAVE_INTERVAL: 1000,

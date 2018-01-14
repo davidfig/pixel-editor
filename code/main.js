@@ -16,7 +16,7 @@ const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
-const Export = require('./export')
+// const Export = require('./export')
 
 let ui, loading = 1, windows = {}
 
@@ -44,7 +44,8 @@ function create()
         backgroundColorWindow: '#cccccc',
         maximizable: false,
         titlebarHeight: '20px',
-        borderRadius: '0 0 4px 4px'
+        borderRadius: '0 0 4px 4px',
+        snap: true
     })
     windows.draw = new Draw(ui.overlay, ui)
 
@@ -231,7 +232,7 @@ function flipVertical()
 function exportFile()
 {
 // TODO
-    ui.addChild(new Export())
+    // ui.addChild(new Export())
 
 }
 

@@ -67,68 +67,13 @@ module.exports = class Animation extends PIXI.Container
         this.captureKey(this.animationTime)
         html({parent: stack, html: 'ms', styles: { paddingBottom: '0.25em'}})
         this.showNames()
-        this.animationName.addEventListener('change', () => this.changeName())
+        this.animationName.addEventListener('change', () => this.showText())
 
         this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none' } })
         this.animationText.addEventListener('change', () => this.changeText())
         this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'red' }})
         this.captureKey(this.animationText)
         this.showText()
-
-        // this.animationName.on('changed', this.changeName, this)
-        // this.animationName.on('lose-focus', () => this.list.visible = false)
-        // this.animationText = this.addChild(new UI.EditText('enter data here...', { full: true }))
-        // this.animationText.on('changed', this.changeText, this)
-        // this.animationText.disabled = true
-        // this.animationError = this.addChild(new UI.Text(''))
-        // this.animationError['foreground-color'] = '#ff0000'
-        // this.list = this.special.addChild(new UI.List({ transparent: false, theme: { between: 0, spacing: 2 } }))
-        // this.list.visible = false
-        // this.list.on('select', this.select, this)
-        // this.newButton = new UI.Button({ sprite: this.sheet.get('animation-4') })
-        // this.newButton.on('clicked', this.reset, this)
-        // this.copyButton = new UI.Button({ sprite: this.sheet.get('animation-3') })
-        // this.copyButton.on('clicked', this.copyAnimation, this)
-        // this.deleteButton = new UI.Button({ sprite: this.sheet.get('animation-2') })
-        // this.deleteButton.on('clicked', this.removeAnimation, this)
-        // this.buttons = this.addChild(new UI.Stack([this.newButton, this.copyButton, this.deleteButton], { horizontal: true }))
-        // for (let button of this.buttons.items)
-        // {
-        //     button.sprite.anchor.set(0)
-        //     button.sprite.scale.set(2)
-        // }
-        // this.animationTime = this.addChild(new UI.EditText('150', { afterText: 'ms' }))
-        // this.time = 150
-        // this.animationTime.on('changed', this.changeTime, this)
-        // this.disableControls(true)
-
-
-// return
-//         this.play.position.set(this.right - this.play.width, 0)
-//         this.animationName.y = this.pixel.y + (1 - this.pixel.anchor.y) * PixelEditor.maxHeight * PixelEditor.zoom + Settings.BORDER
-//         this.animationText.y = this.animationName.y + this.animationName.height + Settings.BORDER
-//         this.animationText.width = this.animationError.width = this.right
-//         this.animationText.height = this.animationText.height = this.animationName.height
-//         this.animationError.y = this.animationText.y + this.animationText.height + Settings.BORDER
-//         this.list.y = this.animationName.y + this.animationName.height + Settings.BORDER * 2
-//         this.list.x = this.get('spacing')
-//         this.animationTime.y = this.buttons.y = this.animationError.y + this.animationError.height + Settings.BORDER
-//         this.animationTime.x = this.buttons.x + this.buttons.width + Settings.BORDER
-//         this.maxHeight = this.buttons.y + this.buttons.height + Settings.BORDER + this.get('spacing') * 2
-
-//     }
-
-
-    }
-
-    reset()
-    {
-        this.animationName.text = 'animation name...'
-        this.animationText.text = ''
-        this.animationError.text = ''
-        this.original = ''
-        this.disableControls(true)
-        this.pixel.frame(0)
     }
 
     captureKey(div)
@@ -160,65 +105,10 @@ module.exports = class Animation extends PIXI.Container
         }
     }
 
-    /**
-     * whether an active animation is selected
-     */
-    disableControls(disable)
-    {
-        this.play.disabled = disable
-        this.animationText.disabled = disable
-        for (let button of this.buttons.items)
-        {
-            button.disabled = disable
-        }
-    }
-
-    changeName()
-    {
-        const animations = PixelEditor.animations
-        const name = this.animationName.text
-        if (!name || name === this.original)
-        {
-            return
-        }
-        if (this.original)
-        {
-            animations[name] = animations[this.original]
-            delete animations[this.original]
-            PixelEditor.save()
-        }
-        else
-        {
-            this.original = name
-            animations[name] = []
-            PixelEditor.save()
-        }
-        this.list.visible = false
-        this.disableControls(false)
-    }
-
     changeTime()
     {
         this.time = parseInt(this.animationTime.value)
         this.draw()
-    }
-
-    select(item)
-    {
-        const name = item.text
-        if (!name || name === 'animation name...')
-        {
-            this.list.visible = false
-            return
-        }
-        this.animationName.editing = false
-        this.animationName.text = name
-        this.original = name
-        const text = JSON.stringify(PixelEditor.animations[name])
-        this.animationText.text = text.substring(1, text.length - 1)
-        this.animationText.disabled = false
-        this.list.visible = false
-        this.disableControls(false)
     }
 
     changeText()
@@ -382,11 +272,6 @@ module.exports = class Animation extends PIXI.Container
         })
     }
 
-    stopped()
-    {
-        this.change()
-    }
-
     update(elapsed)
     {
         if (this.pixel)
@@ -417,9 +302,13 @@ module.exports = class Animation extends PIXI.Container
         {
             this.win.win.display = 'none'
         }
-        PixelEditor.on('changed', this.draw, this)
-        // State.on('last-file', () => { this.draw(); this.height = this.maxHeight; this.reset() })
-// TODO
+        PixelEditor.on('changed', () => this.draw())
+        State.on('last-file', () =>
+        {
+            this.draw()
+            this.showNames()
+            this.showText()
+        })
         State.on('relative', this.draw, this)
     }
 

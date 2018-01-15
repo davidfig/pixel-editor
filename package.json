@@ -1,11 +1,11 @@
 {
   "name": "pixel-editor",
-  "version": "1.0.0",
-  "description": "A pixel editor built in Electron",
+  "version": "0.5.0",
+  "description": "A pixel editor/animator built in Electron",
   "main": "main.js",
   "scripts": {
     "start": "electron . --disable-gpu",
-    "build": "@echo off && echo make sure you are using cmd.exe!!!! && electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.15 --icon=icon.ico",
+    "build": "electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.15 --icon=icon.ico",
     "icon": "electron-icon-maker -i assets/icon.png -o assets"
   },
   "repository": "https://github.com/davidfig/pixel-editor",

@@ -10,6 +10,7 @@ const button = require('./button')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const sheet = require('./pixel-sheet')
+const Dialog = require('./dialog')
 
 const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
@@ -51,9 +52,13 @@ module.exports = class Animation extends PIXI.Container
         clicked(this.play, () => this.change())
 
         const newButton = button(buttons, BUTTONS.imageData[4], null, 'new animation')
+        clicked(newButton, () => this.createAnimation())
         this.renameButton = button(buttons, BUTTONS.imageData[5], null, 'rename animation')
+        clicked(this.renameButton, () => this.renameAnimation())
         this.copyButton = button(buttons, BUTTONS.imageData[3], null, 'duplicate animation')
+        clicked(this.copyButton, () => this.duplicateAnimation())
         this.deleteButton = button(buttons, BUTTONS.imageData[2], null, 'delete animation')
+        clicked(this.deleteButton, () => this.removeAnimation())
 
         const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
         this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1' } })
@@ -237,7 +242,7 @@ module.exports = class Animation extends PIXI.Container
 
     disable(button, disable)
     {
-        button.setAttribute('disabled', disable)
+        button.disabled = disable
         button.style.opacity = disable ? 0.25 : 1
     }
 
@@ -270,7 +275,7 @@ module.exports = class Animation extends PIXI.Container
     {
         while (this.animationName.firstChild)
         {
-            this.animationName.removeChild(this.types.firstChild);
+            this.animationName.removeChild(this.animationName.firstChild);
         }
         const animations = PixelEditor.animations
         if (Object.keys(animations).length)
@@ -302,40 +307,79 @@ module.exports = class Animation extends PIXI.Container
         }
     }
 
-    removeAnimation()
+    createAnimation()
     {
-        delete PixelEditor.animations[this.animationName.text]
-        PixelEditor.save()
-        this.reset()
+        new Dialog(this.win, 'Create Animation', 'string', 'name: ', (value) =>
+        {
+            if (value)
+            {
+                if (!PixelEditor.animations[value])
+                {
+                    PixelEditor.animations[value] = []
+                    PixelEditor.save()
+                    this.showNames()
+                }
+                this.selectAnimation(value)
+            }
+        })
     }
 
-    copyAnimation()
+    removeAnimation()
     {
-        let name = this.animationName.text
-        const dashes = name.split('-')
-        if (dashes.length > 1)
+        new Dialog(this.win, 'Delete Animation?', 'confirmation', 'Are you sure you want to delete the ' + this.animationName.value + ' animation?', (value) =>
         {
-            if (!isNaN(dashes[dashes.length - 1]))
+            if (value)
             {
-                const number = dashes[dashes.length - 1]
-                name = name.replace('-' + number, '-' + (parseInt(number) + 1))
+                delete PixelEditor.animations[this.animationName.value]
+                PixelEditor.save()
+                this.showNames()
             }
-            else
+        }, { ok: 'DELETE', okColor: 'red' })
+    }
+
+    selectAnimation(value)
+    {
+        for (let name of this.animationName.childNodes)
+        {
+            if (name.value === value)
             {
-                name += '-1'
+                name.setAttribute('selected', true)
+                return
             }
         }
-        else
+    }
+
+    renameAnimation()
+    {
+        new Dialog(this.win, 'Rename Animation', 'string', 'name: ',(value) =>
         {
-            name += '-1'
-        }
-        PixelEditor.animations[name] = PixelEditor.animations[this.animationName.text]
-        PixelEditor.save()
-        this.animationName.text = name
-        this.animationError.text = ''
-        this.animationText['foreground-color'] = '0'
-        this.animationText.layout()
-        this.disableControls(false)
+            if (value && value !== this.animationName.value)
+            {
+                PixelEditor.animations[value] = PixelEditor.animations[this.animationName.value]
+                delete PixelEditor.animations[this.animationName.value]
+                PixelEditor.save()
+                this.showNames()
+                this.selectAnimation(value)
+            }
+        }, { original: this.animationName.value })
+    }
+
+    duplicateAnimation()
+    {
+        new Dialog(this.win, 'Duplicate Animation', 'string', 'name: ', (value) =>
+        {
+            if (value)
+            {
+                if (!PixelEditor.animations[value])
+                {
+                    const original = PixelEditor.animations[this.animationName.value]
+                    PixelEditor.animations[value] = JSON.parse(JSON.stringify(original))
+                    PixelEditor.save()
+                    this.showNames()
+                }
+                this.selectAnimation(value)
+            }
+        })
     }
 
     stopped()

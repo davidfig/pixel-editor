@@ -1,93 +1,61 @@
-const Settings = require('./settings')
-
 const remote = require('electron').remote
 const path = require('path')
-const UI = require(Settings.UI)
-const PIXI = require('pixi.js')
 const fs = require('fs')
+const PIXI = require('pixi.js')
+const clicked = require('clicked')
 
 const sheet = require('./pixel-sheet')
+const html = require('./html')
+
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 
-module.exports = class Export extends UI.Stack
+module.exports = class Export
 {
-    constructor()
+    constructor(wm)
     {
-        super({ draggable: true, modal: true, transparent: false, theme: { spacing: 10 } })
-        this.add(new UI.Text('Export Frame to PNG', { align: 'center', theme: { spacing: 0 } }))
-        this.add(new UI.Spacer(0, 10))
-        this.editWidth = this.add(new UI.EditText(PixelEditor.width * PixelEditor.zoom, { count: 8, beforeText: 'Desired Width: ' }))
-        this.editWidth.on('changed', this.changeWidth, this)
-        this.editHeight = this.add(new UI.EditText(PixelEditor.height * PixelEditor.zoom, { count: 8, beforeText: 'Desired Height: ' }))
-        this.editHeight.on('changed', this.changeHeight, this)
-        this.editScale = this.add(new UI.EditText(PixelEditor.zoom, { count: 8, beforeText: 'Desired Scale: ' }))
-        this.editScale.on('changed', this.changeScale, this)
-        this.editWidth.width = this.editScale.width = this.editHeight.width
-        this.exportButton = new UI.Button({ text: 'export' })
-        this.exportButton.on('clicked', this.export, this)
-        this.cancelButton = new UI.Button({ text: 'cancel' })
-        this.cancelButton.on('clicked', this.close, this)
-        this.add(new UI.Spacer(0, 10))
-        this.buttons = this.add(new UI.Stack([this.exportButton, this.cancelButton], { sameWidth: true, horizontal: true }))
-        this.layout()
-        this.position.set(window.innerWidth / 2 - this.width / 2, window.innerHeight / 2 - this.height / 2)
+        this.win = wm.createWindow({ title: 'Export Frame to PNG', modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0, titleCenter: true })
+
+        let div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '1em 0.5em 0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'width: ', styles: { display: 'inline-block', width: '5em' } })
+        this.width = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.width.value = PixelEditor.width * PixelEditor.zoom
+        this.captureKey(this.width)
+        this.width.addEventListener('change', () => this.changeWidth())
+
+        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'height: ', styles: { display: 'inline-block', width: '5em' } })
+        this.height = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.height.value = PixelEditor.height * PixelEditor.zoom
+        this.captureKey(this.height)
+        this.height.addEventListener('change', () => this.changeHeight())
+
+        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'scale: ', styles: { display: 'inline-block', width: '5em' } })
+        this.scale = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.scale.value = PixelEditor.zoom
+        this.captureKey(this.scale)
+        this.scale.addEventListener('change', () => this.changeScale())
+
+        const buttons = html({ parent: this.win.content, styles: { width: '100%', display: 'flex', justifyContent: 'center', margin: '0.25em' } })
+        const OK = html({ parent: buttons, type: 'button', html: 'export...', styles: { width: '6em', display: 'block', margin: '0.25em' } })
+        clicked(OK, () => this.OK())
+        const Cancel = html({ parent: buttons, type: 'button', html: 'cancel', styles: { width: '6em', display: 'block', margin: '0.25em' } })
+        clicked(Cancel, () => this.cancel())
+
+        this.win.open()
+        this.win.move(window.innerWidth / 2 - this.win.width / 2, window.innerHeight / 2 - this.win.height / 2)
+
         this.saveScale = PixelEditor.zoom
     }
 
-    changeWidth()
+    OK()
     {
-        const scale = parseInt(this.editWidth.text) / PixelEditor.width
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.editScale.text = scale.toFixed(2)
-            this.editHeight.text = (PixelEditor.height * scale).toFixed(2)
-        }
-        else
-        {
-            this.editWidth.text = ''
-        }
-    }
-
-    changeHeight()
-    {
-        const scale = parseInt(this.editHeight.text) / PixelEditor.height
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.editScale.text = scale.toFixed(2)
-            this.editWidth.text = (PixelEditor.width * scale).toFixed(2)
-        }
-        else
-        {
-            this.editHeight.text = ''
-        }
-    }
-
-    changeHeight()
-    {
-        const scale = parseFloat(this.editScale.text)
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.editHeight.text = (PixelEditor.height * scale).toFixed(2)
-            this.editWidth.text = (PixelEditor.width * scale).toFixed(2)
-        }
-        else
-        {
-            this.editScale.text = ''
-        }
-    }
-
-    keydown(code)
-    {
-
-    }
-
-    export()
-    {
-        remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Export PNG file', defaultPath: State.lastPath }, this.exportFile.bind(this))
+        remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
+            title: 'Export PNG file',
+            defaultPath: State.lastPath,
+            filters: [{ name: 'PNG', extensions: ['png'] }]
+        }, this.exportFile.bind(this))
     }
 
     exportFile(name)
@@ -107,7 +75,82 @@ module.exports = class Export extends UI.Stack
             renderer.render(sprite)
             const data = renderer.view.toDataURL().replace(/^data:image\/\w+;base64,/, '')
             fs.writeFileSync(name, new Buffer(data, 'base64'))
-            this.close()
+        }
+        this.win.close()
+    }
+
+    cancel()
+    {
+        this.win.close()
+    }
+
+    captureKey(div)
+    {
+        div.addEventListener('keydown', (e) =>
+        {
+            if (e.code === 'Enter')
+            {
+                this.OK()
+            }
+            e.stopPropagation()
+        })
+        div.addEventListener('keyup', (e) => e.stopPropagation())
+    }
+
+    changeWidth()
+    {
+        const scale = parseInt(this.width.value) / PixelEditor.width
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.scale.value = this.fix(scale)
+            this.height.value = this.fix(PixelEditor.height * scale)
+        }
+        else
+        {
+            this.width.value = ''
+        }
+    }
+
+    changeHeight()
+    {
+        const scale = parseInt(this.height.value) / PixelEditor.height
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.scale.value = this.fix(scale)
+            this.width.value = this.fix(PixelEditor.width * scale)
+        }
+        else
+        {
+            this.height.value = ''
+        }
+    }
+
+    changeScale()
+    {
+        const scale = parseFloat(this.scale.value)
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.height.value = this.fix(PixelEditor.height * scale)
+            this.width.value = this.fix(PixelEditor.width * scale)
+        }
+        else
+        {
+            this.scale.value = ''
+        }
+    }
+
+    fix(n)
+    {
+        if (n === Math.round(n))
+        {
+            return n
+        }
+        else
+        {
+            return n.toFixed(2)
         }
     }
 }

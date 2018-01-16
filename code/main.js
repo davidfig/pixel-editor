@@ -16,7 +16,7 @@ const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
-// const Export = require('./export')
+const Export = require('./export')
 
 let ui, loading = 1, windows = {}
 
@@ -94,6 +94,9 @@ function keydown(e)
             case 83: // ctrl-s
                 saveFile()
                 break
+            case 69: // ctrl-e
+                exportFile()
+                break
             case 70: // ctrl-f
                 add()
                 break
@@ -119,6 +122,7 @@ function keydown(e)
                 flipVertical()
                 break
         }
+        console.log(e)
     }
     for (let window in windows)
     {
@@ -231,9 +235,7 @@ function flipVertical()
 
 function exportFile()
 {
-// TODO
-    // ui.addChild(new Export())
-
+    new Export(ui)
 }
 
 module.exports = {

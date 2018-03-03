@@ -2,7 +2,6 @@ const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
 const Pixel = require(Settings.YY_PIXEL).Pixel
-const exists = require('exists')
 const clicked = require('clicked')
 
 const html = require('./html')
@@ -22,10 +21,8 @@ module.exports = class Animation extends PIXI.Container
     constructor(wm)
     {
         super()
-
         this.current = 0
         this.time = 150
-
         this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
         this.content.style.margin = '0.25em'
@@ -283,25 +280,19 @@ module.exports = class Animation extends PIXI.Container
         }
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
         if (State.getHidden(this.name))
         {
             this.win.win.display = 'none'
         }
+        this.win.on('resize', () =>
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+        })
+        this.win.on('resize-end', () => State.set())
+        this.win.on('move-end', () => State.set())
         PixelEditor.on('changed', () => this.draw())
         State.on('last-file', () =>
         {
@@ -317,7 +308,7 @@ module.exports = class Animation extends PIXI.Container
         if (this.win._resizing)
         {
             this.draw()
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+            State.set()
         }
     }
 
@@ -325,7 +316,7 @@ module.exports = class Animation extends PIXI.Container
     {
         if (this.win._moving)
         {
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+            State.set()
         }
     }
 

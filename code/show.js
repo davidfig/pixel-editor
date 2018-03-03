@@ -25,7 +25,6 @@ module.exports = class Show extends PIXI.Container
         this.win.open()
 
         this.content = this.win.content
-        // this.content.style.margin = '0 0.25em'
         this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
@@ -34,8 +33,7 @@ module.exports = class Show extends PIXI.Container
         this.renderer.view.style.height = '100%'
 
         this.pixels = this.addChild(new PIXI.Container())
-        // this.buttons = []
-        this.stateSetup('show')
+        this.stateSetup()
         this.redraw()
     }
 
@@ -236,35 +234,24 @@ module.exports = class Show extends PIXI.Container
         }
     }
 
-    stateSetup(name)
+    resize()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.redraw()
+    }
+
+    stateSetup()
+    {
         this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         if (State.getHidden(this.name))
         {
             this.win.close()
         }
-        this.win.on('resize', () =>
-        {
-            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-            this.redraw()
-        })
-        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
-        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
-        PixelEditor.on('changed', this.redraw, this)
-        PixelEditor.on('current', this.currentChange, this)
-        State.on('last-file', this.redraw, this)
+        this.win.on('resize', () => this.resize())
+        this.win.on('resize-end', () => State.set())
+        this.win.on('move-end', () => State.set())
+        PixelEditor.on('changed', () => this.redraw())
+        PixelEditor.on('current', () => this.currentChange())
+        State.on('last-file', () => this.redraw())
     }
 }

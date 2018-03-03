@@ -43,8 +43,9 @@ function create()
     ui = new WM({
         backgroundColorWindow: '#cccccc',
         maximizable: false,
-        titlebarHeight: '20px',
-        borderRadius: '0 0 4px 4px',
+        titlebarHeight: '2em',
+        borderRadius: 'none',
+        shadow: 'none',
         snap: { }
     })
     windows.draw = new Draw(ui.overlay, ui)
@@ -57,6 +58,9 @@ function create()
     windows.coords = new Coords(ui)
     windows.animation = new Animation(ui)
 
+    State.position(ui)
+    windows.show.resize()
+
     document.body.addEventListener('keydown', keydown)
 }
 
@@ -66,6 +70,11 @@ function keydown(e)
 
     // reload on ctrl-r key (should be disabled when not debugging)
     if (e.ctrlKey && code === 82) window.location.reload()
+
+    if (e.ctrlKey && e.shiftKey && code === 73)
+    {
+        remote.getCurrentWindow().toggleDevTools()
+    }
 
     this.shift = e.shiftKey
     if (e.ctrlKey && code >= 48 && code <= 57)
@@ -122,13 +131,11 @@ function keydown(e)
                 flipVertical()
                 break
         }
-        console.log(e)
     }
     for (let window in windows)
     {
         windows[window].keydown(e)
     }
-    // console.log(code)
 }
 
 function toggleWindow(name)

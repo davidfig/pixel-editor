@@ -3,6 +3,8 @@ const path = require('path')
 const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
 
+const TIME_BETWEEN_SAVES = 250
+
 class State extends Events
 {
     constructor()
@@ -10,14 +12,6 @@ class State extends Events
         super()
         const app = electron.remote ? electron.remote.app : electron.app
         this.filename = path.join(app.getPath('userData'), 'state.json')
-        this.load()
-        this.state.lastFiles = this.state.lastFiles || []
-        this.state.windows = this.state.windows || {}
-        this.state.relative = this.state.relative || 'top-left'
-    }
-
-    load()
-    {
         try
         {
             this.state = jsonfile.readFileSync(this.filename)
@@ -29,15 +23,26 @@ class State extends Events
             {
                 this.state.background = '00000000'
             }
-            for (let name in this.state.windows)
-            {
-                if (this.state.windows[name].y < 0) this.state.windows[name].y = 0
-            }
         }
         catch (err)
         {
             this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
         }
+        this.state.lastFiles = this.state.lastFiles || []
+        this.state.windows = this.state.windows || {}
+        this.state.relative = this.state.relative || 'top-left'
+        this.time = 0
+        this.last = performance.now()
+        window.setInterval(() => this.update(), TIME_BETWEEN_SAVES)
+    }
+
+    position(wm)
+    {
+        if (this.state.windows)
+        {
+            wm.load(this.state.windows)
+        }
+        this.wm = wm
     }
 
     mainResize(object)
@@ -75,9 +80,9 @@ class State extends Events
         window.on('move', this.mainMove.bind(this))
     }
 
-    set(name, x, y, width, height)
+    set()
     {
-        this.state.windows[name] = { x, y, width, height }
+        this.state.windows = this.wm.save()
         this.save()
     }
 
@@ -94,7 +99,7 @@ class State extends Events
 
     getHidden(name)
     {
-        return this.state.windows[name].hidden
+        return false//this.state.windows[name].hidden
     }
 
     toggleHidden(name)
@@ -282,7 +287,7 @@ class State extends Events
 
     save()
     {
-        jsonfile.writeFileSync(this.filename, this.state)
+        this.dirty = true
     }
 
     get lastFile()
@@ -316,6 +321,20 @@ class State extends Events
     set lastFiles(value)
     {
         this.state.lastFiles = value
+    }
+
+    update()
+    {
+        const now = performance.now()
+        const elapsed = now - this.last
+        this.last = now
+        this.time += elapsed
+        if (this.dirty && this.time > TIME_BETWEEN_SAVES)
+        {
+            jsonfile.writeFileSync(this.filename, this.state)
+            this.time = 0
+            this.dirty = false
+        }
     }
 }
 

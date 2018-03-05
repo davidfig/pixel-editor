@@ -11,8 +11,8 @@ module.exports = {
     // YY_PIXEL: '../../components/pixel/',
     YY_PIXEL: 'yy-pixel',
 
-    // VIEWPORT: '../../components/pixi-viewport',
-    VIEWPORT: 'pixi-viewport',
+    VIEWPORT: '../../components/pixi-viewport',
+    // VIEWPORT: 'pixi-viewport',
 
     // WINDOW_MANAGER: '../../components/window-manager',
     WINDOW_MANAGER: 'simple-window-manager',

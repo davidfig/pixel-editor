@@ -10,7 +10,6 @@ const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
 
 const CURSOR_COLOR = 0xff0000
-const SHAPE_HOVER_ALPHA = 1
 const BORDER = 1
 const DOTTED = 10
 

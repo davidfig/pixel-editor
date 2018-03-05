@@ -28,7 +28,7 @@ module.exports = class Picker
         this.ui = ui
         this.content = this.win.content
         this.content.style.margin = '0.5em'
-
+        this.content.style.color = '#eeeeee'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')

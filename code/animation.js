@@ -25,6 +25,7 @@ module.exports = class Animation extends PIXI.Container
         this.time = 150
         this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
+        this.content.style.color = '#eeeeee'
         this.content.style.margin = '0.25em'
         this.content.style.height = '100%'
         this.content.style.display = 'flex'
@@ -58,17 +59,17 @@ module.exports = class Animation extends PIXI.Container
         clicked(this.deleteButton, () => this.removeAnimation())
 
         const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
-        this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1' } })
-        this.animationTime = html({ parent: stack, type: 'input', value: this.time, styles: { margin: '0.25em', width: '2em', textAlign: 'right' } })
+        this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1', background: '#eeeeee' } })
+        this.animationTime = html({ parent: stack, type: 'input', value: this.time, styles: { margin: '0.25em', width: '2em', textAlign: 'right', background: '#eeeeee' } })
         this.animationTime.addEventListener('change', () => this.changeTime())
         this.captureKey(this.animationTime)
         html({parent: stack, html: 'ms', styles: { paddingBottom: '0.25em'}})
         this.showNames()
         this.animationName.addEventListener('change', () => this.showText())
 
-        this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none' } })
+        this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none', background: '#eeeeee' } })
         this.animationText.addEventListener('change', () => this.changeText())
-        this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'red' }})
+        this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'rgb(255,50,50)' }})
         this.captureKey(this.animationText)
         this.showText()
     }

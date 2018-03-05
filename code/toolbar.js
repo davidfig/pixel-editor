@@ -26,7 +26,7 @@ module.exports = class Toolbar
             clicked(one, () => this.pressed(i))
             this.buttons.push(one)
         }
-        this.pressed(1)
+        this.changed()
         this.stateSetup()
         this.win.open()
     }
@@ -106,8 +106,6 @@ module.exports = class Toolbar
         }
         this.buttons[index].style.opacity = 1
         this.selected = this.buttons[index]
-        this.buttons[3].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openCircle ? 4 : 3][2]
-        this.buttons[4].image.src = 'data:image/png;base64,' + ICONS.imageData[State.openEllipse ? 6 : 5][2]
     }
 
     stateSetup(name)

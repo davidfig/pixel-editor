@@ -8,7 +8,7 @@ const Settings = require('./code/settings')
 
 let _main
 
-const BACKGROUND = '#aaaaaa'
+const BACKGROUND = '#000000'
 
 function init()
 {

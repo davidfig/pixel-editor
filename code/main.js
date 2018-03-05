@@ -41,9 +41,11 @@ function afterLoad()
 function create()
 {
     ui = new WM({
-        backgroundColorWindow: '#cccccc',
+        backgroundColorTitlebarActive: '#555555',
+        backgroundColorTitlebarInactive: '#444444',
+        backgroundColorWindow: '#333333',
         maximizable: false,
-        titlebarHeight: '2em',
+        titlebarHeight: '1.25em',
         borderRadius: 'none',
         shadow: 'none',
         snap: { }

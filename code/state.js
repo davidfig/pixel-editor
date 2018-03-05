@@ -32,8 +32,7 @@ class State extends Events
         this.state.windows = this.state.windows || {}
         this.state.relative = this.state.relative || 'top-left'
         this.time = 0
-        this.last = performance.now()
-        window.setInterval(() => this.update(), TIME_BETWEEN_SAVES)
+        this.last = 0
     }
 
     position(wm)
@@ -43,6 +42,7 @@ class State extends Events
             wm.load(this.state.windows)
         }
         this.wm = wm
+        window.setInterval(() => this.update(), TIME_BETWEEN_SAVES)
     }
 
     mainResize(object)

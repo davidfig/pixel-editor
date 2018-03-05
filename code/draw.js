@@ -649,10 +649,12 @@ module.exports = class Draw extends PIXI.Container
                     if (this.shift)
                     {
                         PixelEditor.redoOne()
+                        e.preventDefault()
                     }
                     else
                     {
                         PixelEditor.undoOne()
+                        e.preventDefault()
                     }
                     break
                 case 68:

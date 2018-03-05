@@ -1,4 +1,3 @@
-const exists = require('exists')
 const clicked = require('clicked')
 
 const State = require('./state')
@@ -7,7 +6,7 @@ const button = require('./button')
 const ICONS = require('../images/editor.json')
 
 const BUTTONS = [0, 1, 2, 3, 5, 7, 8, 9]
-const TIPS = ['draw', 'select', 'fill', 'circle', 'ellipse', 'line', 'crop', 'dropper']
+const TIPS = [['draw mode', 'b'], ['select mode', 'v'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm'], ['color dropper', 'i']]
 
 const OPACITY_UNSELECTED = 0.6
 

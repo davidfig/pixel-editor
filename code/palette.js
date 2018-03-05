@@ -250,22 +250,24 @@ module.exports = class Palette extends PIXI.Container
             this.win.width = MIN_WIDTH
             this.win.height = MIN_HEIGHT
         }
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.resize()
         if (State.getHidden(this.name))
         {
             this.win.close()
         }
-        this.win.on('resize', () =>
-        {
-            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-            this.draw()
-        })
+        this.win.on('resize', () => this.resize())
         this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
         PixelEditor.on('changed', this.draw, this)
+    }
+
+    resize()
+    {
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.draw()
     }
 
     keydown(e)

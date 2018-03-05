@@ -60,6 +60,7 @@ function create()
 
     State.position(ui)
     windows.show.resize()
+    windows.palette.resize()
 
     document.body.addEventListener('keydown', keydown)
 }

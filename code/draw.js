@@ -275,20 +275,21 @@ module.exports = class Draw extends PIXI.Container
 
     circleCursor()
     {
-        const color = parseInt(State.color.substr(0, 6), 16)
         const alpha = parseInt(State.color.substr(6), 16) / 255
         this.cursorBlock.lineStyle(0)
         this.cursorBlock.position.set(0, 0)
         let x0 = State.cursorX
         let y0 = State.cursorY
+        const foreground = State.foreground
+        const background = State.background
         const blocks = {}
         if (State.cursorSizeX === 3)
         {
-            blocks[x0 + ',' + (y0 - 1)] = true
-            blocks[x0 + ',' + y0] = true
-            blocks[x0 + ',' + (y0 + 1)] = true
-            blocks[(x0 - 1) + ',' + y0] = true
-            blocks[(x0 + 1) + ',' + y0] = true
+            blocks[x0 + ',' + (y0 - 1)] = foreground
+            blocks[x0 + ',' + y0] = background
+            blocks[x0 + ',' + (y0 + 1)] = foreground
+            blocks[(x0 - 1) + ',' + y0] = foreground
+            blocks[(x0 + 1) + ',' + y0] = foreground
         }
         else
         {
@@ -296,37 +297,30 @@ module.exports = class Draw extends PIXI.Container
             const even = State.cursorSizeX % 2 === 0 ? 1 : 0
             let y = 0
             let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-
             while (x >= y)
             {
-                if (State.openCircle)
+                for (let i = 0; i <= x; i++)
                 {
-                    blocks[(x0 + x) + ',' + (y0 + y + even)] = true
-                    blocks[(x0 + y) + ',' + (y0 + x + even)] = true
-                    blocks[(x0 - y - even) + ',' + (y0 + x + even)] = true
-                    blocks[(x0 - x - even) + ',' + (y0 + y + even)] = true
-                    blocks[(x0 - x - even) + ',' + (y0 - y)] = true
-                    blocks[(x0 - y - even) + ',' + (y0 - x)] = true
-                    blocks[(x0 + y) + ',' + (y0 - x)] = true
-                    blocks[(x0 + x) + ',' + (y0 - y)] = true
+                    blocks[(x0 + x - i) + ',' + (y0 + y + even)] = background
+                    blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = background
+                    blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = background
+                    blocks[(x0 - x - even + i) + ',' + (y0 - y)] = background
+                    blocks[(x0 + x - i) + ',' + (y0 - y)] = background
                 }
-                else
+                for (let i = 0; i <= y; i++)
                 {
-                    for (let i = 0; i <= x; i++)
-                    {
-                        blocks[(x0 + x - i) + ',' + (y0 + y + even)] = true
-                        blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = true
-                        blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = true
-                        blocks[(x0 - x - even + i) + ',' + (y0 - y)] = true
-                        blocks[(x0 + x - i) + ',' + (y0 - y)] = true
-                    }
-                    for (let i = 0; i <= y; i++)
-                    {
-                        blocks[(x0 + y - i) + ',' + (y0 + x + even)] = true
-                        blocks[(x0 - y - even + i) + ',' + (y0 - x)] = true
-                        blocks[(x0 + y - i) + ',' + (y0 - x)] = true
-                    }
+                    blocks[(x0 + y - i) + ',' + (y0 + x + even)] = background
+                    blocks[(x0 - y - even + i) + ',' + (y0 - x)] = background
+                    blocks[(x0 + y - i) + ',' + (y0 - x)] = background
                 }
+                blocks[(x0 + x) + ',' + (y0 + y + even)] = foreground
+                blocks[(x0 + y) + ',' + (y0 + x + even)] = foreground
+                blocks[(x0 - y - even) + ',' + (y0 + x + even)] = foreground
+                blocks[(x0 - x - even) + ',' + (y0 + y + even)] = foreground
+                blocks[(x0 - x - even) + ',' + (y0 - y)] = foreground
+                blocks[(x0 - y - even) + ',' + (y0 - x)] = foreground
+                blocks[(x0 + y) + ',' + (y0 - x)] = foreground
+                blocks[(x0 + x) + ',' + (y0 - y)] = foreground
                 y++
                 if (decisionOver2 <= 0)
                 {
@@ -358,7 +352,7 @@ module.exports = class Draw extends PIXI.Container
                 const pos = block.split(',')
                 if (this.inBounds(pos))
                 {
-                    this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
+                    this.cursorBlock.beginFill(blocks[block], alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
                     this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]) })
                 }
             }

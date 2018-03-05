@@ -2,6 +2,7 @@ const clicked = require('clicked')
 
 const State = require('./state')
 const button = require('./button')
+const PixelEditor = require('./pixel-editor')
 
 const ICONS = require('../images/position.json')
 
@@ -15,11 +16,12 @@ module.exports = class Position
         this.ui = ui
         this.draw = draw
         this.buttons = []
-        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minHeight: 0 })
+        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
 
         for (let i = 0; i < BUTTONS; i++)
         {
             const one = button(this.win.content, ICONS.imageData[i], null, TIPS[i])
+            one.style.opacity = 0.6
             clicked(one, () => this.pressed(i))
             this.buttons.push(one)
         }
@@ -32,17 +34,19 @@ module.exports = class Position
         const vp = this.draw.vp
         const landscape = this.draw.width / window.innerWidth > this.draw.height / window.innerHeight
         let center
+        const width = PixelEditor.width * this.draw.zoom
+        const height = PixelEditor.height * this.draw.zoom
         switch (index)
         {
             case 0:
                 center = vp.center
                 if (landscape)
                 {
-                    vp.fitWidth(window.innerWidth * 3)
+                    vp.fitWidth(width * 4)
                 }
                 else
                 {
-                    vp.fitHeight(window.innerHeight * 3)
+                    vp.fitHeight(height * 4)
                 }
                 vp.center = center
                 break
@@ -50,11 +54,11 @@ module.exports = class Position
                 center = vp.center
                 if (landscape)
                 {
-                    vp.fitWidth(window.innerWidth * 1.5)
+                    vp.fitWidth(width * 2)
                 }
                 else
                 {
-                    vp.fitHeight(window.innerHeight * 1.5)
+                    vp.fitHeight(height * 2)
                 }
                 vp.center = center
                 break
@@ -62,11 +66,11 @@ module.exports = class Position
                 center = vp.center
                 if (landscape)
                 {
-                    vp.fitWidth(window.innerWidth * 1)
+                    vp.fitWidth(width * 1.25)
                 }
                 else
                 {
-                    vp.fitHeight(window.innerHeight * 1)
+                    vp.fitHeight(height * 1.25)
                 }
                 vp.center = center
                 break

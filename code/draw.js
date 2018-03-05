@@ -404,7 +404,9 @@ module.exports = class Draw extends PIXI.Container
 
     lineCursor()
     {
-        const color = State.foreground === null ? CURSOR_COLOR : State.foreground
+        const color = State.color
+        const c = parseInt(color.substr(0, 6), 16)
+        const a = parseInt(color.substr(6), 16) / 255
         this.cursorBlock.position.set(0)
         if (this.line)
         {
@@ -422,7 +424,7 @@ module.exports = class Draw extends PIXI.Container
             let e2
             while (true)
             {
-                this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA)
+                this.cursorBlock.beginFill(c, a)
                     .drawRect(x0 * this.zoom - BORDER, y0 * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
                     .endFill()
                 this.stamp.push({ x: x0, y: y0 })
@@ -445,10 +447,10 @@ module.exports = class Draw extends PIXI.Container
         }
         else
         {
-            this.cursorBlock.beginFill(color, SHAPE_HOVER_ALPHA)
+            this.cursorBlock.beginFill(c, a)
                 .drawRect(State.cursorX * this.zoom - BORDER, State.cursorY * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
                 .endFill()
-            this.stamp = [{ x: State.cursorX, y: State.cursorY }]
+            this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
         }
     }
 
@@ -576,6 +578,7 @@ module.exports = class Draw extends PIXI.Container
             State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
         }
         this.cursorDraw()
+        this.renderer.render(this)
     }
 
     cursorDraw()
@@ -1052,7 +1055,6 @@ module.exports = class Draw extends PIXI.Container
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.redraw())
         State.on('last-file', () => this.redraw())
-        State.on('open-circle', () => this.redraw())
-        State.on('open-ellipse', () => this.redraw())
+        State.on('background', () => this.tool())
     }
 }

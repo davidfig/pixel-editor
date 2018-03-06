@@ -23,7 +23,8 @@ function init()
     }
     else
     {
-        _main = new electron.BrowserWindow({ title: 'Pixel Editor', backgroundColor: BACKGROUND })
+        _main = new electron.BrowserWindow({ icon: './assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND })
+        _main.maximize()
     }
     _main.loadURL(url.format({ pathname: path.join(__dirname, 'html', 'main.html'), protocol: 'file:', slashes: true }))
     if (Settings.DEBUG)

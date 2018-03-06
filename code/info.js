@@ -1,10 +1,10 @@
 const EasyEdit = require('easyedit')
-const exists = require('exists')
 const Tooltip = require('yy-tooltip')
 
 const State = require('./state')
 const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
+const locale = require('./locale')
 
 module.exports = class Info
 {
@@ -32,7 +32,7 @@ module.exports = class Info
         const container = document.createElement('div')
         if (tooltip)
         {
-            new Tooltip(container, Array.isArray(tooltip) ? '<div>' + tooltip[0] + '</div><div>key: ' + tooltip[1] + '</div>' : tooltip)
+            new Tooltip(container, Array.isArray(tooltip) ? '<div>' + tooltip[0] + '</div><div>' + locale.get('shortcut') + tooltip[1] + '</div>' : tooltip)
         }
         parent.appendChild(container)
         for (let style in styles)
@@ -47,7 +47,7 @@ module.exports = class Info
         }
         const span = document.createElement('span')
         container.appendChild(span)
-        span.style.borderBottom = 'dotted 1px black'
+        span.style.borderBottom = 'dotted 1px #eeeeee'
         span.innerHTML = text
         return new EasyEdit(span)
     }
@@ -63,12 +63,12 @@ module.exports = class Info
 
     name()
     {
-        this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' }, 'Name of sprite')
+        this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('nameOfSprite'))
     }
 
     frameNumber()
     {
-        this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' }, 'Frame number')
+        this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('frameNumber'))
         this.frameNumberEdit.on('success', (value) =>
         {
             const number = parseInt(value)
@@ -82,7 +82,7 @@ module.exports = class Info
     frameSize()
     {
         const stack = this.stack(this.content)
-        this.frameWidthEdit = this.editText(stack, 'w: ', 15, null, 'width of frame')
+        this.frameWidthEdit = this.editText(stack, 'w: ', 15, null, locale.get('frameWidth'))
         this.frameWidthEdit.on('success', (value) =>
         {
             const width = parseInt(value)
@@ -103,7 +103,7 @@ module.exports = class Info
             PixelEditor.adjustWidth(width, relative)
         })
 
-        this.frameHeightEdit = this.editText(stack, 'h: ', 15, null, 'height of frame')
+        this.frameHeightEdit = this.editText(stack, 'h: ', 15, null, locale.get('frameHeight'))
         this.frameHeightEdit.on('success', (value) =>
         {
             const height = parseInt(value)

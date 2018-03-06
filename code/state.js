@@ -3,7 +3,9 @@ const path = require('path')
 const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
 
-const TIME_BETWEEN_SAVES = 250
+const Settings = require('./settings')
+
+const SPACING = 5
 
 class State extends Events
 {
@@ -26,23 +28,34 @@ class State extends Events
         }
         catch (err)
         {
-            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
+            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [] }
         }
         this.state.lastFiles = this.state.lastFiles || []
-        this.state.windows = this.state.windows || {}
         this.state.relative = this.state.relative || 'top-left'
-        this.time = 0
-        this.last = 0
+    }
+
+    positionDefault()
+    {
+        this.state.windows = [
+            { x: SPACING, y: window.innerHeight - SPACING - 200, width: 200, height: 200 }, // show
+            { x: SPACING, y: SPACING }, // toolbar
+            { x: window.innerWidth - SPACING - 200, y: SPACING * 2 + 300, width: 200, height: 150 }, // palette
+            { x: window.innerWidth - SPACING - 200, y: SPACING, width: 200, height: 300 }, // picker
+            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING - 205 }, // info
+            { x: window.innerWidth - SPACING * 2 - 200 - 235 + (235 / 2 - 50 / 2), y: SPACING - (226 / 2 - 50 / 2 - 3), minimized: true, lastMinimized: { left: window.innerWidth - SPACING * 2 - 50 + 'px', top: SPACING + 'px' }, minimized: { x: window.innerWidth - SPACING * 2 - 235 - 200, y: SPACING, width: 230, height: 226 }}, // animation (230, 226)
+            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING * 2 - 205 - 60 } // position (195, 60)
+        ]
     }
 
     position(wm)
     {
-        if (this.state.windows)
+        if (!this.state.windows)
         {
-            wm.load(this.state.windows)
+            this.positionDefault()
         }
+        wm.load(this.state.windows)
         this.wm = wm
-        window.setInterval(() => this.update(), TIME_BETWEEN_SAVES)
+        window.setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
     mainResize(object)
@@ -298,14 +311,9 @@ class State extends Events
 
     update()
     {
-        const now = performance.now()
-        const elapsed = now - this.last
-        this.last = now
-        this.time += elapsed
-        if (this.dirty && this.time > TIME_BETWEEN_SAVES)
+        if (this.dirty)
         {
             jsonfile.writeFileSync(this.filename, this.state)
-            this.time = 0
             this.dirty = false
         }
     }

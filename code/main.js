@@ -51,10 +51,9 @@ function create()
         shadow: 'none',
         snap: { }
     })
+
     windows.draw = new Draw(ui.overlay, ui)
-
     windows.show = new Show(ui)
-
     windows.toolbar = new Toolbar(ui)
     windows.palette = new Palette(ui)
     windows.picker = new Picker(ui)
@@ -203,6 +202,8 @@ function newFile()
     State.current = 0
     State.cursorX = State.cursorY = 0
     State.cursorSizeX = State.cursorSizeY = 1
+    windows.position.pressed(1)
+    windows.position.pressed(3)
 }
 
 function saveFile()

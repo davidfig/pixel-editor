@@ -40,7 +40,7 @@ class PixelEditor extends Pixel
             while (fs.existsSync(filename))
             this.filename = filename
             this.name = path.basename(filename, '.json')
-            this.editor = { zoom: 10, current: 0, imageData: [{ undo: [], redo: [] }] }
+            this.editor = { zoom: 4, current: 0, imageData: [{ undo: [], redo: [] }] }
             Pixel.addFrame(0, this.getData(), sheet)
             sheet.render(() => this.dirty = true)
         }

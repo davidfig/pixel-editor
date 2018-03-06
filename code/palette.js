@@ -24,7 +24,7 @@ module.exports = class Palette extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ width: MIN_WIDTH, height: MIN_HEIGHT })
         this.win.open()
 
         this.content = this.win.content
@@ -235,21 +235,8 @@ module.exports = class Palette extends PIXI.Container
             })
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
         this.resize()
         if (State.getHidden(this.name))
         {

@@ -2,7 +2,6 @@ const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
 const Pixel = require(Settings.YY_PIXEL).Pixel
-const exists = require('exists')
 
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
@@ -10,8 +9,6 @@ const State = require('./state')
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
-const MAX_SCALE = 10
-const SCALE_DECREASE = -0.1
 const SPACING = 5
 
 const COLOR_SELECTED = 0x888888
@@ -21,9 +18,8 @@ module.exports = class Show extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
-
         this.content = this.win.content
         this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
@@ -31,43 +27,42 @@ module.exports = class Show extends PIXI.Container
         this.renderer.view.style.margin = '0 auto'
         this.renderer.view.style.width = '100%'
         this.renderer.view.style.height = '100%'
-
         this.pixels = this.addChild(new PIXI.Container())
         this.stateSetup()
         this.redraw()
     }
 
-    measure()
-    {
-        let scale = MAX_SCALE, x, y, largest
-        const windowWidth = this.win.width
-        const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
-        const data = PixelEditor.imageData
-        do
-        {
-            largest = 0, x = SPACING, y = SPACING
-            for (let i = 0; i < data.length; i++)
-            {
-                const width = data[i][0] * scale
-                const height = data[i][1] * scale
-                if (x + width + SPACING > windowWidth)
-                {
-                    x = SPACING
-                    y += largest + SPACING
-                    largest = 0
-                }
-                x += width + SPACING
-                largest = height > largest ? height : largest
-            }
-            scale += SCALE_DECREASE
-        }
-        while (scale > 0.1 && y + largest + SPACING > windowHeight)
-        this.scaler = scale
-    }
+    // measure()
+    // {
+    //     let scale = MAX_SCALE, x, y, largest
+    //     const windowWidth = this.win.width
+    //     const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
+    //     const data = PixelEditor.imageData
+    //     do
+    //     {
+    //         largest = 0, x = SPACING, y = SPACING
+    //         for (let i = 0; i < data.length; i++)
+    //         {
+    //             const width = data[i][0] * scale
+    //             const height = data[i][1] * scale
+    //             if (x + width + SPACING > windowWidth)
+    //             {
+    //                 x = SPACING
+    //                 y += largest + SPACING
+    //                 largest = 0
+    //             }
+    //             x += width + SPACING
+    //             largest = height > largest ? height : largest
+    //         }
+    //         scale += SCALE_DECREASE
+    //     }
+    //     while (scale > 0.1 && y + largest + SPACING > windowHeight)
+    //     this.scaler = scale
+    // }
 
     redraw()
     {
-        this.measure()
+        this.scaler = PixelEditor.zoom
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
@@ -89,7 +84,7 @@ module.exports = class Show extends PIXI.Container
                 largest = 0
             }
             pixel.position.set(x, y)
-            const number = this.pixels.addChild(new PIXI.Text(i, { fontSize: '1.5em', fontfamily: 'consolas' }))
+            const number = this.pixels.addChild(new PIXI.Text(i, { fill: '#eeeeee', fontSize: '1.5em', fontfamily: 'consolas' }))
             number.position.set(x + width / 2 - number.width / 2, y + height + SPACING)
             number.position.set(x + width - number.width, y)
             number.alpha = 0.25
@@ -116,6 +111,8 @@ module.exports = class Show extends PIXI.Container
         this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
         this.selector.width = target.width + Settings.BORDER
         this.selector.height = target.height + Settings.BORDER
+        this.renderer.view.style.height = this.height + 'px'
+        this.renderer.resize(this.win.width, this.height)
         this.renderer.render(this)
     }
 

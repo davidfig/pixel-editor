@@ -46,16 +46,17 @@ module.exports = class Animation extends PIXI.Container
     {
         const div = html({ parent: this.content, styles: { width: '100%' } })
         const buttons = html({ parent: div, styles: { margin: '1em auto 0.25em', textAlign: 'center' } })
-        this.play = button(buttons, BUTTONS.imageData[0], null, 'play animation')
+        const style = { opacity: 0.6 }
+        this.play = button(buttons, BUTTONS.imageData[0], style, 'play animation')
         clicked(this.play, () => this.change())
 
-        const newButton = button(buttons, BUTTONS.imageData[4], null, 'new animation')
+        const newButton = button(buttons, BUTTONS.imageData[4], style, 'new animation')
         clicked(newButton, () => this.createAnimation())
-        this.renameButton = button(buttons, BUTTONS.imageData[5], null, 'rename animation')
+        this.renameButton = button(buttons, BUTTONS.imageData[5], style, 'rename animation')
         clicked(this.renameButton, () => this.renameAnimation())
-        this.copyButton = button(buttons, BUTTONS.imageData[3], null, 'duplicate animation')
+        this.copyButton = button(buttons, BUTTONS.imageData[3], style, 'duplicate animation')
         clicked(this.copyButton, () => this.duplicateAnimation())
-        this.deleteButton = button(buttons, BUTTONS.imageData[2], null, 'delete animation')
+        this.deleteButton = button(buttons, BUTTONS.imageData[2], style, 'delete animation')
         clicked(this.deleteButton, () => this.removeAnimation())
 
         const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
@@ -131,7 +132,7 @@ module.exports = class Animation extends PIXI.Container
     disable(button, disable)
     {
         button.disabled = disable
-        button.style.opacity = disable ? 0.25 : 1
+        button.style.opacity = disable ? 0.25 : 0.6
     }
 
     draw()

@@ -24,6 +24,7 @@ module.exports = class Draw extends PIXI.Container
         {
             this.fps = new FPS()
         }
+        this.body = body
         this.ui = ui
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
@@ -58,7 +59,7 @@ module.exports = class Draw extends PIXI.Container
 
     setupViewport()
     {
-        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight }))
+        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
         this.vp
             .drag()
             .decelerate()

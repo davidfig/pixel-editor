@@ -457,10 +457,6 @@ module.exports = class Picker
 
     stateSetup()
     {
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.content.style.overflow = 'hidden'
         this.win.on('resize', () =>
         {

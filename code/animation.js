@@ -284,10 +284,6 @@ module.exports = class Animation extends PIXI.Container
 
     stateSetup()
     {
-        if (State.getHidden(this.name))
-        {
-            this.win.win.display = 'none'
-        }
         this.win.on('resize', () =>
         {
             this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)

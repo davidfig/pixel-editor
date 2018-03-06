@@ -170,18 +170,8 @@ module.exports = class Coords
         this.cursorSizeYEdit.object.innerText = State.cursorSizeY
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-        }
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y))
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)

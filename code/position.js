@@ -17,7 +17,7 @@ module.exports = class Position
         this.draw = draw
         this.buttons = []
         this.win = this.ui.createWindow({ minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
-
+        this.win.content.style.display = 'flex'
         for (let i = 0; i < BUTTONS; i++)
         {
             const one = button(this.win.content, ICONS.imageData[i], null, TIPS[i])

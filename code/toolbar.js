@@ -108,13 +108,8 @@ module.exports = class Toolbar
         this.selected = this.buttons[index]
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.win.on('move-end', () => State.set())
         State.on('tool', this.changed, this)
     }

@@ -131,21 +131,6 @@ function keydown(e)
     // console.log(code)
 }
 
-function toggleWindow(name)
-{
-    State.toggleHidden(name)
-    if (State.getHidden(name))
-    {
-        windows[name].visible = false
-    }
-    else
-    {
-        windows[name].visible = true
-        windows[name].layout()
-    }
-    ui.dirty = true
-}
-
 function save(filename)
 {
     if (filename)
@@ -239,7 +224,6 @@ function exportFile()
 }
 
 module.exports = {
-    toggleWindow,
     saveFile,
     openFile,
     newFile,

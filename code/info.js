@@ -177,10 +177,6 @@ module.exports = class Info
 
     stateSetup()
     {
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.win.on('move-end', () => State.set())
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)

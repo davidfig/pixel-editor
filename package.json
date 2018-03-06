@@ -24,7 +24,7 @@
     "pixi-viewport": "^1.4.0",
     "pixi.js": "^4.7.0",
     "point-in-triangle": "^1.0.1",
-    "simple-window-manager": "^0.12.1",
+    "simple-window-manager": "^0.13.2",
     "tinycolor2": "^1.4.1",
     "tippy.js": "^2.2.3",
     "yy-color": "^1.0.7",

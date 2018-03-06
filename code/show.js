@@ -244,10 +244,6 @@ module.exports = class Show extends PIXI.Container
     stateSetup()
     {
         this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.win.on('resize', () => this.resize())
         this.win.on('resize-end', () => State.set())
         this.win.on('move-end', () => State.set())

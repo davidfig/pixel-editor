@@ -18,6 +18,7 @@ const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
 const Position = require('./position')
+const Manager = require('./manager')
 
 let ui, loading = 1, windows = {}
 
@@ -29,14 +30,13 @@ function afterLoad()
         return
     }
 
-    Menu()
-
     if (!Settings.NO_LOAD && State.lastFile)
     {
         PixelEditor.load(State.lastFile)
     }
 
     create()
+    Menu()
 }
 
 function create()
@@ -60,12 +60,43 @@ function create()
     windows.info = new Info(ui)
     windows.animation = new Animation(ui)
     windows.position = new Position(ui, windows.draw)
+    windows.manager = new Manager(ui)
 
+    reposition()
+
+    document.body.addEventListener('keydown', keydown)
+}
+
+function reposition()
+{
     State.position(ui)
     windows.show.resize()
     windows.palette.resize()
+}
 
-    document.body.addEventListener('keydown', keydown)
+function resetWindows()
+{
+    State.positionDefault()
+    State.save()
+    reposition()
+}
+
+function getHidden(name)
+{
+    return windows[name].win.closed
+}
+
+function toggleHidden(name)
+{
+    if (windows[name].win.closed)
+    {
+        windows[name].win.open()
+    }
+    else
+    {
+        windows[name].win.close()
+    }
+    State.set()
 }
 
 function keydown(e)
@@ -140,21 +171,6 @@ function keydown(e)
     {
         windows[window].keydown(e)
     }
-}
-
-function toggleWindow(name)
-{
-    State.toggleHidden(name)
-    if (State.getHidden(name))
-    {
-        windows[name].visible = false
-    }
-    else
-    {
-        windows[name].visible = true
-        windows[name].layout()
-    }
-    ui.dirty = true
 }
 
 function save(filename)
@@ -252,7 +268,6 @@ function exportFile()
 }
 
 module.exports = {
-    toggleWindow,
     saveFile,
     openFile,
     newFile,
@@ -263,7 +278,11 @@ module.exports = {
     duplicate,
     rotate,
     flipHorizontal,
-    flipVertical
+    flipVertical,
+    windows,
+    getHidden,
+    toggleHidden,
+    resetWindows
 }
 
 Sheet.load(afterLoad)

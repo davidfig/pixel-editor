@@ -2,7 +2,6 @@ const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
 const Pixel = require(Settings.YY_PIXEL).Pixel
-const exists = require('exists')
 const clicked = require('clicked')
 
 const html = require('./html')
@@ -38,7 +37,7 @@ module.exports = class Animation extends PIXI.Container
         const canvas = html({ parent: this.content, styles: { width: '100%' } })
         canvas.appendChild(this.renderer.view)
         this.createButtons()
-        this.stateSetup('animation')
+        this.stateSetup()
         this.draw()
         PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
         this.win.open()
@@ -283,25 +282,8 @@ module.exports = class Animation extends PIXI.Container
         }
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
-        if (State.getHidden(this.name))
-        {
-            this.win.win.display = 'none'
-        }
         PixelEditor.on('changed', () => this.draw())
         State.on('last-file', () =>
         {

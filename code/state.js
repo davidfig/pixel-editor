@@ -16,6 +16,10 @@ class State extends Events
         this.filename = path.join(app.getPath('userData'), 'state.json')
         try
         {
+            if (Settings.TEST_CLEAN_OPENING)
+            {
+                throw 'testing clean opening'
+            }
             this.state = jsonfile.readFileSync(this.filename)
             if (typeof this.state.foreground !== 'string')
             {
@@ -25,10 +29,14 @@ class State extends Events
             {
                 this.state.background = '00000000'
             }
+            if (!this.state.manager)
+            {
+                this.state.manager = { zoom: 4, images: true, alphabetical: true }
+            }
         }
         catch (err)
         {
-            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [] }
+            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
         }
         this.state.lastFiles = this.state.lastFiles || []
         this.state.relative = this.state.relative || 'top-left'
@@ -42,8 +50,9 @@ class State extends Events
             { x: window.innerWidth - SPACING - 200, y: SPACING * 2 + 300, width: 200, height: 150 }, // palette
             { x: window.innerWidth - SPACING - 200, y: SPACING, width: 200, height: 300 }, // picker
             { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING - 205 }, // info
-            { x: window.innerWidth - SPACING * 2 - 200 - 235 + (235 / 2 - 50 / 2), y: SPACING - (226 / 2 - 50 / 2 - 3), minimized: true, lastMinimized: { left: window.innerWidth - SPACING * 2 - 50 + 'px', top: SPACING + 'px' }, minimized: { x: window.innerWidth - SPACING * 2 - 235 - 200, y: SPACING, width: 230, height: 226 }}, // animation (230, 226)
-            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING * 2 - 205 - 60 } // position (195, 60)
+            { x: window.innerWidth - SPACING * 2 - 235 - 200, y: SPACING, width: 230, height: 226 }, // animation (230, 226)
+            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING * 2 - 205 - 60 }, // position (195, 60)
+            { x: SPACING * 2 + 45, y: SPACING, width: 194, height: 250, closed: true }
         ]
     }
 
@@ -107,17 +116,6 @@ class State extends Events
     setHidden(name, hidden)
     {
         this.state.windows[name].hidden = hidden
-        this.save()
-    }
-
-    getHidden(name)
-    {
-        return false//this.state.windows[name].hidden
-    }
-
-    toggleHidden(name)
-    {
-        this.state.windows[name].hidden = !this.state.windows[name].hidden
         this.save()
     }
 
@@ -307,6 +305,11 @@ class State extends Events
     set lastFiles(value)
     {
         this.state.lastFiles = value
+    }
+
+    get manager()
+    {
+        return this.state.manager
     }
 
     update()

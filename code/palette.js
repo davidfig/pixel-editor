@@ -238,10 +238,6 @@ module.exports = class Palette extends PIXI.Container
     stateSetup()
     {
         this.resize()
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
         this.win.on('resize', () => this.resize())
         this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))

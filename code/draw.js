@@ -32,7 +32,7 @@ module.exports = class Draw extends PIXI.Container
         this.renderer.view.style.margin = '0 auto'
         this.renderer.view.style.width = '100%'
         this.renderer.view.style.height = '100%'
-        this.renderer.resize(window.innerWidth, window.innerHeight)
+        this.resize()
 
         this.setupViewport()
         this.blocks = this.vp.addChild(new PIXI.Container())
@@ -40,9 +40,20 @@ module.exports = class Draw extends PIXI.Container
         this.grid = this.vp.addChild(new PIXI.Graphics())
         this.cursorBlock = this.vp.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
+        window.addEventListener('resize', () => this.resize())
         document.body.addEventListener('keyup', (e) => this.keyup(e))
         this.redraw()
         PIXI.ticker.shared.add(() => this.update())
+    }
+
+    resize()
+    {
+        this.renderer.resize(window.innerWidth, window.innerHeight)
+        if (this.vp)
+        {
+            this.vp.resize(window.innerWidth, window.innerHeight)
+        }
+        this.renderer.render(this)
     }
 
     setupViewport()

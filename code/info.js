@@ -173,6 +173,7 @@ module.exports = class Info
         this.cursorYEdit.object.innerText = y
         this.cursorSizeXEdit.object.innerText = State.cursorSizeX
         this.cursorSizeYEdit.object.innerText = State.cursorSizeY
+        this.zoomEdit.object.innerText = PixelEditor.zoom
     }
 
     stateSetup()

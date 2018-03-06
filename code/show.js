@@ -62,12 +62,11 @@ module.exports = class Show extends PIXI.Container
 
     redraw()
     {
-        this.scaler = PixelEditor.zoom
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
         const data = PixelEditor.imageData
-        const scale = this.scaler
+        const scale = PixelEditor.zoom
         let x = SPACING, y = SPACING, largest = 0
         for (let i = 0; i < data.length; i++)
         {

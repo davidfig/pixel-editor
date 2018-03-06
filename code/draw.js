@@ -687,15 +687,15 @@ module.exports = class Draw extends PIXI.Container
         {
             switch (code)
             {
-                case 88:
-                    this.cut()
-                    break
-                case 67:
-                    this.copy()
-                    break
-                case 86:
-                    this.paste()
-                    break
+                // case 88:
+                //     this.cut()
+                //     break
+                // case 67:
+                //     this.copy()
+                //     break
+                // case 86:
+                //     this.paste()
+                //     break
                 case 90:
                     if (this.shift)
                     {

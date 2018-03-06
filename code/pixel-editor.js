@@ -12,6 +12,8 @@ const sheet = require('./pixel-sheet')
 const DEFAULT = [15, 15]
 const UNDO_SIZE = 50
 
+const DEFAULT_ZOOM = 4
+
 class PixelEditor extends Pixel
 {
     constructor(filename)
@@ -39,7 +41,7 @@ class PixelEditor extends Pixel
             while (fs.existsSync(filename))
             this.filename = filename
             this.name = path.basename(filename, '.json')
-            this.editor = { zoom: 4, current: 0, imageData: [{ undo: [], redo: [] }] }
+            this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
             Pixel.addFrame(0, this.getData(), sheet)
             sheet.render(() => this.dirty = true)
         }
@@ -614,7 +616,7 @@ class PixelEditor extends Pixel
         {
             this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
             this.editor.current = 0
-            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : 10
+            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
             for (let frame of this.editor.imageData)
             {
                 if (frame.undo.length > UNDO_SIZE)

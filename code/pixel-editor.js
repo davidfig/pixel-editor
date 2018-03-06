@@ -21,7 +21,6 @@ class PixelEditor extends Pixel
         this.tempCanvas = document.createElement('canvas')
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
         this.create(filename)
-        this.time = 0
         setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 

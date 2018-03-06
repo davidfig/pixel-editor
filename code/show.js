@@ -114,6 +114,10 @@ module.exports = class Show extends PIXI.Container
         this.renderer.view.style.height = this.height + 'px'
         this.renderer.resize(this.win.width, this.height)
         this.renderer.render(this)
+        if (this.selector.y < this.content.scrollTop || this.selector.y + this.selector.height > this.content.scrollTop + this.content.offsetHeight)
+        {
+            this.content.scrollTop = this.selector.y
+        }
     }
 
     down(x, y, data)

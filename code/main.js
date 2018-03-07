@@ -22,7 +22,7 @@ const Export = require('./export')
 const Position = require('./position')
 const Manager = require('./manager')
 
-let ui, loading = 1, windows = {}
+let ui, loading = 2, windows = {}
 
 function afterLoad()
 {
@@ -289,4 +289,8 @@ module.exports = {
 
 // Sheet.load(afterLoad)
 
-window.onload = () => Sheet.load(afterLoad)
+window.onload = () =>
+{
+    State.load(afterLoad)
+    Sheet.load(afterLoad)
+}

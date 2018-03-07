@@ -28,18 +28,25 @@ function openDirDialog(callback)
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] }, callback)
 }
 
-function readState()
+function readState(callback)
 {
     const app = electron.remote ? electron.remote.app : electron.app
-    this.filename = path.join(app.getPath('userData'), 'state.json')
+    const filename = path.join(app.getPath('userData'), 'state.json')
     try
     {
-        return jsonfile.readFileSync(this.filename)
+        callback(jsonfile.readFileSync(filename))
     }
     catch (err)
     {
-        return null
+        callback()
     }
+}
+
+function writeState(data)
+{
+    const app = electron.remote ? electron.remote.app : electron.app
+    const filename = path.join(app.getPath('userData'), 'state.json')
+    jsonfile.writeFileSync(filename, data)
 }
 
 function getTempFilename()
@@ -74,6 +81,7 @@ module.exports = {
     openDirDialog,
     saveFileDialog,
     readState,
+    writeState,
     getTempFilename,
     readJSON,
     writeJSON,

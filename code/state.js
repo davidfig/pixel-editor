@@ -1,48 +1,54 @@
 const Events = require('eventemitter3')
 
 const File = require('./config/file')
-
 const Settings = require('./settings')
-
-const SPACING = 5
 
 class State extends Events
 {
     constructor()
     {
         super()
-        this.state = File.readState()
-        if (!this.state || Settings.TEST_CLEAN_OPENING)
+    }
+
+    load(callback)
+    {
+        File.readState((value) =>
         {
-            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
-        }
-        if (typeof this.state.foreground !== 'string')
-        {
-            this.state.foreground = 'ffffffff'
-        }
-        if (typeof this.state.background !== 'string')
-        {
-            this.state.background = '00000000'
-        }
-        if (!this.state.manager)
-        {
-            this.state.manager = { zoom: 4, images: true, alphabetical: true }
-        }
-        this.state.lastFiles = this.state.lastFiles || []
-        this.state.relative = this.state.relative || 'top-left'
+            this.state = value
+            if (!this.state || Settings.TEST_CLEAN_OPENING)
+            {
+                this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
+            }
+            if (typeof this.state.foreground !== 'string')
+            {
+                this.state.foreground = 'ffffffff'
+            }
+            if (typeof this.state.background !== 'string')
+            {
+                this.state.background = '00000000'
+            }
+            if (!this.state.manager)
+            {
+                this.state.manager = { zoom: 4, images: true, alphabetical: true }
+            }
+            this.state.lastFiles = this.state.lastFiles || []
+            this.state.relative = this.state.relative || 'top-left'
+            callback()
+        })
     }
 
     positionDefault()
     {
+        const space = Settings.BORDER
         this.state.windows = [
-            { x: SPACING, y: window.innerHeight - SPACING - 200, width: 200, height: 200 }, // show
-            { x: SPACING, y: SPACING }, // toolbar
-            { x: window.innerWidth - SPACING - 200, y: SPACING * 2 + 300, width: 200, height: 150 }, // palette
-            { x: window.innerWidth - SPACING - 200, y: SPACING, width: 200, height: 300 }, // picker
-            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING - 205 }, // info
-            { x: window.innerWidth - SPACING * 2 - 235 - 200, y: SPACING, width: 230, height: 226 }, // animation (230, 226)
-            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING * 2 - 205 - 60 }, // position (195, 60)
-            { x: SPACING * 2 + 45, y: SPACING, width: 194, height: 250, closed: true }
+            { x: space, y: window.innerHeight - space - 200, width: 200, height: 200 }, // show
+            { x: space, y: space }, // toolbar
+            { x: window.innerWidth - space - 200, y: space * 2 + 300, width: 200, height: 150 }, // palette
+            { x: window.innerWidth - space - 200, y: space, width: 200, height: 300 }, // picker
+            { x: window.innerWidth - space - 200, y: window.innerHeight - space - 205 }, // info
+            { x: window.innerWidth - space * 2 - 235 - 200, y: space, width: 230, height: 226 }, // animation (230, 226)
+            { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60 }, // position (195, 60)
+            { x: space * 2 + 45, y: space, width: 194, height: 250, closed: true }
         ]
     }
 
@@ -306,7 +312,7 @@ class State extends Events
     {
         if (this.dirty)
         {
-            File.writeJSON(this.filename, this.state)
+            File.writeState(this.state)
             this.dirty = false
         }
     }

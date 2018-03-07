@@ -1,10 +1,9 @@
-const fs = require('fs')
 const path = require('path')
-const jsonfile = require('jsonfile')
+
 const tooltip = require('yy-tooltip')
 const clicked = require('clicked')
-const remote = require('electron').remote
 
+const File = require('./config/file')
 const PixelEditor = require('./pixel-editor')
 const locale = require('./locale')
 const State = require('./state')
@@ -34,7 +33,7 @@ module.exports = class Manager
     {
         clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
         {
-            remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory']}, (dir) =>
+            File.openDirDialog((dir) =>
             {
                 if (dir && dir.length >= 1)
                 {
@@ -100,18 +99,18 @@ module.exports = class Manager
         dir = dir || path.dirname(PixelEditor.filename)
         if (dir)
         {
-            const files = fs.readdirSync(dir)
+            const files = File.readDir(dir) || []
             let images = []
             for (let file of files)
             {
                 if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
                 {
                     const filename = path.join(dir, file)
-                    const data = jsonfile.readFileSync(filename)
+                    const data = File.readJSON(filename)
                     if (data.imageData)
                     {
                         const image = new Image()
-                        image.sort = State.manager.alphabetical ? data.name : fs.statSync(filename).mtimeMs
+                        image.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
                         image.src = 'data:image/png;base64,' + data.imageData[0][2]
                         image.width = data.imageData[0][0]
                         image.height = data.imageData[0][1]
@@ -149,17 +148,17 @@ module.exports = class Manager
         if (dir)
         {
             let entries = []
-            const files = fs.readdirSync(dir)
+            const files = File.readDir(dir) || []
             for (let file of files)
             {
                 const filename = path.join(dir, file)
                 if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
                 {
-                    const data = jsonfile.readFileSync(filename)
+                    const data = File.readJSON(filename)
                     if (data.imageData)
                     {
                         const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                        entry.sort = State.manager.alphabetical ? data.name : fs.statSync(filename).mtimeMs
+                        entry.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
                         entries.push(entry)
                         clicked(entry, () => { PixelEditor.load(filename) })
                         entry.addEventListener('mouseenter', () =>

@@ -1,8 +1,8 @@
-const Settings = require('./settings')
-
 const PIXI = require('pixi.js')
-const Pixel = require(Settings.YY_PIXEL).Pixel
 const clicked = require('clicked')
+
+const libraries = require('./config/libraries')
+const Pixel = libraries.Pixel
 
 const html = require('./html')
 const button = require('./button')

@@ -2,7 +2,9 @@ const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
 const FPS = require('yy-fps')
-const Viewport = require(Settings.VIEWPORT)
+
+const libraries = require('./config/libraries')
+const Viewport = libraries.Viewport
 
 const Sheet = require('./sheet')
 const State = require('./state')

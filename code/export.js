@@ -1,9 +1,8 @@
-const remote = require('electron').remote
-const path = require('path')
-const fs = require('fs')
 const PIXI = require('pixi.js')
 const clicked = require('clicked')
+const path = require('path')
 
+const File = require('./config/file')
 const sheet = require('./pixel-sheet')
 const html = require('./html')
 
@@ -51,11 +50,7 @@ module.exports = class Export
 
     OK()
     {
-        remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
-            title: 'Export PNG file',
-            defaultPath: State.lastPath,
-            filters: [{ name: 'PNG', extensions: ['png'] }]
-        }, this.exportFile.bind(this))
+        File.exportFileDialog(State.lastPath, this.exportFile.bind(this))
     }
 
     exportFile(name)
@@ -74,7 +69,7 @@ module.exports = class Export
             sprite.anchor.set(0)
             renderer.render(sprite)
             const data = renderer.view.toDataURL().replace(/^data:image\/\w+;base64,/, '')
-            fs.writeFileSync(name, new Buffer(data, 'base64'))
+            File.writeFile(name, new Buffer(data, 'base64'))
         }
         this.win.close()
     }

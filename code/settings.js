@@ -1,22 +1,10 @@
 module.exports = {
 
-    DEBUG: false,
+    DEBUG: true,
     NO_LOAD: false,
     TEST_CLEAN_OPENING: false,
 
     SAVE_INTERVAL: 500,
-
-    // YY_RENDERSHEET: '../../components/rendersheet/',
-    YY_RENDERSHEET: 'yy-rendersheet',
-
-    // YY_PIXEL: '../../components/pixel/',
-    YY_PIXEL: 'yy-pixel',
-
-    // VIEWPORT: '../../components/pixi-viewport',
-    VIEWPORT: 'pixi-viewport',
-
-    // WINDOW_MANAGER: '../../components/window-manager',
-    WINDOW_MANAGER: 'simple-window-manager',
 
     BORDER: 5
 }

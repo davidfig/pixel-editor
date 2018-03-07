@@ -1,8 +1,9 @@
-const Settings = require('./settings')
-
 const PIXI = require('pixi.js')
-const Pixel = require(Settings.YY_PIXEL).Pixel
 
+const libraries = require('./config/libraries')
+const Pixel = libraries.Pixel
+
+const Settings = require('./settings')
 const sheet = require('./pixel-sheet')
 const PixelEditor = require('./pixel-editor')
 const State = require('./state')

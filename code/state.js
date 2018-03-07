@@ -1,7 +1,6 @@
-const electron = require('electron')
-const path = require('path')
-const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
+
+const File = require('./config/file')
 
 const Settings = require('./settings')
 
@@ -12,31 +11,22 @@ class State extends Events
     constructor()
     {
         super()
-        const app = electron.remote ? electron.remote.app : electron.app
-        this.filename = path.join(app.getPath('userData'), 'state.json')
-        try
-        {
-            if (Settings.TEST_CLEAN_OPENING)
-            {
-                throw 'testing clean opening'
-            }
-            this.state = jsonfile.readFileSync(this.filename)
-            if (typeof this.state.foreground !== 'string')
-            {
-                this.state.foreground = 'ffffffff'
-            }
-            if (typeof this.state.background !== 'string')
-            {
-                this.state.background = '00000000'
-            }
-            if (!this.state.manager)
-            {
-                this.state.manager = { zoom: 4, images: true, alphabetical: true }
-            }
-        }
-        catch (err)
+        this.state = File.readState()
+        if (!this.state || Settings.TEST_CLEAN_OPENING)
         {
             this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
+        }
+        if (typeof this.state.foreground !== 'string')
+        {
+            this.state.foreground = 'ffffffff'
+        }
+        if (typeof this.state.background !== 'string')
+        {
+            this.state.background = '00000000'
+        }
+        if (!this.state.manager)
+        {
+            this.state.manager = { zoom: 4, images: true, alphabetical: true }
         }
         this.state.lastFiles = this.state.lastFiles || []
         this.state.relative = this.state.relative || 'top-left'
@@ -316,7 +306,7 @@ class State extends Events
     {
         if (this.dirty)
         {
-            jsonfile.writeFileSync(this.filename, this.state)
+            File.writeJSON(this.filename, this.state)
             this.dirty = false
         }
     }

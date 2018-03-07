@@ -1,6 +1,5 @@
-const Settings = require('./settings')
-
-const RenderSheet = require(Settings.YY_RENDERSHEET)
+const libraries = require('./config/libraries')
+const RenderSheet = libraries.RenderSheet
 const Color = require('yy-color')
 
 const COLOR = 0x999999

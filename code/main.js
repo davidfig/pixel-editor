@@ -1,9 +1,11 @@
 const Settings = require('./settings')
 
-const remote = require('electron').remote
-const path = require('path')
-const ClipBoard = require('electron').clipboard
-const WM = require(Settings.WINDOW_MANAGER)
+const libraries = require('./config/libraries')
+const WM = libraries.WM
+
+const File = require('./config/file')
+const clipboard = require('./config/clipboard')
+const Misc = require('./config/misc')
 
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
@@ -13,7 +15,7 @@ const Sheet = require('./sheet')
 const Draw = require('./draw')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
-const Menu = require('./menu')
+const Menu = require('./config/menu')
 const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
@@ -108,7 +110,7 @@ function keydown(e)
 
     if (e.ctrlKey && e.shiftKey && code === 73)
     {
-        remote.getCurrentWindow().toggleDevTools()
+        Misc.toggleDevTools()
     }
 
     this.shift = e.shiftKey
@@ -151,7 +153,7 @@ function keydown(e)
                 newFile()
                 break
             case 191: // '/' to add to clipboard the data indexed by color
-                ClipBoard.writeText(PixelEditor.export())
+                clipboard.writeText(PixelEditor.export())
                 break
             case 188: // ,
                 rotate(true)
@@ -224,12 +226,12 @@ function newFile()
 
 function saveFile()
 {
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, save)
+    File.saveFileDialog(State.lastPath, save)
 }
 
 function openFile()
 {
-    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, load)
+    File.openFileDialog(State.lastPath, load)
 }
 
 function remove()
@@ -285,4 +287,6 @@ module.exports = {
     resetWindows
 }
 
-Sheet.load(afterLoad)
+// Sheet.load(afterLoad)
+
+window.onload = () => Sheet.load(afterLoad)

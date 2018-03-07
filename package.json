@@ -6,12 +6,16 @@
   "scripts": {
     "start": "electron . --disable-gpu",
     "build": "electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.15 --icon=icon.ico",
-    "icon": "electron-icon-maker -i assets/icon.png -o assets"
+    "icon": "electron-icon-maker -i assets/icon.png -o assets",
+    "test": "./node_modules/.bin/budo code/main.js:index.js --dir html",
+    "electron-ready": "cp -f code/electron/*.js code/config/"
   },
   "repository": "https://github.com/davidfig/pixel-editor",
   "author": "David Figatner",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "budo": "^11.2.0"
+  },
   "dependencies": {
     "calc-fontsize": "^1.1.0",
     "clicked": "^1.1.0",
@@ -20,6 +24,7 @@
     "exists": "^1.0.1",
     "fontfaceobserver": "^2.0.9",
     "jsonfile": "^4.0.0",
+    "path": "^0.12.7",
     "pixi-ease": "^0.18.0",
     "pixi-viewport": "^1.4.0",
     "pixi.js": "^4.7.0",

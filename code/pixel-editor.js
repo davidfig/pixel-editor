@@ -1,9 +1,9 @@
-const remote = require('electron').remote
-const fs = require('fs')
-const jsonfile = require('jsonfile')
 const path = require('path')
+
 const Settings = require('./settings')
-const Pixel = require(Settings.YY_PIXEL).Pixel
+const libraries = require('./config/libraries')
+const Pixel = libraries.Pixel
+const File = require('./config/file')
 const exists = require('exists')
 const Color = require('yy-color')
 
@@ -32,15 +32,8 @@ class PixelEditor extends Pixel
         {
             this.imageData = [[DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]]
             this.animations = { 'idle': [[0, 0]] }
-            let i = 0
-            do
-            {
-                i++
-                filename = path.join(remote.app.getPath('temp'), 'pixel-' + i + '.json')
-            }
-            while (fs.existsSync(filename))
-            this.filename = filename
-            this.name = path.basename(filename, '.json')
+            this.filename = File.getTempFilename()
+            this.name = path.basename(this.filename, '.json')
             this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
             Pixel.addFrame(0, this.getData(), sheet)
             sheet.render(() => this.dirty = true)
@@ -596,7 +589,7 @@ class PixelEditor extends Pixel
         filename = filename || this.filename
         try
         {
-            const load = jsonfile.readFileSync(filename)
+            const load = File.readJSON(filename)
             if (!load.imageData.length || !load.animations || load.imageData[0].length !== 3)
             {
                 return
@@ -614,7 +607,7 @@ class PixelEditor extends Pixel
         this.filename = filename
         try
         {
-            this.editor = jsonfile.readFileSync(this.filename.replace('.json', '.editor.json'))
+            this.editor = File.readJSON(this.filename.replace('.json', '.editor.json'))
             this.editor.current = 0
             this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
             for (let frame of this.editor.imageData)
@@ -646,10 +639,10 @@ class PixelEditor extends Pixel
     {
         const changed = exists(filename) && this.filename !== filename
         this.filename = filename || this.filename
-        jsonfile.writeFileSync(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
+        File.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
         if (this.editor)
         {
-            jsonfile.writeFileSync(this.filename.replace('.json', '.editor.json'), this.editor)
+            File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         }
         if (changed)
         {

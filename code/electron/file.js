@@ -49,7 +49,7 @@ function writeState(data)
     jsonfile.writeFileSync(filename, data)
 }
 
-function getTempFilename()
+function getTempFilename(callback)
 {
     let filename, i = 0
     do
@@ -58,12 +58,12 @@ function getTempFilename()
         filename = path.join(remote.app.getPath('temp'), 'pixel-' + i + '.json')
     }
     while (fs.existsSync(filename))
-    return filename
+    callback(filename)
 }
 
-function readJSON(filename)
+function readJSON(filename, callback)
 {
-    return jsonfile.readFileSync(filename)
+    callback(jsonfile.readFileSync(filename))
 }
 
 function writeJSON(filename, json)

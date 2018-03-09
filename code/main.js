@@ -31,14 +31,11 @@ function afterLoad()
     {
         return
     }
-
-    if (!Settings.NO_LOAD && State.lastFile)
+    PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile, () =>
     {
-        PixelEditor.load(State.lastFile)
-    }
-
-    create()
-    Menu()
+        create()
+        Menu()
+    })
 }
 
 function create()
@@ -54,6 +51,9 @@ function create()
         snap: { }
     })
 
+    ui.win.style.position = 'absolute'
+    ui.win.style.margin = '1.25em 0 0 0'
+
     windows.draw = new Draw(ui.overlay, ui)
     windows.show = new Show(ui)
     windows.toolbar = new Toolbar(ui)
@@ -66,7 +66,7 @@ function create()
 
     reposition()
 
-    document.body.addEventListener('keydown', keydown)
+    // document.body.addEventListener('keydown', keydown)
 }
 
 function reposition()

@@ -1,7 +1,6 @@
 /* Copyright (c) 2018 YOPEY YOPEY LLC */
 
-// const Tooltip = require('yy-tooltip')
-const Tooltip = require('../../components/tooltip')
+const Tooltip = require('./config/libraries').Tooltip
 
 const html = require('./html')
 

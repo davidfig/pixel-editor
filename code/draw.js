@@ -68,7 +68,8 @@ module.exports = class Draw extends PIXI.Container
             .pinch()
             .wheel()
         const vp = PixelEditor.viewport
-        if (vp)
+        // debugger
+        if (false && vp)
         {
             this.vp.x = vp.x
             this.vp.y = vp.y

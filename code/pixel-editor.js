@@ -16,33 +16,40 @@ const DEFAULT_ZOOM = 4
 
 class PixelEditor extends Pixel
 {
-    constructor(filename)
+    constructor()
     {
         super()
         this.sheet = sheet
         this.tempCanvas = document.createElement('canvas')
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
-        this.create(filename)
-        setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
-    create(filename)
+    create(filename, callback)
     {
         if (!filename)
         {
             this.imageData = [[DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]]
             this.animations = { 'idle': [[0, 0]] }
-            this.filename = File.getTempFilename()
-            this.name = path.basename(this.filename, '.json')
-            this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
-            Pixel.addFrame(0, this.getData(), sheet)
-            sheet.render(() => this.dirty = true)
+            File.getTempFilename((filename) =>
+            {
+                this.filename = filename
+                this.name = path.basename(this.filename, '.json')
+                this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
+                Pixel.addFrame(0, this.getData(), sheet)
+                sheet.render(() =>
+                {
+                    this.dirty = true
+                    callback()
+                })
+                setInterval(() => this.update(), Settings.SAVE_INTERVAL)
+            })
         }
         else
         {
             this.filename = filename
-            this.load()
             this.name = this.name || path.basename(filename, '.json')
+            this.load(callback)
+            setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
     }
 
@@ -584,55 +591,55 @@ class PixelEditor extends Pixel
         }
     }
 
-    load(filename)
+    afterLoad(load, callback)
     {
-        filename = filename || this.filename
-        try
+        if (!load || !load.imageData.length || !load.animations || load.imageData[0].length !== 3)
         {
-            const load = File.readJSON(filename)
-            if (!load.imageData.length || !load.animations || load.imageData[0].length !== 3)
-            {
-                return
-            }
-            this.imageData = load.imageData
-            this.animations = load.animations
-            this.name = load.name
-            this.render(true)
-            sheet.render(() => this.emit('changed'))
-        }
-        catch (e)
-        {
+            callback()
             return
         }
-        this.filename = filename
-        try
+        this.imageData = load.imageData
+        this.animations = load.animations
+        this.name = load.name
+        this.render(true)
+        sheet.render(() => this.emit('changed'))
+        File.readJSON(this.filename.replace('.json', '.editor.json'), (editor) =>
         {
-            this.editor = File.readJSON(this.filename.replace('.json', '.editor.json'))
-            this.editor.current = 0
-            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
-            for (let frame of this.editor.imageData)
+            if (editor)
             {
-                if (frame.undo.length > UNDO_SIZE)
+                this.editor = editor
+                this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
+                for (let frame of this.editor.imageData)
                 {
-                    while (frame.undo.length > UNDO_SIZE)
+                    if (frame.undo.length > UNDO_SIZE)
                     {
-                        frame.undo.shift()
+                        while (frame.undo.length > UNDO_SIZE)
+                        {
+                            frame.undo.shift()
+                        }
                     }
                 }
             }
-        }
-        catch (e)
-        {
-            this.editor = {}
-            this.editor.imageData = []
-            for (let i = 0; i < this.imageData.length; i++)
+            else
             {
-                this.editor.imageData.push({ undo: [], redo: [] })
+                this.editor = {}
+                this.editor.imageData = []
+                for (let i = 0; i < this.imageData.length; i++)
+                {
+                    this.editor.imageData.push({ undo: [], redo: [] })
+                }
+                this.editor.current = 0
+                this.editor.zoom = 10
+                this.dirty = true
             }
-            this.editor.current = 0
-            this.editor.zoom = 10
-            this.dirty = true
-        }
+            callback()
+        })
+    }
+
+    load(filename, callback)
+    {
+        this.filename = filename = filename || this.filename
+        File.readJSON(filename, (load) => this.afterLoad(load, callback))
     }
 
     save(filename)
@@ -640,10 +647,7 @@ class PixelEditor extends Pixel
         const changed = exists(filename) && this.filename !== filename
         this.filename = filename || this.filename
         File.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
-        if (this.editor)
-        {
-            File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
-        }
+        File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         if (changed)
         {
             Pixel.add(this.getData(), sheet)

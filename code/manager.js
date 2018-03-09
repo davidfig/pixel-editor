@@ -1,8 +1,7 @@
 const path = require('path')
-
-const tooltip = require('yy-tooltip')
 const clicked = require('clicked')
 
+const Tooltip = require('./config/libraries').Tooltip
 const File = require('./config/file')
 const PixelEditor = require('./pixel-editor')
 const locale = require('./locale')
@@ -127,7 +126,7 @@ module.exports = class Manager
                             image.style.backgroundColor = 'transparent'
                         })
                         clicked(image, () => { PixelEditor.load(filename)} )
-                        new tooltip(image, data.name)
+                        new Tooltip(image, data.name)
                         images.push(image)
                     }
                 }
@@ -171,7 +170,7 @@ module.exports = class Manager
                             entry.style.backgroundColor = 'transparent'
                             entry.style.color = ''
                         })
-                        new tooltip(entry, filename)
+                        new Tooltip(entry, filename)
                     }
                 }
             }

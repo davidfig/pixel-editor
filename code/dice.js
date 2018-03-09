@@ -1,5 +1,5 @@
 const PIXI = require('pixi.js')
-const Tooltip = require('yy-tooltip')
+const Tooltip = require('./config/libraries').Tooltip
 
 const State = require('./state')
 

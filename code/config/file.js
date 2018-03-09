@@ -42,18 +42,47 @@ function writeState(data)
     localforage.setItem(STATE_FILENAME, JSON.stringify(data))
 }
 
-function getTempFilename()
+function getTempFilename(callback)
 {
-    return 'temp.json'
+    localforage.keys()
+        .then((keys) =>
+        {
+            function search(filename)
+            {
+                for (let key of keys)
+                {
+                    if (key === filename)
+                    {
+                        return true
+                    }
+                }
+                return false
+            }
+
+            let filename, i = 0
+            do
+            {
+                i++
+                filename = 'pixel-' + i + '.json'
+            }
+            while (search(filename))
+            callback(filename)
+        }).catch((err) =>
+        {
+            console.error(err)
+        })
 }
 
-function readJSON()
+function readJSON(filename, callback)
 {
-    return null
+    localforage.getItem(filename)
+        .then((value) => callback(JSON.parse(value)))
+        .catch(() => callback())
 }
 
-function writeJSON(filename, json)
+function writeJSON(filename, data)
 {
+    localforage.setItem(filename, JSON.stringify(data))
 }
 
 function writeFile()

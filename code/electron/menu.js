@@ -1,8 +1,8 @@
-// const remote = require('electron').remote
-// const app = remote.app
-// const Menu = remote.Menu
-// const MenuItem = remote.MenuItem
-// const path = require('path')
+const remote = require('electron').remote
+const app = remote.app
+const Menu = remote.Menu
+const MenuItem = remote.MenuItem
+const path = require('path')
 
 const locale = require('../locale')
 const State = require('../state')
@@ -76,7 +76,7 @@ function frame()
 function menu()
 {
     return
-    Main = require('./main')
+    Main = require('../main')
     _menu = new Menu()
 
     file()

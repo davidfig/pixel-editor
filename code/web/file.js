@@ -1,3 +1,13 @@
+const localforage = require('localforage')
+
+const Settings = require('../settings')
+
+const STATE_FILENAME = 'state-save'
+
+localforage.config({
+    name: Settings.NAME
+})
+
 function saveFileDialog(path, callback)
 {
     // remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, callback)
@@ -20,23 +30,59 @@ function openDirDialog(callback)
 
 }
 
-function readState()
+function readState(callback)
 {
-    return null
+    localforage.getItem(STATE_FILENAME)
+        .then((value) => callback(JSON.parse(value)))
+        .catch(() => callback())
 }
 
-function getTempFilename()
+function writeState(data)
 {
-    return 'temp.json'
+    localforage.setItem(STATE_FILENAME, JSON.stringify(data))
 }
 
-function readJSON()
+function getTempFilename(callback)
 {
-    return null
+    localforage.keys()
+        .then((keys) =>
+        {
+            function search(filename)
+            {
+                for (let key of keys)
+                {
+                    if (key === filename)
+                    {
+                        return true
+                    }
+                }
+                return false
+            }
+
+            let filename, i = 0
+            do
+            {
+                i++
+                filename = 'pixel-' + i + '.json'
+            }
+            while (search(filename))
+            callback(filename)
+        }).catch((err) =>
+        {
+            console.error(err)
+        })
 }
 
-function writeJSON(filename, json)
+function readJSON(filename, callback)
 {
+    localforage.getItem(filename)
+        .then((value) => callback(JSON.parse(value)))
+        .catch(() => callback())
+}
+
+function writeJSON(filename, data)
+{
+    localforage.setItem(filename, JSON.stringify(data))
 }
 
 function writeFile()
@@ -56,6 +102,7 @@ module.exports = {
     openDirDialog,
     saveFileDialog,
     readState,
+    writeState,
     getTempFilename,
     readJSON,
     writeJSON,

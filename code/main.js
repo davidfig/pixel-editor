@@ -22,7 +22,7 @@ const Export = require('./export')
 const Position = require('./position')
 const Manager = require('./manager')
 
-let ui, loading = 2, windows = {}
+let ui, loading = 2, menuSpacing, windows = {}
 
 function afterLoad()
 {
@@ -33,8 +33,8 @@ function afterLoad()
     }
     PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile, () =>
     {
+        menuSpacing = Menu() + Settings.BORDER
         create()
-        Menu()
     })
 }
 
@@ -51,9 +51,6 @@ function create()
         snap: { }
     })
 
-    ui.win.style.position = 'absolute'
-    ui.win.style.margin = '1.25em 0 0 0'
-
     windows.draw = new Draw(ui.overlay, ui)
     windows.show = new Show(ui)
     windows.toolbar = new Toolbar(ui)
@@ -63,6 +60,24 @@ function create()
     windows.animation = new Animation(ui)
     windows.position = new Position(ui, windows.draw)
     windows.manager = new Manager(ui)
+
+    if (menuSpacing)
+    {
+        for (let name in windows)
+        {
+            const win = windows[name].win
+            if (win)
+            {
+                win.on('move-end', () =>
+                {
+                    if (win.y < menuSpacing)
+                    {
+                        win.y = menuSpacing
+                    }
+                })
+            }
+        }
+    }
 
     reposition()
 
@@ -85,7 +100,7 @@ function resetWindows()
 
 function getHidden(name)
 {
-    return windows[name].win.closed
+    // return windows[name].win.closed
 }
 
 function toggleHidden(name)

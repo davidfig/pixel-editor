@@ -72,7 +72,7 @@ function frame()
 function menu()
 {
     Main = require('../main')
-    _menu = new Menu()
+    _menu = new Menu({ styles: { position: 'unset' }})
 
     file()
     edit()
@@ -80,6 +80,7 @@ function menu()
     frame()
 
     Menu.setApplicationMenu(_menu)
+    return _menu.div.offsetHeight
 }
 
 State.on('last-file', menu)

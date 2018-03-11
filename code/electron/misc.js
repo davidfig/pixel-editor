@@ -9,5 +9,7 @@ module.exports = {
 
     toggleDevTools: () => remote.getCurrentWindow().toggleDevTools(),
 
-    quit: () => remote.app.quit()
+    quit: () => remote.app.quit(),
+
+    isElectron: true
 }

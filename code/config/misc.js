@@ -9,5 +9,7 @@ module.exports = {
 
     toggleDevTools: () => { },
 
-    quit: () => { }
+    quit: () => { },
+
+    isElectron: false
 }

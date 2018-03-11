@@ -14,7 +14,7 @@ const SPACING = 5
 
 const COLOR_SELECTED = 0x888888
 
-module.exports = class Show extends PIXI.Container
+module.exports = class Frames extends PIXI.Container
 {
     constructor(ui)
     {

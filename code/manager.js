@@ -1,6 +1,7 @@
 const path = require('path')
 const clicked = require('clicked')
 
+const Misc = require('./config/misc')
 const Tooltip = require('./config/libraries').Tooltip
 const File = require('./config/file')
 const PixelEditor = require('./pixel-editor')
@@ -30,16 +31,19 @@ module.exports = class Manager
 
     setupToolbar()
     {
-        clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
+        if (Misc.isElectron)
         {
-            File.openDirDialog((dir) =>
+            clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
             {
-                if (dir && dir.length >= 1)
+                File.openDirDialog((dir) =>
                 {
-                    this.populateBox(dir[0])
-                }
+                    if (dir && dir.length >= 1)
+                    {
+                        this.populateBox(dir[0])
+                    }
+                })
             })
-        })
+        }
         clicked(button(this.toolbar, ICONS.imageData[1], { opacity: 0.6 }, locale.get('increaseZoom')), () =>
         {
             State.manager.zoom++

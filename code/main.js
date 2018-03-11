@@ -15,7 +15,7 @@ const Draw = require('./draw')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
-const Show = require('./show')
+const Frames = require('./frames')
 const Animation = require('./animation')
 const Export = require('./export')
 const Position = require('./position')
@@ -71,7 +71,7 @@ const Main = {
         })
 
         windows.draw = new Draw(ui.overlay, ui)
-        windows.show = new Show(ui)
+        windows.frames = new Frames(ui)
         windows.toolbar = new Toolbar(ui)
         windows.palette = new Palette(ui)
         windows.picker = new Picker(ui)
@@ -104,7 +104,7 @@ const Main = {
     reposition: function()
     {
         State.position(ui)
-        windows.show.resize()
+        windows.frames.resize()
         windows.palette.resize()
     },
 
@@ -131,6 +131,7 @@ const Main = {
             windows[name].win.close()
         }
         State.set()
+        Menu.toggle(name)
     },
 
     save: function(filename)

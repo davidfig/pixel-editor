@@ -8,6 +8,7 @@ module.exports = class Line extends Base
     constructor(draw)
     {
         super(draw)
+        document.body.addEventListener('keyup', (e) => this.keyup(e))
     }
 
     cursor()
@@ -25,8 +26,29 @@ module.exports = class Line extends Base
         this.eraseBox()
     }
 
+    keyup(e)
+    {
+        if (e.code === 'Space')
+        {
+            this.spacing = null
+        }
+    }
+
+    move(x, y)
+    {
+        super.move(x, y)
+        if (this.spacing)
+        {
+            this.space()
+        }
+    }
+
     space()
     {
+        if (this.spacing && State.cursorX === this.spacing.x && State.cursorY === this.spacing.y)
+        {
+            return
+        }
         if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
         {
             PixelEditor.undoSave()
@@ -66,5 +88,6 @@ module.exports = class Line extends Base
             }
         }
         this.draw.change()
+        this.spacing = { x: State.cursorX, y: State.cursorY }
     }
 }

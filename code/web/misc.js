@@ -1,15 +1,13 @@
-const Misc = {
+// const Menu = require('../../../components/menu')
+const Menu = require('yy-menu')
+const MenuItem = Menu.MenuItem
 
-    Menu: require('../../../components/menu'),
-    // Menu: require('yy-menu')
+module.exports = {
 
-    MenuItem: Misc.Menu.MenuItem,
-
-    Accelerator: Misc.Menu.LocalAccelerator,
+    Menu,
+    MenuItem,
 
     toggleDevTools: () => { },
 
     quit: () => { }
 }
-
-module.exports = Misc

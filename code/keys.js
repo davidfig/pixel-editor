@@ -10,7 +10,7 @@ function setup(main)
     Main = main
 
     // debug keys
-    Accelerator.register('ctrl+shift+i', Misc.toggleDevTools)
+    Accelerator.register('ctrl+shift+i', () => Misc.toggleDevTools())
     Accelerator.register('ctrl+r', (e) =>
     {
         e.preventDefault()

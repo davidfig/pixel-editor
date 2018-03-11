@@ -129,7 +129,6 @@ module.exports = class Draw extends PIXI.Container
 
     redraw()
     {
-        Settings.ZOOM = 50
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
         this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)

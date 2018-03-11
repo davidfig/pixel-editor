@@ -1,1 +1,1 @@
-module.exports = require('./misc').LocalAccelerator
+module.exports = require('./misc').Menu.LocalAccelerator

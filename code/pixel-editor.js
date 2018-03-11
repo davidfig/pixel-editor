@@ -48,7 +48,7 @@ class PixelEditor extends Pixel
         {
             this.filename = filename
             this.name = this.name || path.basename(filename, '.json')
-            this.load(callback)
+            this.load(filename, callback)
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
     }

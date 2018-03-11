@@ -74,19 +74,75 @@ module.exports = class Manager
     {
         while (this.box.firstChild)
         {
-            this.box.removeChild(this.box.firstChild);
+            this.box.removeChild(this.box.firstChild)
         }
         if (State.manager.images)
         {
-            this.images(dir)
+            this.drawImages(dir)
         }
         else
         {
-            this.names(dir)
+            this.drawNames(dir)
         }
     }
 
-    images(dir)
+    imagesComplete()
+    {
+        const images = this.images.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
+        for (let entry of images)
+        {
+            this.box.appendChild(entry)
+        }
+    }
+
+    nextImageFile()
+    {
+        if (this.files.length)
+        {
+            const file = this.files.pop()
+            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+            {
+                const filename = path.join(this.dir, file)
+                File.readJSON(filename, (data) =>
+                {
+                    if (data && data.imageData)
+                    {
+                        const image = new Image()
+                        image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                        image.src = 'data:image/png;base64,' + data.imageData[0][2]
+                        image.width = data.imageData[0][0]
+                        image.height = data.imageData[0][1]
+                        image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
+                        image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
+                        image.style.margin = '0.25em'
+                        image.style.imageRendering = 'pixelated'
+                        image.addEventListener('mouseenter', () =>
+                        {
+                            image.style.backgroundColor = '#aaaaaa'
+                        })
+                        image.addEventListener('mouseleave', () =>
+                        {
+                            image.style.backgroundColor = 'transparent'
+                        })
+                        clicked(image, () => { PixelEditor.load(filename) })
+                        new Tooltip(image, data.name)
+                        this.images.push(image)
+                    }
+                    this.nextImageFile()
+                })
+            }
+            else
+            {
+                this.nextImageFile()
+            }
+        }
+        else
+        {
+            this.imagesComplete()
+        }
+    }
+
+    drawImages(dir)
     {
         this.box.style.width = '100%'
         this.box.style.display = 'flex'
@@ -95,97 +151,83 @@ module.exports = class Manager
         this.box.style.alignItems = 'center'
         this.box.style.padding = '0'
 
-        dir = dir || path.dirname(PixelEditor.filename)
-        if (dir)
+        this.index = 0
+        this.images = []
+        this.dir = dir || path.dirname(PixelEditor.filename)
+        if (this.dir)
         {
             File.readDir(dir, (files) =>
             {
-                let images = []
-                for (let file of files)
-                {
-                    if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
-                    {
-                        const filename = path.join(dir, file)
-                        File.readJSON(filename, (data) =>
-                        {
-                            if (data.imageData)
-                            {
-                                const image = new Image()
-                                image.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
-                                image.src = 'data:image/png;base64,' + data.imageData[0][2]
-                                image.width = data.imageData[0][0]
-                                image.height = data.imageData[0][1]
-                                image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
-                                image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
-                                image.style.margin = '0.25em'
-                                image.style.imageRendering = 'pixelated'
-                                image.addEventListener('mouseenter', () =>
-                                {
-                                    image.style.backgroundColor = '#aaaaaa'
-                                })
-                                image.addEventListener('mouseleave', () =>
-                                {
-                                    image.style.backgroundColor = 'transparent'
-                                })
-                                clicked(image, () => { PixelEditor.load(filename) })
-                                new Tooltip(image, data.name)
-                                images.push(image)
-                            }
-                        })
-                    }
-                }
-                images = images.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
-                for (let entry of images)
-                {
-                    this.box.appendChild(entry)
-                }
+                this.files = files
+                this.nextImageFile()
             })
         }
     }
 
-    names(dir)
+    nextNameFile()
+    {
+        if (this.files.length)
+        {
+            const file = this.files.pop()
+            const filename = path.join(this.dir, file)
+            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+            {
+                File.readJSON(filename, (data) =>
+                {
+                    if (data.imageData)
+                    {
+                        const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
+                        entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                        clicked(entry, () => { PixelEditor.load(filename) })
+                        entry.addEventListener('mouseenter', () =>
+                        {
+                            entry.style.backgroundColor = '#aaaaaa'
+                            entry.style.color = 'black'
+                        })
+                        entry.addEventListener('mouseleave', () =>
+                        {
+                            entry.style.backgroundColor = 'transparent'
+                            entry.style.color = ''
+                        })
+                        new Tooltip(entry, filename)
+                        this.entries.push(entry)
+                    }
+                    this.nextNameFile()
+                })
+            }
+            else
+            {
+                this.nextNameFile()
+            }
+        }
+        else
+        {
+            this.nameComplete()
+        }
+    }
+
+    nameComplete()
+    {
+        const entries = this.entries.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
+        for (let entry of entries)
+        {
+            this.box.appendChild(entry)
+        }
+    }
+
+    drawNames(dir)
     {
         this.box.style.display = 'block'
         this.box.style.padding = '0.5em'
-        dir = dir || path.dirname(PixelEditor.filename)
-        if (dir)
+        this.dir = dir || path.dirname(PixelEditor.filename)
+        if (this.dir)
         {
-            let entries = []
-            File.readDir(dir, (files) =>
+            this.index = 0
+            this.entries = []
+            File.readDir(this.dir, (files) =>
             {
-                for (let file of files)
-                {
-                    const filename = path.join(dir, file)
-                    if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
-                    {
-                        File.readJSON(filename, (data) =>
-                        {
-                            if (data.imageData)
-                            {
-                                const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                                entry.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
-                                entries.push(entry)
-                                clicked(entry, () => { PixelEditor.load(filename) })
-                                entry.addEventListener('mouseenter', () =>
-                                {
-                                    entry.style.backgroundColor = '#aaaaaa'
-                                    entry.style.color = 'black'
-                                })
-                                entry.addEventListener('mouseleave', () =>
-                                {
-                                    entry.style.backgroundColor = 'transparent'
-                                    entry.style.color = ''
-                                })
-                                new Tooltip(entry, filename)
-                            }
-                        })
-                    }
-                }
-                entries = entries.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
-                for (let entry of entries)
-                {
-                    this.box.appendChild(entry)
-                }
+                this.files = files
+                this.nextNameFile()
             })
         }
     }

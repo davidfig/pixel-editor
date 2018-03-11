@@ -91,11 +91,15 @@ function writeFile()
 
 function readDir(dir, callback)
 {
-    callback([])
+    localforage.keys((err, keys) =>
+    {
+        callback(keys)
+    })
 }
 
 function fileDate(file)
 {
+    return 0
 }
 
 module.exports = {

@@ -3,6 +3,7 @@ const path = require('path')
 const libraries = require('./config/libraries')
 const WM = libraries.WM
 const File = require('./config/file')
+const FPS = require('yy-fps')
 
 const Settings = require('./settings')
 const Toolbar = require('./toolbar')
@@ -21,7 +22,7 @@ const Position = require('./position')
 const Manager = require('./manager')
 const Keys = require('./keys')
 
-let ui, loading = 2, windows = {}
+let ui, loading = 2, windows = {}, fps
 
 const Main = {
 
@@ -32,12 +33,28 @@ const Main = {
         {
             return
         }
+        if (Settings.DEBUG)
+        {
+            Main.fpsSetup()
+        }
         PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile, () =>
         {
             Main.create()
             Menu.create()
             Keys.setup(Main)
         })
+
+    },
+
+    fpsSetup: function ()
+    {
+        function frame()
+        {
+            fps.frame()
+            requestAnimationFrame(frame)
+        }
+        fps = new FPS()
+        frame()
     },
 
     create: function()

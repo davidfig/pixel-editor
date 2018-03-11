@@ -1,7 +1,6 @@
 const Settings = require('./settings')
 
 const PIXI = require('pixi.js')
-const FPS = require('yy-fps')
 
 const libraries = require('./config/libraries')
 const Viewport = libraries.Viewport
@@ -11,9 +10,14 @@ const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
 
-const CURSOR_COLOR = 0xff0000
+const Circle = require('./tools/circle')
+const Ellipse = require('./tools/ellipse')
+const Line = require('./tools/line')
+const Paint = require('./tools/paint')
+const Select = require('./tools/select')
+const Fill = require('./tools/fill')
+
 const BORDER = 1
-const DOTTED = 10
 
 const THRESHOLD = 5
 
@@ -22,10 +26,6 @@ module.exports = class Draw extends PIXI.Container
     constructor(body, ui)
     {
         super()
-        if (Settings.DEBUG)
-        {
-            this.fps = new FPS()
-        }
         this.body = body
         this.ui = ui
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
@@ -44,7 +44,14 @@ module.exports = class Draw extends PIXI.Container
         this.cursorBlock = this.vp.addChild(new PIXI.Graphics())
         this.stateSetup('draw')
         window.addEventListener('resize', () => this.resize())
-        document.body.addEventListener('keyup', (e) => this.keyup(e))
+
+        this.circle = new Circle(this)
+        this.ellipse = new Ellipse(this)
+        this.line = new Line(this)
+        this.fill = new Fill(this)
+        this.tool = this.paint = new Paint(this)
+        this.select = new Select(this)
+
         this.redraw()
         PIXI.ticker.shared.add(() => this.update())
     }
@@ -68,8 +75,8 @@ module.exports = class Draw extends PIXI.Container
             .pinch()
             .wheel()
         const vp = PixelEditor.viewport
-        // debugger
-        if (false && vp)
+
+        if (vp)
         {
             this.vp.x = vp.x
             this.vp.y = vp.y
@@ -104,10 +111,6 @@ module.exports = class Draw extends PIXI.Container
             this.vp.dirty = false
             this.setHitArea()
             this.renderer.render(this)
-        }
-        if (this.fps)
-        {
-            this.fps.frame()
         }
     }
 
@@ -147,6 +150,19 @@ module.exports = class Draw extends PIXI.Container
         this.redraw()
     }
 
+    moveCursor(x, y)
+    {
+        if (this.shift)
+        {
+            this.tool.moveShift(x, y)
+        }
+        else
+        {
+            this.tool.move(x, y)
+        }
+        this.cursorDraw()
+    }
+
     transparency()
     {
         this.blocks.removeChildren()
@@ -178,460 +194,11 @@ module.exports = class Draw extends PIXI.Container
         }
     }
 
-    ellipseCursor()
-    {
-        const foreground = State.foreground
-        const background = State.background
-        this.cursorBlock.lineStyle(0)
-        this.cursorBlock.position.set(0, 0)
-        let xc = State.cursorX
-        let yc = State.cursorY
-        let width = State.cursorSizeX
-        let height = State.cursorSizeY
-
-        const blocks = {}
-        if (width === 1)
-        {
-            height--
-            for (let y = -height / 2; y <= height / 2; y++)
-            {
-                blocks[xc + ',' + (yc + y)] = foreground
-            }
-        }
-        else if (height === 1)
-        {
-            width--
-            for (let x = -width / 2; x <= width / 2; x++)
-            {
-                blocks[(xc + x) + ',' + yc] = foreground
-            }
-        }
-        else
-        {
-            const evenX = State.cursorSizeX % 2 === 0 ? 1 : 0
-            const evenY = State.cursorSizeY % 2 === 0 ? 1 : 0
-            width = Math.floor(State.cursorSizeX / 2)
-            height = Math.floor(State.cursorSizeY / 2)
-            let a2 = width * width
-            let b2 = height * height
-            let fa2 = 4 * a2, fb2 = 4 * b2
-            let x, y, sigma
-
-            // draw inside of ellipse
-            if (parseInt(State.background.substr(6), 16) !== 0)
-            {
-                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
-                {
-                    for (let xx = -x + evenX; xx <= x; xx++)
-                    {
-                        blocks[(xc + xx) + ',' + (yc - y)] = background
-                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
-                    }
-                    if (sigma >= 0)
-                    {
-                        sigma += fa2 * (1 - y)
-                        y--
-                    }
-                    sigma += b2 * ((4 * x) + 6)
-                }
-
-                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
-                {
-                    for (let xx = -x + evenX; xx <= x; xx++)
-                    {
-                        blocks[(xc + xx) + ',' + (yc - y)] = background
-                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
-                    }
-                    if (sigma >= 0)
-                    {
-                        sigma += fb2 * (1 - x)
-                        x--
-                    }
-                    sigma += a2 * ((4 * y) + 6)
-                }
-            }
-
-            // outside of ellipse
-            if (parseInt(State.foreground.substr(6), 16) !== 0)
-            {
-                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
-                {
-                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
-                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
-                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
-                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
-                    if (sigma >= 0)
-                    {
-                        sigma += fa2 * (1 - y)
-                        y--
-                    }
-                    sigma += b2 * ((4 * x) + 6)
-                }
-
-                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
-                {
-                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
-                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
-                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
-                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
-                    if (sigma >= 0)
-                    {
-                        sigma += fb2 * (1 - x)
-                        x--
-                    }
-                    sigma += a2 * ((4 * y) + 6)
-                }
-            }
-        }
-        this.stamp = []
-        for (let block in blocks)
-        {
-            const data = blocks[block]
-            const pos = block.split(',')
-            if (this.inBounds(pos))
-            {
-                const color = parseInt(data.substr(0, 6), 16)
-                const alpha = parseInt(data.substr(6), 16) / 255
-                this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
-            }
-        }
-    }
-
-    inBounds(pos)
-    {
-        let x = parseInt(pos[0])
-        let y = parseInt(pos[1])
-        return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
-    }
-
-    circleCursor()
-    {
-        this.cursorBlock.lineStyle(0)
-        this.cursorBlock.position.set(0, 0)
-        let x0 = State.cursorX
-        let y0 = State.cursorY
-        const foreground = State.foreground
-        const background = State.background
-        const blocks = {}
-        if (State.cursorSizeX === 3)
-        {
-            blocks[x0 + ',' + (y0 - 1)] = foreground
-            blocks[x0 + ',' + y0] = background
-            blocks[x0 + ',' + (y0 + 1)] = foreground
-            blocks[(x0 - 1) + ',' + y0] = foreground
-            blocks[(x0 + 1) + ',' + y0] = foreground
-        }
-        else
-        {
-            const even = State.cursorSizeX % 2 === 0 ? 1 : 0
-            let x = Math.ceil(State.cursorSizeX / 2) - 1
-            let y = 0
-            let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-
-            // draw inside
-            if (parseInt(State.background.substr(6), 16) !== 0)
-            {
-                while (x >= y)
-                {
-                    for (let i = 0; i <= x; i++)
-                    {
-                        blocks[(x0 + x - i) + ',' + (y0 + y + even)] = background
-                        blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = background
-                        blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = background
-                        blocks[(x0 - x - even + i) + ',' + (y0 - y)] = background
-                        blocks[(x0 + x - i) + ',' + (y0 - y)] = background
-                    }
-                    for (let i = 0; i <= y; i++)
-                    {
-                        blocks[(x0 + y - i) + ',' + (y0 + x + even)] = background
-                        blocks[(x0 - y - even + i) + ',' + (y0 - x)] = background
-                        blocks[(x0 + y - i) + ',' + (y0 - x)] = background
-                    }
-                    y++
-                    if (decisionOver2 <= 0)
-                    {
-                        decisionOver2 += 2 * y + 1
-                    }
-                    else
-                    {
-                        x--
-                        decisionOver2 += 2 * (y - x) + 1
-                    }
-                }
-            }
-
-            // draw outside
-            if (parseInt(State.foreground.substr(6), 16) !== 0)
-            {
-                x = Math.ceil(State.cursorSizeX / 2) - 1
-                y = 0
-                decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-                while (x >= y)
-                {
-                    blocks[(x0 + x) + ',' + (y0 + y + even)] = foreground
-                    blocks[(x0 + y) + ',' + (y0 + x + even)] = foreground
-                    blocks[(x0 - y - even) + ',' + (y0 + x + even)] = foreground
-                    blocks[(x0 - x - even) + ',' + (y0 + y + even)] = foreground
-                    blocks[(x0 - x - even) + ',' + (y0 - y)] = foreground
-                    blocks[(x0 - y - even) + ',' + (y0 - x)] = foreground
-                    blocks[(x0 + y) + ',' + (y0 - x)] = foreground
-                    blocks[(x0 + x) + ',' + (y0 - y)] = foreground
-                    y++
-                    if (decisionOver2 <= 0)
-                    {
-                        decisionOver2 += 2 * y + 1
-                    }
-                    else
-                    {
-                        x--
-                        decisionOver2 += 2 * (y - x) + 1
-                    }
-                }
-            }
-        }
-        if (State.cursorSizeX === 4)
-        {
-            blocks[(x0 - 2) + ',' + (y0 - 1)] = false
-            blocks[(x0 + 1) + ',' + (y0 - 1)] = false
-            blocks[(x0 - 2) + ',' + (y0 + 2)] = false
-            blocks[(x0 + 1) + ',' + (y0 + 2)] = false
-        }
-        this.stamp = []
-        for (let block in blocks)
-        {
-            const data = blocks[block]
-            if (data)
-            {
-                const pos = block.split(',')
-                if (this.inBounds(pos))
-                {
-                    const data = blocks[block]
-                    const color = parseInt(data.substr(0, 6), 16)
-                    const alpha = parseInt(data.substr(6), 16) / 255
-                    this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                    this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
-                }
-            }
-        }
-    }
-
-    lineCursor()
-    {
-        const color = State.color
-        const c = parseInt(color.substr(0, 6), 16)
-        const a = parseInt(color.substr(6), 16) / 255
-        this.cursorBlock.position.set(0)
-        if (this.line)
-        {
-            this.stamp = []
-            let x0 = State.cursorX
-            let y0 = State.cursorY
-            let x1 = this.line.x
-            let y1 = this.line.y
-
-            const dx = Math.abs(x1 - x0)
-            const dy = Math.abs(y1 - y0)
-            const sx = x0 < x1 ? 1 : -1
-            const sy = y0 < y1 ? 1 : -1
-            let err = dx - dy
-            let e2
-            while (true)
-            {
-                this.cursorBlock.beginFill(c, a)
-                    .drawRect(x0 * this.zoom - BORDER, y0 * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
-                    .endFill()
-                this.stamp.push({ x: x0, y: y0 })
-                if (x0 == x1 && y0 == y1)
-                {
-                    break
-                }
-                e2 = 2 * err
-                if (e2 > -dy)
-                {
-                    err -= dy
-                    x0 += sx
-                }
-                if (e2 < dx)
-                {
-                    err += dx
-                    y0 += sy
-                }
-            }
-        }
-        else
-        {
-            this.cursorBlock.beginFill(c, a)
-                .drawRect(State.cursorX * this.zoom - BORDER, State.cursorY * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
-                .endFill()
-            this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
-        }
-    }
-
-    fillCursor(reverse)
-    {
-        const color = reverse ? 0x888888 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0,6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(10, color)
-        this.cursorBlock.drawRect(0, 0, this.zoom, this.zoom)
-    }
-
-    normalCursor()
-    {
-        const color = State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(5, color)
-        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
-        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        this.cursorBlock.drawRect(0, 0, this.zoom * x, this.zoom * y)
-    }
-
-    selectCursor(special)
-    {
-        const color = special ? 0xd20000 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(5, color)
-        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
-        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        let reverse = this.zoom * x < 0
-        for (let i = 0; reverse ? i > this.zoom * x : i < this.zoom * x; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
-        {
-            let far
-            if (reverse)
-            {
-                far = i - DOTTED < this.zoom * x ? this.zoom * x : i - DOTTED
-            }
-            else
-            {
-                far = i + DOTTED > this.zoom * x ? this.zoom * x : i + DOTTED
-            }
-            this.cursorBlock.moveTo(i, 0)
-            this.cursorBlock.lineTo(far, 0)
-            this.cursorBlock.moveTo(i, this.zoom * y)
-            this.cursorBlock.lineTo(far, this.zoom * y)
-        }
-        reverse = this.zoom * y < 0
-        for (let i = 0; reverse ? i > this.zoom * y : i < this.zoom * y; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
-        {
-            let far
-            if (reverse)
-            {
-                far = i - DOTTED < this.zoom * y ? this.zoom * y : i - DOTTED
-            }
-            else
-            {
-                far = i + DOTTED > this.zoom * y ? this.zoom * y : i + DOTTED
-            }
-            this.cursorBlock.moveTo(0, i)
-            this.cursorBlock.lineTo(0, far)
-            this.cursorBlock.moveTo(this.zoom * x, i)
-            this.cursorBlock.lineTo(this.zoom * x, far)
-        }
-    }
-
-    moveCursor(x, y)
-    {
-        if (this.shift)
-        {
-            if (State.tool === 'line')
-            {
-                if (!this.line)
-                {
-                    this.line = { x: State.cursorX, y: State.cursorY }
-                }
-                this.line.x += x
-                this.line.y += y
-                this.line.x = this.line.x < 0 ? PixelEditor.width - 1 : this.line.x
-                this.line.y = this.line.y < 0 ? PixelEditor.height - 1 : this.line.y
-                this.line.x = this.line.x === PixelEditor.width ? 0 : this.line.x
-                this.line.y = this.line.y === PixelEditor.height ? 0 : this.line.y
-            }
-            else
-            {
-                State.cursorSizeX += x
-                State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-                State.cursorSizeX = (State.cursorSizeX < -PixelEditor.width) ? -PixelEditor.width : State.cursorSizeX
-                if ((State.tool === 'circle' || State.tool === 'ellipse') && State.cursorSizeX < 1)
-                {
-                    State.cursorSizeX = 1
-                }
-                if (State.tool === 'ellipse' && State.cursorSizeY < 1)
-                {
-                    State.cursorSizeY = 1
-                }
-                if (State.cursorSizeX === 0)
-                {
-                    State.cursorSizeX = (x < 0) ? -1 : 1
-                }
-                State.cursorSizeY += y
-                State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-                State.cursorSizeY = (State.cursorSizeY < -PixelEditor.height) ? -PixelEditor.height : State.cursorSizeY
-                if (State.cursorSizeY === 0)
-                {
-                    State.cursorSizeY = (y < 0) ? -1 : 1
-                }
-            }
-        }
-        else
-        {
-            if (State.cursorSizeX < 0)
-            {
-                State.cursorX += State.cursorSizeX
-                State.cursorSizeX = -State.cursorSizeX
-            }
-            if (State.cursorSizeY < 0)
-            {
-                State.cursorY += State.cursorSizeY
-                State.cursorSizeY = -State.cursorSizeY
-            }
-            State.cursorX += x
-            State.cursorY += y
-            State.cursorX = State.cursorX < 0 ? PixelEditor.width - 1 : State.cursorX
-            State.cursorY = State.cursorY < 0 ? PixelEditor.height - 1 : State.cursorY
-            State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
-            State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
-        }
-        this.cursorDraw()
-        this.renderer.render(this)
-    }
-
     cursorDraw()
     {
         this.cursorBlock.clear()
-        switch (State.tool)
-        {
-            case 'select':
-                this.selectCursor()
-                break
-
-            case 'crop':
-                this.selectCursor(true)
-                break
-
-            case 'sample':
-                this.fillCursor(true)
-                break
-
-            case 'paint':
-                this.normalCursor()
-                break
-
-            case 'circle':
-                this.circleCursor()
-                break
-
-            case 'ellipse':
-                this.ellipseCursor()
-                break
-
-            case 'line':
-                this.lineCursor()
-                break
-
-            case 'fill':
-                this.fillCursor()
-                break
-        }
+        this.tool.cursor()
+        this.renderer.render(this)
     }
 
     down(x, y, data)
@@ -693,104 +260,51 @@ module.exports = class Draw extends PIXI.Container
 
     pressSpace()
     {
-        this.space()
+        this.tool.space()
         this.spacingOn = true
         this.lastX = State.cursorX
         this.lastY = State.cursorY
     }
 
-    keydown(e)
-    {
-        const code = e.keyCode
-        this.shift = e.shiftKey
-        switch (code)
-        {
-            case 27:
-                this.clear()
-                break
-            case 8:
-                this.clearBox()
-                break
-        }
-        if (this.spacingOn)
-        {
-            if (State.cursorX !== this.lastX || State.cursorY !== this.lastY)
-            {
-                this.space()
-            }
-        }
-    }
 
-    keyup(e)
-    {
-        if (this.spacingOn)
-        {
-            if (e.keyCode === 32)
-            {
-                this.spacingOn = false
-            }
-        }
-    }
-
-    clear()
-    {
-        switch (State.tool)
-        {
-            case 'crop':
-            case 'select':
-            case 'paint':
-                if (State.cursorSizeX < 0)
-                {
-                    State.cursorX += State.cursorSizeX
-                }
-                if (State.cursorSizeY < 0)
-                {
-                    State.cursorY += State.cursorSizeY
-                }
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    State.cursorX = 0
-                    State.cursorY = 0
-                }
-                else
-                {
-                    State.cursorSizeX = 1
-                    State.cursorSizeY = 1
-                }
-                break
-        }
-    }
-
-    tool()
+    toolChange()
     {
         switch (State.tool)
         {
             case 'ellipse':
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    State.cursorSizeX = 3
-                    State.cursorSizeY = 3
-                }
+                this.tool = this.ellipse
                 break
 
             case 'circle':
-                if (State.cursorSizeX === 1)
-                {
-                    State.cursorSizeX = 3
-                }
+                this.tool = this.circle
                 break
 
             case 'select':
-                this.dragging = false
-                this.selecting = false
+                this.tool = this.select
                 break
 
             case 'line':
-                this.line = null
+                this.tool = this.line
+                break
+
+            case 'crop':
+                this.tool = this.crop
+                break
+
+            case 'paint':
+                this.tool = this.paint
+                break
+
+            case 'fill':
+                this.tool = this.fill
+                break
+
+            case 'sample':
+                this.sample = this.sample
                 break
         }
+        this.tool.activate()
         this.cursorDraw()
-        this.renderer.render(this)
     }
 
     cut()
@@ -846,37 +360,10 @@ module.exports = class Draw extends PIXI.Container
         }
     }
 
-    clearBox()
+    erase()
     {
         PixelEditor.undoSave()
-        switch (State.tool)
-        {
-            case 'select':
-            case 'fill':
-            case 'paint':
-                for (let y = State.cursorY; y < State.cursorY + State.cursorSizeY; y++)
-                {
-                    for (let x = State.cursorX; x < State.cursorX + State.cursorSizeX; x++)
-                    {
-                        if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
-                        {
-                            PixelEditor.set(x, y, '00000000', true)
-                        }
-                    }
-                }
-                break
-            case 'ellipse':
-            case 'circle':
-            case 'line':
-                for (let block of this.stamp)
-                {
-                    if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
-                    {
-                        PixelEditor.set(block.x, block.y, '00000000', true)
-                    }
-                }
-                break
-        }
+        this.tool.erase()
         this.change()
     }
 
@@ -897,113 +384,6 @@ module.exports = class Draw extends PIXI.Container
         }
     }
 
-    space()
-    {
-        switch (State.tool)
-        {
-            case 'crop':
-                PixelEditor.crop(State.cursorX, State.cursorY, State.cursorSizeX, State.cursorSizeY)
-                State.cursorX = 0
-                State.cursorY = 0
-                break
-
-            case 'paint':
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    PixelEditor.undoSave()
-                    const current = PixelEditor.get(State.cursorX, State.cursorY)
-                    const color = (current !== State.foreground) ? State.foreground : State.background
-                    PixelEditor.set(State.cursorX, State.cursorY, color, true)
-                    this.change()
-                    return color
-                }
-                else
-                {
-                    PixelEditor.undoSave()
-                    const color = State.foreground
-                    let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
-                    if (State.cursorSizeX < 0)
-                    {
-                        xStart += State.cursorSizeX
-                        xTo = xStart + Math.abs(State.cursorSizeX)
-                    }
-                    else
-                    {
-                        xTo = xStart + State.cursorSizeX
-                    }
-                    if (State.cursorSizeY < 0)
-                    {
-                        yStart += State.cursorSizeY
-                        yTo = yStart + Math.abs(State.cursorSizeY) - 1
-                    }
-                    else
-                    {
-                        yTo = yStart + State.cursorSizeY
-                    }
-                    for (let y = yStart; y < yTo; y++)
-                    {
-                        for (let x = xStart; x < xTo; x++)
-                        {
-                            PixelEditor.set(x, y, color, true)
-                        }
-                    }
-                    this.change()
-                }
-                break
-
-            case 'ellipse':
-            case 'circle':
-            case 'line':
-                PixelEditor.undoSave()
-                for (let block of this.stamp)
-                {
-                    if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
-                    {
-                        PixelEditor.set(block.x, block.y, block.color, true)
-                    }
-                }
-                this.change()
-                break
-
-            case 'line':
-                break
-
-            case 'fill':
-                PixelEditor.undoSave()
-                this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
-                this.change()
-                break
-
-            case 'sample':
-                State.color = PixelEditor.get(State.cursorX, State.cursorY)
-                break
-        }
-    }
-
-    floodFill(x, y, check)
-    {
-        if (check !== State.color && PixelEditor.get(x, y) === check)
-        {
-            PixelEditor.set(x, y, State.color, true)
-            if (y > 0)
-            {
-                this.floodFill(x, y - 1, check)
-            }
-            if (y < PixelEditor.height - 1)
-            {
-                this.floodFill(x, y + 1, check)
-            }
-            if (x > 0)
-            {
-                this.floodFill(x - 1, y, check)
-            }
-            if (x < PixelEditor.width - 1)
-            {
-                this.floodFill(x + 1, y, check)
-            }
-        }
-    }
-
     stateSetup(name)
     {
         this.name = name
@@ -1012,10 +392,10 @@ module.exports = class Draw extends PIXI.Container
         {
             State.on(state, () => this.redraw())
         }
-        State.on('tool', () => this.tool())
+        State.on('tool', () => this.toolChange())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.redraw())
         State.on('last-file', () => this.redraw())
-        State.on('background', () => this.tool())
+        State.on('background', () => this.toolChange())
     }
 }

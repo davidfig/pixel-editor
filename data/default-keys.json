@@ -22,8 +22,10 @@
     "Paste": "CommandOrControl+V",
     "SelectAll": "CommandOrControl+A",
 
+    "Draw": "space",
     "Dropper": "i",
     "Clear": "escape",
+    "Erase": "backspace",
 
     "ToolbarWindow": "",
     "InfoWindow": "",

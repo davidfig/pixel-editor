@@ -13,6 +13,8 @@
     "menuPaste": "&Paste",
     "menuSelectAll": "Select &All",
     "menuDraw": "&Draw",
+    "menuSpace": "&Draw",
+    "menuErase": "&Erase",
     "menuDropper": "Sample &Color",
     "menuClear": "&Shrink Cursor",
     "menuView": "&View",

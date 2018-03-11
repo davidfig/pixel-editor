@@ -7,6 +7,8 @@ module.exports = {
     TEST_CLEAN_OPENING: false,
 
     SAVE_INTERVAL: 500,
+    CURSOR_COLOR: 0xff0000,
+    DOTTED: 10,
 
     BORDER: 5
 }

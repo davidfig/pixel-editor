@@ -682,94 +682,41 @@ module.exports = class Draw extends PIXI.Container
         }
     }
 
+    selectAll()
+    {
+        State.tool = 'select'
+        State.cursorX = 0
+        State.cursorY = 0
+        State.cursorSizeX = PixelEditor.width
+        State.cursorSizeY = PixelEditor.height
+    }
+
+    pressSpace()
+    {
+        this.space()
+        this.spacingOn = true
+        this.lastX = State.cursorX
+        this.lastY = State.cursorY
+    }
+
     keydown(e)
     {
         const code = e.keyCode
         this.shift = e.shiftKey
-        if (e.ctrlKey)
+        switch (code)
         {
-            switch (code)
-            {
-                // case 88:
-                //     this.cut()
-                //     break
-                // case 67:
-                //     this.copy()
-                //     break
-                // case 86:
-                //     this.paste()
-                //     break
-                case 90:
-                    if (this.shift)
-                    {
-                        PixelEditor.redoOne()
-                        e.preventDefault()
-                    }
-                    else
-                    {
-                        PixelEditor.undoOne()
-                        e.preventDefault()
-                    }
-                    break
-                case 68:
-                    PixelEditor.duplicate()
-                    break
-                case 65:
-                    State.tool = 'select'
-                    State.cursorX = 0
-                    State.cursorY = 0
-                    State.cursorSizeX = PixelEditor.width
-                    State.cursorSizeY = PixelEditor.height
-                    break
-            }
+            case 27:
+                this.clear()
+                break
+            case 8:
+                this.clearBox()
+                break
         }
-        else
+        if (this.spacingOn)
         {
-            switch (code)
+            if (State.cursorX !== this.lastX || State.cursorY !== this.lastY)
             {
-                case 37: // left
-                    this.moveCursor(-1, 0)
-                    e.preventDefault()
-                    break
-                case 38: // up
-                    this.moveCursor(0, -1)
-                    e.preventDefault()
-                    break
-                case 39: // right
-                    this.moveCursor(1, 0)
-                    e.preventDefault()
-                    break
-                case 40: // down
-                    this.moveCursor(0, 1)
-                    e.preventDefault()
-                    break
-                case 187: // -
-                    break
-                case 189: // =
-                    break
-                case 32: // space
-                    this.space()
-                    this.spacingOn = true
-                    this.lastX = State.cursorX
-                    this.lastY = State.cursorY
-                    e.preventDefault()
-                    break
-                case 73:
-                    State.foreground = PixelEditor.get(State.cursorX, State.cursorY)
-                    break
-                case 27:
-                    this.clear()
-                    break
-                case 8:
-                    this.clearBox()
-                    break
-            }
-            if (this.spacingOn)
-            {
-                if (State.cursorX !== this.lastX || State.cursorY !== this.lastY)
-                {
-                    this.space()
-                }
+                this.space()
             }
         }
     }

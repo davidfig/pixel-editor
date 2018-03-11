@@ -1,8 +1,13 @@
 const remote = require('electron').remote
+const Menu = remote.Menu
+const MenuItem = remote.MenuItem
 
 module.exports = {
-    toggleDevTools: () =>
-    {
-        remote.getCurrentWindow().toggleDevTools()
-    }
+
+    Menu,
+    MenuItem,
+
+    toggleDevTools: () => remote.getCurrentWindow().toggleDevTools(),
+
+    quit: () => remote.app.quit()
 }

@@ -12,7 +12,12 @@ const BACKGROUND = '#000000'
 
 function init()
 {
-    const main = State.state.main
+    State.load(afterLoad)
+}
+
+function afterLoad()
+{
+    const main = State.main
     if (main)
     {
         _main = new electron.BrowserWindow({ icon: './assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND, width: Math.round(main.width), height: Math.round(main.height), x: Math.round(main.x), y: Math.round(main.y), })

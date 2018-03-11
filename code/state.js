@@ -3,6 +3,8 @@ const Events = require('eventemitter3')
 const File = require('./config/file')
 const Settings = require('./settings')
 
+const DEFAULT_KEYS = require('../data/default-keys.json')
+
 class State extends Events
 {
     constructor()
@@ -33,6 +35,8 @@ class State extends Events
             }
             this.state.lastFiles = this.state.lastFiles || []
             this.state.relative = this.state.relative || 'top-left'
+            this.state.keys = this.state.keys || DEFAULT_KEYS
+this.state.keys = DEFAULT_KEYS
             callback()
         })
     }
@@ -74,6 +78,11 @@ class State extends Events
             main.height = size[1]
             this.save()
         }
+    }
+
+    get main()
+    {
+        return this.state.main
     }
 
     mainMove(object)
@@ -307,6 +316,11 @@ class State extends Events
     get manager()
     {
         return this.state.manager
+    }
+
+    get keys()
+    {
+        return this.state.keys
     }
 
     update()

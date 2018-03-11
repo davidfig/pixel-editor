@@ -89,8 +89,9 @@ function writeFile()
 {
 }
 
-function readDir()
+function readDir(dir, callback)
 {
+    callback([])
 }
 
 function fileDate(file)

@@ -76,6 +76,11 @@ function fileDate(filename)
     return fs.statSync(filename).mtimeMs
 }
 
+function readDir(dir, callback)
+{
+    callback(fs.readdirSync(dir))
+}
+
 module.exports = {
     openFileDialog,
     openDirDialog,
@@ -87,6 +92,6 @@ module.exports = {
     writeJSON,
     exportFileDialog,
     writeFile: fs.writeFileSync,
-    readDir: fs.readdirSync,
+    readDir,
     fileDate
 }

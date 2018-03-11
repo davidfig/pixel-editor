@@ -12,9 +12,6 @@ module.exports = {
     // WINDOW_MANAGER: '../../../components/window-manager',
     WM: require('simple-window-manager'),
 
-    Menu: require('../../../components/menu'),
-    // Menu: require('yy-menu')
-
-    // const Tooltip: require('yy-tooltip')
-    Tooltip: require('../../../components/tooltip')
+    // Tooltip: require('../../../components/tooltip')
+    Tooltip: require('yy-tooltip')
 }

@@ -1,0 +1,38 @@
+{
+    "AddFrame": "CommandOrControl+F",
+    "DeleteFrame": "CommandOrControl+Backspace",
+    "NewFrame": "CommandOrControl+F",
+    "Duplicate": "CommandOrControl+D",
+    "Delete": "CommandOrControl+Backspace",
+    "Clockwise": "CommandOrControl+period",
+    "CounterClockwise": "CommandOrControl+comma",
+    "FlipHorizontal": "CommandOrControl+H",
+    "FlipVertical": "CommandOrControl+B",
+
+    "New": "CommandOrControl+M|CommandOrControl+N",
+    "Open": "CommandOrControl+O",
+    "Save": "CommandOrControl+S",
+    "Export": "CommandOrControl+E",
+    "Quit": "CommandOrControl+Q",
+
+    "Undo": "CommandOrControl+Z",
+    "Redo": "CommandOrControl+Shift+Z",
+    "Copy": "CommandOrControl+C",
+    "Cut": "CommandOrControl+X",
+    "Paste": "CommandOrControl+V",
+    "SelectAll": "CommandOrControl+A",
+
+    "Dropper": "i",
+    "Clear": "escape",
+
+    "ToolbarWindow": "",
+    "InfoWindow": "",
+    "AnimationWindow": "a",
+    "PaletteWindow": "",
+    "PickerWindow": "",
+    "FramesWindow": "",
+    "PositionWindow": "",
+    "ManagerWindow": "m",
+
+    "ResetWindows": ""
+}

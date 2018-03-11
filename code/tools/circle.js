@@ -1,5 +1,6 @@
 const Base = require('./base')
 const State = require('../state')
+const Settings = require('../settings')
 
 module.exports = class Circle extends Base
 {
@@ -112,7 +113,7 @@ module.exports = class Circle extends Base
                     const data = blocks[block]
                     const color = parseInt(data.substr(0, 6), 16)
                     const alpha = parseInt(data.substr(6), 16) / 255
-                    this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.draw.zoom, parseInt(pos[1]) * this.draw.zoom, this.draw.zoom, this.draw.zoom).endFill()
+                    this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * Settings.ZOOM, parseInt(pos[1]) * Settings.ZOOM, Settings.ZOOM, Settings.ZOOM).endFill()
                     this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
                 }
             }

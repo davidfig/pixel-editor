@@ -1,6 +1,7 @@
 const Base = require('./base')
 const State = require('../state')
 const PixelEditor = require('../pixel-editor')
+const Settings = require('../settings')
 
 const COLOR = 0x888888
 
@@ -13,9 +14,9 @@ module.exports = class Line extends Base
 
     cursor()
     {
-        this.draw.cursorBlock.position.set(State.cursorX * this.draw.zoom, State.cursorY * this.draw.zoom)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
         this.draw.cursorBlock.lineStyle(10, COLOR)
-        this.draw.cursorBlock.drawRect(0, 0, this.draw.zoom, this.draw.zoom)
+        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM, Settings.ZOOM)
     }
 
     space()

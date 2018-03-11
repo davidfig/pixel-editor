@@ -10,5 +10,6 @@ module.exports = {
     CURSOR_COLOR: 0xff0000,
     DOTTED: 10,
 
-    BORDER: 5
+    BORDER: 5,
+    ZOOM: 50 // size of box in draw window
 }

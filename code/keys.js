@@ -20,6 +20,10 @@ function setup(main)
     Accelerator.register('arrowleft', () => Main.windows.draw.moveCursor(-1, 0))
     Accelerator.register('arrowdown', () => Main.windows.draw.moveCursor(0, 1))
     Accelerator.register('arrowup', () => Main.windows.draw.moveCursor(0, -1))
+    Accelerator.register('shift+arrowright', () => Main.windows.draw.moveCursorShift(1, 0))
+    Accelerator.register('shift+arrowleft', () => Main.windows.draw.moveCursorShift(-1, 0))
+    Accelerator.register('shift+arrowdown', () => Main.windows.draw.moveCursorShift(0, 1))
+    Accelerator.register('shift+arrowup', () => Main.windows.draw.moveCursorShift(0, -1))
 }
 
 module.exports = {

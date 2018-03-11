@@ -13,9 +13,9 @@ module.exports = class Line extends Base
     cursor()
     {
         const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.draw.cursorBlock.position.set(State.cursorX * this.draw.zoom, State.cursorY * this.draw.zoom)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
         this.draw.cursorBlock.lineStyle(10, color)
-        this.draw.cursorBlock.drawRect(0, 0, this.draw.zoom, this.draw.zoom)
+        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM, Settings.ZOOM)
     }
 
     erase()

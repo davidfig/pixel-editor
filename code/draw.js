@@ -1,14 +1,14 @@
-const Settings = require('./settings')
-
 const PIXI = require('pixi.js')
 
 const libraries = require('./config/libraries')
 const Viewport = libraries.Viewport
 
+const Settings = require('./settings')
 const Sheet = require('./sheet')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
+const Position = require('./position')
 
 const Circle = require('./tools/circle')
 const Ellipse = require('./tools/ellipse')
@@ -18,16 +18,16 @@ const Select = require('./tools/select')
 const Fill = require('./tools/fill')
 
 const BORDER = 1
-
 const THRESHOLD = 5
 
 module.exports = class Draw extends PIXI.Container
 {
-    constructor(body, ui)
+    constructor(body, ui, main)
     {
         super()
         this.body = body
         this.ui = ui
+        this.main = main
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
@@ -37,7 +37,7 @@ module.exports = class Draw extends PIXI.Container
         this.renderer.view.style.height = '100%'
         this.resize()
 
-        this.setupViewport()
+        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
         this.blocks = this.vp.addChild(new PIXI.Container())
         this.sprite = this.vp.addChild(new PIXI.Sprite())
         this.grid = this.vp.addChild(new PIXI.Graphics())
@@ -53,6 +53,7 @@ module.exports = class Draw extends PIXI.Container
         this.select = new Select(this)
 
         this.redraw()
+        this.setupViewport()
         PIXI.ticker.shared.add(() => this.update())
     }
 
@@ -68,14 +69,13 @@ module.exports = class Draw extends PIXI.Container
 
     setupViewport()
     {
-        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
         this.vp
             .drag()
             .decelerate()
             .pinch()
             .wheel()
-        const vp = PixelEditor.viewport
 
+        const vp = PixelEditor.viewport
         if (vp)
         {
             this.vp.x = vp.x
@@ -84,9 +84,8 @@ module.exports = class Draw extends PIXI.Container
         }
         else
         {
-            this.vp.scale.set(PixelEditor.zoom)
-            this.vp.x = window.innerWidth / 2 - PixelEditor.largestWidth / 2
-            this.vp.y = window.innerHeight / 2 - PixelEditor.largestHeight / 2
+            Position.halfSize(this)
+            Position.center(this)
         }
     }
 
@@ -98,14 +97,13 @@ module.exports = class Draw extends PIXI.Container
         }
 
         const point = this.vp.toWorld(x, y)
-        State.cursorX = clamp(Math.floor(point.x / this.zoom), 0, PixelEditor.width - 1)
-        State.cursorY = clamp(Math.floor(point.y / this.zoom), 0, PixelEditor.height - 1)
+        State.cursorX = clamp(Math.floor(point.x / Settings.ZOOM), 0, PixelEditor.width - 1)
+        State.cursorY = clamp(Math.floor(point.y / Settings.ZOOM), 0, PixelEditor.height - 1)
     }
 
     update()
     {
-        const result = this.vp.dirty
-        if (result)
+        if (this.vp.dirty)
         {
             PixelEditor.viewport = { x: this.vp.x, y: this.vp.y, scale: this.vp.scale.x }
             this.vp.dirty = false
@@ -131,11 +129,11 @@ module.exports = class Draw extends PIXI.Container
 
     redraw()
     {
-        this.zoom = 50
+        Settings.ZOOM = 50
         State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
         State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
         this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
-        this.sprite.scale.set(this.zoom)
+        this.sprite.scale.set(Settings.ZOOM)
         this.transparency()
         this.frame()
         this.cursorDraw()
@@ -150,17 +148,19 @@ module.exports = class Draw extends PIXI.Container
         this.redraw()
     }
 
+    clear()
+    {
+        this.tool.clear()
+    }
+
+    moveCursorShift(x, y)
+    {
+        this.tool.moveShift(x, y)
+    }
+
     moveCursor(x, y)
     {
-        if (this.shift)
-        {
-            this.tool.moveShift(x, y)
-        }
-        else
-        {
-            this.tool.move(x, y)
-        }
-        this.cursorDraw()
+        this.tool.move(x, y)
     }
 
     transparency()
@@ -171,8 +171,8 @@ module.exports = class Draw extends PIXI.Container
             for (let x = 0; x < PixelEditor.width; x++)
             {
                 const block = this.blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')))
-                block.width = block.height = this.zoom
-                block.position.set(x * this.zoom, y * this.zoom)
+                block.width = block.height = Settings.ZOOM
+                block.position.set(x * Settings.ZOOM, y * Settings.ZOOM)
             }
         }
     }
@@ -183,14 +183,14 @@ module.exports = class Draw extends PIXI.Container
         this.grid.lineStyle(BORDER, 0x888888)
         for (let y = 0; y <= PixelEditor.height; y++)
         {
-            this.grid.moveTo(0, y * this.zoom)
-            this.grid.lineTo(PixelEditor.width * this.zoom, y * this.zoom)
+            this.grid.moveTo(0, y * Settings.ZOOM)
+            this.grid.lineTo(PixelEditor.width * Settings.ZOOM, y * Settings.ZOOM)
         }
 
         for (let x = 0; x <= PixelEditor.width; x++)
         {
-            this.grid.moveTo(x * this.zoom, 0)
-            this.grid.lineTo(x * this.zoom, PixelEditor.height * this.zoom)
+            this.grid.moveTo(x * Settings.ZOOM, 0)
+            this.grid.lineTo(x * Settings.ZOOM, PixelEditor.height * Settings.ZOOM)
         }
     }
 
@@ -203,50 +203,29 @@ module.exports = class Draw extends PIXI.Container
 
     down(x, y, data)
     {
-        if (!this.max)
-        {
-            return super.down(x, y, data)
-        }
-        else
-        {
-            this.saveDown = { x, y }
-            return this.vp.down(x, y, data)
-        }
+        this.saveDown = { x, y }
+        return this.vp.down(x, y, data)
     }
 
     up(x, y, data)
     {
-        if (!this.max)
+        if (this.saveDown)
         {
-            return super.up(x, y, data)
+            this.moveViewportCursor(x, y, data)
         }
-        else
-        {
-            if (this.saveDown)
-            {
-                this.moveViewportCursor(x, y, data)
-            }
-            return this.vp.up(x, y, data)
-        }
+        return this.vp.up(x, y, data)
     }
 
     move(x, y, data)
     {
-        if (!this.max)
+        if (this.saveDown)
         {
-            return super.move(x, y, data)
-        }
-        else
-        {
-            if (this.saveDown)
+            if (Math.abs(this.saveDown.x - x) > THRESHOLD || Math.abs(this.saveDown.y - y) > THRESHOLD)
             {
-                if (Math.abs(this.saveDown.x - x) > THRESHOLD || Math.abs(this.saveDown.y - y) > THRESHOLD)
-                {
-                    this.saveDown = null
-                }
+                this.saveDown = null
             }
-            return this.vp.move(x, y, data)
         }
+        return this.vp.move(x, y, data)
     }
 
     selectAll()

@@ -1,5 +1,6 @@
 const clicked = require('clicked')
 
+const Settings = require('./settings')
 const State = require('./state')
 const button = require('./button')
 const PixelEditor = require('./pixel-editor')
@@ -31,62 +32,98 @@ module.exports = class Position
 
     pressed(index)
     {
-        const vp = this.draw.vp
-        const landscape = this.draw.width / window.innerWidth > this.draw.height / window.innerHeight
-        let center
-        const width = PixelEditor.width * this.draw.zoom
-        const height = PixelEditor.height * this.draw.zoom
         switch (index)
         {
             case 0:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 4)
-                }
-                else
-                {
-                    vp.fitHeight(height * 4)
-                }
-                vp.center = center
+                Position.quarterSize(this.draw)
                 break
             case 1:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 2)
-                }
-                else
-                {
-                    vp.fitHeight(height * 2)
-                }
-                vp.center = center
+                Position.halfSize(this.draw)
                 break
             case 2:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 1.25)
-                }
-                else
-                {
-                    vp.fitHeight(height * 1.25)
-                }
-                vp.center = center
+                Position.threeQuarterSize(this.draw)
                 break
             case 3:
-                vp.moveCenter(this.draw.width / 2 / vp.scale.x, this.draw.height / 2 / vp.scale.y)
+                Position.center(this.draw)
                 break
             case 4:
-                vp.moveCorner(0, 0)
+                Position.corner(this.draw)
                 break
         }
+    }
+
+    static quarterSize(draw)
+    {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 4)
+        }
+        else
+        {
+            vp.fitHeight(height * 4)
+        }
+        vp.center = center
         vp.dirty = true
     }
 
-    keydown(e)
+    static halfSize(draw)
     {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 2)
+        }
+        else
+        {
+            vp.fitHeight(height * 2)
+        }
+        vp.center = center
+        vp.dirty = true
+    }
 
+    static threeQuarterSize(draw)
+    {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 1.25)
+        }
+        else
+        {
+            vp.fitHeight(height * 1.25)
+        }
+        vp.center = center
+        vp.dirty = true
+    }
+
+    static center(draw)
+    {
+        const vp = draw.vp
+        vp.moveCenter(draw.width / 2 / vp.scale.x, draw.height / 2 / vp.scale.y)
+        vp.dirty = true
+    }
+
+    static corner(draw)
+    {
+        const vp = draw.vp
+        vp.moveCorner(0, 0)
+        vp.dirty = true
     }
 
     stateSetup()

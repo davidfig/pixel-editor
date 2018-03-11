@@ -33,7 +33,7 @@ module.exports = class Line extends Base
             while (true)
             {
                 this.draw.cursorBlock.beginFill(c, a)
-                    .drawRect(x0 * this.draw.zoom - Settings.BORDER, y0 * this.draw.zoom - Settings.BORDER, this.draw.zoom + Settings.BORDER * 2, this.draw.zoom + Settings.BORDER * 2)
+                    .drawRect(x0 * Settings.ZOOM - Settings.BORDER, y0 * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
                     .endFill()
                 this.stamp.push({ x: x0, y: y0 })
                 if (x0 == x1 && y0 == y1)
@@ -56,7 +56,7 @@ module.exports = class Line extends Base
         else
         {
             this.draw.cursorBlock.beginFill(c, a)
-                .drawRect(State.cursorX * this.draw.zoom - Settings.BORDER, State.cursorY * this.draw.zoom - Settings.BORDER, this.draw.zoom + Settings.BORDER * 2, this.draw.zoom + Settings.BORDER * 2)
+                .drawRect(State.cursorX * Settings.ZOOM - Settings.BORDER, State.cursorY * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
                 .endFill()
             this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
         }

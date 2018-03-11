@@ -13,11 +13,11 @@ module.exports = class Line extends Base
     cursor()
     {
         const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.draw.cursorBlock.position.set(State.cursorX * this.draw.zoom, State.cursorY * this.draw.zoom)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
         this.draw.cursorBlock.lineStyle(5, color)
         const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
         const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        this.draw.cursorBlock.drawRect(0, 0, this.draw.zoom * x, this.draw.zoom * y)
+        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM * x, Settings.ZOOM * y)
     }
 
     erase()

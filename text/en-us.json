@@ -16,7 +16,7 @@
     "menuSpace": "&Draw",
     "menuErase": "&Erase",
     "menuDropper": "Sample &Color",
-    "menuClear": "&Shrink Cursor",
+    "menuClear": "&Reset Cursor",
     "menuView": "&View",
     "menuPanes": "&Windows",
     "menuToolbar": "&Toolbar",

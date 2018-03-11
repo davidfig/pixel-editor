@@ -239,11 +239,7 @@ module.exports = class Draw extends PIXI.Container
     pressSpace()
     {
         this.tool.space()
-        this.spacingOn = true
-        this.lastX = State.cursorX
-        this.lastY = State.cursorY
     }
-
 
     toolChange()
     {

@@ -120,7 +120,7 @@ module.exports = class Frames extends PIXI.Container
         }
     }
 
-    down(x, y, data)
+    down(x, y)
     {
         const point = this.toLocal({ x, y })
         for (let button of this.buttons)
@@ -141,7 +141,7 @@ module.exports = class Frames extends PIXI.Container
         }
     }
 
-    move(x, y, data)
+    move(x, y)
     {
         if (this.dragging)
         {
@@ -189,7 +189,7 @@ module.exports = class Frames extends PIXI.Container
         }
     }
 
-    up(x, y, data)
+    up()
     {
         if (this.dragging)
         {

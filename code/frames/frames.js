@@ -1,12 +1,12 @@
 const PIXI = require('pixi.js')
 
-const libraries = require('./config/libraries')
+const libraries = require('../config/libraries')
 const Pixel = libraries.Pixel
 
-const Settings = require('./settings')
-const sheet = require('./pixel-sheet')
-const PixelEditor = require('./pixel-editor')
-const State = require('./state')
+const Settings = require('../settings')
+const sheet = require('../pixel-sheet')
+const PixelEditor = require('../pixel-editor')
+const State = require('../state')
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100

@@ -45,12 +45,15 @@ module.exports = class Draw extends PIXI.Container
         this.stateSetup('draw')
         window.addEventListener('resize', () => this.resize())
 
-        this.circle = new Circle(this)
-        this.ellipse = new Ellipse(this)
-        this.line = new Line(this)
-        this.fill = new Fill(this)
-        this.tool = this.paint = new Paint(this)
-        this.select = new Select(this)
+        this.tools = {
+            circle: new Circle(this),
+            ellipse: new Ellipse(this),
+            line: new Line(this),
+            fill: new Fill(this),
+            tool: this.paint = new Paint(this),
+            select: new Select(this)
+        }
+        this.tool = this.tools[State.tool]
 
         this.redraw()
         this.setupViewport()
@@ -243,36 +246,7 @@ module.exports = class Draw extends PIXI.Container
 
     toolChange()
     {
-        switch (State.tool)
-        {
-            case 'ellipse':
-                this.tool = this.ellipse
-                break
-
-            case 'circle':
-                this.tool = this.circle
-                break
-
-            case 'select':
-                this.tool = this.select
-                break
-
-            case 'line':
-                this.tool = this.line
-                break
-
-            case 'crop':
-                this.tool = this.crop
-                break
-
-            case 'paint':
-                this.tool = this.paint
-                break
-
-            case 'fill':
-                this.tool = this.fill
-                break
-        }
+        this.tool = this.tools[State.tool]
         this.tool.activate()
         this.cursorDraw()
     }

@@ -1,10 +1,10 @@
 const EasyEdit = require('easyedit')
-const Tooltip = require('./config/libraries').Tooltip
+const Tooltip = require('../config/libraries').Tooltip
 
-const State = require('./state')
-const Dice = require('./dice')
-const PixelEditor = require('./pixel-editor')
-const locale = require('./locale')
+const State = require('../state')
+const Dice = require('../dice')
+const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
 
 module.exports = class Info
 {

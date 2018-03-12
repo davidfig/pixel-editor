@@ -59,8 +59,8 @@ module.exports = class Select extends Base
         this.selecting = false
     }
 
-    clear()
+    erase()
     {
-        this.clearBox()
+        this.eraseBox()
     }
 }

@@ -6,21 +6,23 @@ const File = require('./config/file')
 const FPS = require('yy-fps')
 
 const Settings = require('./settings')
-const Toolbar = require('./toolbar')
-const Palette = require('./palette')
-const Picker = require('./picker')
-const Info = require('./info')
+const Views = require('./views')
 const Sheet = require('./sheet')
 const Draw = require('./draw')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const Menu = require('./menu')
-const Frames = require('./frames')
-const Animation = require('./animation')
 const Export = require('./export')
-const Position = require('./position')
-const Manager = require('./manager')
 const Keys = require('./keys')
+
+const Toolbar = require('./frames/toolbar')
+const Palette = require('./frames/palette')
+const Picker = require('./frames/picker')
+const Info = require('./frames/info')
+const Frames = require('./frames/frames')
+const Animation = require('./frames/animation')
+const Position = require('./frames/position')
+const Manager = require('./frames/manager')
 
 let ui, loading = 2, windows = {}, fps
 
@@ -97,22 +99,14 @@ const Main = {
                 }
             }
         }
-
-        Main.reposition()
+        Views.init(ui)
+        State.start()
     },
 
     reposition: function()
     {
-        State.position(ui)
-        windows.frames.resize()
-        windows.palette.resize()
-    },
-
-    resetWindows: function()
-    {
-        State.positionDefault()
-        State.save()
-        Main.reposition()
+        // windows.frames.resize()
+        // windows.palette.resize()
     },
 
     getHidden: function(name)

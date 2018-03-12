@@ -33,6 +33,10 @@ class State extends Events
             {
                 this.state.manager = { zoom: 4, images: true, alphabetical: true }
             }
+            if (this.state.tool === 'sample')
+            {
+                this.state.tool = 'select'
+            }
             this.state.lastFiles = this.state.lastFiles || []
             this.state.relative = this.state.relative || 'top-left'
             this.state.keys = this.state.keys || DEFAULT_KEYS
@@ -41,30 +45,8 @@ this.state.keys = DEFAULT_KEYS
         })
     }
 
-    positionDefault()
+    start()
     {
-        const top = 20
-        const space = Settings.BORDER
-        this.state.windows = [
-            { x: space, y: window.innerHeight - space - 200, width: 200, height: 200 }, // show
-            { x: space, y: top + space }, // toolbar
-            { x: window.innerWidth - space - 200, y: top + space * 2 + 300, width: 200, height: 150 }, // palette
-            { x: window.innerWidth - space - 200, y: top + space, width: 200, height: 300 }, // picker
-            { x: window.innerWidth - space - 200, y: window.innerHeight - space - 205 }, // info
-            { x: window.innerWidth - space * 2 - 235 - 200, y: top + space, width: 230, height: 226 }, // animation (230, 226)
-            { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60 }, // position (195, 60)
-            { x: space * 2 + 45, y: top + space, width: 194, height: 250, closed: true }
-        ]
-    }
-
-    position(wm)
-    {
-        if (!this.state.windows)
-        {
-            this.positionDefault()
-        }
-        wm.load(this.state.windows)
-        this.wm = wm
         window.setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
@@ -321,6 +303,21 @@ this.state.keys = DEFAULT_KEYS
     get keys()
     {
         return this.state.keys
+    }
+
+    get views()
+    {
+        return this.state.views
+    }
+
+    get view()
+    {
+        return this.state.view
+    }
+    set view(value)
+    {
+        this.state.view = value
+        this.save()
     }
 
     update()

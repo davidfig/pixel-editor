@@ -1,15 +1,14 @@
-const Settings = require('./settings')
-
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
 const Color = require('yy-color')
 
-const PixelEditor = require('./pixel-editor')
-const State = require('./state')
-const Sheet = require('./sheet')
-const PixelSheet = require('./pixel-sheet')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+const State = require('../state')
+const Sheet = require('../sheet')
+const PixelSheet = require('../pixel-sheet')
 
 const COLORS_PER_LINE = 10
 

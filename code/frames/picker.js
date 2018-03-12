@@ -1,12 +1,11 @@
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
-const exists = require('exists')
 const RenderSheet = require('yy-rendersheet')
 const EasyEdit = require('easyedit')
 const clicked = require('clicked')
 
-const State = require('./state.js')
-const sheet = require('./sheet')
+const State = require('../state.js')
+const sheet = require('../sheet')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300

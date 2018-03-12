@@ -1,16 +1,17 @@
 const path = require('path')
 const clicked = require('clicked')
 
-const Misc = require('./config/misc')
-const Tooltip = require('./config/libraries').Tooltip
-const File = require('./config/file')
-const PixelEditor = require('./pixel-editor')
-const locale = require('./locale')
-const State = require('./state')
-const html = require('./html')
-const button = require('./button')
+const Misc = require('../config/misc')
+const Tooltip = require('../config/libraries').Tooltip
+const File = require('../config/file')
 
-const ICONS = require('../images/manager.json')
+const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
+const State = require('../state')
+const html = require('../html')
+const button = require('../button')
+
+const ICONS = require('../../images/manager.json')
 
 const MIN_WIDTH = '165px'
 

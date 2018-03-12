@@ -1,11 +1,11 @@
 const clicked = require('clicked')
 
-const Settings = require('./settings')
-const State = require('./state')
-const button = require('./button')
-const PixelEditor = require('./pixel-editor')
+const Settings = require('../settings')
+const State = require('../state')
+const button = require('../button')
+const PixelEditor = require('../pixel-editor')
 
-const ICONS = require('../images/position.json')
+const ICONS = require('../../images/position.json')
 
 const BUTTONS = 5
 const TIPS = ['25% of screen size', '50% of screen size', '75% of screen size', 'center in viewport', 'top-left in viewport']

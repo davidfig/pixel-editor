@@ -9,8 +9,8 @@
     "icon": "electron-icon-maker -i assets/icon.png -o assets",
     "test": "npm run web-ready && npm run budo",
     "budo": "./node_modules/.bin/budo code/main.js:index.js --dir html --live",
-    "electron-ready": "cp -f code/electron/*.js code/config/",
-    "web-ready": "cp -f code/web/*.js code/config/",
+    "electron-ready": "cp -f code/config/electron/*.js code/config/",
+    "web-ready": "cp -f code/config/web/*.js code/config/",
     "build-web": "npm run web-ready && browserify code/main.js -o docs/index.js"
   },
   "repository": "https://github.com/davidfig/pixel-editor",

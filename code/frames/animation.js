@@ -1,20 +1,20 @@
 const PIXI = require('pixi.js')
 const clicked = require('clicked')
 
-const libraries = require('./config/libraries')
+const libraries = require('../config/libraries')
 const Pixel = libraries.Pixel
 
-const html = require('./html')
-const button = require('./button')
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-const sheet = require('./pixel-sheet')
-const Dialog = require('./dialog')
+const html = require('../html')
+const button = require('../button')
+const State = require('../state')
+const PixelEditor = require('../pixel-editor')
+const sheet = require('../pixel-sheet')
+const Dialog = require('../dialog')
 
 const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
 
-const BUTTONS = require('../images/animation.json')
+const BUTTONS = require('../../images/animation.json')
 
 module.exports = class Animation extends PIXI.Container
 {

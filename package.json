@@ -4,8 +4,8 @@
   "description": "A pixel editor/animator built in Electron",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --disable-gpu",
-    "build": "electron-packager . PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.15 --icon=icon.ico",
+    "start": "electron code/electron.js --disable-gpu",
+    "build": "electron-packager code/electron.js PixelEditor --platform=win32 --arch=x64 --overwrite --electron-version=1.6.15 --icon=icon.ico",
     "icon": "electron-icon-maker -i assets/icon.png -o assets",
     "test": "npm run web-ready && npm run budo",
     "budo": "./node_modules/.bin/budo code/main.js:index.js --dir html --live",

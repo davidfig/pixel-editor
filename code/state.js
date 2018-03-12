@@ -37,6 +37,11 @@ class State extends Events
             {
                 this.state.tool = 'select'
             }
+            if (!this.state.views)
+            {
+                this.state.views = []
+                this.state.view = 0
+            }
             this.state.lastFiles = this.state.lastFiles || []
             this.state.relative = this.state.relative || 'top-left'
             this.state.keys = this.state.keys || DEFAULT_KEYS

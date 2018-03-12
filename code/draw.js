@@ -8,7 +8,7 @@ const Sheet = require('./sheet')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 const pixelSheet = require('./pixel-sheet')
-const Position = require('./position')
+const Position = require('./frames/position')
 
 const Circle = require('./tools/circle')
 const Ellipse = require('./tools/ellipse')

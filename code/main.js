@@ -104,20 +104,16 @@ const Main = {
                 }
             }
         }
-        Views.init(ui)
+        Views.init(ui, Main)
         State.start()
+        setTimeout(() => document.body.style.opacity = 1, 500)
     },
 
-    reposition: function()
-    {
-        // windows.frames.resize()
-        // windows.palette.resize()
-    },
-
-    getHidden: function(name)
-    {
-        return windows[name].win.closed
-    },
+    // reposition: function()
+    // {
+    //     windows.frames.resize()
+    //     windows.palette.resize()
+    // },
 
     toggleHidden: function(name)
     {
@@ -129,8 +125,6 @@ const Main = {
         {
             windows[name].win.close()
         }
-        State.set()
-        Menu.toggle(name)
     },
 
     save: function(filename)
@@ -207,6 +201,7 @@ module.exports = Main
 
 window.onload = () =>
 {
+    document.body.style.opacity = 0
     State.load(Main.afterLoad)
     Sheet.load(Main.afterLoad)
 }

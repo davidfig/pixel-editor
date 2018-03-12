@@ -60,7 +60,6 @@ module.exports = class Coords extends UI.Window
         {
             this.position.set(place.x, place.y)
         }
-        this.on('drag-end', this.dragged, this)
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)
@@ -137,10 +136,5 @@ module.exports = class Coords extends UI.Window
             case 'center': State.cursorY = y + Math.floor(PixelEditor.width / 2); break
             default: State.cursorY = y
         }
-    }
-
-    dragged()
-    {
-        State.set(this.name, this.x, this.y)
     }
 }

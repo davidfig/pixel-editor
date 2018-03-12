@@ -61,7 +61,7 @@ function draw()
     const list = ['Select', 'Paint', 'Fill', 'Circle', 'Ellipse', 'Line', 'Crop']
     for (let tool of list)
     {
-        tools.append(new MenuItem({ label: locale.get('menu' + tool + 'Tool'), accelerator: Keys[tool + 'Tool'], click: () => State.tools = tool.toLowerCase() }))
+        tools.append(new MenuItem({ label: locale.get('menu' + tool + 'Tool'), accelerator: Keys[tool + 'Tool'], click: () => State.tool = tool.toLowerCase() }))
     }
 
     submenu.append(new MenuItem({ label: locale.get('menuTools'), submenu: tools }))
@@ -70,19 +70,19 @@ function draw()
 
 function view()
 {
-    function paneCreate(name)
+    function paneCreate(name, i)
     {
         let capitalize = name.substr(0, 1).toUpperCase() + name.substr(1)
-        _panes[name] = new MenuItem({ label: locale.get('menu' + capitalize), type: 'checkbox', checked: !Main.getHidden(name), click: () => Main.toggleHidden(name), accelerator: Keys[capitalize + 'Window'] })
+        _panes[name] = new MenuItem({ label: locale.get('menu' + capitalize), type: 'checkbox', checked: !Views.getClosed(i), click: () => Views.toggleClosed(name, i), accelerator: Keys[capitalize + 'Window'] })
         panes.append(_panes[name])
     }
 
     _panes = {}
     const panes = new Menu()
-    const list = ['toolbar', 'info', 'animation', 'palette', 'picker', 'frames', 'position', 'manager']
-    for (let item of list)
+    const list = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager']
+    for (let i = 0; i < list.length; i++)
     {
-        paneCreate(item)
+        paneCreate(list[i], i)
     }
 
     const submenu = new Menu()
@@ -90,7 +90,7 @@ function view()
     submenu.append(new MenuItem({ label: locale.get('menuPreviousView'), click: () => Views.change(-1), accelerator: Keys.PreviousView }))
     submenu.append(new MenuItem({ type: 'separator' }))
     submenu.append(new MenuItem({ label: locale.get('menuPanes'), submenu: panes }))
-    submenu.append(new MenuItem({ label: locale.get('menuResetPanes'), click: () => Main.resetWindows(), accelerator: Keys.ResetWindows }))
+    submenu.append(new MenuItem({ label: locale.get('menuResetPanes'), click: () => Views.resetWindows(), accelerator: Keys.ResetWindows }))
     _menu.append(new MenuItem({ label: locale.get('menuView'), submenu }))
 }
 
@@ -126,6 +126,15 @@ function create()
     Menu.setApplicationMenu(_menu)
 }
 
+function toggleAll()
+{
+    let i = 0
+    for (let pane in _panes)
+    {
+        _panes[pane].checked = !State.views[State.view][i++].closed
+    }
+}
+
 function toggle(name)
 {
     _panes[name].checked = !_panes[name].checked
@@ -136,6 +145,7 @@ State.on('last-file', create)
 module.exports = {
     create,
     toggle,
+    toggleAll,
     get Accelerator()
     {
         return Menu.GlobalAccelerator

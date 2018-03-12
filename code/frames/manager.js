@@ -241,24 +241,4 @@ module.exports = class Manager
     {
         State.on('last-file', () => this.populateBox())
     }
-
-    keydown(e)
-    {
-        const code = e.keyCode
-        if (code === 77 && !e.ctrlKey && !e.altKey && !e.shiftKey)
-        {
-            if (this.win.closed)
-            {
-                this.win.open()
-                State.set()
-            }
-            else
-            {
-                this.win.close()
-                State.set()
-            }
-            e.preventDefault()
-            e.stopPropagation()
-        }
-    }
 }

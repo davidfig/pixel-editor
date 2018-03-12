@@ -304,15 +304,6 @@ module.exports = class Animation extends PIXI.Container
         if (this.win._resizing)
         {
             this.draw()
-            State.set()
-        }
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set()
         }
     }
 

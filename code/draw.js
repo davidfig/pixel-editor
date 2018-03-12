@@ -50,7 +50,7 @@ module.exports = class Draw extends PIXI.Container
             ellipse: new Ellipse(this),
             line: new Line(this),
             fill: new Fill(this),
-            tool: this.paint = new Paint(this),
+            paint: new Paint(this),
             select: new Select(this)
         }
         this.tool = this.tools[State.tool]

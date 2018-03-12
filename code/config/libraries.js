@@ -9,7 +9,7 @@ module.exports = {
     // VIEWPORT: '../../../components/pixi-viewport',
     Viewport: require('pixi-viewport'),
 
-    // WINDOW_MANAGER: '../../../components/window-manager',
+    // WM: require('../../../components/window-manager/src/window-manager'),
     WM: require('simple-window-manager'),
 
     // Tooltip: require('../../../components/tooltip')

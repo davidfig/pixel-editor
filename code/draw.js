@@ -272,10 +272,6 @@ module.exports = class Draw extends PIXI.Container
             case 'fill':
                 this.tool = this.fill
                 break
-
-            case 'sample':
-                this.sample = this.sample
-                break
         }
         this.tool.activate()
         this.cursorDraw()

@@ -554,10 +554,6 @@ module.exports = class Draw extends PIXI.Container
                 this.selectCursor(true)
                 break
 
-            case 'sample':
-                this.fillCursor(true)
-                break
-
             case 'paint':
                 this.normalCursor()
                 break

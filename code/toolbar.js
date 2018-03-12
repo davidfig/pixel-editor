@@ -5,8 +5,8 @@ const button = require('./button')
 
 const ICONS = require('../images/editor.json')
 
-const BUTTONS = 8
-const TIPS = [['select mode', 'v'], ['draw mode', 'b'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm'], ['color dropper', 'i']]
+const BUTTONS = 7
+const TIPS = [['select mode', 'v'], ['draw mode', 'b'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm']]
 
 const OPACITY_UNSELECTED = 0.6
 
@@ -48,7 +48,6 @@ module.exports = class Toolbar
             case 4: State.tool = 'ellipse'; break
             case 5: State.tool = 'line'; break
             case 6: State.tool = 'crop'; break
-            case 7: State.tool = 'sample'; break
         }
     }
 
@@ -79,9 +78,6 @@ module.exports = class Toolbar
                 case 82:
                     State.tool = 'crop'
                     break
-                case 83:
-                    State.tool = 'sample'
-                    break
             }
         }
     }
@@ -91,14 +87,14 @@ module.exports = class Toolbar
         let index
         switch (State.tool)
         {
-            case 'select': index = 0; break
             case 'paint': index = 1; break
             case 'fill': index = 2; break
             case 'circle': index = 3; break
             case 'ellipse': index = 4; break
             case 'line': index = 5; break
             case 'crop': index = 6; break
-            case 'sample': index = 7; break
+            default:
+                index = 0
         }
         if (this.selected)
         {

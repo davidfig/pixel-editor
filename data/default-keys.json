@@ -13,7 +13,7 @@
     "Open": "CommandOrControl+O",
     "Save": "CommandOrControl+S",
     "Export": "CommandOrControl+E",
-    "Quit": "CommandOrControl+Q",
+    "Exit": "CommandOrControl+Q",
 
     "Undo": "CommandOrControl+Z",
     "Redo": "CommandOrControl+Shift+Z",
@@ -27,6 +27,13 @@
     "Clear": "escape",
     "Erase": "backspace",
     "SwapForeground": "x",
+    "SelectTool": "v",
+    "PaintTool": "b",
+    "FillTool": "f",
+    "CircleTool": "c",
+    "EllipseTool": "e",
+    "LineTool": "l",
+    "CropTool": "i",
 
     "ToolbarWindow": "",
     "InfoWindow": "",

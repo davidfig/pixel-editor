@@ -6,10 +6,5 @@ module.exports = {
 
     Menu,
     MenuItem,
-
-    toggleDevTools: () => { },
-
-    quit: () => { },
-
     isElectron: false
 }

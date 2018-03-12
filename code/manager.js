@@ -160,7 +160,7 @@ module.exports = class Manager
         this.dir = dir || path.dirname(PixelEditor.filename)
         if (this.dir)
         {
-            File.readDir(dir, (files) =>
+            File.readDir(this.dir, (files) =>
             {
                 this.files = files
                 this.nextImageFile()

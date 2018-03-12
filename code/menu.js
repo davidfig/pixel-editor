@@ -1,3 +1,4 @@
+const Misc = require('./config/misc')
 const Menu = require('./config/misc').Menu
 const MenuItem = require('./config/misc').MenuItem
 const path = require('path')
@@ -25,6 +26,11 @@ function file()
             submenu.append(new MenuItem({ label: '&' + i + '. ' + path.basename(State.lastFiles[i], '.json'), accelerator: 'CommandOrControl+' + i, click: () => Main.load([State.lastFiles[i]]) }))
         }
     }
+    if (Misc.isElectron)
+    {
+        submenu.append(new MenuItem({ type: 'separator' }))
+        submenu.append(new MenuItem({ label: locale.get('menuExit'), accelerator: Keys.exit, click: () => Misc.quit() }))
+    }
     _menu.append(new MenuItem({ label: locale.get('menuFile'), submenu }))
 }
 
@@ -44,12 +50,21 @@ function edit()
 
 function draw()
 {
-    const submenu = new Menu
+    const submenu = new Menu()
     submenu.append(new MenuItem({ label: locale.get('menuSpace'), accelerator: Keys.Draw, click: () => Main.windows.draw.pressSpace() }))
     submenu.append(new MenuItem({ label: locale.get('menuErase'), accelerator: Keys.Erase, click: () => Main.windows.draw.erase() }))
     submenu.append(new MenuItem({ label: locale.get('menuDropper'), accelerator: Keys.Dropper, click: () => State.foreground = PixelEditor.get(State.cursorX, State.cursorY) }))
     submenu.append(new MenuItem({ label: locale.get('menuClear'), accelerator: Keys.Clear, click: () => Main.windows.draw.clear() }))
     submenu.append(new MenuItem({ label: locale.get('menuSwapForeground'), accelerator: Keys.SwapForeground, click: () => Main.windows.palette.switchForeground() }))
+
+    const tools = new Menu()
+    const list = ['Select', 'Paint', 'Fill', 'Circle', 'Ellipse', 'Line', 'Crop']
+    for (let tool of list)
+    {
+        tools.append(new MenuItem({ label: locale.get('menu' + tool + 'Tool'), accelerator: Keys[tool + 'Tool'], click: () => State.tools = tool.toLowerCase() }))
+    }
+
+    submenu.append(new MenuItem({ label: locale.get('menuTools'), submenu: tools }))
     _menu.append(new MenuItem({ label: locale.get('menuDraw'), submenu }))
 }
 

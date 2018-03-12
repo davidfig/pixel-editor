@@ -70,9 +70,8 @@ module.exports = class Palette extends PIXI.Container
         this.main.removeChildren()
         this.blocks.removeChildren()
 
-        const width = (this.content.offsetWidth / WIDTH)// - (Settings.BORDER * 2 / WIDTH)
-
-        const fontSize = FontSize('8', { width, height: width * 0.75 }) || 1
+        const width = (this.win.width / WIDTH)
+        const fontSize = FontSize('8', { width, height: width * 0.85 }) || 1
         let yStart = Settings.BORDER
 
         const behindForeground = this.main.addChild(Sheet.get('transparency'))

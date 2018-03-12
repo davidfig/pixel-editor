@@ -8,9 +8,8 @@ const Views = {
     {
         Views.wm = wm
         Views.main = main
-        if (true || State.views.length === 0)
+        if (State.views.length === 0)
         {
-while (State.views.length) State.views.pop()
             State.views.push(
                 this.positionDefault(),
                 this.positionDefault(true)

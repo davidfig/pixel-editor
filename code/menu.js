@@ -7,7 +7,7 @@ const locale = require('./locale')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 
-let Main, Keys
+let Main, Keys, Views
 let _menu, _panes
 
 function file()
@@ -84,16 +84,11 @@ function view()
     {
         paneCreate(item)
     }
-    // panes.append(new MenuItem({ label: locale.get('menuToolbar'), type: 'checkbox', checked: !Main.getHidden('toolbar'), click: () => Main.toggleHidden('toolbar'), accelerator: Keys.ToolbarWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuInfo'), type: 'checkbox', checked: !Main.getHidden('info'), click: () => Main.toggleHidden('info'), accelerator: Keys.InfoWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuAnimation'), type: 'checkbox', checked: !Main.getHidden('animation'), click: () => Main.toggleHidden('animation'), accelerator: Keys.AnimationWindow, click: () => Main.toggleHidden('animation') }))
-    // panes.append(new MenuItem({ label: locale.get('menuPalette'), type: 'checkbox', checked: !Main.getHidden('palette'), click: () => Main.toggleHidden('palette'), accelerator: Keys.PaletteWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuPicker'), type: 'checkbox', checked: !Main.getHidden('picker'), click: () => Main.toggleHidden('picker'), accelerator: Keys.PickerWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuFrames'), type: 'checkbox', checked: !Main.getHidden('show'), click: () => Main.toggleHidden('show'), accelerator: Keys.FramesWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuPosition'), type: 'checkbox', checked: !Main.getHidden('position'), click: () => Main.toggleHidden('position'), accelerator: Keys.PositionWindow }))
-    // panes.append(new MenuItem({ label: locale.get('menuManager'), type: 'checkbox', checked: !Main.getHidden('manager'), click: () => Main.toggleHidden('manager'), accelerator: Keys.ManagerWindow, click: () => Main.toggleHidden('manager') }))
 
     const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuNextView'), click: () => Views.change(1), accelerator: Keys.NextView }))
+    submenu.append(new MenuItem({ label: locale.get('menuPreviousView'), click: () => Views.change(-1), accelerator: Keys.PreviousView }))
+    submenu.append(new MenuItem({ type: 'separator' }))
     submenu.append(new MenuItem({ label: locale.get('menuPanes'), submenu: panes }))
     submenu.append(new MenuItem({ label: locale.get('menuResetPanes'), click: () => Main.resetWindows(), accelerator: Keys.ResetWindows }))
     _menu.append(new MenuItem({ label: locale.get('menuView'), submenu }))
@@ -117,6 +112,7 @@ function frame()
 function create()
 {
     Main = require('./main')
+    Views = require('./views')
     Keys = State.keys
 
     _menu = new Menu({ styles: { position: 'unset' } })

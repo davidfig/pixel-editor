@@ -82,20 +82,25 @@ const Main = {
         windows.position = new Position(ui, windows.draw)
         windows.manager = new Manager(ui)
 
-        if (Menu.height)
+        for (let name in windows)
         {
-            for (let name in windows)
+            const win = windows[name].win
+            if (win)
             {
-                const win = windows[name].win
-                if (win)
+                win.on('resize-end', () => Views.update())
+                win.on('move-end', () => Views.update())
+                if (Menu.height)
                 {
-                    win.on('move-end', () =>
+                    if (win)
                     {
-                        if (win.y < Menu.height)
+                        win.on('move-end', () =>
                         {
-                            win.y = Menu.height
-                        }
-                    })
+                            if (win.y < Menu.height)
+                            {
+                                win.y = Menu.height
+                            }
+                        })
+                    }
                 }
             }
         }

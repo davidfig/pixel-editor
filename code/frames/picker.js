@@ -476,8 +476,6 @@ module.exports = class Picker
                 this.quickSetup()
             })
         })
-        this.win.on('resize-end', () => State.set())
-        this.win.on('move-end', () => State.set())
         State.on('foreground', () => this.dirty = true)
         State.on('background', () => this.dirty = true)
         State.on('isForeground', () => this.dirty = true)

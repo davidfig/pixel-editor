@@ -27,7 +27,6 @@ module.exports = class Position
             this.buttons.push(one)
         }
         this.win.open()
-        this.stateSetup()
     }
 
     pressed(index)
@@ -124,10 +123,5 @@ module.exports = class Position
         const vp = draw.vp
         vp.moveCorner(0, 0)
         vp.dirty = true
-    }
-
-    stateSetup()
-    {
-        this.win.on('move-end', () => State.set())
     }
 }

@@ -178,7 +178,6 @@ module.exports = class Info
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set())
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)

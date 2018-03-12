@@ -106,7 +106,6 @@ module.exports = class Toolbar
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set())
         State.on('tool', this.changed, this)
     }
 }

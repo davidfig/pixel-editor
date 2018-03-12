@@ -35,6 +35,9 @@
     "LineTool": "l",
     "CropTool": "i",
 
+    "NextView": "tab",
+    "PreviousView": "shift+tab",
+
     "ToolbarWindow": "",
     "InfoWindow": "",
     "AnimationWindow": "a",

@@ -239,7 +239,6 @@ module.exports = class Manager
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set())
         State.on('last-file', () => this.populateBox())
     }
 

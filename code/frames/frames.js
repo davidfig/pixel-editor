@@ -245,8 +245,6 @@ module.exports = class Frames extends PIXI.Container
     {
         this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         this.win.on('resize', () => this.resize())
-        this.win.on('resize-end', () => State.set())
-        this.win.on('move-end', () => State.set())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.currentChange())
         State.on('last-file', () => this.redraw())

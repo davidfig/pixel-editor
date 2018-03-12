@@ -19,6 +19,8 @@ const Views = {
 
     update()
     {
+        State.views[State.view] = Views.wm.save()
+        State.save()
     },
 
     resetWindows: function ()

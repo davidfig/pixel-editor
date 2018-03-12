@@ -1,5 +1,5 @@
 const LANGUAGES = {
-    'en-us': require('../text/en-us.json')
+    'en-us': require('../data/text/en-us.json')
 }
 
 const language = 'en-us'

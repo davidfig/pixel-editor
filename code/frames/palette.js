@@ -72,7 +72,7 @@ module.exports = class Palette extends PIXI.Container
 
         const width = (this.content.offsetWidth / WIDTH)// - (Settings.BORDER * 2 / WIDTH)
 
-        const fontSize = FontSize('8', { width, height: width * 0.75 })
+        const fontSize = FontSize('8', { width, height: width * 0.75 }) || 1
         let yStart = Settings.BORDER
 
         const behindForeground = this.main.addChild(Sheet.get('transparency'))
@@ -238,8 +238,6 @@ module.exports = class Palette extends PIXI.Container
     {
         this.resize()
         this.win.on('resize', () => this.resize())
-        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
-        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)

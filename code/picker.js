@@ -584,6 +584,4 @@ module.exports = class Picker
         this.renderer.resize(this.content.offsetWidth, height)
         this.dirty = true
     }
-
-    keydown() { }
 }

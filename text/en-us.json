@@ -17,6 +17,7 @@
     "menuErase": "&Erase",
     "menuDropper": "Sample &Color",
     "menuClear": "&Reset Cursor",
+    "menuSwapForeground": "Swap &Foreground",
     "menuView": "&View",
     "menuPanes": "&Windows",
     "menuToolbar": "&Toolbar",

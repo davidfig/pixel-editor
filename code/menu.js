@@ -49,6 +49,7 @@ function draw()
     submenu.append(new MenuItem({ label: locale.get('menuErase'), accelerator: Keys.Erase, click: () => Main.windows.draw.erase() }))
     submenu.append(new MenuItem({ label: locale.get('menuDropper'), accelerator: Keys.Dropper, click: () => State.foreground = PixelEditor.get(State.cursorX, State.cursorY) }))
     submenu.append(new MenuItem({ label: locale.get('menuClear'), accelerator: Keys.Clear, click: () => Main.windows.draw.clear() }))
+    submenu.append(new MenuItem({ label: locale.get('menuSwapForeground'), accelerator: Keys.SwapForeground, click: () => Main.windows.palette.switchForeground() }))
     _menu.append(new MenuItem({ label: locale.get('menuDraw'), submenu }))
 }
 

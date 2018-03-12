@@ -253,38 +253,44 @@ module.exports = class Palette extends PIXI.Container
         this.draw()
     }
 
-    keydown(e)
+    switchForeground()
     {
-        const code = e.keyCode
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey)
+        State.isForeground = !State.isForeground
+    }
+
+    switchStandardColor(i)
+    {
+        switch (i)
         {
-            switch (code)
-            {
-                case 88:
-                    State.isForeground = !State.isForeground
-                    break
-                case 49:
-                    State.color = '000000ff'
-                    break
-                case 50:
-                    State.color = 'ffffffff'
-                    break
-                case 51:
-                    State.color = '00000000'
-                    break
-                case 52: case 53: case 54: case 55: case 56: case 57: case 58:
-                    if (exists(this.colors[0][code - 52]))
-                    {
-                        State.color = this.colors[0][code - 52]
-                    }
-                    break
-                case 48:
-                    if (exists(this.colors[0][10 - 4]))
-                    {
-                        State.color = this.colors[0][10 - 4]
-                    }
-                    break
-            }
+            case 1:
+                State.color = '000000ff'
+                break
+            case 2:
+                State.color = 'ffffffff'
+                break
+            case 3:
+                State.color = '00000000'
+                break
+        }
+    }
+
+    switchColor(digit)
+    {
+        switch (digit)
+        {
+            case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                if (exists(this.colors[0][digit - 3]))
+                {
+                    State.color = this.colors[0][digit - 3]
+                }
+                break
+
+            case 0:
+                if (exists(this.colors[0][10 - 4]))
+                {
+                    State.color = this.colors[0][10 - 4]
+                }
+                break
         }
     }
 }

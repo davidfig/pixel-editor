@@ -24,6 +24,17 @@ function setup(main)
     Accelerator.register('shift+arrowleft', () => Main.windows.draw.moveCursorShift(-1, 0))
     Accelerator.register('shift+arrowdown', () => Main.windows.draw.moveCursorShift(0, 1))
     Accelerator.register('shift+arrowup', () => Main.windows.draw.moveCursorShift(0, -1))
+
+    // number colors
+    for (let i = 1; i < 4; i++)
+    {
+        Accelerator.register(i, () => Main.windows.palette.switchStandardColor(i))
+    }
+    for (let i = 4; i < 10; i++)
+    {
+        Accelerator.register(i, () => Main.windows.palette.switchColor(i))
+    }
+    Accelerator.register(0, () => Main.windows.palette.switchColor(0))
 }
 
 module.exports = {

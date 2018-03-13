@@ -1,0 +1,1 @@
+module.exports = require('./misc').Menu.LocalAccelerator

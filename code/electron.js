@@ -20,7 +20,7 @@ function afterLoad()
     const main = State.main
     if (main)
     {
-        _main = new electron.BrowserWindow({ icon: './assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND, width: Math.round(main.width), height: Math.round(main.height), x: Math.round(main.x), y: Math.round(main.y), })
+        _main = new electron.BrowserWindow({ icon: '../assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND, width: Math.round(main.width), height: Math.round(main.height), x: Math.round(main.x), y: Math.round(main.y), })
         if (main.maximize)
         {
             _main.maximize()
@@ -28,10 +28,10 @@ function afterLoad()
     }
     else
     {
-        _main = new electron.BrowserWindow({ icon: './assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND })
+        _main = new electron.BrowserWindow({ icon: '../assets/icon.png', title: 'Pixel Editor', backgroundColor: BACKGROUND })
         _main.maximize()
     }
-    _main.loadURL(url.format({ pathname: path.join(__dirname, 'html', 'main.html'), protocol: 'file:', slashes: true }))
+    _main.loadURL(url.format({ pathname: path.join(__dirname, '..', 'html', 'electron.html'), protocol: 'file:', slashes: true }))
     if (Settings.DEBUG)
     {
         _main.toggleDevTools()

@@ -23,9 +23,9 @@
     "CircleTool": "c",
     "EllipseTool": "e",
     "LineTool": "l",
-    "CropTool": "i",
+    "CropTool": "w",
 
-    "NextView": "tab",
+    "NextView": "Tab",
     "PreviousView": "shift+tab",
 
     "ToolbarWindow": "",

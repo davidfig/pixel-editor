@@ -19,7 +19,7 @@ module.exports = class Manager
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ x: 10, y: 10, minWidth: MIN_WIDTH, resizable: true, minimizable: false })
+        this.win = ui.createWindow({ title: locale.get('ManagerTitle'), x: 10, y: 10, minWidth: MIN_WIDTH, resizable: true, minimizable: false })
         this.win.open()
         this.content = this.win.content
         this.content.style.color = '#eeeeee'

@@ -53,7 +53,7 @@ module.exports = class Select extends Base
         }
     }
 
-    crop()
+    space()
     {
         PixelEditor.crop(State.cursorX, State.cursorY, State.cursorSizeX, State.cursorSizeY)
         State.cursorX = 0

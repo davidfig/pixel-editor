@@ -24,7 +24,7 @@ class PixelEditor extends Pixel
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
     }
 
-    create(filename, callback)
+    create(filename)
     {
         if (!filename)
         {
@@ -39,7 +39,6 @@ class PixelEditor extends Pixel
                 sheet.render(() =>
                 {
                     this.dirty = true
-                    callback()
                 })
                 setInterval(() => this.update(), Settings.SAVE_INTERVAL)
             })
@@ -48,7 +47,7 @@ class PixelEditor extends Pixel
         {
             this.filename = filename
             this.name = this.name || path.basename(filename, '.json')
-            this.load(filename, callback)
+            this.load(filename)
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
     }
@@ -591,11 +590,10 @@ class PixelEditor extends Pixel
         }
     }
 
-    afterLoad(load, callback)
+    afterLoad(load)
     {
         if (!load || !load.imageData.length || !load.animations || load.imageData[0].length !== 3)
         {
-            callback()
             return
         }
         this.imageData = load.imageData
@@ -632,14 +630,13 @@ class PixelEditor extends Pixel
                 this.editor.zoom = 10
                 this.dirty = true
             }
-            callback()
         })
     }
 
-    load(filename, callback)
+    load(filename)
     {
         this.filename = filename = filename || this.filename
-        File.readJSON(filename, (load) => this.afterLoad(load, callback))
+        File.readJSON(filename, (load) => this.afterLoad(load))
     }
 
     save(filename)

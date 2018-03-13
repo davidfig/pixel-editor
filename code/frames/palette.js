@@ -9,6 +9,7 @@ const PixelEditor = require('../pixel-editor')
 const State = require('../state')
 const Sheet = require('../sheet')
 const PixelSheet = require('../pixel-sheet')
+const locale = require('../locale')
 
 const COLORS_PER_LINE = 10
 
@@ -23,7 +24,7 @@ module.exports = class Palette extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ width: MIN_WIDTH, height: MIN_HEIGHT })
+        this.win = ui.createWindow({ title: locale.get('PaletteTitle'), width: MIN_WIDTH, height: MIN_HEIGHT })
         this.win.open()
 
         this.content = this.win.content

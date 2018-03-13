@@ -107,7 +107,15 @@
     "KeyboardWindow": "Keyboard Preferences",
     "ResetWindows": "Reset Current Windows Position and Size",
 
-    "TitleKeys": "Key Binding Preferences",
+    "AnimationTitle": "Animations",
+    "FramesTitle": "Frames",
+    "InfoTitle": "Pixel Info",
+    "ManagerTitle": "File Manager",
+    "PaletteTitle": "Color Palette",
+    "PickerTitle": "Color Picker",
+    "PositionTitle": "Frame Position",
+    "KeyboardTitle": "Key Binding Preferences",
+
     "Command": "Command",
     "Keybinding": "Key Binding",
     "DialogKeyBinding": "Press key combination",

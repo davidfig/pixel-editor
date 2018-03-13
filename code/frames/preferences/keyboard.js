@@ -12,7 +12,7 @@ module.exports = class Keys
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ title: locale.get('TitleKeys') })
+        this.win = ui.createWindow({ title: locale.get('KeyboardTitle') })
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'
         this.content.style.color = '#eeeeee'

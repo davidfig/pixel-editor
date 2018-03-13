@@ -6,6 +6,7 @@ const clicked = require('clicked')
 
 const State = require('../state.js')
 const sheet = require('../sheet')
+const locale = require('../locale')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300
@@ -22,7 +23,7 @@ module.exports = class Picker
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ title: locale.get('PickerTitle'), height: MIN_HEIGHT, width: MIN_WIDTH })
         this.win.open()
         this.ui = ui
         this.content = this.win.content

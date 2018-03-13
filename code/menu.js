@@ -1,6 +1,6 @@
 const Misc = require('./config/misc')
-const Menu = require('./config/misc').Menu
-const MenuItem = require('./config/misc').MenuItem
+const Menu = Misc.Menu
+const MenuItem = Misc.MenuItem
 const path = require('path')
 
 const locale = require('./locale')

@@ -1,10 +1,10 @@
 # Pixel Editor thingy
 
-This is a WIP Pixel editor/animator that runs in the web and locally using Electron. 
+This is a Pixel Editor/Animator that runs in the web and locally using Electron.
 
-## Demo
+## Live Demo
 
-[Early web demo](https://davidfig.github.io/pixel-editor/) (no save/load for the web yet)
+[Early web demo](https://davidfig.github.io/pixel-editor/)
 
 
 ## license  

@@ -180,4 +180,4 @@ const LocalAccelerator = {
     }
 }
 
-module.exports = LocalAccelerator
+module.exports = require('./misc').Menu.LocalAccelerator

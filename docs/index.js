@@ -1,1438 +1,898 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
-const Ease = require('dom-ease')
+/* Copyright (c) 2018 YOPEY YOPEY LLC */
 
-class Tooltip
+const Tooltip = require('./config/libraries').Tooltip
+
+const html = require('./html')
+
+module.exports = function button(parent, data, styles, title)
 {
-    /**
-     * Add tooltip to an element
-     * @param {HTMLElement} element
-     * @param {string} html
-     * @param {object} [options]
-     * @param {object} [options.styles] additional styles to apply to tooltip (e.g., backgroundColor: 'red')
-     * @param {number} [options.parent] parent to attach tooltip div
-     */
-    constructor(element, html, options)
+    const scale = 2
+
+    const button = html({ parent, type: 'button', styles: { position: 'relative' } })
+    if (title)
+    {
+        if (Array.isArray(title))
+        {
+            new Tooltip(button, '<div>' + title[0] + '</div><div>key: ' + title[1] + '</div>')
+        }
+        else
+        {
+            new Tooltip(button, title)
+        }
+    }
+    const image = new Image()
+    image.src = 'data:image/png;base64,' + data[2]
+    image.width = data[0] * scale
+    button.style.width = image.width * 1.5 + 'px'
+    image.height = data[1] * scale
+    button.style.height = image.height * 1.5 + 'px'
+    image.style.imageRendering = 'pixelated'
+    image.style.position = 'absolute'
+    image.style.top = '50%'
+    image.style.left = '50%'
+    image.style.transform = 'translate(-50%, -50%)'
+    image.style.pointerEvents = 'none'
+    button.image = image
+    button.appendChild(image)
+    if (styles)
+    {
+        for (let key in styles)
+        {
+            button.style[key] = styles[key]
+        }
+    }
+    return button
+}
+},{"./config/libraries":3,"./html":20}],2:[function(require,module,exports){
+const localforage = require('localforage')
+
+const Settings = require('../settings')
+
+const STATE_FILENAME = 'state-save'
+
+localforage.config({
+    name: Settings.NAME
+})
+
+function saveFileDialog(path, callback)
+{
+    // remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, callback)
+    console.log('todo: save file')
+}
+
+function exportFileDialog(path, callback)
+{
+
+}
+
+function openFileDialog(path, callback)
+{
+    // remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, callback)
+    console.log('todo: load file')
+}
+
+function openDirDialog(callback)
+{
+
+}
+
+function readState(callback)
+{
+    localforage.getItem(STATE_FILENAME)
+        .then((value) => callback(JSON.parse(value)))
+        .catch(() => callback())
+}
+
+function writeState(data)
+{
+    localforage.setItem(STATE_FILENAME, JSON.stringify(data))
+}
+
+function getTempFilename(callback)
+{
+    localforage.keys()
+        .then((keys) =>
+        {
+            function search(filename)
+            {
+                for (let key of keys)
+                {
+                    if (key === filename)
+                    {
+                        return true
+                    }
+                }
+                return false
+            }
+
+            let filename, i = 0
+            do
+            {
+                i++
+                filename = 'pixel-' + i + '.json'
+            }
+            while (search(filename))
+            callback(filename)
+        }).catch((err) =>
+        {
+            console.error(err)
+        })
+}
+
+function readJSON(filename, callback)
+{
+    localforage.getItem(filename)
+        .then((value) => callback(JSON.parse(value)))
+        .catch(() => callback())
+}
+
+function writeJSON(filename, data)
+{
+    localforage.setItem(filename, JSON.stringify(data))
+}
+
+function writeFile()
+{
+}
+
+function readDir(dir, callback)
+{
+    localforage.keys((err, keys) =>
+    {
+        callback(keys)
+    })
+}
+
+function fileDate(file)
+{
+    return 0
+}
+
+module.exports = {
+    openFileDialog,
+    openDirDialog,
+    saveFileDialog,
+    readState,
+    writeState,
+    getTempFilename,
+    readJSON,
+    writeJSON,
+    exportFileDialog,
+    writeFile,
+    readDir,
+    fileDate
+}
+},{"../settings":27,"localforage":59}],3:[function(require,module,exports){
+module.exports = {
+
+    // YY_RENDERSHEET: '../../../components/rendersheet/',
+    RenderSheet: require('yy-rendersheet'),
+
+    // YY_PIXEL: '../../../components/pixel/',
+    Pixel: require('yy-pixel').Pixel,
+
+    // VIEWPORT: '../../../components/pixi-viewport',
+    Viewport: require('pixi-viewport'),
+
+    // WM: require('../../../components/window-manager/src/window-manager'),
+    WM: require('simple-window-manager'),
+
+    // Tooltip: require('../../../components/tooltip')
+    Tooltip: require('yy-tooltip')
+}
+},{"pixi-viewport":104,"simple-window-manager":278,"yy-pixel":293,"yy-rendersheet":300,"yy-tooltip":302}],4:[function(require,module,exports){
+module.exports = require('./misc').Menu.LocalAccelerator
+},{"./misc":5}],5:[function(require,module,exports){
+// const Menu = require('../../../components/menu')
+const Menu = require('yy-menu')
+const MenuItem = Menu.MenuItem
+
+module.exports = {
+
+    Menu,
+    MenuItem,
+    isElectron: false
+}
+},{"yy-menu":291}],6:[function(require,module,exports){
+const clicked = require('clicked')
+
+const html = require('./html')
+
+module.exports = class Dialog
+{
+    constructor(win, title, type, label, callback, options)
     {
         options = options || {}
+        options.ok = options.ok || 'OK'
+        options.cancel = options.cancel || 'Cancel'
+        options.okColor = options.okColor || 'black'
 
-        const styles = {}
-        for (let style in Tooltip.styles)
+        this.callback = callback
+        this.win = win.wm.createWindow({ title, parent: win, modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0 })
+        this.win.content.style.color = '#eeeeee'
+        const div = html({ parent: this.win.content, styles: { display: 'flex', justifyContent: 'center', margin: '1em' } })
+        if (type === 'string')
         {
-            styles[style] = Tooltip.styles[style]
-        }
-        if (options.styles)
-        {
-            for (let style in options.styles)
+            html({ parent: div, type: 'label', html: 'title', html: label })
+            this.input = html({ parent: div, type: 'input' })
+            if (options.original)
             {
-                styles[style] = options.styles[style]
+                this.input.value = options.original
             }
+            this.captureKey(this.input)
         }
-        this.display = styles['display'] || 'block'
-        this.showing = false
-
-        this.parent = options.parent || Tooltip.parent || document.body
-        this.div = document.createElement('div')
-
-        for (let style in styles)
+        else if (type === 'confirmation')
         {
-            this.div.style[style] = styles[style]
+            html({ parent: div, html: label })
         }
-        this.div.style.display = 'none'
-        this.div.innerHTML = html
+        this.type = type
 
-        element.addEventListener('mouseenter', (e) => this.mouseenter(e))
-        element.addEventListener('mousemove', (e) => this.mousemove(e))
-        element.addEventListener('mouseleave', (e) => this.mouseleave(e))
+        const buttons = html({ parent: this.win.content, styles: { width: '100%', display: 'flex', justifyContent: 'center', margin: '0.25em' } })
+        const OK = html({ parent: buttons, type: 'button', html: options.ok, styles: { width: '6em', display: 'block', margin: '0.25em', color: options.okColor } })
+        clicked(OK, () => this.OK())
+        const Cancel = html({ parent: buttons, type: 'button', html: options.cancel, styles: { width: '6em', display: 'block', margin: '0.25em' } })
+        clicked(Cancel, () => this.cancel())
 
-        this.parent.appendChild(this.div)
-    }
-
-    /** removes tooltip */
-    remove()
-    {
-        this.parent.removeChild(this.div)
-        this.div = null
-    }
-
-    /**
-     * @type {string}
-     * gets/sets change html of tooltip
-     */
-    get html()
-    {
-        return this.div.innerHTML
-    }
-    set html(value)
-    {
-        this.div.innerHTML = value
-    }
-
-    /**
-     * @type {number}
-     * get/set fade in/out duration in milliseconds
-     */
-    static get animationDuration()
-    {
-        return Tooltip.ease.options.duration
-    }
-    static set animationDuration(value)
-    {
-        Tooltip.ease.options.duration = value
-    }
-
-    /**
-     * @type {(string|function)}
-     * get/set ease function (or function name) to use for tooltip fade
-     * defaults to 'easeInOutSine'
-     */
-    static get animationEase()
-    {
-        return Tooltip.ease.options.ease
-    }
-    static set animationEase(value)
-    {
-        Tooltip.ease.options.ease = value
-    }
-
-    position(e)
-    {
-        this.div.style.left = e.pageX - (e.pageX > window.innerWidth / 2 ? this.div.offsetWidth : 0) + 'px'
-        this.div.style.top = e.pageY - (e.pageY > window.innerHeight / 2 ? this.div.offsetHeight : 0) + 'px'
-    }
-
-    mouseenter(e)
-    {
-        if (!this.div)
+        this.win.open()
+        this.win.center(win)
+        if (this.input)
         {
-            return
-        }
-        if (e.buttons === 0)
-        {
-            if (!this.showing)
+            this.input.focus()
+            if (options.original)
             {
-                this.div.style.opacity = 0
-                this.div.style.display = this.display
-                Tooltip.ease.remove(this.easing)
-                this.easing = Tooltip.ease.add(this.div, { opacity: 1 }, { wait: Tooltip.wait })
-                this.position(e)
-                this.showing = true
+                this.input.select()
             }
         }
     }
 
-    mousemove(e)
+    OK()
     {
-        if (this.div && this.showing)
+        this.win.close()
+        switch (this.type)
         {
-            this.position(e)
+            case 'string':
+                this.callback(this.input.value)
+                break
+
+            case 'confirmation':
+                this.callback(true)
+                break
         }
     }
 
-    mouseleave()
+    cancel()
     {
-        if (this.div && this.showing)
+        this.win.close()
+        this.callback()
+    }
+
+    captureKey(div)
+    {
+        div.addEventListener('keydown', (e) =>
         {
-            this.showing = false
-            Tooltip.ease.remove(this.easing)
-            this.easing = Tooltip.ease.add(this.div, { opacity: 0 })
-            this.easing.on('complete', () =>
+            if (e.code === 'Enter')
             {
-                this.div.style.display = 'none'
-            })
+                this.OK()
+            }
+            e.stopPropagation()
+        })
+        div.addEventListener('keyup', (e) => e.stopPropagation())
+    }
+}
+},{"./html":20,"clicked":50}],7:[function(require,module,exports){
+const PIXI = require('pixi.js')
+const Tooltip = require('./config/libraries').Tooltip
+
+const State = require('./state')
+
+const DICE = 50
+const DICE_COLOR = [0x888888, 0xaa0000]
+const SIZE = 10
+
+module.exports = class Dice extends PIXI.Container
+{
+    constructor(parent)
+    {
+        super()
+        this.renderer = new PIXI.WebGLRenderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
+        parent.appendChild(this.renderer.view)
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        new Tooltip(this.renderer.view, 'anchor of sprite')
+        this.dice = []
+        for (let i = 0; i < 9; i++)
+        {
+            const dice = this.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+            dice.anchor.set(0.5)
+            dice.width = dice.height = SIZE
+            this.dice.push(dice)
+        }
+        State.on('relative', this.draw, this)
+        this.draw()
+        this.interactive = true
+        this.on('pointerdown', (e) => this.down(e))
+    }
+
+    draw()
+    {
+        const border = SIZE
+        const centerX = DICE / 2
+        const centerY = DICE / 2
+        this.dice[0].position.set(border, border)
+        this.dice[1].position.set(centerX, border)
+        this.dice[2].position.set(DICE - border, border)
+        this.dice[3].position.set(border, centerY)
+        this.dice[4].position.set(centerX, centerY)
+        this.dice[5].position.set(DICE - border, centerY)
+        this.dice[6].position.set(border, DICE - border)
+        this.dice[7].position.set(centerX, DICE - border)
+        this.dice[8].position.set(DICE - border, DICE - border)
+        for (let dice of this.dice)
+        {
+            dice.tint = DICE_COLOR[0]
+        }
+        switch (State.relative)
+        {
+            case 'top-left': this.dice[0].tint = DICE_COLOR[1]; break
+            case 'top-center': this.dice[1].tint = DICE_COLOR[1]; break
+            case 'top-right': this.dice[2].tint = DICE_COLOR[1]; break
+            case 'center-left': this.dice[3].tint = DICE_COLOR[1]; break
+            case 'center-center': this.dice[4].tint = DICE_COLOR[1]; break
+            case 'center-right': this.dice[5].tint = DICE_COLOR[1]; break
+            case 'bottom-left': this.dice[6].tint = DICE_COLOR[1]; break
+            case 'bottom-center': this.dice[7].tint = DICE_COLOR[1]; break
+            case 'bottom-right': this.dice[8].tint = DICE_COLOR[1]; break
+        }
+        this.renderer.render(this)
+    }
+
+    down(e)
+    {
+        const point = e.data.global
+        for (let i = 0; i < this.dice.length; i++)
+        {
+            if (this.dice[i].containsPoint(point))
+            {
+                switch (i)
+                {
+                    case 0: State.relative = 'top-left'; break
+                    case 1: State.relative = 'top-center'; break
+                    case 2: State.relative = 'top-right'; break
+                    case 3: State.relative = 'center-left'; break
+                    case 4: State.relative = 'center-center'; break
+                    case 5: State.relative = 'center-right'; break
+                    case 6: State.relative = 'bottom-left'; break
+                    case 7: State.relative = 'bottom-center'; break
+                    case 8: State.relative = 'bottom-right'; break
+                }
+                this.draw()
+            }
         }
     }
 }
+},{"./config/libraries":3,"./state":29,"pixi.js":221}],8:[function(require,module,exports){
+const PIXI = require('pixi.js')
 
-/**
- * @type {object}
- * default styles to apply to tooltip div
- */
-Tooltip.styles = {
-    'position': 'absolute',
-    'zIndex': 99999,
-    'background': 'white',
-    'border': 'solid black 1px',
-    'padding': '0.75em',
-    'pointerEvents': 'none'
-}
+const libraries = require('./config/libraries')
+const Viewport = libraries.Viewport
 
-Tooltip.ease = new Ease({ duration: 250, ease: 'easeInOutSine' })
+const Settings = require('./settings')
+const Sheet = require('./sheet')
+const State = require('./state')
+const PixelEditor = require('./pixel-editor')
+const pixelSheet = require('./pixel-sheet')
+const Position = require('./frames/position')
 
-/**
- * @type {number}
- * @static
- * milliseconds to wait before showing tooltip
- */
-Tooltip.wait = 500
+const Circle = require('./tools/circle')
+const Ellipse = require('./tools/ellipse')
+const Line = require('./tools/line')
+const Paint = require('./tools/paint')
+const Select = require('./tools/select')
+const Fill = require('./tools/fill')
+const Crop = require('./tools/crop')
 
-/**
- * @type {HTMLElement}
- * element to attach div
- */
-Tooltip.parent = document.body
+const BORDER = 1
+const THRESHOLD = 5
 
-module.exports = Tooltip
-},{"dom-ease":2}],2:[function(require,module,exports){
-'use strict';
+module.exports = class Draw extends PIXI.Container
+{
+    constructor(body, ui, main)
+    {
+        super()
+        this.body = body
+        this.ui = ui
+        this.main = main
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
+        body.appendChild(this.renderer.view)
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+        this.renderer.view.style.display = 'block'
+        this.renderer.view.style.margin = '0 auto'
+        this.renderer.view.style.width = '100%'
+        this.renderer.view.style.height = '100%'
+        this.resize()
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
+        this.blocks = this.vp.addChild(new PIXI.Container())
+        this.sprite = this.vp.addChild(new PIXI.Sprite())
+        this.grid = this.vp.addChild(new PIXI.Graphics())
+        this.cursorBlock = this.vp.addChild(new PIXI.Graphics())
+        this.stateSetup('draw')
+        window.addEventListener('resize', () => this.resize())
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var EventEmitter = require('eventemitter3');
-var Penner = require('penner');
-var exists = require('exists');
-
-var Ease = require('./ease');
-
-/**
- * Manages all eases
- * @extends EventEmitter
- * @example
- * var Ease = require('dom-ease');
- * var ease = new Ease({ duration: 3000, ease: 'easeInOutSine' });
- *
- * var test = document.getElementById('test')
- * ease.add(test, { left: 20, top: 15, opacity: 0.25 }, { repeat: true, reverse: true })
- */
-
-var DomEase = function (_EventEmitter) {
-    _inherits(DomEase, _EventEmitter);
-
-    /**
-     * @param {object} [options]
-     * @param {number} [options.duration=1000] default duration
-     * @param {(string|function)} [options.ease=penner.linear] default ease
-     * @param {(string|function)} [options.autostart=true]
-     * @param {boolean} [options.pauseOnBlur] pause timer on blur, resume on focus
-     * @fires DomEase#each
-     * @fires DomEase#complete
-     */
-    function DomEase(options) {
-        _classCallCheck(this, DomEase);
-
-        var _this = _possibleConstructorReturn(this, (DomEase.__proto__ || Object.getPrototypeOf(DomEase)).call(this));
-
-        _this.options = options || {};
-        _this.options.duration = _this.options.duration || 1000;
-        _this.options.ease = _this.options.ease || Penner.linear;
-        _this.list = [];
-        _this.empty = true;
-        if (!options.autostart) {
-            _this.start();
+        this.tools = {
+            circle: new Circle(this),
+            ellipse: new Ellipse(this),
+            line: new Line(this),
+            fill: new Fill(this),
+            paint: new Paint(this),
+            select: new Select(this),
+            crop: new Crop(this)
         }
-        if (options.pauseOnBlur) {
-            window.addEventListener('blur', function () {
-                return _this.blur();
-            });
-            window.addEventListener('focus', function () {
-                return _this.focus();
-            });
-        }
-        return _this;
+        this.tool = this.tools[State.tool]
+
+        this.redraw()
+        this.setupViewport()
+        PIXI.ticker.shared.add(() => this.update())
     }
 
-    /**
-     * start animation loop (automatically called unless options.autostart=false)
-     */
-
-
-    _createClass(DomEase, [{
-        key: 'start',
-        value: function start() {
-            if (!this._requested) {
-                this._requested = true;
-                this.loop();
-                this.running = true;
-            }
+    resize()
+    {
+        this.renderer.resize(window.innerWidth, window.innerHeight)
+        if (this.vp)
+        {
+            this.vp.resize(window.innerWidth, window.innerHeight)
         }
-    }, {
-        key: 'blur',
-        value: function blur() {
-            if (this.running) {
-                this.stop();
-                this.running = true;
-            }
-        }
-    }, {
-        key: 'focus',
-        value: function focus() {
-            if (this.running) {
-                this.start();
-            }
-        }
-    }, {
-        key: 'loop',
-        value: function loop(time) {
-            var _this2 = this;
-
-            if (time) {
-                var elapsed = this._last ? time - this._last : 0;
-                this.update(elapsed);
-            }
-            this._last = time;
-            this._requestId = window.requestAnimationFrame(function (time) {
-                return _this2.loop(time);
-            });
-        }
-
-        /**
-         * stop animation loop
-         */
-
-    }, {
-        key: 'stop',
-        value: function stop() {
-            if (this._requested) {
-                window.cancelAnimationFrame(this._requestId);
-                this._requested = false;
-                this.running = false;
-            }
-        }
-
-        /**
-         * add eases
-         * @param {HTMLElement} element
-         * @param {object} params
-         * @param {number} [params.left] in px
-         * @param {number} [params.top] in px
-         * @param {number} [params.width] in px
-         * @param {number} [params.height] in px
-         * @param {number} [params.scale]
-         * @param {number} [params.scaleX]
-         * @param {number} [params.scaleY]
-         * @param {number} [params.opacity]
-         * @param {(color|color[])} [params.color]
-         * @param {(color|color[])} [params.backgroundColor]
-         * @param {object} [options]
-         * @param {number} [options.duration]
-         * @param {(string|function)} [options.ease]
-         * @param {(boolean|number)} [options.repeat]
-         * @param {boolean} [options.reverse]
-         * @returns {Ease}
-         */
-
-    }, {
-        key: 'add',
-        value: function add(element, params, options) {
-            // set up default options
-            options = options || {};
-            options.duration = exists(options.duration) ? options.duration : this.options.duration;
-            options.ease = options.ease || this.options.ease;
-            if (typeof options.ease === 'string') {
-                options.ease = Penner[options.ease];
-            }
-            var ease = new Ease(element, params, options);
-            this.list.push(ease);
-            return ease;
-        }
-
-        /**
-         * remove all eases on element
-         * @param {HTMLElement} element
-         */
-
-    }, {
-        key: 'removeObjectEases',
-        value: function removeObjectEases(element) {
-            var list = this.list;
-            for (var i = 0, _i = list.length; i < _i; i++) {
-                var ease = list[i];
-                if (ease.element === element) {
-                    list.splice(i, 1);
-                    i--;
-                    _i--;
-                }
-            }
-        }
-
-        /**
-         * remove eases using Ease object returned by add()
-         * @param {Ease} ease
-         */
-
-    }, {
-        key: 'remove',
-        value: function remove(ease) {
-            var list = this.list;
-            for (var i = 0, _i = list.length; i < _i; i++) {
-                if (list[i] === ease) {
-                    list.splice(i, 1);
-                    return;
-                }
-            }
-        }
-
-        /**
-         * remove all eases
-         */
-
-    }, {
-        key: 'removeAll',
-        value: function removeAll() {
-            this.list = [];
-        }
-
-        /**
-         * update frame; this is called automatically if start() is used
-         * @param {number} elapsed time in ms
-         */
-
-    }, {
-        key: 'update',
-        value: function update(elapsed) {
-            for (var i = 0, _i = this.list.length; i < _i; i++) {
-                if (this.list[i].update(elapsed)) {
-                    this.list.splice(i, 1);
-                    i--;
-                    _i--;
-                }
-            }
-            this.emit('each', this);
-            if (!this.empty && this.list.length === 0) {
-                this.emit('done', this);
-                this.empty = true;
-            }
-        }
-
-        /**
-         * number of eases
-         * @returns {number}
-         */
-
-    }, {
-        key: 'getCount',
-        value: function getCount() {
-            return this.list.length;
-        }
-    }]);
-
-    return DomEase;
-}(EventEmitter);
-
-/**
- * fires when there are no more animations for a DOM element
- * @event DomEase#complete
- * @type {DomEase}
- */
-
-/**
- * fires on each loop for a DOM element where there are animations
- * @event DomEase#each
- * @type {DomEase}
- */
-
-module.exports = DomEase;
-
-},{"./ease":3,"eventemitter3":4,"exists":5,"penner":6}],3:[function(require,module,exports){
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var EventEmitter = require('eventemitter3');
-var exists = require('exists');
-
-var Ease = function (_EventEmitter) {
-    _inherits(Ease, _EventEmitter);
-
-    /**
-     * Ease class returned by DomEase.add()
-     * @extends EventEmitter
-     * @param {HTMLElement} element
-     * @param {object} params
-     * @param {number} [params.left] in px
-     * @param {number} [params.top] in px
-     * @param {number} [params.width] in px
-     * @param {number} [params.height] in px
-     * @param {number} [params.scale]
-     * @param {number} [params.scaleX]
-     * @param {number} [params.scaleY]
-     * @param {number} [params.opacity]
-     * @param {(color|color[])} [params.color]
-     * @param {(color|color[])} [params.backgroundColor]
-     * @param {object} [options]
-     * @param {number} [options.duration]
-     * @param {(string|function)} [options.ease]
-     * @param {(boolean|number)} [options.repeat]
-     * @param {boolean} [options.reverse]
-     * @param {number} [options.wait]
-     * @returns {Ease}
-     * @fires Ease#each
-     * @fires Ease#complete
-     * @fires Ease#loop
-     * @hideconstructor
-     */
-    function Ease(element, params, options) {
-        _classCallCheck(this, Ease);
-
-        var _this = _possibleConstructorReturn(this, (Ease.__proto__ || Object.getPrototypeOf(Ease)).call(this));
-
-        _this.element = element;
-        _this.list = [];
-        _this.time = 0;
-        _this.duration = options.duration;
-        _this.ease = options.ease;
-        _this.repeat = options.repeat;
-        _this.reverse = options.reverse;
-        _this.wait = options.wait || 0;
-        for (var entry in params) {
-            switch (entry) {
-                case 'left':
-                    _this.numberStart(entry, element.offsetLeft, params[entry], 'px');
-                    break;
-
-                case 'top':
-                    _this.numberStart(entry, element.offsetTop, params[entry], 'px');
-                    break;
-
-                case 'color':
-                    _this.colorStart('color', element.style.color, params[entry]);
-                    break;
-
-                case 'backgroundColor':
-                    _this.colorStart('backgroundColor', element.style.backgroundColor, params[entry]);
-                    break;
-
-                case 'scale':
-                    _this.transformStart(entry, params[entry]);
-                    break;
-
-                case 'scaleX':
-                    _this.transformStart(entry, params[entry]);
-                    break;
-
-                case 'scaleY':
-                    _this.transformStart(entry, params[entry]);
-                    break;
-
-                case 'opacity':
-                    _this.numberStart(entry, exists(element.style.opacity) ? parseFloat(element.style.opacity) : 1, params[entry]);
-                    break;
-
-                case 'width':
-                    _this.numberStart(entry, element.offsetWidth, params[entry], 'px');
-                    break;
-
-                case 'height':
-                    _this.numberStart(entry, element.offsetHeight, params[entry], 'px');
-                    break;
-
-                default:
-                    console.warn(entry + ' not setup for animation in dom-ease.');
-            }
-        }
-        return _this;
+        this.renderer.render(this)
     }
 
-    /**
-     * create number entry
-     * @private
-     * @param {string} entry
-     * @param {number} start
-     * @param {number} to
-     * @param {string} [units]
-     */
+    setupViewport()
+    {
+        this.vp
+            .drag()
+            .decelerate()
+            .pinch()
+            .wheel()
 
+        const vp = PixelEditor.viewport
+        if (vp)
+        {
+            this.vp.x = vp.x
+            this.vp.y = vp.y
+            this.vp.scale.set(vp.scale)
+        }
+        else
+        {
+            Position.halfSize(this)
+            Position.center(this)
+        }
+    }
 
-    _createClass(Ease, [{
-        key: 'numberStart',
-        value: function numberStart(entry, start, to, units) {
-            var ease = { type: 'number', entry: entry, to: to, start: start, delta: to - start, units: units || '' };
-            this.list.push(ease);
-        }
-    }, {
-        key: 'numberUpdate',
-        value: function numberUpdate(ease, percent) {
-            this.element.style[ease.entry] = ease.start + ease.delta * percent + ease.units;
+    moveViewportCursor(x, y)
+    {
+        function clamp(n, min, max)
+        {
+            return n < min ? min : n > max ? max : n
         }
 
-        /**
-         * reverse number and transform
-         * @private
-         * @param {object} ease
-         */
+        const point = this.vp.toWorld(x, y)
+        State.cursorX = clamp(Math.floor(point.x / Settings.ZOOM), 0, PixelEditor.width - 1)
+        State.cursorY = clamp(Math.floor(point.y / Settings.ZOOM), 0, PixelEditor.height - 1)
+    }
 
-    }, {
-        key: 'easeReverse',
-        value: function easeReverse(ease) {
-            var swap = ease.to;
-            ease.to = ease.start;
-            ease.start = swap;
-            ease.delta = -ease.delta;
+    update()
+    {
+        if (this.vp.dirty)
+        {
+            PixelEditor.viewport = { x: this.vp.x, y: this.vp.y, scale: this.vp.scale.x }
+            this.vp.dirty = false
+            this.setHitArea()
+            this.renderer.render(this)
         }
-    }, {
-        key: 'transformStart',
-        value: function transformStart(entry, to) {
-            var ease = { type: 'transform', entry: entry, to: to };
-            if (!this.transforms) {
-                this.readTransform();
-            }
-            var transforms = this.transforms;
-            var found = void 0;
-            for (var i = 0, _i = transforms.length; i < _i; i++) {
-                var transform = transforms[i];
-                if (transform.name === entry) {
-                    switch (entry) {
-                        case 'scale':case 'scaleX':case 'scaleY':
-                            ease.start = parseFloat(transform.values);
-                            break;
-                    }
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                switch (entry) {
-                    case 'scale':case 'scaleX':case 'scaleY':
-                        ease.start = 1;
-                }
-            }
-            ease.delta = to - ease.start;
-            this.list.push(ease);
-        }
-    }, {
-        key: 'transformUpdate',
-        value: function transformUpdate(ease, percent) {
-            if (!this.changedTransform) {
-                this.readTransform();
-                this.changedTransform = true;
-            }
-            var name = ease.entry;
-            var transforms = this.transforms;
-            var values = ease.start + ease.delta * percent;
-            for (var i = 0, _i = transforms.length; i < _i; i++) {
-                if (transforms[i].name === name) {
-                    transforms[i].values = values;
-                    return;
-                }
-            }
-            this.transforms.push({ name: name, values: values });
-        }
-    }, {
-        key: 'colorUpdate',
-        value: function colorUpdate(ease) {
-            var elementStyle = this.element.style;
-            var style = ease.style;
-            var colors = ease.colors;
-            var i = Math.floor(this.time / ease.interval);
-            var color = colors[i];
-            if (elementStyle[style] !== color) {
-                elementStyle[style] = colors[i];
-            }
-        }
-    }, {
-        key: 'colorReverse',
-        value: function colorReverse(ease) {
-            var reverse = [];
-            var colors = ease.colors;
-            for (var color in colors) {
-                reverse.unshift(colors[color]);
-            }
-            reverse.push(reverse.shift());
-            ease.colors = reverse;
-        }
-    }, {
-        key: 'colorStart',
-        value: function colorStart(style, original, colors) {
-            var ease = { type: 'color', style: style };
-            if (Array.isArray(colors)) {
-                ease.colors = colors;
-            } else {
-                ease.colors = [colors];
-            }
-            colors.push(original);
-            ease.interval = this.duration / colors.length;
-            this.list.push(ease);
-        }
-    }, {
-        key: 'update',
-        value: function update(elapsed) {
-            if (this.wait) {
-                this.wait -= elapsed;
-                if (this.wait < 0) {
-                    elapsed = -this.wait;
-                    this.wait = 0;
-                } else {
-                    return;
-                }
-            }
-            this.changedTransform = false;
-            var list = this.list;
-            var leftover = null;
-            this.time += elapsed;
-            if (this.time >= this.duration) {
-                leftover = this.time - this.duration;
-                this.time -= leftover;
-            }
-            var percent = this.ease(this.time, 0, 1, this.duration);
-            for (var i = 0, _i = list.length; i < _i; i++) {
-                var ease = list[i];
-                switch (ease.type) {
-                    case 'number':
-                        this.numberUpdate(ease, percent);
-                        break;
+    }
 
-                    case 'color':
-                        this.colorUpdate(ease);
-                        break;
+    setHitArea()
+    {
+        if (!this.vp.forceHitArea)
+        {
+            this.vp.forceHitArea = new PIXI.Rectangle(this.vp.left, this.vp.top, this.vp.worldScreenWidth, this.vp.worldScreenHeight)
+        }
+        else
+        {
+            this.vp.forceHitArea.x = this.vp.left
+            this.vp.forceHitArea.y = this.vp.top
+            this.vp.forceHitArea.width = this.vp.worldScreenWidth
+            this.vp.forceHitArea.height = this.vp.worldScreenHeight
+        }
+    }
 
-                    case 'transform':
-                        this.transformUpdate(ease, percent);
-                        break;
-                }
-            }
-            if (this.changedTransform) {
-                this.writeTransform();
-            }
-            this.emit('each', this);
+    redraw()
+    {
+        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
+        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
+        this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
+        this.sprite.scale.set(Settings.ZOOM)
+        this.transparency()
+        this.frame()
+        this.cursorDraw()
+        this.setHitArea()
+        this.renderer.render(this)
+    }
 
-            // handle end of duration
-            if (leftover !== null) {
-                if (this.reverse) {
-                    this.reverseEases();
-                    this.time = leftover;
-                    this.emit('loop', this);
-                    if (!this.repeat) {
-                        this.reverse = false;
-                    } else if (this.repeat !== true) {
-                        this.repeat--;
-                    }
-                } else if (this.repeat) {
-                    this.emit('loop', this);
-                    this.time = leftover;
-                    if (this.repeat !== true) {
-                        this.repeat--;
-                    }
-                } else {
-                    this.emit('complete', this);
-                    return true;
-                }
+    change()
+    {
+        PixelEditor.save()
+        PixelEditor.emit('changed')
+        this.redraw()
+    }
+
+    clear()
+    {
+        this.tool.clear()
+    }
+
+    moveCursorShift(x, y)
+    {
+        this.tool.moveShift(x, y)
+    }
+
+    moveCursor(x, y)
+    {
+        this.tool.move(x, y)
+    }
+
+    transparency()
+    {
+        this.blocks.removeChildren()
+        for (let y = 0; y < PixelEditor.height; y++)
+        {
+            for (let x = 0; x < PixelEditor.width; x++)
+            {
+                const block = this.blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')))
+                block.width = block.height = Settings.ZOOM
+                block.position.set(x * Settings.ZOOM, y * Settings.ZOOM)
             }
         }
-    }, {
-        key: 'reverseEases',
-        value: function reverseEases() {
-            var list = this.list;
-            for (var i = 0, _i = list.length; i < _i; i++) {
-                var ease = list[i];
-                if (ease.type === 'color') {
-                    this.colorReverse(ease);
-                } else {
-                    this.easeReverse(ease);
-                }
+    }
+
+    frame()
+    {
+        this.grid.clear()
+        this.grid.lineStyle(BORDER, 0x888888)
+        for (let y = 0; y <= PixelEditor.height; y++)
+        {
+            this.grid.moveTo(0, y * Settings.ZOOM)
+            this.grid.lineTo(PixelEditor.width * Settings.ZOOM, y * Settings.ZOOM)
+        }
+
+        for (let x = 0; x <= PixelEditor.width; x++)
+        {
+            this.grid.moveTo(x * Settings.ZOOM, 0)
+            this.grid.lineTo(x * Settings.ZOOM, PixelEditor.height * Settings.ZOOM)
+        }
+    }
+
+    cursorDraw()
+    {
+        this.cursorBlock.clear()
+        this.tool.cursor()
+        this.renderer.render(this)
+    }
+
+    down(x, y, data)
+    {
+        this.saveDown = { x, y }
+        return this.vp.down(x, y, data)
+    }
+
+    up(x, y, data)
+    {
+        if (this.saveDown)
+        {
+            this.moveViewportCursor(x, y, data)
+        }
+        return this.vp.up(x, y, data)
+    }
+
+    move(x, y, data)
+    {
+        if (this.saveDown)
+        {
+            if (Math.abs(this.saveDown.x - x) > THRESHOLD || Math.abs(this.saveDown.y - y) > THRESHOLD)
+            {
+                this.saveDown = null
             }
         }
-    }, {
-        key: 'readTransform',
-        value: function readTransform() {
-            this.transforms = [];
-            var transform = this.element.style.transform;
-            var inside = void 0,
-                name = '',
-                values = void 0;
-            for (var i = 0, _i = transform.length; i < _i; i++) {
-                var letter = transform[i];
-                if (inside) {
-                    if (letter === ')') {
-                        inside = false;
-                        this.transforms.push({ name: name, values: values });
-                        name = '';
-                    } else {
-                        values += letter;
-                    }
-                } else {
-                    if (letter === '(') {
-                        values = '';
-                        inside = true;
-                    } else if (letter !== ' ') {
-                        name += letter;
+        return this.vp.move(x, y, data)
+    }
+
+    selectAll()
+    {
+        State.tool = 'select'
+        State.cursorX = 0
+        State.cursorY = 0
+        State.cursorSizeX = PixelEditor.width
+        State.cursorSizeY = PixelEditor.height
+    }
+
+    pressSpace()
+    {
+        this.tool.space()
+    }
+
+    toolChange()
+    {
+        this.tool = this.tools[State.tool]
+        this.tool.activate()
+        this.cursorDraw()
+    }
+
+    cut()
+    {
+        this.copy(true)
+        this.change()
+    }
+
+    copy(clear)
+    {
+        PixelEditor.undoSave()
+        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        {
+            this.clipboard = { width: 1, height: 1, data: PixelEditor.get(State.cursorX, State.cursorY) }
+            if (clear)
+            {
+                PixelEditor.set(State.cursorX, State.cursorY, '00000000', true)
+            }
+        }
+        else
+        {
+            let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
+            if (State.cursorSizeX < 0)
+            {
+                xStart += State.cursorSizeX
+                xTo = xStart + Math.abs(State.cursorSizeX)
+            }
+            else
+            {
+                xTo = xStart + State.cursorSizeX
+            }
+            if (State.cursorSizeY < 0)
+            {
+                yStart += State.cursorSizeY
+                yTo = yStart + Math.abs(State.cursorSizeY) - 1
+            }
+            else
+            {
+                yTo = yStart + State.cursorSizeY
+            }
+            this.clipboard = { width: xTo - xStart, height: yTo - yStart, data: [] }
+            for (let y = yStart; y < yTo; y++)
+            {
+                for (let x = xStart; x < xTo; x++)
+                {
+                    this.clipboard.data.push(PixelEditor.get(x, y))
+                    if (clear)
+                    {
+                        PixelEditor.set(x, y, '00000000', true)
                     }
                 }
             }
         }
-    }, {
-        key: 'writeTransform',
-        value: function writeTransform() {
-            var transforms = this.transforms;
-            var s = '';
-            for (var i = 0, _i = transforms.length; i < _i; i++) {
-                var transform = transforms[i];
-                s += transform.name + '(' + transform.values + ')';
+    }
+
+    erase()
+    {
+        PixelEditor.undoSave()
+        this.tool.erase()
+        this.change()
+    }
+
+    paste()
+    {
+        if (this.clipboard)
+        {
+            PixelEditor.undoSave()
+            let i = 0
+            for (let y = 0; y < this.clipboard.height; y++)
+            {
+                for (let x = 0; x < this.clipboard.width; x++)
+                {
+                    PixelEditor.set(x + State.cursorX, y + State.cursorY, this.clipboard.data[i++], true)
+                }
             }
-            this.element.style.transform = s;
+            this.change()
         }
-    }]);
-
-    return Ease;
-}(EventEmitter);
-
-/**
- * fires when eases are complete
- * @event Ease#complete
- * @type {Ease}
- */
-
-/**
- * fires on each loop while eases are running
- * @event Ease#each
- * @type {Ease}
- */
-
-/**
- * fires when eases repeat or reverse
- * @event Ease#loop
- * @type {Ease}
- */
-
-module.exports = Ease;
-
-},{"eventemitter3":4,"exists":5}],4:[function(require,module,exports){
-'use strict';
-
-var has = Object.prototype.hasOwnProperty
-  , prefix = '~';
-
-/**
- * Constructor to create a storage for our `EE` objects.
- * An `Events` instance is a plain object whose properties are event names.
- *
- * @constructor
- * @private
- */
-function Events() {}
-
-//
-// We try to not inherit from `Object.prototype`. In some engines creating an
-// instance in this way is faster than calling `Object.create(null)` directly.
-// If `Object.create(null)` is not supported we prefix the event names with a
-// character to make sure that the built-in object properties are not
-// overridden or used as an attack vector.
-//
-if (Object.create) {
-  Events.prototype = Object.create(null);
-
-  //
-  // This hack is needed because the `__proto__` property is still inherited in
-  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
-  //
-  if (!new Events().__proto__) prefix = false;
-}
-
-/**
- * Representation of a single event listener.
- *
- * @param {Function} fn The listener function.
- * @param {*} context The context to invoke the listener with.
- * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
- * @constructor
- * @private
- */
-function EE(fn, context, once) {
-  this.fn = fn;
-  this.context = context;
-  this.once = once || false;
-}
-
-/**
- * Add a listener for a given event.
- *
- * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} context The context to invoke the listener with.
- * @param {Boolean} once Specify if the listener is a one-time listener.
- * @returns {EventEmitter}
- * @private
- */
-function addListener(emitter, event, fn, context, once) {
-  if (typeof fn !== 'function') {
-    throw new TypeError('The listener must be a function');
-  }
-
-  var listener = new EE(fn, context || emitter, once)
-    , evt = prefix ? prefix + event : event;
-
-  if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
-  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
-  else emitter._events[evt] = [emitter._events[evt], listener];
-
-  return emitter;
-}
-
-/**
- * Clear event by name.
- *
- * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
- * @param {(String|Symbol)} evt The Event name.
- * @private
- */
-function clearEvent(emitter, evt) {
-  if (--emitter._eventsCount === 0) emitter._events = new Events();
-  else delete emitter._events[evt];
-}
-
-/**
- * Minimal `EventEmitter` interface that is molded against the Node.js
- * `EventEmitter` interface.
- *
- * @constructor
- * @public
- */
-function EventEmitter() {
-  this._events = new Events();
-  this._eventsCount = 0;
-}
-
-/**
- * Return an array listing the events for which the emitter has registered
- * listeners.
- *
- * @returns {Array}
- * @public
- */
-EventEmitter.prototype.eventNames = function eventNames() {
-  var names = []
-    , events
-    , name;
-
-  if (this._eventsCount === 0) return names;
-
-  for (name in (events = this._events)) {
-    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
-  }
-
-  if (Object.getOwnPropertySymbols) {
-    return names.concat(Object.getOwnPropertySymbols(events));
-  }
-
-  return names;
-};
-
-/**
- * Return the listeners registered for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Array} The registered listeners.
- * @public
- */
-EventEmitter.prototype.listeners = function listeners(event) {
-  var evt = prefix ? prefix + event : event
-    , handlers = this._events[evt];
-
-  if (!handlers) return [];
-  if (handlers.fn) return [handlers.fn];
-
-  for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
-    ee[i] = handlers[i].fn;
-  }
-
-  return ee;
-};
-
-/**
- * Return the number of listeners listening to a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Number} The number of listeners.
- * @public
- */
-EventEmitter.prototype.listenerCount = function listenerCount(event) {
-  var evt = prefix ? prefix + event : event
-    , listeners = this._events[evt];
-
-  if (!listeners) return 0;
-  if (listeners.fn) return 1;
-  return listeners.length;
-};
-
-/**
- * Calls each of the listeners registered for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Boolean} `true` if the event had listeners, else `false`.
- * @public
- */
-EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-  var evt = prefix ? prefix + event : event;
-
-  if (!this._events[evt]) return false;
-
-  var listeners = this._events[evt]
-    , len = arguments.length
-    , args
-    , i;
-
-  if (listeners.fn) {
-    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
-
-    switch (len) {
-      case 1: return listeners.fn.call(listeners.context), true;
-      case 2: return listeners.fn.call(listeners.context, a1), true;
-      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
-      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
-      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
-      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
     }
 
-    for (i = 1, args = new Array(len -1); i < len; i++) {
-      args[i - 1] = arguments[i];
+    stateSetup(name)
+    {
+        this.name = name
+        const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
+        for (let state of states)
+        {
+            State.on(state, () => this.redraw())
+        }
+        State.on('tool', () => this.toolChange())
+        PixelEditor.on('changed', () => this.redraw())
+        PixelEditor.on('current', () => this.redraw())
+        State.on('last-file', () => this.redraw())
+        State.on('background', () => this.toolChange())
     }
-
-    listeners.fn.apply(listeners.context, args);
-  } else {
-    var length = listeners.length
-      , j;
-
-    for (i = 0; i < length; i++) {
-      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
-
-      switch (len) {
-        case 1: listeners[i].fn.call(listeners[i].context); break;
-        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
-        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
-        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
-        default:
-          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
-            args[j - 1] = arguments[j];
-          }
-
-          listeners[i].fn.apply(listeners[i].context, args);
-      }
-    }
-  }
-
-  return true;
-};
-
-/**
- * Add a listener for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} [context=this] The context to invoke the listener with.
- * @returns {EventEmitter} `this`.
- * @public
- */
-EventEmitter.prototype.on = function on(event, fn, context) {
-  return addListener(this, event, fn, context, false);
-};
-
-/**
- * Add a one-time listener for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} [context=this] The context to invoke the listener with.
- * @returns {EventEmitter} `this`.
- * @public
- */
-EventEmitter.prototype.once = function once(event, fn, context) {
-  return addListener(this, event, fn, context, true);
-};
-
-/**
- * Remove the listeners of a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn Only remove the listeners that match this function.
- * @param {*} context Only remove the listeners that have this context.
- * @param {Boolean} once Only remove one-time listeners.
- * @returns {EventEmitter} `this`.
- * @public
- */
-EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
-  var evt = prefix ? prefix + event : event;
-
-  if (!this._events[evt]) return this;
-  if (!fn) {
-    clearEvent(this, evt);
-    return this;
-  }
-
-  var listeners = this._events[evt];
-
-  if (listeners.fn) {
-    if (
-      listeners.fn === fn &&
-      (!once || listeners.once) &&
-      (!context || listeners.context === context)
-    ) {
-      clearEvent(this, evt);
-    }
-  } else {
-    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
-      if (
-        listeners[i].fn !== fn ||
-        (once && !listeners[i].once) ||
-        (context && listeners[i].context !== context)
-      ) {
-        events.push(listeners[i]);
-      }
-    }
-
-    //
-    // Reset the array, or remove it completely if we have no more listeners.
-    //
-    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
-    else clearEvent(this, evt);
-  }
-
-  return this;
-};
-
-/**
- * Remove all listeners, or those of the specified event.
- *
- * @param {(String|Symbol)} [event] The event name.
- * @returns {EventEmitter} `this`.
- * @public
- */
-EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-  var evt;
-
-  if (event) {
-    evt = prefix ? prefix + event : event;
-    if (this._events[evt]) clearEvent(this, evt);
-  } else {
-    this._events = new Events();
-    this._eventsCount = 0;
-  }
-
-  return this;
-};
-
-//
-// Alias methods names because people roll like that.
-//
-EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-EventEmitter.prototype.addListener = EventEmitter.prototype.on;
-
-//
-// Expose the prefix.
-//
-EventEmitter.prefixed = prefix;
-
-//
-// Allow `EventEmitter` to be imported as module namespace.
-//
-EventEmitter.EventEmitter = EventEmitter;
-
-//
-// Expose the module.
-//
-if ('undefined' !== typeof module) {
-  module.exports = EventEmitter;
 }
 
-},{}],5:[function(require,module,exports){
-module.exports = exists;
+},{"./config/libraries":3,"./frames/position":16,"./pixel-editor":25,"./pixel-sheet":26,"./settings":27,"./sheet":28,"./state":29,"./tools/circle":31,"./tools/crop":32,"./tools/ellipse":33,"./tools/fill":34,"./tools/line":35,"./tools/paint":36,"./tools/select":37,"pixi.js":221}],9:[function(require,module,exports){
+(function (Buffer){
+const PIXI = require('pixi.js')
+const clicked = require('clicked')
+const path = require('path')
 
-module.exports.allExist = allExist;
+const File = require('./config/file')
+const sheet = require('./pixel-sheet')
+const html = require('./html')
 
-function exists (v) {
-  return v !== null && v !== undefined;
-}
+const State = require('./state')
+const PixelEditor = require('./pixel-editor')
 
-function allExist (/* vals */) {
-  var vals = Array.prototype.slice.call(arguments);
-  return vals.every(exists);
-}
-},{}],6:[function(require,module,exports){
+module.exports = class Export
+{
+    constructor(wm)
+    {
+        this.win = wm.createWindow({ title: 'Export Frame to PNG', modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0, titleCenter: true })
 
-/*
-	Copyright © 2001 Robert Penner
-	All rights reserved.
+        let div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '1em 0.5em 0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'width: ', styles: { display: 'inline-block', width: '5em' } })
+        this.width = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.width.value = PixelEditor.width * PixelEditor.zoom
+        this.captureKey(this.width)
+        this.width.addEventListener('change', () => this.changeWidth())
 
-	Redistribution and use in source and binary forms, with or without modification, 
-	are permitted provided that the following conditions are met:
+        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'height: ', styles: { display: 'inline-block', width: '5em' } })
+        this.height = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.height.value = PixelEditor.height * PixelEditor.zoom
+        this.captureKey(this.height)
+        this.height.addEventListener('change', () => this.changeHeight())
 
-	Redistributions of source code must retain the above copyright notice, this list of 
-	conditions and the following disclaimer.
-	Redistributions in binary form must reproduce the above copyright notice, this list 
-	of conditions and the following disclaimer in the documentation and/or other materials 
-	provided with the distribution.
+        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
+        html({ parent: div, type: 'label', html: 'title', html: 'scale: ', styles: { display: 'inline-block', width: '5em' } })
+        this.scale = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
+        this.scale.value = PixelEditor.zoom
+        this.captureKey(this.scale)
+        this.scale.addEventListener('change', () => this.changeScale())
 
-	Neither the name of the author nor the names of contributors may be used to endorse 
-	or promote products derived from this software without specific prior written permission.
+        const buttons = html({ parent: this.win.content, styles: { width: '100%', display: 'flex', justifyContent: 'center', margin: '0.25em' } })
+        const OK = html({ parent: buttons, type: 'button', html: 'export...', styles: { width: '6em', display: 'block', margin: '0.25em' } })
+        clicked(OK, () => this.OK())
+        const Cancel = html({ parent: buttons, type: 'button', html: 'cancel', styles: { width: '6em', display: 'block', margin: '0.25em' } })
+        clicked(Cancel, () => this.cancel())
 
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
-	EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
-	AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
-	OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+        this.win.open()
+        this.win.move(window.innerWidth / 2 - this.win.width / 2, window.innerHeight / 2 - this.win.height / 2)
 
-(function() {
-  var penner, umd;
-
-  umd = function(factory) {
-    if (typeof exports === 'object') {
-      return module.exports = factory;
-    } else if (typeof define === 'function' && define.amd) {
-      return define([], factory);
-    } else {
-      return this.penner = factory;
+        this.saveScale = PixelEditor.zoom
     }
-  };
 
-  penner = {
-    linear: function(t, b, c, d) {
-      return c * t / d + b;
-    },
-    easeInQuad: function(t, b, c, d) {
-      return c * (t /= d) * t + b;
-    },
-    easeOutQuad: function(t, b, c, d) {
-      return -c * (t /= d) * (t - 2) + b;
-    },
-    easeInOutQuad: function(t, b, c, d) {
-      if ((t /= d / 2) < 1) {
-        return c / 2 * t * t + b;
-      } else {
-        return -c / 2 * ((--t) * (t - 2) - 1) + b;
-      }
-    },
-    easeInCubic: function(t, b, c, d) {
-      return c * (t /= d) * t * t + b;
-    },
-    easeOutCubic: function(t, b, c, d) {
-      return c * ((t = t / d - 1) * t * t + 1) + b;
-    },
-    easeInOutCubic: function(t, b, c, d) {
-      if ((t /= d / 2) < 1) {
-        return c / 2 * t * t * t + b;
-      } else {
-        return c / 2 * ((t -= 2) * t * t + 2) + b;
-      }
-    },
-    easeInQuart: function(t, b, c, d) {
-      return c * (t /= d) * t * t * t + b;
-    },
-    easeOutQuart: function(t, b, c, d) {
-      return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-    },
-    easeInOutQuart: function(t, b, c, d) {
-      if ((t /= d / 2) < 1) {
-        return c / 2 * t * t * t * t + b;
-      } else {
-        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
-      }
-    },
-    easeInQuint: function(t, b, c, d) {
-      return c * (t /= d) * t * t * t * t + b;
-    },
-    easeOutQuint: function(t, b, c, d) {
-      return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-    },
-    easeInOutQuint: function(t, b, c, d) {
-      if ((t /= d / 2) < 1) {
-        return c / 2 * t * t * t * t * t + b;
-      } else {
-        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
-      }
-    },
-    easeInSine: function(t, b, c, d) {
-      return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
-    },
-    easeOutSine: function(t, b, c, d) {
-      return c * Math.sin(t / d * (Math.PI / 2)) + b;
-    },
-    easeInOutSine: function(t, b, c, d) {
-      return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
-    },
-    easeInExpo: function(t, b, c, d) {
-      if (t === 0) {
-        return b;
-      } else {
-        return c * Math.pow(2, 10 * (t / d - 1)) + b;
-      }
-    },
-    easeOutExpo: function(t, b, c, d) {
-      if (t === d) {
-        return b + c;
-      } else {
-        return c * (-Math.pow(2, -10 * t / d) + 1) + b;
-      }
-    },
-    easeInOutExpo: function(t, b, c, d) {
-      if (t === 0) {
-        b;
-      }
-      if (t === d) {
-        b + c;
-      }
-      if ((t /= d / 2) < 1) {
-        return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-      } else {
-        return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
-      }
-    },
-    easeInCirc: function(t, b, c, d) {
-      return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
-    },
-    easeOutCirc: function(t, b, c, d) {
-      return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
-    },
-    easeInOutCirc: function(t, b, c, d) {
-      if ((t /= d / 2) < 1) {
-        return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-      } else {
-        return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
-      }
-    },
-    easeInElastic: function(t, b, c, d) {
-      var a, p, s;
-      s = 1.70158;
-      p = 0;
-      a = c;
-      if (t === 0) {
-        b;
-      } else if ((t /= d) === 1) {
-        b + c;
-      }
-      if (!p) {
-        p = d * .3;
-      }
-      if (a < Math.abs(c)) {
-        a = c;
-        s = p / 4;
-      } else {
-        s = p / (2 * Math.PI) * Math.asin(c / a);
-      }
-      return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-    },
-    easeOutElastic: function(t, b, c, d) {
-      var a, p, s;
-      s = 1.70158;
-      p = 0;
-      a = c;
-      if (t === 0) {
-        b;
-      } else if ((t /= d) === 1) {
-        b + c;
-      }
-      if (!p) {
-        p = d * .3;
-      }
-      if (a < Math.abs(c)) {
-        a = c;
-        s = p / 4;
-      } else {
-        s = p / (2 * Math.PI) * Math.asin(c / a);
-      }
-      return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
-    },
-    easeInOutElastic: function(t, b, c, d) {
-      var a, p, s;
-      s = 1.70158;
-      p = 0;
-      a = c;
-      if (t === 0) {
-        b;
-      } else if ((t /= d / 2) === 2) {
-        b + c;
-      }
-      if (!p) {
-        p = d * (.3 * 1.5);
-      }
-      if (a < Math.abs(c)) {
-        a = c;
-        s = p / 4;
-      } else {
-        s = p / (2 * Math.PI) * Math.asin(c / a);
-      }
-      if (t < 1) {
-        return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-      } else {
-        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
-      }
-    },
-    easeInBack: function(t, b, c, d, s) {
-      if (s === void 0) {
-        s = 1.70158;
-      }
-      return c * (t /= d) * t * ((s + 1) * t - s) + b;
-    },
-    easeOutBack: function(t, b, c, d, s) {
-      if (s === void 0) {
-        s = 1.70158;
-      }
-      return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-    },
-    easeInOutBack: function(t, b, c, d, s) {
-      if (s === void 0) {
-        s = 1.70158;
-      }
-      if ((t /= d / 2) < 1) {
-        return c / 2 * (t * t * (((s *= 1.525) + 1) * t - s)) + b;
-      } else {
-        return c / 2 * ((t -= 2) * t * (((s *= 1.525) + 1) * t + s) + 2) + b;
-      }
-    },
-    easeInBounce: function(t, b, c, d) {
-      var v;
-      v = penner.easeOutBounce(d - t, 0, c, d);
-      return c - v + b;
-    },
-    easeOutBounce: function(t, b, c, d) {
-      if ((t /= d) < 1 / 2.75) {
-        return c * (7.5625 * t * t) + b;
-      } else if (t < 2 / 2.75) {
-        return c * (7.5625 * (t -= 1.5 / 2.75) * t + .75) + b;
-      } else if (t < 2.5 / 2.75) {
-        return c * (7.5625 * (t -= 2.25 / 2.75) * t + .9375) + b;
-      } else {
-        return c * (7.5625 * (t -= 2.625 / 2.75) * t + .984375) + b;
-      }
-    },
-    easeInOutBounce: function(t, b, c, d) {
-      var v;
-      if (t < d / 2) {
-        v = penner.easeInBounce(t * 2, 0, c, d);
-        return v * .5 + b;
-      } else {
-        v = penner.easeOutBounce(t * 2 - d, 0, c, d);
-        return v * .5 + c * .5 + b;
-      }
+    OK()
+    {
+        File.exportFileDialog(State.lastPath, this.exportFile.bind(this))
     }
-  };
 
-  umd(penner);
+    exportFile(name)
+    {
+        if (name)
+        {
+            if (path.extname(name) !== '.png')
+            {
+                name += '.png'
+            }
+            const width = Math.ceil(PixelEditor.width * this.saveScale)
+            const height = Math.ceil(PixelEditor.height * this.saveScale)
+            const renderer = new PIXI.CanvasRenderer({ width, height, transparent: true })
+            const sprite = sheet.get(PixelEditor.name + '-' + PixelEditor.current)
+            sprite.scale.set(this.saveScale)
+            sprite.anchor.set(0)
+            renderer.render(sprite)
+            const data = renderer.view.toDataURL().replace(/^data:image\/\w+;base64,/, '')
+            File.writeFile(name, new Buffer(data, 'base64'))
+        }
+        this.win.close()
+    }
 
-}).call(this);
+    cancel()
+    {
+        this.win.close()
+    }
 
-},{}],7:[function(require,module,exports){
+    captureKey(div)
+    {
+        div.addEventListener('keydown', (e) =>
+        {
+            if (e.code === 'Enter')
+            {
+                this.OK()
+            }
+            e.stopPropagation()
+        })
+        div.addEventListener('keyup', (e) => e.stopPropagation())
+    }
+
+    changeWidth()
+    {
+        const scale = parseInt(this.width.value) / PixelEditor.width
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.scale.value = this.fix(scale)
+            this.height.value = this.fix(PixelEditor.height * scale)
+        }
+        else
+        {
+            this.width.value = ''
+        }
+    }
+
+    changeHeight()
+    {
+        const scale = parseInt(this.height.value) / PixelEditor.height
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.scale.value = this.fix(scale)
+            this.width.value = this.fix(PixelEditor.width * scale)
+        }
+        else
+        {
+            this.height.value = ''
+        }
+    }
+
+    changeScale()
+    {
+        const scale = parseFloat(this.scale.value)
+        if (!isNaN(scale))
+        {
+            this.saveScale = scale
+            this.height.value = this.fix(PixelEditor.height * scale)
+            this.width.value = this.fix(PixelEditor.width * scale)
+        }
+        else
+        {
+            this.scale.value = ''
+        }
+    }
+
+    fix(n)
+    {
+        if (n === Math.round(n))
+        {
+            return n
+        }
+        else
+        {
+            return n.toFixed(2)
+        }
+    }
+}
+}).call(this,require("buffer").Buffer)
+},{"./config/file":2,"./html":20,"./pixel-editor":25,"./pixel-sheet":26,"./state":29,"buffer":48,"clicked":50,"path":63,"pixi.js":221}],10:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const clicked = require('clicked')
 
-const libraries = require('./config/libraries')
+const libraries = require('../config/libraries')
 const Pixel = libraries.Pixel
 
-const html = require('./html')
-const button = require('./button')
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-const sheet = require('./pixel-sheet')
-const Dialog = require('./dialog')
+const html = require('../html')
+const button = require('../button')
+const State = require('../state')
+const PixelEditor = require('../pixel-editor')
+const sheet = require('../pixel-sheet')
+const Dialog = require('../dialog')
+const locale = require('../locale')
 
 const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
 
-const BUTTONS = require('../images/animation.json')
+const BUTTONS = require('../../images/animation.json')
 
 module.exports = class Animation extends PIXI.Container
 {
@@ -1441,7 +901,7 @@ module.exports = class Animation extends PIXI.Container
         super()
         this.current = 0
         this.time = 150
-        this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
+        this.win = wm.createWindow({ title: locale.get('AnimationTitle'), height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
         this.content.style.color = '#eeeeee'
         this.content.style.margin = '0.25em'
@@ -1707,8 +1167,6 @@ module.exports = class Animation extends PIXI.Container
             this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
             this.draw()
         })
-        this.win.on('resize-end', () => State.set())
-        this.win.on('move-end', () => State.set())
         PixelEditor.on('changed', () => this.draw())
         State.on('last-file', () =>
         {
@@ -1724,1665 +1182,279 @@ module.exports = class Animation extends PIXI.Container
         if (this.win._resizing)
         {
             this.draw()
-            State.set()
-        }
-    }
-
-    dragged()
-    {
-        if (this.win._moving)
-        {
-            State.set()
         }
     }
 
     keydown() { }
 }
-},{"../images/animation.json":33,"./button":8,"./config/libraries":11,"./dialog":14,"./html":18,"./pixel-editor":25,"./pixel-sheet":26,"./state":31,"clicked":42,"pixi.js":213}],8:[function(require,module,exports){
-/* Copyright (c) 2018 YOPEY YOPEY LLC */
+},{"../../images/animation.json":41,"../button":1,"../config/libraries":3,"../dialog":6,"../html":20,"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../state":29,"clicked":50,"pixi.js":221}],11:[function(require,module,exports){
+const PIXI = require('pixi.js')
 
-// const Tooltip = require('yy-tooltip')
-const Tooltip = require('../../components/tooltip')
-
-const html = require('./html')
-
-module.exports = function button(parent, data, styles, title)
-{
-    const scale = 2
-
-    const button = html({ parent, type: 'button', styles: { position: 'relative' } })
-    if (title)
-    {
-        if (Array.isArray(title))
-        {
-            new Tooltip(button, '<div>' + title[0] + '</div><div>key: ' + title[1] + '</div>')
-        }
-        else
-        {
-            new Tooltip(button, title)
-        }
-    }
-    const image = new Image()
-    image.src = 'data:image/png;base64,' + data[2]
-    image.width = data[0] * scale
-    button.style.width = image.width * 1.5 + 'px'
-    image.height = data[1] * scale
-    button.style.height = image.height * 1.5 + 'px'
-    image.style.imageRendering = 'pixelated'
-    image.style.position = 'absolute'
-    image.style.top = '50%'
-    image.style.left = '50%'
-    image.style.transform = 'translate(-50%, -50%)'
-    image.style.pointerEvents = 'none'
-    button.image = image
-    button.appendChild(image)
-    if (styles)
-    {
-        for (let key in styles)
-        {
-            button.style[key] = styles[key]
-        }
-    }
-    return button
-}
-},{"../../components/tooltip":1,"./html":18}],9:[function(require,module,exports){
-module.exports = {
-    writeText: (text) => console.log('TODO: clipboard copy to ' + text)
-}
-
-},{}],10:[function(require,module,exports){
-const localforage = require('localforage')
+const libraries = require('../config/libraries')
+const Pixel = libraries.Pixel
 
 const Settings = require('../settings')
+const sheet = require('../pixel-sheet')
+const PixelEditor = require('../pixel-editor')
+const State = require('../state')
+const locale = require('../locale')
 
-const STATE_FILENAME = 'state-save'
+const MIN_WIDTH = 100
+const MIN_HEIGHT = 100
+const SPACING = 5
 
-localforage.config({
-    name: Settings.NAME
-})
+const COLOR_SELECTED = 0x888888
 
-function saveFileDialog(path, callback)
+module.exports = class Frames extends PIXI.Container
 {
-    // remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, callback)
-    console.log('todo: save file')
-}
-
-function exportFileDialog(path, callback)
-{
-
-}
-
-function openFileDialog(path, callback)
-{
-    // remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, callback)
-    console.log('todo: load file')
-}
-
-function openDirDialog(callback)
-{
-
-}
-
-function readState(callback)
-{
-    localforage.getItem(STATE_FILENAME)
-        .then((value) => callback(JSON.parse(value)))
-        .catch(() => callback())
-}
-
-function writeState(data)
-{
-    localforage.setItem(STATE_FILENAME, JSON.stringify(data))
-}
-
-function getTempFilename(callback)
-{
-    localforage.keys()
-        .then((keys) =>
-        {
-            function search(filename)
-            {
-                for (let key of keys)
-                {
-                    if (key === filename)
-                    {
-                        return true
-                    }
-                }
-                return false
-            }
-
-            let filename, i = 0
-            do
-            {
-                i++
-                filename = 'pixel-' + i + '.json'
-            }
-            while (search(filename))
-            callback(filename)
-        }).catch((err) =>
-        {
-            console.error(err)
-        })
-}
-
-function readJSON(filename, callback)
-{
-    localforage.getItem(filename)
-        .then((value) => callback(JSON.parse(value)))
-        .catch(() => callback())
-}
-
-function writeJSON(filename, data)
-{
-    localforage.setItem(filename, JSON.stringify(data))
-}
-
-function writeFile()
-{
-}
-
-function readDir()
-{
-}
-
-function fileDate(file)
-{
-}
-
-module.exports = {
-    openFileDialog,
-    openDirDialog,
-    saveFileDialog,
-    readState,
-    writeState,
-    getTempFilename,
-    readJSON,
-    writeJSON,
-    exportFileDialog,
-    writeFile,
-    readDir,
-    fileDate
-}
-},{"../settings":28,"localforage":51}],11:[function(require,module,exports){
-module.exports = {
-
-    // YY_RENDERSHEET: '../../components/rendersheet/',
-    RenderSheet: require('yy-rendersheet'),
-
-    // YY_PIXEL: '../../components/pixel/',
-    Pixel: require('yy-pixel').Pixel,
-
-    // VIEWPORT: '../../components/pixi-viewport',
-    Viewport: require('pixi-viewport'),
-
-    // WINDOW_MANAGER: '../../components/window-manager',
-    WM: require('simple-window-manager')
-}
-},{"pixi-viewport":96,"simple-window-manager":270,"yy-pixel":280,"yy-rendersheet":287}],12:[function(require,module,exports){
-module.exports = () => { }
-},{}],13:[function(require,module,exports){
-module.exports = {
-    toggleDevTools: () => {}
-}
-},{}],14:[function(require,module,exports){
-const clicked = require('clicked')
-
-const html = require('./html')
-
-module.exports = class Dialog
-{
-    constructor(win, title, type, label, callback, options)
+    constructor(ui)
     {
-        options = options || {}
-        options.ok = options.ok || 'OK'
-        options.cancel = options.cancel || 'Cancel'
-        options.okColor = options.okColor || 'black'
-
-        this.callback = callback
-        this.win = win.wm.createWindow({ title, parent: win, resizable: false, maximizable: false, minimizable: false, minHeight: 0 })
-        this.win.content.style.color = '#eeeeee'
-        const div = html({ parent: this.win.content, styles: { display: 'flex', justifyContent: 'center', margin: '1em' } })
-        if (type === 'string')
-        {
-            html({ parent: div, type: 'label', html: 'title', html: label })
-            this.input = html({ parent: div, type: 'input' })
-            if (options.original)
-            {
-                this.input.value = options.original
-            }
-            this.captureKey(this.input)
-        }
-        else if (type === 'confirmation')
-        {
-            html({ parent: div, html: label })
-        }
-        this.type = type
-
-        const buttons = html({ parent: this.win.content, styles: { width: '100%', display: 'flex', justifyContent: 'center', margin: '0.25em' } })
-        const OK = html({ parent: buttons, type: 'button', html: options.ok, styles: { width: '6em', display: 'block', margin: '0.25em', color: options.okColor } })
-        clicked(OK, () => this.OK())
-        const Cancel = html({ parent: buttons, type: 'button', html: options.cancel, styles: { width: '6em', display: 'block', margin: '0.25em' } })
-        clicked(Cancel, () => this.cancel())
-
+        super()
+        this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
-        this.win.center(win)
-        if (this.input)
-        {
-            this.input.focus()
-            if (options.original)
-            {
-                this.input.select()
-            }
-        }
-    }
-
-    OK()
-    {
-        this.win.close()
-        switch (this.type)
-        {
-            case 'string':
-                this.callback(this.input.value)
-                break
-
-            case 'confirmation':
-                this.callback(true)
-                break
-        }
-    }
-
-    cancel()
-    {
-        this.win.close()
-        this.callback()
-    }
-
-    captureKey(div)
-    {
-        div.addEventListener('keydown', (e) =>
-        {
-            if (e.code === 'Enter')
-            {
-                this.OK()
-            }
-            e.stopPropagation()
-        })
-        div.addEventListener('keyup', (e) => e.stopPropagation())
-    }
-}
-},{"./html":18,"clicked":42}],15:[function(require,module,exports){
-const PIXI = require('pixi.js')
-const Tooltip = require('yy-tooltip')
-
-const State = require('./state')
-
-const DICE = 50
-const DICE_COLOR = [0x888888, 0xaa0000]
-const SIZE = 10
-
-module.exports = class Dice extends PIXI.Container
-{
-    constructor(parent)
-    {
-        super()
-        this.renderer = new PIXI.WebGLRenderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
-        parent.appendChild(this.renderer.view)
-        this.renderer.view.style.display = 'block'
-        this.renderer.view.style.margin = '0 auto'
-        new Tooltip(this.renderer.view, 'anchor of sprite')
-        this.dice = []
-        for (let i = 0; i < 9; i++)
-        {
-            const dice = this.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-            dice.anchor.set(0.5)
-            dice.width = dice.height = SIZE
-            this.dice.push(dice)
-        }
-        State.on('relative', this.draw, this)
-        this.draw()
-        this.interactive = true
-        this.on('pointerdown', (e) => this.down(e))
-    }
-
-    draw()
-    {
-        const border = SIZE
-        const centerX = DICE / 2
-        const centerY = DICE / 2
-        this.dice[0].position.set(border, border)
-        this.dice[1].position.set(centerX, border)
-        this.dice[2].position.set(DICE - border, border)
-        this.dice[3].position.set(border, centerY)
-        this.dice[4].position.set(centerX, centerY)
-        this.dice[5].position.set(DICE - border, centerY)
-        this.dice[6].position.set(border, DICE - border)
-        this.dice[7].position.set(centerX, DICE - border)
-        this.dice[8].position.set(DICE - border, DICE - border)
-        for (let dice of this.dice)
-        {
-            dice.tint = DICE_COLOR[0]
-        }
-        switch (State.relative)
-        {
-            case 'top-left': this.dice[0].tint = DICE_COLOR[1]; break
-            case 'top-center': this.dice[1].tint = DICE_COLOR[1]; break
-            case 'top-right': this.dice[2].tint = DICE_COLOR[1]; break
-            case 'center-left': this.dice[3].tint = DICE_COLOR[1]; break
-            case 'center-center': this.dice[4].tint = DICE_COLOR[1]; break
-            case 'center-right': this.dice[5].tint = DICE_COLOR[1]; break
-            case 'bottom-left': this.dice[6].tint = DICE_COLOR[1]; break
-            case 'bottom-center': this.dice[7].tint = DICE_COLOR[1]; break
-            case 'bottom-right': this.dice[8].tint = DICE_COLOR[1]; break
-        }
-        this.renderer.render(this)
-    }
-
-    down(e)
-    {
-        const point = e.data.global
-        for (let i = 0; i < this.dice.length; i++)
-        {
-            if (this.dice[i].containsPoint(point))
-            {
-                switch (i)
-                {
-                    case 0: State.relative = 'top-left'; break
-                    case 1: State.relative = 'top-center'; break
-                    case 2: State.relative = 'top-right'; break
-                    case 3: State.relative = 'center-left'; break
-                    case 4: State.relative = 'center-center'; break
-                    case 5: State.relative = 'center-right'; break
-                    case 6: State.relative = 'bottom-left'; break
-                    case 7: State.relative = 'bottom-center'; break
-                    case 8: State.relative = 'bottom-right'; break
-                }
-                this.draw()
-            }
-        }
-    }
-}
-},{"./state":31,"pixi.js":213,"yy-tooltip":289}],16:[function(require,module,exports){
-const Settings = require('./settings')
-
-const PIXI = require('pixi.js')
-const FPS = require('yy-fps')
-
-const libraries = require('./config/libraries')
-const Viewport = libraries.Viewport
-
-const Sheet = require('./sheet')
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-const pixelSheet = require('./pixel-sheet')
-
-const CURSOR_COLOR = 0xff0000
-const BORDER = 1
-const DOTTED = 10
-
-const THRESHOLD = 5
-
-module.exports = class Draw extends PIXI.Container
-{
-    constructor(body, ui)
-    {
-        super()
-        if (Settings.DEBUG)
-        {
-            this.fps = new FPS()
-        }
-        this.body = body
-        this.ui = ui
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
-        body.appendChild(this.renderer.view)
-
+        this.content = this.win.content
+        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
         this.renderer.view.style.width = '100%'
         this.renderer.view.style.height = '100%'
-        this.resize()
-
-        this.setupViewport()
-        this.blocks = this.vp.addChild(new PIXI.Container())
-        this.sprite = this.vp.addChild(new PIXI.Sprite())
-        this.grid = this.vp.addChild(new PIXI.Graphics())
-        this.cursorBlock = this.vp.addChild(new PIXI.Graphics())
-        this.stateSetup('draw')
-        window.addEventListener('resize', () => this.resize())
-        document.body.addEventListener('keyup', (e) => this.keyup(e))
+        this.pixels = this.addChild(new PIXI.Container())
+        this.stateSetup()
         this.redraw()
-        PIXI.ticker.shared.add(() => this.update())
     }
 
-    resize()
-    {
-        this.renderer.resize(window.innerWidth, window.innerHeight)
-        if (this.vp)
-        {
-            this.vp.resize(window.innerWidth, window.innerHeight)
-        }
-        this.renderer.render(this)
-    }
-
-    setupViewport()
-    {
-        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
-        this.vp
-            .drag()
-            .decelerate()
-            .pinch()
-            .wheel()
-        const vp = PixelEditor.viewport
-        if (vp)
-        {
-            this.vp.x = vp.x
-            this.vp.y = vp.y
-            this.vp.scale.set(vp.scale)
-        }
-        else
-        {
-            this.vp.scale.set(PixelEditor.zoom)
-            this.vp.x = window.innerWidth / 2 - PixelEditor.largestWidth / 2
-            this.vp.y = window.innerHeight / 2 - PixelEditor.largestHeight / 2
-        }
-    }
-
-    moveViewportCursor(x, y)
-    {
-        function clamp(n, min, max)
-        {
-            return n < min ? min : n > max ? max : n
-        }
-
-        const point = this.vp.toWorld(x, y)
-        State.cursorX = clamp(Math.floor(point.x / this.zoom), 0, PixelEditor.width - 1)
-        State.cursorY = clamp(Math.floor(point.y / this.zoom), 0, PixelEditor.height - 1)
-    }
-
-    update()
-    {
-        const result = this.vp.dirty
-        if (result)
-        {
-            PixelEditor.viewport = { x: this.vp.x, y: this.vp.y, scale: this.vp.scale.x }
-            this.vp.dirty = false
-            this.setHitArea()
-            this.renderer.render(this)
-        }
-        if (this.fps)
-        {
-            this.fps.frame()
-        }
-    }
-
-    setHitArea()
-    {
-        if (!this.vp.forceHitArea)
-        {
-            this.vp.forceHitArea = new PIXI.Rectangle(this.vp.left, this.vp.top, this.vp.worldScreenWidth, this.vp.worldScreenHeight)
-        }
-        else
-        {
-            this.vp.forceHitArea.x = this.vp.left
-            this.vp.forceHitArea.y = this.vp.top
-            this.vp.forceHitArea.width = this.vp.worldScreenWidth
-            this.vp.forceHitArea.height = this.vp.worldScreenHeight
-        }
-    }
+    // measure()
+    // {
+    //     let scale = MAX_SCALE, x, y, largest
+    //     const windowWidth = this.win.width
+    //     const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
+    //     const data = PixelEditor.imageData
+    //     do
+    //     {
+    //         largest = 0, x = SPACING, y = SPACING
+    //         for (let i = 0; i < data.length; i++)
+    //         {
+    //             const width = data[i][0] * scale
+    //             const height = data[i][1] * scale
+    //             if (x + width + SPACING > windowWidth)
+    //             {
+    //                 x = SPACING
+    //                 y += largest + SPACING
+    //                 largest = 0
+    //             }
+    //             x += width + SPACING
+    //             largest = height > largest ? height : largest
+    //         }
+    //         scale += SCALE_DECREASE
+    //     }
+    //     while (scale > 0.1 && y + largest + SPACING > windowHeight)
+    //     this.scaler = scale
+    // }
 
     redraw()
     {
-        this.zoom = 50
-        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-        this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
-        this.sprite.scale.set(this.zoom)
-        this.transparency()
-        this.frame()
-        this.cursorDraw()
-        this.setHitArea()
+        this.pixels.removeChildren()
+        this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
+        this.selector.tint = COLOR_SELECTED
+        const data = PixelEditor.imageData
+        const scale = PixelEditor.zoom
+        let x = SPACING, y = SPACING, largest = 0
+        for (let i = 0; i < data.length; i++)
+        {
+            const pixel = this.pixels.addChild(new Pixel(PixelEditor, sheet))
+            const width = data[i][0] * scale
+            const height = data[i][1] * scale
+            pixel.scale.set(scale)
+            pixel.frame(i)
+            pixel.current = i
+            if (x + width + SPACING > this.win.width)
+            {
+                x = SPACING
+                y += largest + SPACING
+                largest = 0
+            }
+            pixel.position.set(x, y)
+            const number = this.pixels.addChild(new PIXI.Text(i, { fill: '#eeeeee', fontSize: '1.5em', fontfamily: 'consolas' }))
+            number.position.set(x + width / 2 - number.width / 2, y + height + SPACING)
+            number.position.set(x + width - number.width, y)
+            number.alpha = 0.25
+            pixel.interactive = true
+            pixel.on('pointertap', () =>
+            {
+                if (PixelEditor.current !== pixel.current)
+                {
+                    PixelEditor.current = pixel.current
+                    this.selector.position.set(pixel.x, pixel.y)
+                    this.selector.width = pixel.width
+                    this.selector.height = pixel.height
+                }
+            })
+            x += width + SPACING
+            largest = height > largest ? pixel.height : largest
+        }
+        this.currentChange()
+    }
+
+    currentChange()
+    {
+        const target = this.pixels.children[1 + PixelEditor.current * 2]
+        this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
+        this.selector.width = target.width + Settings.BORDER
+        this.selector.height = target.height + Settings.BORDER
+        this.renderer.view.style.height = this.height + 'px'
+        this.renderer.resize(this.win.width, this.height)
         this.renderer.render(this)
-    }
-
-    change()
-    {
-        PixelEditor.save()
-        PixelEditor.emit('changed')
-        this.redraw()
-    }
-
-    transparency()
-    {
-        this.blocks.removeChildren()
-        for (let y = 0; y < PixelEditor.height; y++)
+        if (this.selector.y < this.content.scrollTop || this.selector.y + this.selector.height > this.content.scrollTop + this.content.offsetHeight)
         {
-            for (let x = 0; x < PixelEditor.width; x++)
-            {
-                const block = this.blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')))
-                block.width = block.height = this.zoom
-                block.position.set(x * this.zoom, y * this.zoom)
-            }
+            this.content.scrollTop = this.selector.y
         }
     }
 
-    frame()
+    down(x, y)
     {
-        this.grid.clear()
-        this.grid.lineStyle(BORDER, 0x888888)
-        for (let y = 0; y <= PixelEditor.height; y++)
+        const point = this.toLocal({ x, y })
+        for (let button of this.buttons)
         {
-            this.grid.moveTo(0, y * this.zoom)
-            this.grid.lineTo(PixelEditor.width * this.zoom, y * this.zoom)
-        }
-
-        for (let x = 0; x <= PixelEditor.width; x++)
-        {
-            this.grid.moveTo(x * this.zoom, 0)
-            this.grid.lineTo(x * this.zoom, PixelEditor.height * this.zoom)
-        }
-    }
-
-    ellipseCursor()
-    {
-        const foreground = State.foreground
-        const background = State.background
-        this.cursorBlock.lineStyle(0)
-        this.cursorBlock.position.set(0, 0)
-        let xc = State.cursorX
-        let yc = State.cursorY
-        let width = State.cursorSizeX
-        let height = State.cursorSizeY
-
-        const blocks = {}
-        if (width === 1)
-        {
-            height--
-            for (let y = -height / 2; y <= height / 2; y++)
+            if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2)
             {
-                blocks[xc + ',' + (yc + y)] = foreground
-            }
-        }
-        else if (height === 1)
-        {
-            width--
-            for (let x = -width / 2; x <= width / 2; x++)
-            {
-                blocks[(xc + x) + ',' + yc] = foreground
-            }
-        }
-        else
-        {
-            const evenX = State.cursorSizeX % 2 === 0 ? 1 : 0
-            const evenY = State.cursorSizeY % 2 === 0 ? 1 : 0
-            width = Math.floor(State.cursorSizeX / 2)
-            height = Math.floor(State.cursorSizeY / 2)
-            let a2 = width * width
-            let b2 = height * height
-            let fa2 = 4 * a2, fb2 = 4 * b2
-            let x, y, sigma
-
-            // draw inside of ellipse
-            if (parseInt(State.background.substr(6), 16) !== 0)
-            {
-                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
+                if (PixelEditor.current !== button.current)
                 {
-                    for (let xx = -x + evenX; xx <= x; xx++)
-                    {
-                        blocks[(xc + xx) + ',' + (yc - y)] = background
-                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
-                    }
-                    if (sigma >= 0)
-                    {
-                        sigma += fa2 * (1 - y)
-                        y--
-                    }
-                    sigma += b2 * ((4 * x) + 6)
+                    PixelEditor.current = button.current
+                    this.selector.position.set(button.x, button.y)
+                    this.selector.width = button.width
+                    this.selector.height = button.height
                 }
-
-                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
-                {
-                    for (let xx = -x + evenX; xx <= x; xx++)
-                    {
-                        blocks[(xc + xx) + ',' + (yc - y)] = background
-                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
-                    }
-                    if (sigma >= 0)
-                    {
-                        sigma += fb2 * (1 - x)
-                        x--
-                    }
-                    sigma += a2 * ((4 * y) + 6)
-                }
-            }
-
-            // outside of ellipse
-            if (parseInt(State.foreground.substr(6), 16) !== 0)
-            {
-                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
-                {
-                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
-                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
-                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
-                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
-                    if (sigma >= 0)
-                    {
-                        sigma += fa2 * (1 - y)
-                        y--
-                    }
-                    sigma += b2 * ((4 * x) + 6)
-                }
-
-                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
-                {
-                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
-                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
-                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
-                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
-                    if (sigma >= 0)
-                    {
-                        sigma += fb2 * (1 - x)
-                        x--
-                    }
-                    sigma += a2 * ((4 * y) + 6)
-                }
-            }
-        }
-        this.stamp = []
-        for (let block in blocks)
-        {
-            const data = blocks[block]
-            const pos = block.split(',')
-            if (this.inBounds(pos))
-            {
-                const color = parseInt(data.substr(0, 6), 16)
-                const alpha = parseInt(data.substr(6), 16) / 255
-                this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
+                const pixel = this.buttons[button.current].pixel
+                this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
+                return true
             }
         }
     }
 
-    inBounds(pos)
+    move(x, y)
     {
-        let x = parseInt(pos[0])
-        let y = parseInt(pos[1])
-        return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
-    }
-
-    circleCursor()
-    {
-        this.cursorBlock.lineStyle(0)
-        this.cursorBlock.position.set(0, 0)
-        let x0 = State.cursorX
-        let y0 = State.cursorY
-        const foreground = State.foreground
-        const background = State.background
-        const blocks = {}
-        if (State.cursorSizeX === 3)
+        if (this.dragging)
         {
-            blocks[x0 + ',' + (y0 - 1)] = foreground
-            blocks[x0 + ',' + y0] = background
-            blocks[x0 + ',' + (y0 + 1)] = foreground
-            blocks[(x0 - 1) + ',' + y0] = foreground
-            blocks[(x0 + 1) + ',' + y0] = foreground
-        }
-        else
-        {
-            const even = State.cursorSizeX % 2 === 0 ? 1 : 0
-            let x = Math.ceil(State.cursorSizeX / 2) - 1
-            let y = 0
-            let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-
-            // draw inside
-            if (parseInt(State.background.substr(6), 16) !== 0)
+            const point = this.toLocal({x, y})
+            const width = 10
+            this.dragging.pixel.x = this.dragging.originalX + (point.x - this.dragging.x)
+            this.dragging.pixel.y = this.dragging.originalY + (point.y - this.dragging.y)
+            let found = false
+            for (let button of this.buttons)
             {
-                while (x >= y)
+                if (point.x < (button.x1 + button.x2) / 2)
                 {
-                    for (let i = 0; i <= x; i++)
+                    if (button.current === this.dragging.current || button.current - 1 === this.dragging.current)
                     {
-                        blocks[(x0 + x - i) + ',' + (y0 + y + even)] = background
-                        blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = background
-                        blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = background
-                        blocks[(x0 - x - even + i) + ',' + (y0 - y)] = background
-                        blocks[(x0 + x - i) + ',' + (y0 - y)] = background
-                    }
-                    for (let i = 0; i <= y; i++)
-                    {
-                        blocks[(x0 + y - i) + ',' + (y0 + x + even)] = background
-                        blocks[(x0 - y - even + i) + ',' + (y0 - x)] = background
-                        blocks[(x0 + y - i) + ',' + (y0 - x)] = background
-                    }
-                    y++
-                    if (decisionOver2 <= 0)
-                    {
-                        decisionOver2 += 2 * y + 1
+                        this.selector.x = this.dragging.originalX
+                        this.selector.width = this.dragging.pixel.width
+                        this.dragging.drop = this.dragging.current
                     }
                     else
                     {
-                        x--
-                        decisionOver2 += 2 * (y - x) + 1
+                        this.selector.x = button.x1 - width / 2
+                        this.selector.width = width
+                        this.dragging.drop = button.current
                     }
-                }
-            }
-
-            // draw outside
-            if (parseInt(State.foreground.substr(6), 16) !== 0)
-            {
-                x = Math.ceil(State.cursorSizeX / 2) - 1
-                y = 0
-                decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
-                while (x >= y)
-                {
-                    blocks[(x0 + x) + ',' + (y0 + y + even)] = foreground
-                    blocks[(x0 + y) + ',' + (y0 + x + even)] = foreground
-                    blocks[(x0 - y - even) + ',' + (y0 + x + even)] = foreground
-                    blocks[(x0 - x - even) + ',' + (y0 + y + even)] = foreground
-                    blocks[(x0 - x - even) + ',' + (y0 - y)] = foreground
-                    blocks[(x0 - y - even) + ',' + (y0 - x)] = foreground
-                    blocks[(x0 + y) + ',' + (y0 - x)] = foreground
-                    blocks[(x0 + x) + ',' + (y0 - y)] = foreground
-                    y++
-                    if (decisionOver2 <= 0)
-                    {
-                        decisionOver2 += 2 * y + 1
-                    }
-                    else
-                    {
-                        x--
-                        decisionOver2 += 2 * (y - x) + 1
-                    }
-                }
-            }
-        }
-        if (State.cursorSizeX === 4)
-        {
-            blocks[(x0 - 2) + ',' + (y0 - 1)] = false
-            blocks[(x0 + 1) + ',' + (y0 - 1)] = false
-            blocks[(x0 - 2) + ',' + (y0 + 2)] = false
-            blocks[(x0 + 1) + ',' + (y0 + 2)] = false
-        }
-        this.stamp = []
-        for (let block in blocks)
-        {
-            const data = blocks[block]
-            if (data)
-            {
-                const pos = block.split(',')
-                if (this.inBounds(pos))
-                {
-                    const data = blocks[block]
-                    const color = parseInt(data.substr(0, 6), 16)
-                    const alpha = parseInt(data.substr(6), 16) / 255
-                    this.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * this.zoom, parseInt(pos[1]) * this.zoom, this.zoom, this.zoom).endFill()
-                    this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
-                }
-            }
-        }
-    }
-
-    lineCursor()
-    {
-        const color = State.color
-        const c = parseInt(color.substr(0, 6), 16)
-        const a = parseInt(color.substr(6), 16) / 255
-        this.cursorBlock.position.set(0)
-        if (this.line)
-        {
-            this.stamp = []
-            let x0 = State.cursorX
-            let y0 = State.cursorY
-            let x1 = this.line.x
-            let y1 = this.line.y
-
-            const dx = Math.abs(x1 - x0)
-            const dy = Math.abs(y1 - y0)
-            const sx = x0 < x1 ? 1 : -1
-            const sy = y0 < y1 ? 1 : -1
-            let err = dx - dy
-            let e2
-            while (true)
-            {
-                this.cursorBlock.beginFill(c, a)
-                    .drawRect(x0 * this.zoom - BORDER, y0 * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
-                    .endFill()
-                this.stamp.push({ x: x0, y: y0 })
-                if (x0 == x1 && y0 == y1)
-                {
+                    found = true
                     break
                 }
-                e2 = 2 * err
-                if (e2 > -dy)
+            }
+            if (!found)
+            {
+                if (this.dragging.current === this.buttons.length - 1)
                 {
-                    err -= dy
-                    x0 += sx
+                    this.selector.x = this.dragging.originalX
+                    this.selector.width = this.dragging.pixel.width
+                    this.dragging.drop = this.dragging.current
                 }
-                if (e2 < dx)
+                else
                 {
-                    err += dx
-                    y0 += sy
+                    this.selector.x = this.buttons[this.buttons.length - 1].x2
+                    this.selector.width = width
+                    this.dragging.drop = this.buttons.length
                 }
             }
-        }
-        else
-        {
-            this.cursorBlock.beginFill(c, a)
-                .drawRect(State.cursorX * this.zoom - BORDER, State.cursorY * this.zoom - BORDER, this.zoom + BORDER * 2, this.zoom + BORDER * 2)
-                .endFill()
-            this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
+            this.renderer.render(this)
         }
     }
 
-    fillCursor(reverse)
+    up()
     {
-        const color = reverse ? 0x888888 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0,6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(10, color)
-        this.cursorBlock.drawRect(0, 0, this.zoom, this.zoom)
-    }
-
-    normalCursor()
-    {
-        const color = State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(5, color)
-        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
-        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        this.cursorBlock.drawRect(0, 0, this.zoom * x, this.zoom * y)
-    }
-
-    selectCursor(special)
-    {
-        const color = special ? 0xd20000 : State.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.cursorBlock.position.set(State.cursorX * this.zoom, State.cursorY * this.zoom)
-        this.cursorBlock.lineStyle(5, color)
-        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
-        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        let reverse = this.zoom * x < 0
-        for (let i = 0; reverse ? i > this.zoom * x : i < this.zoom * x; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
+        if (this.dragging)
         {
-            let far
-            if (reverse)
-            {
-                far = i - DOTTED < this.zoom * x ? this.zoom * x : i - DOTTED
-            }
-            else
-            {
-                far = i + DOTTED > this.zoom * x ? this.zoom * x : i + DOTTED
-            }
-            this.cursorBlock.moveTo(i, 0)
-            this.cursorBlock.lineTo(far, 0)
-            this.cursorBlock.moveTo(i, this.zoom * y)
-            this.cursorBlock.lineTo(far, this.zoom * y)
-        }
-        reverse = this.zoom * y < 0
-        for (let i = 0; reverse ? i > this.zoom * y : i < this.zoom * y; reverse ? i -= DOTTED * 2 : i += DOTTED * 2)
-        {
-            let far
-            if (reverse)
-            {
-                far = i - DOTTED < this.zoom * y ? this.zoom * y : i - DOTTED
-            }
-            else
-            {
-                far = i + DOTTED > this.zoom * y ? this.zoom * y : i + DOTTED
-            }
-            this.cursorBlock.moveTo(0, i)
-            this.cursorBlock.lineTo(0, far)
-            this.cursorBlock.moveTo(this.zoom * x, i)
-            this.cursorBlock.lineTo(this.zoom * x, far)
-        }
-    }
-
-    moveCursor(x, y)
-    {
-        if (this.shift)
-        {
-            if (State.tool === 'line')
-            {
-                if (!this.line)
-                {
-                    this.line = { x: State.cursorX, y: State.cursorY }
-                }
-                this.line.x += x
-                this.line.y += y
-                this.line.x = this.line.x < 0 ? PixelEditor.width - 1 : this.line.x
-                this.line.y = this.line.y < 0 ? PixelEditor.height - 1 : this.line.y
-                this.line.x = this.line.x === PixelEditor.width ? 0 : this.line.x
-                this.line.y = this.line.y === PixelEditor.height ? 0 : this.line.y
-            }
-            else
-            {
-                State.cursorSizeX += x
-                State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-                State.cursorSizeX = (State.cursorSizeX < -PixelEditor.width) ? -PixelEditor.width : State.cursorSizeX
-                if ((State.tool === 'circle' || State.tool === 'ellipse') && State.cursorSizeX < 1)
-                {
-                    State.cursorSizeX = 1
-                }
-                if (State.tool === 'ellipse' && State.cursorSizeY < 1)
-                {
-                    State.cursorSizeY = 1
-                }
-                if (State.cursorSizeX === 0)
-                {
-                    State.cursorSizeX = (x < 0) ? -1 : 1
-                }
-                State.cursorSizeY += y
-                State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-                State.cursorSizeY = (State.cursorSizeY < -PixelEditor.height) ? -PixelEditor.height : State.cursorSizeY
-                if (State.cursorSizeY === 0)
-                {
-                    State.cursorSizeY = (y < 0) ? -1 : 1
-                }
-            }
-        }
-        else
-        {
-            if (State.cursorSizeX < 0)
-            {
-                State.cursorX += State.cursorSizeX
-                State.cursorSizeX = -State.cursorSizeX
-            }
-            if (State.cursorSizeY < 0)
-            {
-                State.cursorY += State.cursorSizeY
-                State.cursorSizeY = -State.cursorSizeY
-            }
-            State.cursorX += x
-            State.cursorY += y
-            State.cursorX = State.cursorX < 0 ? PixelEditor.width - 1 : State.cursorX
-            State.cursorY = State.cursorY < 0 ? PixelEditor.height - 1 : State.cursorY
-            State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
-            State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
-        }
-        this.cursorDraw()
-        this.renderer.render(this)
-    }
-
-    cursorDraw()
-    {
-        this.cursorBlock.clear()
-        switch (State.tool)
-        {
-            case 'select':
-                this.selectCursor()
-                break
-
-            case 'crop':
-                this.selectCursor(true)
-                break
-
-            case 'sample':
-                this.fillCursor(true)
-                break
-
-            case 'paint':
-                this.normalCursor()
-                break
-
-            case 'circle':
-                this.circleCursor()
-                break
-
-            case 'ellipse':
-                this.ellipseCursor()
-                break
-
-            case 'line':
-                this.lineCursor()
-                break
-
-            case 'fill':
-                this.fillCursor()
-                break
-        }
-    }
-
-    down(x, y, data)
-    {
-        if (!this.max)
-        {
-            return super.down(x, y, data)
-        }
-        else
-        {
-            this.saveDown = { x, y }
-            return this.vp.down(x, y, data)
-        }
-    }
-
-    up(x, y, data)
-    {
-        if (!this.max)
-        {
-            return super.up(x, y, data)
-        }
-        else
-        {
-            if (this.saveDown)
-            {
-                this.moveViewportCursor(x, y, data)
-            }
-            return this.vp.up(x, y, data)
-        }
-    }
-
-    move(x, y, data)
-    {
-        if (!this.max)
-        {
-            return super.move(x, y, data)
-        }
-        else
-        {
-            if (this.saveDown)
-            {
-                if (Math.abs(this.saveDown.x - x) > THRESHOLD || Math.abs(this.saveDown.y - y) > THRESHOLD)
-                {
-                    this.saveDown = null
-                }
-            }
-            return this.vp.move(x, y, data)
+            // if (this.dragging.drop)
+            // {
+            //     if (this.dragging.drop !== this.dragging.current)
+            //     {
+            //         PixelEditor.move(this.dragging.current, this.dragging.drop)
+            //     }
+            // }
+            this.dragging = null
+            this.redraw()
         }
     }
 
     keydown(e)
     {
         const code = e.keyCode
-        this.shift = e.shiftKey
         if (e.ctrlKey)
         {
-            switch (code)
+            if (code === 37)
             {
-                // case 88:
-                //     this.cut()
-                //     break
-                // case 67:
-                //     this.copy()
-                //     break
-                // case 86:
-                //     this.paste()
-                //     break
-                case 90:
-                    if (this.shift)
-                    {
-                        PixelEditor.redoOne()
-                        e.preventDefault()
-                    }
-                    else
-                    {
-                        PixelEditor.undoOne()
-                        e.preventDefault()
-                    }
-                    break
-                case 68:
-                    PixelEditor.duplicate()
-                    break
-                case 65:
-                    State.tool = 'select'
-                    State.cursorX = 0
-                    State.cursorY = 0
-                    State.cursorSizeX = PixelEditor.width
-                    State.cursorSizeY = PixelEditor.height
-                    break
-            }
-        }
-        else
-        {
-            switch (code)
-            {
-                case 37: // left
-                    this.moveCursor(-1, 0)
-                    e.preventDefault()
-                    break
-                case 38: // up
-                    this.moveCursor(0, -1)
-                    e.preventDefault()
-                    break
-                case 39: // right
-                    this.moveCursor(1, 0)
-                    e.preventDefault()
-                    break
-                case 40: // down
-                    this.moveCursor(0, 1)
-                    e.preventDefault()
-                    break
-                case 187: // -
-                    break
-                case 189: // =
-                    break
-                case 32: // space
-                    this.space()
-                    this.spacingOn = true
-                    this.lastX = State.cursorX
-                    this.lastY = State.cursorY
-                    e.preventDefault()
-                    break
-                case 73:
-                    State.foreground = PixelEditor.get(State.cursorX, State.cursorY)
-                    break
-                case 27:
-                    this.clear()
-                    break
-                case 8:
-                    this.clearBox()
-                    break
-            }
-            if (this.spacingOn)
-            {
-                if (State.cursorX !== this.lastX || State.cursorY !== this.lastY)
+                if (PixelEditor.current === 0)
                 {
-                    this.space()
-                }
-            }
-        }
-    }
-
-    keyup(e)
-    {
-        if (this.spacingOn)
-        {
-            if (e.keyCode === 32)
-            {
-                this.spacingOn = false
-            }
-        }
-    }
-
-    clear()
-    {
-        switch (State.tool)
-        {
-            case 'crop':
-            case 'select':
-            case 'paint':
-                if (State.cursorSizeX < 0)
-                {
-                    State.cursorX += State.cursorSizeX
-                }
-                if (State.cursorSizeY < 0)
-                {
-                    State.cursorY += State.cursorSizeY
-                }
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    State.cursorX = 0
-                    State.cursorY = 0
+                    PixelEditor.current = PixelEditor.imageData.length - 1
                 }
                 else
                 {
-                    State.cursorSizeX = 1
-                    State.cursorSizeY = 1
-                }
-                break
-        }
-    }
-
-    tool()
-    {
-        switch (State.tool)
-        {
-            case 'ellipse':
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    State.cursorSizeX = 3
-                    State.cursorSizeY = 3
-                }
-                break
-
-            case 'circle':
-                if (State.cursorSizeX === 1)
-                {
-                    State.cursorSizeX = 3
-                }
-                break
-
-            case 'select':
-                this.dragging = false
-                this.selecting = false
-                break
-
-            case 'line':
-                this.line = null
-                break
-        }
-        this.cursorDraw()
-        this.renderer.render(this)
-    }
-
-    cut()
-    {
-        this.copy(true)
-        this.change()
-    }
-
-    copy(clear)
-    {
-        PixelEditor.undoSave()
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-        {
-            this.clipboard = { width: 1, height: 1, data: PixelEditor.get(State.cursorX, State.cursorY) }
-            if (clear)
-            {
-                PixelEditor.set(State.cursorX, State.cursorY, '00000000', true)
-            }
-        }
-        else
-        {
-            let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
-            if (State.cursorSizeX < 0)
-            {
-                xStart += State.cursorSizeX
-                xTo = xStart + Math.abs(State.cursorSizeX)
-            }
-            else
-            {
-                xTo = xStart + State.cursorSizeX
-            }
-            if (State.cursorSizeY < 0)
-            {
-                yStart += State.cursorSizeY
-                yTo = yStart + Math.abs(State.cursorSizeY) - 1
-            }
-            else
-            {
-                yTo = yStart + State.cursorSizeY
-            }
-            this.clipboard = { width: xTo - xStart, height: yTo - yStart, data: [] }
-            for (let y = yStart; y < yTo; y++)
-            {
-                for (let x = xStart; x < xTo; x++)
-                {
-                    this.clipboard.data.push(PixelEditor.get(x, y))
-                    if (clear)
-                    {
-                        PixelEditor.set(x, y, '00000000', true)
-                    }
+                    PixelEditor.current--
                 }
             }
-        }
-    }
-
-    clearBox()
-    {
-        PixelEditor.undoSave()
-        switch (State.tool)
-        {
-            case 'select':
-            case 'fill':
-            case 'paint':
-                for (let y = State.cursorY; y < State.cursorY + State.cursorSizeY; y++)
-                {
-                    for (let x = State.cursorX; x < State.cursorX + State.cursorSizeX; x++)
-                    {
-                        if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
-                        {
-                            PixelEditor.set(x, y, '00000000', true)
-                        }
-                    }
-                }
-                break
-            case 'ellipse':
-            case 'circle':
-            case 'line':
-                for (let block of this.stamp)
-                {
-                    if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
-                    {
-                        PixelEditor.set(block.x, block.y, '00000000', true)
-                    }
-                }
-                break
-        }
-        this.change()
-    }
-
-    paste()
-    {
-        if (this.clipboard)
-        {
-            PixelEditor.undoSave()
-            let i = 0
-            for (let y = 0; y < this.clipboard.height; y++)
+            else if (code === 39)
             {
-                for (let x = 0; x < this.clipboard.width; x++)
+                if (PixelEditor.current === PixelEditor.imageData.length - 1)
                 {
-                    PixelEditor.set(x + State.cursorX, y + State.cursorY, this.clipboard.data[i++], true)
-                }
-            }
-            this.change()
-        }
-    }
-
-    space()
-    {
-        switch (State.tool)
-        {
-            case 'crop':
-                PixelEditor.crop(State.cursorX, State.cursorY, State.cursorSizeX, State.cursorSizeY)
-                State.cursorX = 0
-                State.cursorY = 0
-                break
-
-            case 'paint':
-                if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
-                {
-                    PixelEditor.undoSave()
-                    const current = PixelEditor.get(State.cursorX, State.cursorY)
-                    const color = (current !== State.foreground) ? State.foreground : State.background
-                    PixelEditor.set(State.cursorX, State.cursorY, color, true)
-                    this.change()
-                    return color
+                    PixelEditor.current = 0
                 }
                 else
                 {
-                    PixelEditor.undoSave()
-                    const color = State.foreground
-                    let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
-                    if (State.cursorSizeX < 0)
-                    {
-                        xStart += State.cursorSizeX
-                        xTo = xStart + Math.abs(State.cursorSizeX)
-                    }
-                    else
-                    {
-                        xTo = xStart + State.cursorSizeX
-                    }
-                    if (State.cursorSizeY < 0)
-                    {
-                        yStart += State.cursorSizeY
-                        yTo = yStart + Math.abs(State.cursorSizeY) - 1
-                    }
-                    else
-                    {
-                        yTo = yStart + State.cursorSizeY
-                    }
-                    for (let y = yStart; y < yTo; y++)
-                    {
-                        for (let x = xStart; x < xTo; x++)
-                        {
-                            PixelEditor.set(x, y, color, true)
-                        }
-                    }
-                    this.change()
+                    PixelEditor.current++
                 }
-                break
-
-            case 'ellipse':
-            case 'circle':
-            case 'line':
-                PixelEditor.undoSave()
-                for (let block of this.stamp)
-                {
-                    if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
-                    {
-                        PixelEditor.set(block.x, block.y, block.color, true)
-                    }
-                }
-                this.change()
-                break
-
-            case 'line':
-                break
-
-            case 'fill':
-                PixelEditor.undoSave()
-                this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
-                this.change()
-                break
-
-            case 'sample':
-                State.color = PixelEditor.get(State.cursorX, State.cursorY)
-                break
-        }
-    }
-
-    floodFill(x, y, check)
-    {
-        if (check !== State.color && PixelEditor.get(x, y) === check)
-        {
-            PixelEditor.set(x, y, State.color, true)
-            if (y > 0)
-            {
-                this.floodFill(x, y - 1, check)
-            }
-            if (y < PixelEditor.height - 1)
-            {
-                this.floodFill(x, y + 1, check)
-            }
-            if (x > 0)
-            {
-                this.floodFill(x - 1, y, check)
-            }
-            if (x < PixelEditor.width - 1)
-            {
-                this.floodFill(x + 1, y, check)
             }
         }
     }
 
-    stateSetup(name)
+    resize()
     {
-        this.name = name
-        const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
-        for (let state of states)
-        {
-            State.on(state, () => this.redraw())
-        }
-        State.on('tool', () => this.tool())
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.redraw()
+    }
+
+    stateSetup()
+    {
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.win.on('resize', () => this.resize())
         PixelEditor.on('changed', () => this.redraw())
-        PixelEditor.on('current', () => this.redraw())
+        PixelEditor.on('current', () => this.currentChange())
         State.on('last-file', () => this.redraw())
-        State.on('background', () => this.tool())
     }
 }
-
-},{"./config/libraries":11,"./pixel-editor":25,"./pixel-sheet":26,"./settings":28,"./sheet":29,"./state":31,"pixi.js":213,"yy-fps":279}],17:[function(require,module,exports){
-(function (Buffer){
-const PIXI = require('pixi.js')
-const clicked = require('clicked')
-const path = require('path')
-
-const File = require('./config/file')
-const sheet = require('./pixel-sheet')
-const html = require('./html')
-
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-
-module.exports = class Export
-{
-    constructor(wm)
-    {
-        this.win = wm.createWindow({ title: 'Export Frame to PNG', modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0, titleCenter: true })
-
-        let div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '1em 0.5em 0.5em' } })
-        html({ parent: div, type: 'label', html: 'title', html: 'width: ', styles: { display: 'inline-block', width: '5em' } })
-        this.width = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
-        this.width.value = PixelEditor.width * PixelEditor.zoom
-        this.captureKey(this.width)
-        this.width.addEventListener('change', () => this.changeWidth())
-
-        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
-        html({ parent: div, type: 'label', html: 'title', html: 'height: ', styles: { display: 'inline-block', width: '5em' } })
-        this.height = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
-        this.height.value = PixelEditor.height * PixelEditor.zoom
-        this.captureKey(this.height)
-        this.height.addEventListener('change', () => this.changeHeight())
-
-        div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '0.5em' } })
-        html({ parent: div, type: 'label', html: 'title', html: 'scale: ', styles: { display: 'inline-block', width: '5em' } })
-        this.scale = html({ parent: div, type: 'input', styles: { width: '3em', textAlign: 'right' } })
-        this.scale.value = PixelEditor.zoom
-        this.captureKey(this.scale)
-        this.scale.addEventListener('change', () => this.changeScale())
-
-        const buttons = html({ parent: this.win.content, styles: { width: '100%', display: 'flex', justifyContent: 'center', margin: '0.25em' } })
-        const OK = html({ parent: buttons, type: 'button', html: 'export...', styles: { width: '6em', display: 'block', margin: '0.25em' } })
-        clicked(OK, () => this.OK())
-        const Cancel = html({ parent: buttons, type: 'button', html: 'cancel', styles: { width: '6em', display: 'block', margin: '0.25em' } })
-        clicked(Cancel, () => this.cancel())
-
-        this.win.open()
-        this.win.move(window.innerWidth / 2 - this.win.width / 2, window.innerHeight / 2 - this.win.height / 2)
-
-        this.saveScale = PixelEditor.zoom
-    }
-
-    OK()
-    {
-        File.exportFileDialog(State.lastPath, this.exportFile.bind(this))
-    }
-
-    exportFile(name)
-    {
-        if (name)
-        {
-            if (path.extname(name) !== '.png')
-            {
-                name += '.png'
-            }
-            const width = Math.ceil(PixelEditor.width * this.saveScale)
-            const height = Math.ceil(PixelEditor.height * this.saveScale)
-            const renderer = new PIXI.CanvasRenderer({ width, height, transparent: true })
-            const sprite = sheet.get(PixelEditor.name + '-' + PixelEditor.current)
-            sprite.scale.set(this.saveScale)
-            sprite.anchor.set(0)
-            renderer.render(sprite)
-            const data = renderer.view.toDataURL().replace(/^data:image\/\w+;base64,/, '')
-            File.writeFile(name, new Buffer(data, 'base64'))
-        }
-        this.win.close()
-    }
-
-    cancel()
-    {
-        this.win.close()
-    }
-
-    captureKey(div)
-    {
-        div.addEventListener('keydown', (e) =>
-        {
-            if (e.code === 'Enter')
-            {
-                this.OK()
-            }
-            e.stopPropagation()
-        })
-        div.addEventListener('keyup', (e) => e.stopPropagation())
-    }
-
-    changeWidth()
-    {
-        const scale = parseInt(this.width.value) / PixelEditor.width
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.scale.value = this.fix(scale)
-            this.height.value = this.fix(PixelEditor.height * scale)
-        }
-        else
-        {
-            this.width.value = ''
-        }
-    }
-
-    changeHeight()
-    {
-        const scale = parseInt(this.height.value) / PixelEditor.height
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.scale.value = this.fix(scale)
-            this.width.value = this.fix(PixelEditor.width * scale)
-        }
-        else
-        {
-            this.height.value = ''
-        }
-    }
-
-    changeScale()
-    {
-        const scale = parseFloat(this.scale.value)
-        if (!isNaN(scale))
-        {
-            this.saveScale = scale
-            this.height.value = this.fix(PixelEditor.height * scale)
-            this.width.value = this.fix(PixelEditor.width * scale)
-        }
-        else
-        {
-            this.scale.value = ''
-        }
-    }
-
-    fix(n)
-    {
-        if (n === Math.round(n))
-        {
-            return n
-        }
-        else
-        {
-            return n.toFixed(2)
-        }
-    }
-}
-}).call(this,require("buffer").Buffer)
-},{"./config/file":10,"./html":18,"./pixel-editor":25,"./pixel-sheet":26,"./state":31,"buffer":40,"clicked":42,"path":55,"pixi.js":213}],18:[function(require,module,exports){
-module.exports = function (options)
-{
-    options = options || {}
-    const object = document.createElement(options.type || 'div')
-    if (options.parent)
-    {
-        options.parent.appendChild(object)
-    }
-    if (options.styles)
-    {
-        for (let style in options.styles)
-        {
-            object.style[style] = options.styles[style]
-        }
-    }
-    if (options.html)
-    {
-        object.innerHTML = options.html
-    }
-    if (options.list)
-    {
-        object.setAttribute('list', options.list)
-    }
-    if (options.Type)
-    {
-        object.setAttribute('type', options.Type)
-    }
-    const covered = ['parent', 'styles', 'html', 'type', 'Type', 'list']
-    for (let item in options)
-    {
-        if (covered.indexOf(item) === -1)
-        {
-            object[item] = options[item]
-        }
-    }
-    return object
-}
-},{}],19:[function(require,module,exports){
+},{"../config/libraries":3,"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../state":29,"pixi.js":221}],12:[function(require,module,exports){
 const EasyEdit = require('easyedit')
-const Tooltip = require('yy-tooltip')
+const Tooltip = require('../config/libraries').Tooltip
 
-const State = require('./state')
-const Dice = require('./dice')
-const PixelEditor = require('./pixel-editor')
-const locale = require('./locale')
+const State = require('../state')
+const Dice = require('../dice')
+const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
 
 module.exports = class Info
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ x: 10, y: 10, width: 220, resizable: false })
+        this.win = ui.createWindow({ title: locale.get('InfoTitle'), x: 10, y: 10, width: 220, resizable: false })
         this.win.open()
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'
@@ -3550,7 +1622,6 @@ module.exports = class Info
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set())
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)
@@ -3563,329 +1634,21 @@ module.exports = class Info
 
     keydown() { }
 }
-},{"./dice":15,"./locale":20,"./pixel-editor":25,"./state":31,"easyedit":46,"yy-tooltip":289}],20:[function(require,module,exports){
-const LANGUAGES = {
-    'en-us': require('../text/en-us.json')
-}
-
-const language = 'en-us'
-
-function get(string)
-{
-    return LANGUAGES[language][string]
-}
-
-module.exports = {
-    get
-}
-
-},{"../text/en-us.json":292}],21:[function(require,module,exports){
-const Settings = require('./settings')
-
-const libraries = require('./config/libraries')
-const WM = libraries.WM
-
-const File = require('./config/file')
-const clipboard = require('./config/clipboard')
-const Misc = require('./config/misc')
-
-const Toolbar = require('./toolbar')
-const Palette = require('./palette')
-const Picker = require('./picker')
-const Info = require('./info')
-const Sheet = require('./sheet')
-const Draw = require('./draw')
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-const Menu = require('./config/menu')
-const Show = require('./show')
-const Animation = require('./animation')
-const Export = require('./export')
-const Position = require('./position')
-const Manager = require('./manager')
-
-let ui, loading = 2, windows = {}
-
-function afterLoad()
-{
-    loading--
-    if (loading)
-    {
-        return
-    }
-    PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile)
-    create()
-    Menu()
-}
-
-function create()
-{
-    ui = new WM({
-        backgroundColorTitlebarActive: '#555555',
-        backgroundColorTitlebarInactive: '#444444',
-        backgroundColorWindow: '#333333',
-        maximizable: false,
-        titlebarHeight: '1.25em',
-        borderRadius: 'none',
-        shadow: 'none',
-        snap: { }
-    })
-
-    windows.draw = new Draw(ui.overlay, ui)
-    windows.show = new Show(ui)
-    windows.toolbar = new Toolbar(ui)
-    windows.palette = new Palette(ui)
-    windows.picker = new Picker(ui)
-    windows.info = new Info(ui)
-    windows.animation = new Animation(ui)
-    windows.position = new Position(ui, windows.draw)
-    windows.manager = new Manager(ui)
-
-    reposition()
-
-    document.body.addEventListener('keydown', keydown)
-console.log('hi')
-}
-
-function reposition()
-{
-    State.position(ui)
-    windows.show.resize()
-    windows.palette.resize()
-}
-
-function resetWindows()
-{
-    State.positionDefault()
-    State.save()
-    reposition()
-}
-
-function getHidden(name)
-{
-    return windows[name].win.closed
-}
-
-function toggleHidden(name)
-{
-    if (windows[name].win.closed)
-    {
-        windows[name].win.open()
-    }
-    else
-    {
-        windows[name].win.close()
-    }
-    State.set()
-}
-
-function keydown(e)
-{
-    const code = e.keyCode
-
-    // reload on ctrl-r key (should be disabled when not debugging)
-    if (e.ctrlKey && code === 82) window.location.reload()
-
-    if (e.ctrlKey && e.shiftKey && code === 73)
-    {
-        Misc.toggleDevTools()
-    }
-
-    this.shift = e.shiftKey
-    if (e.ctrlKey && code >= 48 && code <= 57)
-    {
-        let i = code === 48 ? 10 : code - 48
-        if (i < State.lastFiles.length)
-        {
-            load([State.lastFiles[i]])
-        }
-    }
-    if (e.ctrlKey && e.shiftCode && code === 68)
-    {
-        State.createDefaults()
-        return
-    }
-    if (e.ctrlKey)
-    {
-        switch (code)
-        {
-            case 8:
-                remove()
-                break
-            case 81: // ctrl-q
-                remote.app.quit()
-                break
-            case 83: // ctrl-s
-                saveFile()
-                break
-            case 69: // ctrl-e
-                exportFile()
-                break
-            case 70: // ctrl-f
-                add()
-                break
-            case 79: // ctrl-o
-                openFile()
-                break
-            case 78: // ctrl-n
-                newFile()
-                break
-            case 191: // '/' to add to clipboard the data indexed by color
-                clipboard.writeText(PixelEditor.export())
-                break
-            case 188: // ,
-                rotate(true)
-                break
-            case 190: // .
-                rotate()
-                break
-            case 72: // h
-                flipHorizontal()
-                break
-            case 66: // b
-                flipVertical()
-                break
-        }
-    }
-    for (let window in windows)
-    {
-        windows[window].keydown(e)
-    }
-}
-
-function save(filename)
-{
-    if (filename)
-    {
-        State.lastPath = path.dirname(filename)
-        if (path.extname(filename) !== '.json')
-        {
-            filename += '.json'
-        }
-        State.lastFile = filename
-        PixelEditor.name = path.basename(filename, path.extname(filename))
-        PixelEditor.save(filename)
-    }
-}
-
-function load(list)
-{
-    if (list && list.length)
-    {
-        let filename = list[0]
-        if (filename.indexOf('.editor.'))
-        {
-            filename = filename.replace('.editor.', '')
-        }
-        PixelEditor.load(filename)
-        State.lastFile = filename
-        State.current = 0
-        if (State.cursorX >= PixelEditor.width)
-        {
-            State.cursorX = 0
-        }
-        if (State.cursorY >= PixelEditor.height)
-        {
-            State.cursorY = 0
-        }
-    }
-}
-
-function newFile()
-{
-    PixelEditor.create()
-    State.lastFile = PixelEditor.filename
-    State.current = 0
-    State.cursorX = State.cursorY = 0
-    State.cursorSizeX = State.cursorSizeY = 1
-    windows.position.pressed(1)
-    windows.position.pressed(3)
-}
-
-function saveFile()
-{
-    File.saveFileDialog(State.lastPath, save)
-}
-
-function openFile()
-{
-    File.openFileDialog(State.lastPath, load)
-}
-
-function remove()
-{
-    PixelEditor.remove(PixelEditor.current)
-}
-
-function add()
-{
-    PixelEditor.add()
-}
-
-function duplicate()
-{
-    PixelEditor.duplicate()
-}
-
-function rotate(reverse)
-{
-    PixelEditor.rotate(reverse)
-}
-
-function flipHorizontal()
-{
-    PixelEditor.flipHorizontal()
-}
-
-function flipVertical()
-{
-    PixelEditor.flipVertical()
-}
-
-function exportFile()
-{
-    new Export(ui)
-}
-
-module.exports = {
-    saveFile,
-    openFile,
-    newFile,
-    exportFile,
-    load,
-    remove,
-    add,
-    duplicate,
-    rotate,
-    flipHorizontal,
-    flipVertical,
-    windows,
-    getHidden,
-    toggleHidden,
-    resetWindows
-}
-
-// Sheet.load(afterLoad)
-
-window.onload = () =>
-{
-    State.load(afterLoad)
-    Sheet.load(afterLoad)
-}
-},{"./animation":7,"./config/clipboard":9,"./config/file":10,"./config/libraries":11,"./config/menu":12,"./config/misc":13,"./draw":16,"./export":17,"./info":19,"./manager":22,"./palette":23,"./picker":24,"./pixel-editor":25,"./position":27,"./settings":28,"./sheet":29,"./show":30,"./state":31,"./toolbar":32}],22:[function(require,module,exports){
+},{"../config/libraries":3,"../dice":7,"../locale":22,"../pixel-editor":25,"../state":29,"easyedit":54}],13:[function(require,module,exports){
 const path = require('path')
-
-const tooltip = require('yy-tooltip')
 const clicked = require('clicked')
 
-const File = require('./config/file')
-const PixelEditor = require('./pixel-editor')
-const locale = require('./locale')
-const State = require('./state')
-const html = require('./html')
-const button = require('./button')
+const Misc = require('../config/misc')
+const Tooltip = require('../config/libraries').Tooltip
+const File = require('../config/file')
 
-const ICONS = require('../images/manager.json')
+const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
+const State = require('../state')
+const html = require('../html')
+const button = require('../button')
+
+const ICONS = require('../../images/manager.json')
 
 const MIN_WIDTH = '165px'
 
@@ -3893,7 +1656,7 @@ module.exports = class Manager
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ x: 10, y: 10, minWidth: MIN_WIDTH, resizable: true, minimizable: false })
+        this.win = ui.createWindow({ title: locale.get('ManagerTitle'), x: 10, y: 10, minWidth: MIN_WIDTH, resizable: true, minimizable: false })
         this.win.open()
         this.content = this.win.content
         this.content.style.color = '#eeeeee'
@@ -3906,16 +1669,19 @@ module.exports = class Manager
 
     setupToolbar()
     {
-        clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
+        if (Misc.isElectron)
         {
-            File.openDirDialog((dir) =>
+            clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
             {
-                if (dir && dir.length >= 1)
+                File.openDirDialog((dir) =>
                 {
-                    this.populateBox(dir[0])
-                }
+                    if (dir && dir.length >= 1)
+                    {
+                        this.populateBox(dir[0])
+                    }
+                })
             })
-        })
+        }
         clicked(button(this.toolbar, ICONS.imageData[1], { opacity: 0.6 }, locale.get('increaseZoom')), () =>
         {
             State.manager.zoom++
@@ -3950,42 +1716,41 @@ module.exports = class Manager
     {
         while (this.box.firstChild)
         {
-            this.box.removeChild(this.box.firstChild);
+            this.box.removeChild(this.box.firstChild)
         }
         if (State.manager.images)
         {
-            this.images(dir)
+            this.drawImages(dir)
         }
         else
         {
-            this.names(dir)
+            this.drawNames(dir)
         }
     }
 
-    images(dir)
+    imagesComplete()
     {
-        this.box.style.width = '100%'
-        this.box.style.display = 'flex'
-        this.box.style.flexWrap = 'wrap'
-        this.box.style.justifyContent = 'space-around'
-        this.box.style.alignItems = 'center'
-        this.box.style.padding = '0'
-
-        dir = dir || path.dirname(PixelEditor.filename)
-        if (dir)
+        const images = this.images.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
+        for (let entry of images)
         {
-            const files = File.readDir(dir) || []
-            let images = []
-            for (let file of files)
+            this.box.appendChild(entry)
+        }
+    }
+
+    nextImageFile()
+    {
+        if (this.files.length)
+        {
+            const file = this.files.pop()
+            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
             {
-                if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+                const filename = path.join(this.dir, file)
+                File.readJSON(filename, (data) =>
                 {
-                    const filename = path.join(dir, file)
-                    const data = File.readJSON(filename)
-                    if (data.imageData)
+                    if (data && data.imageData)
                     {
                         const image = new Image()
-                        image.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
+                        image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
                         image.src = 'data:image/png;base64,' + data.imageData[0][2]
                         image.width = data.imageData[0][0]
                         image.height = data.imageData[0][1]
@@ -4001,40 +1766,60 @@ module.exports = class Manager
                         {
                             image.style.backgroundColor = 'transparent'
                         })
-                        clicked(image, () => { PixelEditor.load(filename)} )
-                        new tooltip(image, data.name)
-                        images.push(image)
+                        clicked(image, () => { PixelEditor.load(filename) })
+                        new Tooltip(image, data.name)
+                        this.images.push(image)
                     }
-                }
+                    this.nextImageFile()
+                })
             }
-            images = images.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
-            for (let entry of images)
+            else
             {
-                this.box.appendChild(entry)
+                this.nextImageFile()
             }
+        }
+        else
+        {
+            this.imagesComplete()
         }
     }
 
-    names(dir)
+    drawImages(dir)
     {
-        this.box.style.display = 'block'
-        this.box.style.padding = '0.5em'
-        dir = dir || path.dirname(PixelEditor.filename)
-        if (dir)
+        this.box.style.width = '100%'
+        this.box.style.display = 'flex'
+        this.box.style.flexWrap = 'wrap'
+        this.box.style.justifyContent = 'space-around'
+        this.box.style.alignItems = 'center'
+        this.box.style.padding = '0'
+
+        this.index = 0
+        this.images = []
+        this.dir = dir || path.dirname(PixelEditor.filename)
+        if (this.dir)
         {
-            let entries = []
-            const files = File.readDir(dir) || []
-            for (let file of files)
+            File.readDir(this.dir, (files) =>
             {
-                const filename = path.join(dir, file)
-                if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+                this.files = files
+                this.nextImageFile()
+            })
+        }
+    }
+
+    nextNameFile()
+    {
+        if (this.files.length)
+        {
+            const file = this.files.pop()
+            const filename = path.join(this.dir, file)
+            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+            {
+                File.readJSON(filename, (data) =>
                 {
-                    const data = File.readJSON(filename)
                     if (data.imageData)
                     {
                         const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                        entry.sort = State.manager.alphabetical ? data.name : File.fileDate(filename)
-                        entries.push(entry)
+                        entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
                         clicked(entry, () => { PixelEditor.load(filename) })
                         entry.addEventListener('mouseenter', () =>
                         {
@@ -4046,57 +1831,67 @@ module.exports = class Manager
                             entry.style.backgroundColor = 'transparent'
                             entry.style.color = ''
                         })
-                        new tooltip(entry, filename)
+                        new Tooltip(entry, filename)
+                        this.entries.push(entry)
                     }
-                }
+                    this.nextNameFile()
+                })
             }
-            entries = entries.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
-            for (let entry of entries)
+            else
             {
-                this.box.appendChild(entry)
+                this.nextNameFile()
             }
+        }
+        else
+        {
+            this.nameComplete()
+        }
+    }
+
+    nameComplete()
+    {
+        const entries = this.entries.sort((a, b) => { return a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0 })
+        for (let entry of entries)
+        {
+            this.box.appendChild(entry)
+        }
+    }
+
+    drawNames(dir)
+    {
+        this.box.style.display = 'block'
+        this.box.style.padding = '0.5em'
+        this.dir = dir || path.dirname(PixelEditor.filename)
+        if (this.dir)
+        {
+            this.index = 0
+            this.entries = []
+            File.readDir(this.dir, (files) =>
+            {
+                this.files = files
+                this.nextNameFile()
+            })
         }
     }
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set())
         State.on('last-file', () => this.populateBox())
     }
-
-    keydown(e)
-    {
-        const code = e.keyCode
-        if (code === 77 && !e.ctrlKey && !e.altKey && !e.shiftKey)
-        {
-            if (this.win.closed)
-            {
-                this.win.open()
-                State.set()
-            }
-            else
-            {
-                this.win.close()
-                State.set()
-            }
-            e.preventDefault()
-            e.stopPropagation()
-        }
-    }
 }
-},{"../images/manager.json":35,"./button":8,"./config/file":10,"./html":18,"./locale":20,"./pixel-editor":25,"./state":31,"clicked":42,"path":55,"yy-tooltip":289}],23:[function(require,module,exports){
-const Settings = require('./settings')
-
+},{"../../images/manager.json":43,"../button":1,"../config/file":2,"../config/libraries":3,"../config/misc":5,"../html":20,"../locale":22,"../pixel-editor":25,"../state":29,"clicked":50,"path":63}],14:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
 const FontSize = require('calc-fontsize')
 const Color = require('yy-color')
 
-const PixelEditor = require('./pixel-editor')
-const State = require('./state')
-const Sheet = require('./sheet')
-const PixelSheet = require('./pixel-sheet')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+const State = require('../state')
+const Sheet = require('../sheet')
+const PixelSheet = require('../pixel-sheet')
+const locale = require('../locale')
 
 const COLORS_PER_LINE = 10
 
@@ -4111,7 +1906,7 @@ module.exports = class Palette extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ width: MIN_WIDTH, height: MIN_HEIGHT })
+        this.win = ui.createWindow({ title: locale.get('PaletteTitle'), width: MIN_WIDTH, height: MIN_HEIGHT })
         this.win.open()
 
         this.content = this.win.content
@@ -4158,9 +1953,8 @@ module.exports = class Palette extends PIXI.Container
         this.main.removeChildren()
         this.blocks.removeChildren()
 
-        const width = (this.content.offsetWidth / WIDTH)// - (Settings.BORDER * 2 / WIDTH)
-
-        const fontSize = FontSize('8', { width, height: width * 0.75 })
+        const width = (this.win.width / WIDTH)
+        const fontSize = FontSize('8', { width, height: width * 0.85 }) || 1
         let yStart = Settings.BORDER
 
         const behindForeground = this.main.addChild(Sheet.get('transparency'))
@@ -4326,8 +2120,6 @@ module.exports = class Palette extends PIXI.Container
     {
         this.resize()
         this.win.on('resize', () => this.resize())
-        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
-        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
@@ -4340,51 +2132,57 @@ module.exports = class Palette extends PIXI.Container
         this.draw()
     }
 
-    keydown(e)
+    switchForeground()
     {
-        const code = e.keyCode
-        if (!e.ctrlKey && !e.altKey && !e.shiftKey)
+        State.isForeground = !State.isForeground
+    }
+
+    switchStandardColor(i)
+    {
+        switch (i)
         {
-            switch (code)
-            {
-                case 88:
-                    State.isForeground = !State.isForeground
-                    break
-                case 49:
-                    State.color = '000000ff'
-                    break
-                case 50:
-                    State.color = 'ffffffff'
-                    break
-                case 51:
-                    State.color = '00000000'
-                    break
-                case 52: case 53: case 54: case 55: case 56: case 57: case 58:
-                    if (exists(this.colors[0][code - 52]))
-                    {
-                        State.color = this.colors[0][code - 52]
-                    }
-                    break
-                case 48:
-                    if (exists(this.colors[0][10 - 4]))
-                    {
-                        State.color = this.colors[0][10 - 4]
-                    }
-                    break
-            }
+            case 1:
+                State.color = '000000ff'
+                break
+            case 2:
+                State.color = 'ffffffff'
+                break
+            case 3:
+                State.color = '00000000'
+                break
+        }
+    }
+
+    switchColor(digit)
+    {
+        switch (digit)
+        {
+            case 3: case 4: case 5: case 6: case 7: case 8: case 9:
+                if (exists(this.colors[0][digit - 3]))
+                {
+                    State.color = this.colors[0][digit - 3]
+                }
+                break
+
+            case 0:
+                if (exists(this.colors[0][10 - 4]))
+                {
+                    State.color = this.colors[0][10 - 4]
+                }
+                break
         }
     }
 }
-},{"./pixel-editor":25,"./pixel-sheet":26,"./settings":28,"./sheet":29,"./state":31,"calc-fontsize":41,"exists":48,"pixi.js":213,"tinycolor2":273,"yy-color":277}],24:[function(require,module,exports){
+},{"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../sheet":28,"../state":29,"calc-fontsize":49,"exists":56,"pixi.js":221,"tinycolor2":281,"yy-color":285}],15:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
-const exists = require('exists')
 const RenderSheet = require('yy-rendersheet')
 const EasyEdit = require('easyedit')
 const clicked = require('clicked')
 
-const State = require('./state.js')
-const sheet = require('./sheet')
+const State = require('../state.js')
+const sheet = require('../sheet')
+const locale = require('../locale')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300
@@ -4401,7 +2199,7 @@ module.exports = class Picker
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ title: locale.get('PickerTitle'), height: MIN_HEIGHT, width: MIN_WIDTH })
         this.win.open()
         this.ui = ui
         this.content = this.win.content
@@ -4855,8 +2653,6 @@ module.exports = class Picker
                 this.quickSetup()
             })
         })
-        this.win.on('resize-end', () => State.set())
-        this.win.on('move-end', () => State.set())
         State.on('foreground', () => this.dirty = true)
         State.on('background', () => this.dirty = true)
         State.on('isForeground', () => this.dirty = true)
@@ -4962,10 +2758,904 @@ module.exports = class Picker
         this.renderer.resize(this.content.offsetWidth, height)
         this.dirty = true
     }
-
-    keydown() { }
 }
-},{"./sheet":29,"./state.js":31,"clicked":42,"easyedit":46,"exists":48,"pixi.js":213,"tinycolor2":273,"yy-rendersheet":287}],25:[function(require,module,exports){
+},{"../locale":22,"../sheet":28,"../state.js":29,"clicked":50,"easyedit":54,"pixi.js":221,"tinycolor2":281,"yy-rendersheet":300}],16:[function(require,module,exports){
+const clicked = require('clicked')
+
+const Settings = require('../settings')
+const button = require('../button')
+const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
+
+const ICONS = require('../../images/position.json')
+
+const BUTTONS = 5
+const TIPS = ['25% of screen size', '50% of screen size', '75% of screen size', 'center in viewport', 'top-left in viewport']
+
+module.exports = class Position
+{
+    constructor(ui, draw)
+    {
+        this.ui = ui
+        this.draw = draw
+        this.buttons = []
+        this.win = this.ui.createWindow({ title: locale.get('PositionTitle'), minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
+        this.win.content.style.display = 'flex'
+        for (let i = 0; i < BUTTONS; i++)
+        {
+            const one = button(this.win.content, ICONS.imageData[i], null, TIPS[i])
+            one.style.opacity = 0.6
+            clicked(one, () => this.pressed(i))
+            this.buttons.push(one)
+        }
+        this.win.open()
+    }
+
+    pressed(index)
+    {
+        switch (index)
+        {
+            case 0:
+                Position.quarterSize(this.draw)
+                break
+            case 1:
+                Position.halfSize(this.draw)
+                break
+            case 2:
+                Position.threeQuarterSize(this.draw)
+                break
+            case 3:
+                Position.center(this.draw)
+                break
+            case 4:
+                Position.corner(this.draw)
+                break
+        }
+    }
+
+    static quarterSize(draw)
+    {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 4)
+        }
+        else
+        {
+            vp.fitHeight(height * 4)
+        }
+        vp.center = center
+        vp.dirty = true
+    }
+
+    static halfSize(draw)
+    {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 2)
+        }
+        else
+        {
+            vp.fitHeight(height * 2)
+        }
+        vp.center = center
+        vp.dirty = true
+    }
+
+    static threeQuarterSize(draw)
+    {
+        const vp = draw.vp
+        const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
+        let center
+        const width = PixelEditor.width * Settings.ZOOM
+        const height = PixelEditor.height * Settings.ZOOM
+        center = vp.center
+        if (landscape)
+        {
+            vp.fitWidth(width * 1.25)
+        }
+        else
+        {
+            vp.fitHeight(height * 1.25)
+        }
+        vp.center = center
+        vp.dirty = true
+    }
+
+    static center(draw)
+    {
+        const vp = draw.vp
+        vp.moveCenter(draw.width / 2 / vp.scale.x, draw.height / 2 / vp.scale.y)
+        vp.dirty = true
+    }
+
+    static corner(draw)
+    {
+        const vp = draw.vp
+        vp.moveCorner(0, 0)
+        vp.dirty = true
+    }
+}
+},{"../../images/position.json":44,"../button":1,"../locale":22,"../pixel-editor":25,"../settings":27,"clicked":50}],17:[function(require,module,exports){
+const clicked = require('clicked')
+
+const Accelerator = require('../../config/localAccelerator')
+const locale = require('../../locale')
+const html = require('../../html')
+const State = require('../../state')
+
+module.exports = class KeyBinding
+{
+    constructor(win, key, callback)
+    {
+        this.callback = callback
+        this.win = win.wm.createWindow({ noSnap: true, title: locale.get(key), modal: true, resizable: false, closable: false, minimizable: false })
+        this.win.win.tabIndex = -1
+        this.win.win.style.outline = 'none'
+        const content = this.win.content
+        content.style.margin = '1em'
+        content.style.display = 'flex'
+        content.style.flexDirection = 'column'
+        content.style.color = 'white'
+
+        html({ parent: content, html: locale.get('DialogKeyBinding'), styles: { marginBottom: '1em', textAlign: 'center' } })
+        this.current = html({ parent: content, html: Accelerator.prettifyKey(State.keys[key]), styles: { background: 'rgba(255,255,255,0.15', textAlign: 'center', border: '1px solid white', marginBottom: '1em'} })
+        const buttons = html({ parent: content, styles: { display: 'flex', justifyContent: 'space-between' } })
+        const setKey = html({ parent: buttons, type: 'button', html: locale.get('SetKey'), styles: { margin: '0 0.5em' } })
+        clicked(setKey, () => this.set())
+        const clearKey = html({ parent: buttons, type: 'button', html: locale.get('ClearKey'), styles: { color: 'red', margin: '0 0.5em' } })
+        clicked(clearKey, () => this.clear())
+        this.win.open()
+        this.win.center(win)
+        this.win.win.focus()
+        this.win.win.addEventListener('keydown', (e) => this.keydown(e))
+        this.win.win.addEventListener('blur', () => this.win.win.focus())
+    }
+
+    keydown(e)
+    {
+        e.preventDefault()
+        e.stopPropagation()
+        const disallowed = ['Alt', 'Shift', 'Ctrl', 'Meta', 'Control', 'Cmd', 'Command']
+        for (let check of disallowed)
+        {
+            if (e.code.indexOf(check) !== -1)
+            {
+                return
+            }
+        }
+        const modifiers = []
+        if (e.altKey)
+        {
+            modifiers.push('alt')
+        }
+        if (e.ctrlKey)
+        {
+            modifiers.push('ctrl')
+        }
+        if (e.metaKey)
+        {
+            modifiers.push('meta')
+        }
+        if (e.shiftKey)
+        {
+            modifiers.push('shift')
+        }
+        let keyCode = ''
+        for (let modifier of modifiers)
+        {
+            keyCode += modifier + '+'
+        }
+        let translate = e.code.toLowerCase()
+        translate = translate.replace('digit', '')
+        translate = translate.replace('key', '')
+        keyCode += translate
+        this.current.innerHTML = Accelerator.prettifyKey(keyCode)
+    }
+
+    set()
+    {
+        this.win.close()
+        this.callback(this.current.innerHTML)
+    }
+
+    clear()
+    {
+        this.win.close()
+        this.callback(false)
+    }
+}
+},{"../../config/localAccelerator":4,"../../html":20,"../../locale":22,"../../state":29,"clicked":50}],18:[function(require,module,exports){
+const clicked = require('clicked')
+
+const Accelerator = require('../../config/localAccelerator')
+const locale = require('../../locale')
+const html = require('../../html')
+const KeyBinding = require('./keybinding')
+const State = require('../../state')
+const Menu = require('../../menu')
+const Dialog = require('../../dialog')
+
+module.exports = class Keys
+{
+    constructor(ui)
+    {
+        this.win = ui.createWindow({ title: locale.get('KeyboardTitle') })
+        this.content = this.win.content
+        this.content.style.padding = '0em 1em 0.5em'
+        this.content.style.color = '#eeeeee'
+        this.setup()
+        this.win.open()
+        this.win.center()
+    }
+
+    setup()
+    {
+        this.keys = html({ parent: this.win.content, styles: { margin: '0 0.25em', display: 'flex', flexDirection: 'column' } })
+        const table = html({ parent: this.keys, type: 'table', styles: { margin: '0 auto' } })
+        html({ parent: table, type: 'thead', html: '<tr><th>' + locale.get('Command') + '</th><th>' + locale.get('Keybinding') + '</th></tr>' })
+        const body = html({ parent: table, type: 'tbody' })
+        let other = true
+        this.keysList = []
+        for (let key in State.keys)
+        {
+            const tr = html({ parent: body, type: 'tr', styles: { cursor: 'pointer', backgroundColor: (other ? 'rgba(255, 255, 255, 0.15)' : '') } })
+            html({ parent: tr, type: 'td', html: locale.get(key) })
+            const accelerator = html({ parent: tr, type: 'td', html: Accelerator.prettifyKey(State.keys[key]) })
+            tr.addEventListener('mouseenter', () => this.mouseenter(tr))
+            tr.addEventListener('mouseleave', () => this.mouseleave(tr))
+            clicked(tr, () =>
+            {
+                new KeyBinding(this.win, key, (change) => this.changeKey(key, change, accelerator))
+            })
+            this.keysList.push({ accelerator, key })
+            other = !other
+        }
+        const buttons = html({ parent: this.keys, styles: { margin: '1em 0', textAlign: 'right' } })
+        clicked(html({ parent: buttons, type: 'button', html: locale.get('DefaultKeys'), styles: { color: 'red' } }), () => this.resetDialog())
+    }
+
+    resetDialog()
+    {
+        new Dialog(this.win, locale.get('DefaultKeys'), 'confirmation', locale.get('DefaultKeysPrompt'), (result) => this.reset(result))
+    }
+
+    reset(result)
+    {
+        if (result)
+        {
+            State.resetKeys()
+            for (let key of this.keysList)
+            {
+                key.accelerator.innerHTML = Accelerator.prettifyKey(State.keys[key.key])
+            }
+        }
+    }
+
+    changeKey(key, change, accelerator)
+    {
+        if (change)
+        {
+            accelerator.innerHTML = change
+            State.keys[key] = change
+            State.save()
+            Menu.create()
+        }
+        else if (change === false)
+        {
+            accelerator.innerHTML = ''
+            State.keys[key] = ''
+            State.save()
+            Menu.create()
+        }
+    }
+
+    mouseenter(tr)
+    {
+        tr.original = tr.style.backgroundColor
+        tr.style.backgroundColor = 'white'
+        tr.style.color = 'black'
+    }
+
+    mouseleave(tr)
+    {
+        tr.style.backgroundColor = tr.original
+        tr.style.color = ''
+    }
+}
+},{"../../config/localAccelerator":4,"../../dialog":6,"../../html":20,"../../locale":22,"../../menu":24,"../../state":29,"./keybinding":17,"clicked":50}],19:[function(require,module,exports){
+const clicked = require('clicked')
+
+const State = require('../state')
+const button = require('../button')
+
+const ICONS = require('../../images/editor.json')
+
+const BUTTONS = 7
+const TIPS = [['select mode', 'v'], ['draw mode', 'b'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm']]
+
+const OPACITY_UNSELECTED = 0.6
+
+module.exports = class Toolbar
+{
+    constructor(ui)
+    {
+        this.ui = ui
+        this.buttons = []
+
+        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minWidth: 0 })
+        this.win.winTitlebar.childNodes[0].style.padding = 0
+
+        for (let i = 0; i < BUTTONS; i++)
+        {
+            const one = button(this.win.content, ICONS.imageData[i], { opacity: OPACITY_UNSELECTED, display: 'block' }, TIPS[i])
+            clicked(one, () => this.pressed(i))
+            this.buttons.push(one)
+        }
+        this.changed()
+        this.stateSetup()
+        this.win.open()
+    }
+
+    pressed(index)
+    {
+        if (this.selected)
+        {
+            this.selected.style.opacity = OPACITY_UNSELECTED
+        }
+        this.buttons[index].style.opacity = 1
+        this.selected = this.buttons[index]
+        switch (index)
+        {
+            case 0: State.tool = 'select'; break
+            case 1: State.tool = 'paint' ; break
+            case 2: State.tool = 'fill'; break
+            case 3: State.tool = 'circle'; break
+            case 4: State.tool = 'ellipse'; break
+            case 5: State.tool = 'line'; break
+            case 6: State.tool = 'crop'; break
+        }
+    }
+
+    keydown(e)
+    {
+        if (!e.ctrlKey && !e.shiftKey && !e.altKey)
+        {
+            switch (e.keyCode)
+            {
+                case 66:
+                    State.tool = 'paint'
+                    break
+                case 86:
+                    State.tool = 'select'
+                    break
+                case 67:
+                    State.tool = 'circle'
+                    break
+                case 76:
+                    State.tool = 'line'
+                    break
+                case 70:
+                    State.tool = 'fill'
+                    break
+                case 69:
+                    State.tool = 'ellipse'
+                    break
+                case 82:
+                    State.tool = 'crop'
+                    break
+            }
+        }
+    }
+
+    changed()
+    {
+        let index
+        switch (State.tool)
+        {
+            case 'paint': index = 1; break
+            case 'fill': index = 2; break
+            case 'circle': index = 3; break
+            case 'ellipse': index = 4; break
+            case 'line': index = 5; break
+            case 'crop': index = 6; break
+            default:
+                index = 0
+        }
+        if (this.selected)
+        {
+            this.selected.style.opacity = OPACITY_UNSELECTED
+        }
+        this.buttons[index].style.opacity = 1
+        this.selected = this.buttons[index]
+    }
+
+    stateSetup()
+    {
+        State.on('tool', this.changed, this)
+    }
+}
+},{"../../images/editor.json":42,"../button":1,"../state":29,"clicked":50}],20:[function(require,module,exports){
+module.exports = function (options)
+{
+    options = options || {}
+    const object = document.createElement(options.type || 'div')
+    if (options.parent)
+    {
+        options.parent.appendChild(object)
+    }
+    if (options.styles)
+    {
+        for (let style in options.styles)
+        {
+            object.style[style] = options.styles[style]
+        }
+    }
+    if (options.html)
+    {
+        object.innerHTML = options.html
+    }
+    if (options.list)
+    {
+        object.setAttribute('list', options.list)
+    }
+    if (options.Type)
+    {
+        object.setAttribute('type', options.Type)
+    }
+    const covered = ['parent', 'styles', 'html', 'type', 'Type', 'list']
+    for (let item in options)
+    {
+        if (covered.indexOf(item) === -1)
+        {
+            object[item] = options[item]
+        }
+    }
+    return object
+}
+},{}],21:[function(require,module,exports){
+const Misc = require('./config/misc')
+const Accelerator = require('./config/localAccelerator')
+
+let Main
+
+function setup(main)
+{
+    Main = main
+
+    // debug keys
+    if (Misc.isElectron)
+    {
+        Accelerator.register('ctrl+shift+i', () => Misc.toggleDevTools())
+    }
+    Accelerator.register('ctrl+r', (e) =>
+    {
+        e.preventDefault()
+        window.location.reload()
+    })
+
+    // movement arrows
+    Accelerator.register('arrowright', () => Main.windows.draw.moveCursor(1, 0))
+    Accelerator.register('arrowleft', () => Main.windows.draw.moveCursor(-1, 0))
+    Accelerator.register('arrowdown', () => Main.windows.draw.moveCursor(0, 1))
+    Accelerator.register('arrowup', () => Main.windows.draw.moveCursor(0, -1))
+    Accelerator.register('shift+arrowright', () => Main.windows.draw.moveCursorShift(1, 0))
+    Accelerator.register('shift+arrowleft', () => Main.windows.draw.moveCursorShift(-1, 0))
+    Accelerator.register('shift+arrowdown', () => Main.windows.draw.moveCursorShift(0, 1))
+    Accelerator.register('shift+arrowup', () => Main.windows.draw.moveCursorShift(0, -1))
+
+    // number colors
+    for (let i = 1; i < 4; i++)
+    {
+        Accelerator.register(i, () => Main.windows.palette.switchStandardColor(i))
+    }
+    for (let i = 4; i < 10; i++)
+    {
+        Accelerator.register(i, () => Main.windows.palette.switchColor(i))
+    }
+    Accelerator.register(0, () => Main.windows.palette.switchColor(0))
+}
+
+module.exports = {
+    setup
+}
+},{"./config/localAccelerator":4,"./config/misc":5}],22:[function(require,module,exports){
+const LANGUAGES = {
+    'en-us': require('../data/text/en-us.json')
+}
+
+const language = 'en-us'
+
+function get(string)
+{
+    return LANGUAGES[language][string]
+}
+
+module.exports = {
+    get
+}
+
+},{"../data/text/en-us.json":40}],23:[function(require,module,exports){
+const path = require('path')
+
+const libraries = require('./config/libraries')
+const WM = libraries.WM
+const File = require('./config/file')
+const FPS = require('yy-fps')
+
+const Settings = require('./settings')
+const Views = require('./views')
+const Sheet = require('./sheet')
+const Draw = require('./draw')
+const State = require('./state')
+const PixelEditor = require('./pixel-editor')
+const Menu = require('./menu')
+const Export = require('./export')
+const Keys = require('./keys')
+
+const Toolbar = require('./frames/toolbar')
+const Palette = require('./frames/palette')
+const Picker = require('./frames/picker')
+const Info = require('./frames/info')
+const Frames = require('./frames/frames')
+const Animation = require('./frames/animation')
+const Position = require('./frames/position')
+const Manager = require('./frames/manager')
+const Keyboard = require('./frames/preferences/keyboard')
+
+let wm, loading = 2, windows = {}, fps
+
+const Main = {
+
+    afterLoad: function()
+    {
+        loading--
+        if (loading)
+        {
+            return
+        }
+        if (Settings.FPS)
+        {
+            Main.fpsSetup()
+        }
+        PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile)
+        Main.create()
+        Menu.create()
+        Keys.setup(Main)
+
+    },
+
+    fpsSetup: function ()
+    {
+        function frame()
+        {
+            fps.frame()
+            requestAnimationFrame(frame)
+        }
+        fps = new FPS()
+        frame()
+    },
+
+    create: function()
+    {
+        wm = new WM({
+            backgroundColorTitlebarActive: '#555555',
+            backgroundColorTitlebarInactive: '#444444',
+            backgroundColorWindow: '#333333',
+            foregroundColorTitle: '#666666',
+            maximizable: false,
+            titlebarHeight: '1.25em',
+            borderRadius: 'none',
+            shadow: 'none',
+            snap: {}
+        })
+
+        windows.draw = new Draw(wm.overlay, wm)
+        windows.frames = new Frames(wm)
+        windows.toolbar = new Toolbar(wm)
+        windows.palette = new Palette(wm)
+        windows.picker = new Picker(wm)
+        windows.info = new Info(wm)
+        windows.animation = new Animation(wm)
+        windows.position = new Position(wm, windows.draw)
+        windows.manager = new Manager(wm)
+        windows.keyboard = new Keyboard(wm)
+
+        for (let name in windows)
+        {
+            const win = windows[name].win
+            if (win)
+            {
+                win.on('resize-end', () => Views.update())
+                win.on('move-end', () => Views.update())
+                if (Menu.height)
+                {
+                    if (win)
+                    {
+                        win.on('move-end', () =>
+                        {
+                            if (win.y < Menu.height)
+                            {
+                                win.y = Menu.height
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        Views.init(wm, Main)
+        State.start()
+        setTimeout(() => document.body.style.opacity = 1, 500)
+    },
+
+    toggleHidden: function(name)
+    {
+        if (windows[name].win.closed)
+        {
+            windows[name].win.open()
+        }
+        else
+        {
+            windows[name].win.close()
+        }
+    },
+
+    save: function(filename)
+    {
+        if (filename)
+        {
+            State.lastPath = path.dirname(filename)
+            if (path.extname(filename) !== '.json')
+            {
+                filename += '.json'
+            }
+            State.lastFile = filename
+            PixelEditor.name = path.basename(filename, path.extname(filename))
+            PixelEditor.save(filename)
+        }
+    },
+
+    load: function(list)
+    {
+        if (list && list.length)
+        {
+            let filename = list[0]
+            if (filename.indexOf('.editor.'))
+            {
+                filename = filename.replace('.editor.', '')
+            }
+            PixelEditor.load(filename)
+            State.lastFile = filename
+            State.current = 0
+            if (State.cursorX >= PixelEditor.width)
+            {
+                State.cursorX = 0
+            }
+            if (State.cursorY >= PixelEditor.height)
+            {
+                State.cursorY = 0
+            }
+        }
+    },
+
+    newFile: function()
+    {
+        PixelEditor.create()
+        State.lastFile = PixelEditor.filename
+        State.current = 0
+        State.cursorX = State.cursorY = 0
+        State.cursorSizeX = State.cursorSizeY = 1
+        windows.position.pressed(1)
+        windows.position.pressed(3)
+    },
+
+    saveFile: function()
+    {
+        File.saveFileDialog(State.lastPath, Main.save)
+    },
+
+    openFile: function()
+    {
+        File.openFileDialog(State.lastPath, Main.load)
+    },
+
+    exportFile: function()
+    {
+        new Export(wm)
+    },
+
+    get windows()
+    {
+        return windows
+    },
+
+    get wm()
+    {
+        return wm
+    }
+}
+
+module.exports = Main
+
+window.onload = () =>
+{
+    document.body.style.opacity = 0
+    State.load(Main.afterLoad)
+    Sheet.load(Main.afterLoad)
+}
+},{"./config/file":2,"./config/libraries":3,"./draw":8,"./export":9,"./frames/animation":10,"./frames/frames":11,"./frames/info":12,"./frames/manager":13,"./frames/palette":14,"./frames/picker":15,"./frames/position":16,"./frames/preferences/keyboard":18,"./frames/toolbar":19,"./keys":21,"./menu":24,"./pixel-editor":25,"./settings":27,"./sheet":28,"./state":29,"./views":38,"path":63,"yy-fps":287}],24:[function(require,module,exports){
+const Misc = require('./config/misc')
+const Menu = Misc.Menu
+const MenuItem = Misc.MenuItem
+const path = require('path')
+
+const locale = require('./locale')
+const State = require('./state')
+const PixelEditor = require('./pixel-editor')
+
+let Main, Keys, Views
+let _menu, _panes
+
+function file()
+{
+    const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuNew'), accelerator: Keys.New, click: () => Main.newFile() } ))
+    submenu.append(new MenuItem({ label: locale.get('menuSaveAs'), accelerator: Keys.Save, click: () => Main.saveFile() }))
+    submenu.append(new MenuItem({ label: locale.get('menuOpen'), accelerator: Keys.Open, click: () => Main.openFile() }))
+    submenu.append(new MenuItem({ label: locale.get('menuExport'), accelerator: Keys.Export, click: () => Main.exportFile() }))
+    if (State.lastFiles.length)
+    {
+        submenu.append(new MenuItem({ type: 'separator' }))
+
+        for (let i = 1; i < State.lastFiles.length; i++)
+        {
+            submenu.append(new MenuItem({ label: '&' + i + '. ' + path.basename(State.lastFiles[i], '.json'), accelerator: 'CommandOrControl+' + i, click: () => Main.load([State.lastFiles[i]]) }))
+        }
+    }
+    if (Misc.isElectron)
+    {
+        submenu.append(new MenuItem({ type: 'separator' }))
+        submenu.append(new MenuItem({ label: locale.get('menuExit'), accelerator: Keys.exit, click: () => Misc.quit() }))
+    }
+    _menu.append(new MenuItem({ label: locale.get('menuFile'), submenu }))
+}
+
+function edit()
+{
+    const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuUndo'), accelerator: Keys.Undo, click: () => PixelEditor.redoOne() }))
+    submenu.append(new MenuItem({ label: locale.get('menuRedo'), accelerator: Keys.Redo, click: () => PixelEditor.undoOne() }))
+    submenu.append(new MenuItem({ type: 'separator' }))
+    submenu.append(new MenuItem({ label: locale.get('menuCopy'), accelerator: Keys.Copy, click: () => Main.windows.draw.copy() }))
+    submenu.append(new MenuItem({ label: locale.get('menuCut'), accelerator: Keys.Cut, click: () => Main.windows.draw.cut() }))
+    submenu.append(new MenuItem({ label: locale.get('menuPaste'), accelerator: Keys.Paste, click: () => Main.windows.draw.paste() }))
+    submenu.append(new MenuItem({ type: 'separator' }))
+    submenu.append(new MenuItem({ label: locale.get('menuSelectAll'), accelerator: Keys.SelectAll, click: () => Main.windows.draw.selectAll() }))
+    _menu.append(new MenuItem({ label: locale.get('menuEdit'), submenu }))
+}
+
+function draw()
+{
+    const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuSpace'), accelerator: Keys.Draw, click: () => Main.windows.draw.pressSpace() }))
+    submenu.append(new MenuItem({ label: locale.get('menuErase'), accelerator: Keys.Erase, click: () => Main.windows.draw.erase() }))
+    submenu.append(new MenuItem({ label: locale.get('menuDropper'), accelerator: Keys.Dropper, click: () => State.foreground = PixelEditor.get(State.cursorX, State.cursorY) }))
+    submenu.append(new MenuItem({ label: locale.get('menuClear'), accelerator: Keys.Clear, click: () => Main.windows.draw.clear() }))
+    submenu.append(new MenuItem({ label: locale.get('menuSwapForeground'), accelerator: Keys.SwapForeground, click: () => Main.windows.palette.switchForeground() }))
+
+    const tools = new Menu()
+    const list = ['Select', 'Paint', 'Fill', 'Circle', 'Ellipse', 'Line', 'Crop']
+    for (let tool of list)
+    {
+        tools.append(new MenuItem({ label: locale.get('menu' + tool + 'Tool'), accelerator: Keys[tool + 'Tool'], click: () => State.tool = tool.toLowerCase() }))
+    }
+
+    submenu.append(new MenuItem({ label: locale.get('menuTools'), submenu: tools }))
+    _menu.append(new MenuItem({ label: locale.get('menuDraw'), submenu }))
+}
+
+function view()
+{
+    function paneCreate(name, i)
+    {
+        let capitalize = name.substr(0, 1).toUpperCase() + name.substr(1)
+        _panes[name] = new MenuItem({ label: locale.get('menu' + capitalize), type: 'checkbox', checked: !Views.getClosed(i), click: () => Views.toggleClosed(name, i), accelerator: Keys[capitalize + 'Window'] })
+        panes.append(_panes[name])
+    }
+
+    _panes = {}
+    const panes = new Menu()
+    const normal = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager']
+    for (let i = 0; i < normal.length; i++)
+    {
+        paneCreate(normal[i], i)
+    }
+    panes.append(new MenuItem({ type: 'separator' }))
+    const preferences = ['keyboard']
+    for (let i = 0; i < preferences.length; i++)
+    {
+        paneCreate(preferences[i], i + normal.length)
+    }
+
+    const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuNextView'), click: () => Views.change(1), accelerator: Keys.NextView }))
+    submenu.append(new MenuItem({ label: locale.get('menuPreviousView'), click: () => Views.change(-1), accelerator: Keys.PreviousView }))
+    submenu.append(new MenuItem({ type: 'separator' }))
+    submenu.append(new MenuItem({ label: locale.get('menuPanes'), submenu: panes }))
+    submenu.append(new MenuItem({ label: locale.get('menuResetPanes'), click: () => Views.resetWindows(), accelerator: Keys.ResetWindows }))
+    _menu.append(new MenuItem({ label: locale.get('menuView'), submenu }))
+}
+
+function frame()
+{
+    const submenu = new Menu()
+    submenu.append(new MenuItem({ label: locale.get('menuNewFrame'), accelerator: Keys.NewFrame, click: () => PixelEditor.add() }))
+    submenu.append(new MenuItem({ label: locale.get('menuDuplicate'), accelerator: Keys.Duplicate, click: () => PixelEditor.duplicate() }))
+    submenu.append(new MenuItem({ label: locale.get('menuDelete'), accelerator: Keys.Delete, click: () => PixelEditor.remove(PixelEditor.current) }))
+    submenu.append(new MenuItem({ type: 'separator' }))
+    submenu.append(new MenuItem({ label: locale.get('menuClockwise'), accelerator: Keys.Clockwise, click: () => PixelEditor.rotate() }))
+    submenu.append(new MenuItem({ label: locale.get('menuCounterClockwise'), accelerator: Keys.CounterClockwise, click: () => PixelEditor.rotate(true) }))
+    submenu.append(new MenuItem({ label: locale.get('menuFlipHorizontal'), accelerator: Keys.FlipHorizontal, click: () => PixelEditor.flipHorizontal() }))
+    submenu.append(new MenuItem({ label: locale.get('menuFlipVertical'), accelerator: Keys.FlipVertical, click: () => PixelEditor.flipVertical() }))
+
+    _menu.append(new MenuItem({ label: locale.get('menuFrames'), submenu }))
+}
+
+function create()
+{
+    Main = require('./main')
+    Views = require('./views')
+    Keys = State.keys
+
+    _menu = new Menu({ styles: { position: 'unset' } })
+
+    file()
+    edit()
+    draw()
+    view()
+    frame()
+
+    Menu.setApplicationMenu(_menu)
+}
+
+function toggleAll()
+{
+    let i = 0
+    for (let pane in _panes)
+    {
+        _panes[pane].checked = !State.views[State.view][i++].closed
+    }
+}
+
+function toggle(name)
+{
+    _panes[name].checked = !_panes[name].checked
+}
+
+State.on('last-file', create)
+
+module.exports = {
+    create,
+    toggle,
+    toggleAll,
+    get Accelerator()
+    {
+        return Menu.GlobalAccelerator
+    },
+    height: () => { return _menu.div.offsetHeight }
+}
+},{"./config/misc":5,"./locale":22,"./main":23,"./pixel-editor":25,"./state":29,"./views":38,"path":63}],25:[function(require,module,exports){
 const path = require('path')
 
 const Settings = require('./settings')
@@ -4992,7 +3682,7 @@ class PixelEditor extends Pixel
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
     }
 
-    create(filename, callback)
+    create(filename)
     {
         if (!filename)
         {
@@ -5007,7 +3697,6 @@ class PixelEditor extends Pixel
                 sheet.render(() =>
                 {
                     this.dirty = true
-                    callback()
                 })
                 setInterval(() => this.update(), Settings.SAVE_INTERVAL)
             })
@@ -5016,7 +3705,7 @@ class PixelEditor extends Pixel
         {
             this.filename = filename
             this.name = this.name || path.basename(filename, '.json')
-            this.load(callback)
+            this.load(filename)
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
     }
@@ -5559,11 +4248,10 @@ class PixelEditor extends Pixel
         }
     }
 
-    afterLoad(load, callback)
+    afterLoad(load)
     {
         if (!load || !load.imageData.length || !load.animations || load.imageData[0].length !== 3)
         {
-            callback()
             return
         }
         this.imageData = load.imageData
@@ -5600,14 +4288,13 @@ class PixelEditor extends Pixel
                 this.editor.zoom = 10
                 this.dirty = true
             }
-            callback()
         })
     }
 
-    load(filename, callback)
+    load(filename)
     {
         this.filename = filename = filename || this.filename
-        File.readJSON(filename, (load) => this.afterLoad(load, callback))
+        File.readJSON(filename, (load) => this.afterLoad(load))
     }
 
     save(filename)
@@ -5639,122 +4326,29 @@ class PixelEditor extends Pixel
 }
 
 module.exports = new PixelEditor()
-},{"./config/file":10,"./config/libraries":11,"./pixel-sheet":26,"./settings":28,"exists":48,"path":55,"yy-color":277}],26:[function(require,module,exports){
+},{"./config/file":2,"./config/libraries":3,"./pixel-sheet":26,"./settings":27,"exists":56,"path":63,"yy-color":285}],26:[function(require,module,exports){
 const libraries = require('./config/libraries')
 const RenderSheet = libraries.RenderSheet
 
 module.exports = new RenderSheet({ scaleMode: true })
-},{"./config/libraries":11}],27:[function(require,module,exports){
-const clicked = require('clicked')
-
-const State = require('./state')
-const button = require('./button')
-const PixelEditor = require('./pixel-editor')
-
-const ICONS = require('../images/position.json')
-
-const BUTTONS = 5
-const TIPS = ['25% of screen size', '50% of screen size', '75% of screen size', 'center in viewport', 'top-left in viewport']
-
-module.exports = class Position
-{
-    constructor(ui, draw)
-    {
-        this.ui = ui
-        this.draw = draw
-        this.buttons = []
-        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
-        this.win.content.style.display = 'flex'
-        for (let i = 0; i < BUTTONS; i++)
-        {
-            const one = button(this.win.content, ICONS.imageData[i], null, TIPS[i])
-            one.style.opacity = 0.6
-            clicked(one, () => this.pressed(i))
-            this.buttons.push(one)
-        }
-        this.win.open()
-        this.stateSetup()
-    }
-
-    pressed(index)
-    {
-        const vp = this.draw.vp
-        const landscape = this.draw.width / window.innerWidth > this.draw.height / window.innerHeight
-        let center
-        const width = PixelEditor.width * this.draw.zoom
-        const height = PixelEditor.height * this.draw.zoom
-        switch (index)
-        {
-            case 0:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 4)
-                }
-                else
-                {
-                    vp.fitHeight(height * 4)
-                }
-                vp.center = center
-                break
-            case 1:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 2)
-                }
-                else
-                {
-                    vp.fitHeight(height * 2)
-                }
-                vp.center = center
-                break
-            case 2:
-                center = vp.center
-                if (landscape)
-                {
-                    vp.fitWidth(width * 1.25)
-                }
-                else
-                {
-                    vp.fitHeight(height * 1.25)
-                }
-                vp.center = center
-                break
-            case 3:
-                vp.moveCenter(this.draw.width / 2 / vp.scale.x, this.draw.height / 2 / vp.scale.y)
-                break
-            case 4:
-                vp.moveCorner(0, 0)
-                break
-        }
-        vp.dirty = true
-    }
-
-    keydown(e)
-    {
-
-    }
-
-    stateSetup()
-    {
-        this.win.on('move-end', () => State.set())
-    }
-}
-},{"../images/position.json":36,"./button":8,"./pixel-editor":25,"./state":31,"clicked":42}],28:[function(require,module,exports){
+},{"./config/libraries":3}],27:[function(require,module,exports){
 module.exports = {
 
     NAME: 'pixel-editor',
 
-    DEBUG: true,
+    DEBUG: false,
     NO_LOAD: false,
     TEST_CLEAN_OPENING: false,
+    FPS: false,
 
     SAVE_INTERVAL: 500,
+    CURSOR_COLOR: 0xff0000,
+    DOTTED: 10,
 
-    BORDER: 5
+    BORDER: 5,
+    ZOOM: 50 // size of box in draw window
 }
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 const libraries = require('./config/libraries')
 const RenderSheet = libraries.RenderSheet
 const Color = require('yy-color')
@@ -5839,266 +4433,13 @@ module.exports = {
         return _sheet
     }
 }
-},{"./config/libraries":11,"yy-color":277}],30:[function(require,module,exports){
-const PIXI = require('pixi.js')
-
-const libraries = require('./config/libraries')
-const Pixel = libraries.Pixel
-
-const Settings = require('./settings')
-const sheet = require('./pixel-sheet')
-const PixelEditor = require('./pixel-editor')
-const State = require('./state')
-
-const MIN_WIDTH = 100
-const MIN_HEIGHT = 100
-const SPACING = 5
-
-const COLOR_SELECTED = 0x888888
-
-module.exports = class Show extends PIXI.Container
-{
-    constructor(ui)
-    {
-        super()
-        this.win = ui.createWindow({ minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
-        this.win.open()
-        this.content = this.win.content
-        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
-        this.content.appendChild(this.renderer.view)
-        this.renderer.view.style.display = 'block'
-        this.renderer.view.style.margin = '0 auto'
-        this.renderer.view.style.width = '100%'
-        this.renderer.view.style.height = '100%'
-        this.pixels = this.addChild(new PIXI.Container())
-        this.stateSetup()
-        this.redraw()
-    }
-
-    // measure()
-    // {
-    //     let scale = MAX_SCALE, x, y, largest
-    //     const windowWidth = this.win.width
-    //     const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
-    //     const data = PixelEditor.imageData
-    //     do
-    //     {
-    //         largest = 0, x = SPACING, y = SPACING
-    //         for (let i = 0; i < data.length; i++)
-    //         {
-    //             const width = data[i][0] * scale
-    //             const height = data[i][1] * scale
-    //             if (x + width + SPACING > windowWidth)
-    //             {
-    //                 x = SPACING
-    //                 y += largest + SPACING
-    //                 largest = 0
-    //             }
-    //             x += width + SPACING
-    //             largest = height > largest ? height : largest
-    //         }
-    //         scale += SCALE_DECREASE
-    //     }
-    //     while (scale > 0.1 && y + largest + SPACING > windowHeight)
-    //     this.scaler = scale
-    // }
-
-    redraw()
-    {
-        this.pixels.removeChildren()
-        this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
-        this.selector.tint = COLOR_SELECTED
-        const data = PixelEditor.imageData
-        const scale = PixelEditor.zoom
-        let x = SPACING, y = SPACING, largest = 0
-        for (let i = 0; i < data.length; i++)
-        {
-            const pixel = this.pixels.addChild(new Pixel(PixelEditor, sheet))
-            const width = data[i][0] * scale
-            const height = data[i][1] * scale
-            pixel.scale.set(scale)
-            pixel.frame(i)
-            pixel.current = i
-            if (x + width + SPACING > this.win.width)
-            {
-                x = SPACING
-                y += largest + SPACING
-                largest = 0
-            }
-            pixel.position.set(x, y)
-            const number = this.pixels.addChild(new PIXI.Text(i, { fill: '#eeeeee', fontSize: '1.5em', fontfamily: 'consolas' }))
-            number.position.set(x + width / 2 - number.width / 2, y + height + SPACING)
-            number.position.set(x + width - number.width, y)
-            number.alpha = 0.25
-            pixel.interactive = true
-            pixel.on('pointertap', () =>
-            {
-                if (PixelEditor.current !== pixel.current)
-                {
-                    PixelEditor.current = pixel.current
-                    this.selector.position.set(pixel.x, pixel.y)
-                    this.selector.width = pixel.width
-                    this.selector.height = pixel.height
-                }
-            })
-            x += width + SPACING
-            largest = height > largest ? pixel.height : largest
-        }
-        this.currentChange()
-    }
-
-    currentChange()
-    {
-        const target = this.pixels.children[1 + PixelEditor.current * 2]
-        this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
-        this.selector.width = target.width + Settings.BORDER
-        this.selector.height = target.height + Settings.BORDER
-        this.renderer.view.style.height = this.height + 'px'
-        this.renderer.resize(this.win.width, this.height)
-        this.renderer.render(this)
-        if (this.selector.y < this.content.scrollTop || this.selector.y + this.selector.height > this.content.scrollTop + this.content.offsetHeight)
-        {
-            this.content.scrollTop = this.selector.y
-        }
-    }
-
-    down(x, y, data)
-    {
-        const point = this.toLocal({ x, y })
-        for (let button of this.buttons)
-        {
-            if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2)
-            {
-                if (PixelEditor.current !== button.current)
-                {
-                    PixelEditor.current = button.current
-                    this.selector.position.set(button.x, button.y)
-                    this.selector.width = button.width
-                    this.selector.height = button.height
-                }
-                const pixel = this.buttons[button.current].pixel
-                this.dragging = { pixel, current: button.current, x: point.x, y: point.y, originalX: pixel.x, originalY: pixel.y }
-                return true
-            }
-        }
-    }
-
-    move(x, y, data)
-    {
-        if (this.dragging)
-        {
-            const point = this.toLocal({x, y})
-            const width = 10
-            this.dragging.pixel.x = this.dragging.originalX + (point.x - this.dragging.x)
-            this.dragging.pixel.y = this.dragging.originalY + (point.y - this.dragging.y)
-            let found = false
-            for (let button of this.buttons)
-            {
-                if (point.x < (button.x1 + button.x2) / 2)
-                {
-                    if (button.current === this.dragging.current || button.current - 1 === this.dragging.current)
-                    {
-                        this.selector.x = this.dragging.originalX
-                        this.selector.width = this.dragging.pixel.width
-                        this.dragging.drop = this.dragging.current
-                    }
-                    else
-                    {
-                        this.selector.x = button.x1 - width / 2
-                        this.selector.width = width
-                        this.dragging.drop = button.current
-                    }
-                    found = true
-                    break
-                }
-            }
-            if (!found)
-            {
-                if (this.dragging.current === this.buttons.length - 1)
-                {
-                    this.selector.x = this.dragging.originalX
-                    this.selector.width = this.dragging.pixel.width
-                    this.dragging.drop = this.dragging.current
-                }
-                else
-                {
-                    this.selector.x = this.buttons[this.buttons.length - 1].x2
-                    this.selector.width = width
-                    this.dragging.drop = this.buttons.length
-                }
-            }
-            this.renderer.render(this)
-        }
-    }
-
-    up(x, y, data)
-    {
-        if (this.dragging)
-        {
-            // if (this.dragging.drop)
-            // {
-            //     if (this.dragging.drop !== this.dragging.current)
-            //     {
-            //         PixelEditor.move(this.dragging.current, this.dragging.drop)
-            //     }
-            // }
-            this.dragging = null
-            this.redraw()
-        }
-    }
-
-    keydown(e)
-    {
-        const code = e.keyCode
-        if (e.ctrlKey)
-        {
-            if (code === 37)
-            {
-                if (PixelEditor.current === 0)
-                {
-                    PixelEditor.current = PixelEditor.imageData.length - 1
-                }
-                else
-                {
-                    PixelEditor.current--
-                }
-            }
-            else if (code === 39)
-            {
-                if (PixelEditor.current === PixelEditor.imageData.length - 1)
-                {
-                    PixelEditor.current = 0
-                }
-                else
-                {
-                    PixelEditor.current++
-                }
-            }
-        }
-    }
-
-    resize()
-    {
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        this.redraw()
-    }
-
-    stateSetup()
-    {
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        this.win.on('resize', () => this.resize())
-        this.win.on('resize-end', () => State.set())
-        this.win.on('move-end', () => State.set())
-        PixelEditor.on('changed', () => this.redraw())
-        PixelEditor.on('current', () => this.currentChange())
-        State.on('last-file', () => this.redraw())
-    }
-}
-},{"./config/libraries":11,"./pixel-editor":25,"./pixel-sheet":26,"./settings":28,"./state":31,"pixi.js":213}],31:[function(require,module,exports){
+},{"./config/libraries":3,"yy-color":285}],29:[function(require,module,exports){
 const Events = require('eventemitter3')
 
 const File = require('./config/file')
 const Settings = require('./settings')
+
+const DEFAULT_KEYS = require('../data/default-keys.json')
 
 class State extends Events
 {
@@ -6128,35 +4469,30 @@ class State extends Events
             {
                 this.state.manager = { zoom: 4, images: true, alphabetical: true }
             }
+            if (this.state.tool === 'sample')
+            {
+                this.state.tool = 'select'
+            }
+            if (!this.state.views)
+            {
+                this.state.views = []
+                this.state.view = 0
+            }
             this.state.lastFiles = this.state.lastFiles || []
             this.state.relative = this.state.relative || 'top-left'
+            this.state.keys = this.state.keys || DEFAULT_KEYS
             callback()
         })
     }
 
-    positionDefault()
+    resetKeys()
     {
-        const space = Settings.BORDER
-        this.state.windows = [
-            { x: space, y: window.innerHeight - space - 200, width: 200, height: 200 }, // show
-            { x: space, y: space }, // toolbar
-            { x: window.innerWidth - space - 200, y: space * 2 + 300, width: 200, height: 150 }, // palette
-            { x: window.innerWidth - space - 200, y: space, width: 200, height: 300 }, // picker
-            { x: window.innerWidth - space - 200, y: window.innerHeight - space - 205 }, // info
-            { x: window.innerWidth - space * 2 - 235 - 200, y: space, width: 230, height: 226 }, // animation (230, 226)
-            { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60 }, // position (195, 60)
-            { x: space * 2 + 45, y: space, width: 194, height: 250, closed: true }
-        ]
+        this.state.keys = DEFAULT_KEYS
+        this.save()
     }
 
-    position(wm)
+    start()
     {
-        if (!this.state.windows)
-        {
-            this.positionDefault()
-        }
-        wm.load(this.state.windows)
-        this.wm = wm
         window.setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
@@ -6170,6 +4506,11 @@ class State extends Events
             main.height = size[1]
             this.save()
         }
+    }
+
+    get main()
+    {
+        return this.state.main
     }
 
     mainMove(object)
@@ -6405,6 +4746,26 @@ class State extends Events
         return this.state.manager
     }
 
+    get keys()
+    {
+        return this.state.keys
+    }
+
+    get views()
+    {
+        return this.state.views
+    }
+
+    get view()
+    {
+        return this.state.view
+    }
+    set view(value)
+    {
+        this.state.view = value
+        this.save()
+    }
+
     update()
     {
         if (this.dirty)
@@ -6416,136 +4777,1055 @@ class State extends Events
 }
 
 module.exports = new State()
-},{"./config/file":10,"./settings":28,"eventemitter3":47}],32:[function(require,module,exports){
-const clicked = require('clicked')
+},{"../data/default-keys.json":39,"./config/file":2,"./settings":27,"eventemitter3":55}],30:[function(require,module,exports){
+const PixelEditor = require('../pixel-editor')
+const State = require('../state')
 
-const State = require('./state')
-const button = require('./button')
-
-const ICONS = require('../images/editor.json')
-
-const BUTTONS = 8
-const TIPS = [['select mode', 'v'], ['draw mode', 'b'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm'], ['color dropper', 'i']]
-
-const OPACITY_UNSELECTED = 0.6
-
-module.exports = class Toolbar
+module.exports = class Base
 {
-    constructor(ui)
+    constructor(draw)
     {
-        this.ui = ui
-        this.buttons = []
-
-        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minWidth: 0 })
-        this.win.winTitlebar.childNodes[0].style.padding = 0
-
-        for (let i = 0; i < BUTTONS; i++)
-        {
-            const one = button(this.win.content, ICONS.imageData[i], { opacity: OPACITY_UNSELECTED, display: 'block' }, TIPS[i])
-            clicked(one, () => this.pressed(i))
-            this.buttons.push(one)
-        }
-        this.changed()
-        this.stateSetup()
-        this.win.open()
+        this.draw = draw
     }
 
-    pressed(index)
+    inBounds(pos)
     {
-        if (this.selected)
+        let x = parseInt(pos[0])
+        let y = parseInt(pos[1])
+        return x >= 0 && y >= 0 && x < PixelEditor.width && y < PixelEditor.height
+    }
+
+    move(x, y)
+    {
+        if (State.cursorSizeX < 0)
         {
-            this.selected.style.opacity = OPACITY_UNSELECTED
+            State.cursorX += State.cursorSizeX
+            State.cursorSizeX = -State.cursorSizeX
         }
-        this.buttons[index].style.opacity = 1
-        this.selected = this.buttons[index]
-        switch (index)
+        if (State.cursorSizeY < 0)
         {
-            case 0: State.tool = 'select'; break
-            case 1: State.tool = 'paint' ; break
-            case 2: State.tool = 'fill'; break
-            case 3: State.tool = 'circle'; break
-            case 4: State.tool = 'ellipse'; break
-            case 5: State.tool = 'line'; break
-            case 6: State.tool = 'crop'; break
-            case 7: State.tool = 'sample'; break
+            State.cursorY += State.cursorSizeY
+            State.cursorSizeY = -State.cursorSizeY
+        }
+        State.cursorX += x
+        State.cursorY += y
+        State.cursorX = State.cursorX < 0 ? PixelEditor.width - 1 : State.cursorX
+        State.cursorY = State.cursorY < 0 ? PixelEditor.height - 1 : State.cursorY
+        State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
+        State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
+    }
+
+    cursor() { }
+
+    activate() { }
+
+    moveShift(x, y)
+    {
+        State.cursorSizeX += x
+        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
+        State.cursorSizeX = (State.cursorSizeX < -PixelEditor.width) ? -PixelEditor.width : State.cursorSizeX
+        if ((State.tool === 'circle' || State.tool === 'ellipse') && State.cursorSizeX < 1)
+        {
+            State.cursorSizeX = 1
+        }
+        if (State.tool === 'ellipse' && State.cursorSizeY < 1)
+        {
+            State.cursorSizeY = 1
+        }
+        if (State.cursorSizeX === 0)
+        {
+            State.cursorSizeX = (x < 0) ? -1 : 1
+        }
+        State.cursorSizeY += y
+        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
+        State.cursorSizeY = (State.cursorSizeY < -PixelEditor.height) ? -PixelEditor.height : State.cursorSizeY
+        if (State.cursorSizeY === 0)
+        {
+            State.cursorSizeY = (y < 0) ? -1 : 1
         }
     }
 
-    keydown(e)
+    erase()
     {
-        if (!e.ctrlKey && !e.shiftKey && !e.altKey)
+        for (let block of this.stamp)
         {
-            switch (e.keyCode)
+            if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
             {
-                case 66:
-                    State.tool = 'paint'
-                    break
-                case 86:
-                    State.tool = 'select'
-                    break
-                case 67:
-                    State.tool = 'circle'
-                    break
-                case 76:
-                    State.tool = 'line'
-                    break
-                case 70:
-                    State.tool = 'fill'
-                    break
-                case 69:
-                    State.tool = 'ellipse'
-                    break
-                case 82:
-                    State.tool = 'crop'
-                    break
-                case 83:
-                    State.tool = 'sample'
-                    break
+                PixelEditor.set(block.x, block.y, '00000000', true)
             }
         }
     }
 
-    changed()
+    eraseBox()
     {
-        let index
-        switch (State.tool)
+        for (let y = State.cursorY; y < State.cursorY + State.cursorSizeY; y++)
         {
-            case 'select': index = 0; break
-            case 'paint': index = 1; break
-            case 'fill': index = 2; break
-            case 'circle': index = 3; break
-            case 'ellipse': index = 4; break
-            case 'line': index = 5; break
-            case 'crop': index = 6; break
-            case 'sample': index = 7; break
+            for (let x = State.cursorX; x < State.cursorX + State.cursorSizeX; x++)
+            {
+                if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
+                {
+                    PixelEditor.set(x, y, '00000000', true)
+                }
+            }
         }
-        if (this.selected)
-        {
-            this.selected.style.opacity = OPACITY_UNSELECTED
-        }
-        this.buttons[index].style.opacity = 1
-        this.selected = this.buttons[index]
     }
 
-    stateSetup()
+    drawStamp()
     {
-        this.win.on('move-end', () => State.set())
-        State.on('tool', this.changed, this)
+        PixelEditor.undoSave()
+        for (let block of this.stamp)
+        {
+            if (block.x >= 0 && block.x < PixelEditor.width && block.y >= 0 && block.y < PixelEditor.height)
+            {
+                PixelEditor.set(block.x, block.y, block.color, true)
+            }
+        }
+        this.change()
+    }
+
+    clear()
+    {
+        if (State.cursorSizeX < 0)
+        {
+            State.cursorX += State.cursorSizeX
+        }
+        if (State.cursorSizeY < 0)
+        {
+            State.cursorY += State.cursorSizeY
+        }
+        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        {
+            State.cursorX = 0
+            State.cursorY = 0
+        }
+        else
+        {
+            State.cursorSizeX = 1
+            State.cursorSizeY = 1
+        }
     }
 }
-},{"../images/editor.json":34,"./button":8,"./state":31,"clicked":42}],33:[function(require,module,exports){
+},{"../pixel-editor":25,"../state":29}],31:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+
+module.exports = class Circle extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        this.draw.cursorBlock.lineStyle(0)
+        this.draw.cursorBlock.position.set(0, 0)
+        let x0 = State.cursorX
+        let y0 = State.cursorY
+        const foreground = State.foreground
+        const background = State.background
+        const blocks = {}
+        if (State.cursorSizeX === 3)
+        {
+            blocks[x0 + ',' + (y0 - 1)] = foreground
+            blocks[x0 + ',' + y0] = background
+            blocks[x0 + ',' + (y0 + 1)] = foreground
+            blocks[(x0 - 1) + ',' + y0] = foreground
+            blocks[(x0 + 1) + ',' + y0] = foreground
+        }
+        else
+        {
+            const even = State.cursorSizeX % 2 === 0 ? 1 : 0
+            let x = Math.ceil(State.cursorSizeX / 2) - 1
+            let y = 0
+            let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
+
+            // draw inside
+            if (parseInt(State.background.substr(6), 16) !== 0)
+            {
+                while (x >= y)
+                {
+                    for (let i = 0; i <= x; i++)
+                    {
+                        blocks[(x0 + x - i) + ',' + (y0 + y + even)] = background
+                        blocks[(x0 - x - even + i) + ',' + (y0 + y + even)] = background
+                        blocks[(x0 - y - even) + ',' + (y0 + x + even - i)] = background
+                        blocks[(x0 - x - even + i) + ',' + (y0 - y)] = background
+                        blocks[(x0 + x - i) + ',' + (y0 - y)] = background
+                    }
+                    for (let i = 0; i <= y; i++)
+                    {
+                        blocks[(x0 + y - i) + ',' + (y0 + x + even)] = background
+                        blocks[(x0 - y - even + i) + ',' + (y0 - x)] = background
+                        blocks[(x0 + y - i) + ',' + (y0 - x)] = background
+                    }
+                    y++
+                    if (decisionOver2 <= 0)
+                    {
+                        decisionOver2 += 2 * y + 1
+                    }
+                    else
+                    {
+                        x--
+                        decisionOver2 += 2 * (y - x) + 1
+                    }
+                }
+            }
+
+            // draw outside
+            if (parseInt(State.foreground.substr(6), 16) !== 0)
+            {
+                x = Math.ceil(State.cursorSizeX / 2) - 1
+                y = 0
+                decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
+                while (x >= y)
+                {
+                    blocks[(x0 + x) + ',' + (y0 + y + even)] = foreground
+                    blocks[(x0 + y) + ',' + (y0 + x + even)] = foreground
+                    blocks[(x0 - y - even) + ',' + (y0 + x + even)] = foreground
+                    blocks[(x0 - x - even) + ',' + (y0 + y + even)] = foreground
+                    blocks[(x0 - x - even) + ',' + (y0 - y)] = foreground
+                    blocks[(x0 - y - even) + ',' + (y0 - x)] = foreground
+                    blocks[(x0 + y) + ',' + (y0 - x)] = foreground
+                    blocks[(x0 + x) + ',' + (y0 - y)] = foreground
+                    y++
+                    if (decisionOver2 <= 0)
+                    {
+                        decisionOver2 += 2 * y + 1
+                    }
+                    else
+                    {
+                        x--
+                        decisionOver2 += 2 * (y - x) + 1
+                    }
+                }
+            }
+        }
+        if (State.cursorSizeX === 4)
+        {
+            blocks[(x0 - 2) + ',' + (y0 - 1)] = false
+            blocks[(x0 + 1) + ',' + (y0 - 1)] = false
+            blocks[(x0 - 2) + ',' + (y0 + 2)] = false
+            blocks[(x0 + 1) + ',' + (y0 + 2)] = false
+        }
+        this.stamp = []
+        for (let block in blocks)
+        {
+            const data = blocks[block]
+            if (data)
+            {
+                const pos = block.split(',')
+                if (this.inBounds(pos))
+                {
+                    const data = blocks[block]
+                    const color = parseInt(data.substr(0, 6), 16)
+                    const alpha = parseInt(data.substr(6), 16) / 255
+                    this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * Settings.ZOOM, parseInt(pos[1]) * Settings.ZOOM, Settings.ZOOM, Settings.ZOOM).endFill()
+                    this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
+                }
+            }
+        }
+    }
+
+    activate()
+    {
+        if (State.cursorSizeX === 1)
+        {
+            State.cursorSizeX = 3
+        }
+    }
+
+    space()
+    {
+        this.drawStamp()
+    }
+}
+},{"../settings":27,"../state":29,"./base":30}],32:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+
+module.exports = class Select extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        const color = 0xd20000
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        this.draw.cursorBlock.lineStyle(5, color)
+        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
+        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
+        let reverse = Settings.ZOOM * x < 0
+        for (let i = 0; reverse ? i > Settings.ZOOM * x : i < Settings.ZOOM * x; reverse ? i -= Settings.DOTTED * 2 : i += Settings.DOTTED * 2)
+        {
+            let far
+            if (reverse)
+            {
+                far = i - Settings.DOTTED < Settings.ZOOM * x ? Settings.ZOOM * x : i - Settings.DOTTED
+            }
+            else
+            {
+                far = i + Settings.DOTTED > Settings.ZOOM * x ? Settings.ZOOM * x : i + Settings.DOTTED
+            }
+            this.draw.cursorBlock.moveTo(i, 0)
+            this.draw.cursorBlock.lineTo(far, 0)
+            this.draw.cursorBlock.moveTo(i, Settings.ZOOM * y)
+            this.draw.cursorBlock.lineTo(far, Settings.ZOOM * y)
+        }
+        reverse = Settings.ZOOM * y < 0
+        for (let i = 0; reverse ? i > Settings.ZOOM * y : i < Settings.ZOOM * y; reverse ? i -= Settings.DOTTED * 2 : i += Settings.DOTTED * 2)
+        {
+            let far
+            if (reverse)
+            {
+                far = i - Settings.DOTTED < Settings.ZOOM * y ? Settings.ZOOM * y : i - Settings.DOTTED
+            }
+            else
+            {
+                far = i + Settings.DOTTED > Settings.ZOOM * y ? Settings.ZOOM * y : i + Settings.DOTTED
+            }
+            this.draw.cursorBlock.moveTo(0, i)
+            this.draw.cursorBlock.lineTo(0, far)
+            this.draw.cursorBlock.moveTo(Settings.ZOOM * x, i)
+            this.draw.cursorBlock.lineTo(Settings.ZOOM * x, far)
+        }
+    }
+
+    space()
+    {
+        PixelEditor.crop(State.cursorX, State.cursorY, State.cursorSizeX, State.cursorSizeY)
+        State.cursorX = 0
+        State.cursorY = 0
+    }
+}
+},{"../pixel-editor":25,"../settings":27,"../state":29,"./base":30}],33:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+
+module.exports = class Ellipse extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        const foreground = State.foreground
+        const background = State.background
+        this.draw.cursorBlock.lineStyle(0)
+        this.draw.cursorBlock.position.set(0, 0)
+        let xc = State.cursorX
+        let yc = State.cursorY
+        let width = State.cursorSizeX
+        let height = State.cursorSizeY
+
+        const blocks = {}
+        if (width === 1)
+        {
+            height--
+            for (let y = -height / 2; y <= height / 2; y++)
+            {
+                blocks[xc + ',' + (yc + y)] = foreground
+            }
+        }
+        else if (height === 1)
+        {
+            width--
+            for (let x = -width / 2; x <= width / 2; x++)
+            {
+                blocks[(xc + x) + ',' + yc] = foreground
+            }
+        }
+        else
+        {
+            const evenX = State.cursorSizeX % 2 === 0 ? 1 : 0
+            const evenY = State.cursorSizeY % 2 === 0 ? 1 : 0
+            width = Math.floor(State.cursorSizeX / 2)
+            height = Math.floor(State.cursorSizeY / 2)
+            let a2 = width * width
+            let b2 = height * height
+            let fa2 = 4 * a2, fb2 = 4 * b2
+            let x, y, sigma
+
+            // draw inside of ellipse
+            if (parseInt(State.background.substr(6), 16) !== 0)
+            {
+                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
+                {
+                    for (let xx = -x + evenX; xx <= x; xx++)
+                    {
+                        blocks[(xc + xx) + ',' + (yc - y)] = background
+                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
+                    }
+                    if (sigma >= 0)
+                    {
+                        sigma += fa2 * (1 - y)
+                        y--
+                    }
+                    sigma += b2 * ((4 * x) + 6)
+                }
+
+                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
+                {
+                    for (let xx = -x + evenX; xx <= x; xx++)
+                    {
+                        blocks[(xc + xx) + ',' + (yc - y)] = background
+                        blocks[(xc + xx) + ',' + (yc + y - evenY)] = background
+                    }
+                    if (sigma >= 0)
+                    {
+                        sigma += fb2 * (1 - x)
+                        x--
+                    }
+                    sigma += a2 * ((4 * y) + 6)
+                }
+            }
+
+            // outside of ellipse
+            if (parseInt(State.foreground.substr(6), 16) !== 0)
+            {
+                for (x = 0, y = height, sigma = 2 * b2 + a2 * (1 - 2 * height); b2 * x <= a2 * y; x++)
+                {
+                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
+                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
+                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
+                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
+                    if (sigma >= 0)
+                    {
+                        sigma += fa2 * (1 - y)
+                        y--
+                    }
+                    sigma += b2 * ((4 * x) + 6)
+                }
+
+                for (x = width, y = 0, sigma = 2 * a2 + b2 * (1 - 2 * width); a2 * y <= b2 * x; y++)
+                {
+                    blocks[(xc - x + evenX) + ',' + (yc - y)] = foreground // 2
+                    blocks[(xc + x) + ',' + (yc - y)] = foreground // 1
+                    blocks[(xc - x + evenX) + ',' + (yc + y - evenY)] = foreground // 3
+                    blocks[(xc + x) + ',' + (yc + y - evenY)] = foreground // 4
+                    if (sigma >= 0)
+                    {
+                        sigma += fb2 * (1 - x)
+                        x--
+                    }
+                    sigma += a2 * ((4 * y) + 6)
+                }
+            }
+        }
+        this.stamp = []
+        for (let block in blocks)
+        {
+            const data = blocks[block]
+            const pos = block.split(',')
+            if (this.inBounds(pos))
+            {
+                const color = parseInt(data.substr(0, 6), 16)
+                const alpha = parseInt(data.substr(6), 16) / 255
+                this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * Settings.ZOOM, parseInt(pos[1]) * Settings.ZOOM, Settings.ZOOM, Settings.ZOOM).endFill()
+                this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
+            }
+        }
+    }
+
+    activate()
+    {
+        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        {
+            State.cursorSizeX = 3
+            State.cursorSizeY = 3
+        }
+    }
+
+    space()
+    {
+        this.drawStamp()
+    }
+}
+},{"../settings":27,"../state":29,"./base":30}],34:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+
+module.exports = class Line extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        this.draw.cursorBlock.lineStyle(10, color)
+        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM, Settings.ZOOM)
+    }
+
+    erase()
+    {
+        this.eraseBox()
+    }
+
+    floodFill(x, y, check)
+    {
+        if (check !== State.color && PixelEditor.get(x, y) === check)
+        {
+            PixelEditor.set(x, y, State.color, true)
+            if (y > 0)
+            {
+                this.floodFill(x, y - 1, check)
+            }
+            if (y < PixelEditor.height - 1)
+            {
+                this.floodFill(x, y + 1, check)
+            }
+            if (x > 0)
+            {
+                this.floodFill(x - 1, y, check)
+            }
+            if (x < PixelEditor.width - 1)
+            {
+                this.floodFill(x + 1, y, check)
+            }
+        }
+    }
+
+    space()
+    {
+        PixelEditor.undoSave()
+        this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
+        this.draw.change()
+    }
+}
+},{"../pixel-editor":25,"../settings":27,"../state":29,"./base":30}],35:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+
+module.exports = class Line extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        const color = State.color
+        const c = parseInt(color.substr(0, 6), 16)
+        const a = parseInt(color.substr(6), 16) / 255
+        this.draw.cursorBlock.position.set(0)
+        if (this.draw.line)
+        {
+            this.stamp = []
+            let x0 = State.cursorX
+            let y0 = State.cursorY
+            let x1 = this.draw.line.x
+            let y1 = this.draw.line.y
+
+            const dx = Math.abs(x1 - x0)
+            const dy = Math.abs(y1 - y0)
+            const sx = x0 < x1 ? 1 : -1
+            const sy = y0 < y1 ? 1 : -1
+            let err = dx - dy
+            let e2
+            while (true)
+            {
+                this.draw.cursorBlock.beginFill(c, a)
+                    .drawRect(x0 * Settings.ZOOM - Settings.BORDER, y0 * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
+                    .endFill()
+                this.stamp.push({ x: x0, y: y0 })
+                if (x0 == x1 && y0 == y1)
+                {
+                    break
+                }
+                e2 = 2 * err
+                if (e2 > -dy)
+                {
+                    err -= dy
+                    x0 += sx
+                }
+                if (e2 < dx)
+                {
+                    err += dx
+                    y0 += sy
+                }
+            }
+        }
+        else
+        {
+            this.draw.cursorBlock.beginFill(c, a)
+                .drawRect(State.cursorX * Settings.ZOOM - Settings.BORDER, State.cursorY * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
+                .endFill()
+            this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
+        }
+    }
+
+    moveShift(x, y)
+    {
+        if (!this.draw.line)
+        {
+            this.draw.line = { x: State.cursorX, y: State.cursorY }
+        }
+        this.draw.line.x += x
+        this.draw.line.y += y
+        this.draw.line.x = this.draw.line.x < 0 ? PixelEditor.width - 1 : this.draw.line.x
+        this.draw.line.y = this.draw.line.y < 0 ? PixelEditor.height - 1 : this.draw.line.y
+        this.draw.line.x = this.draw.line.x === PixelEditor.width ? 0 : this.draw.line.x
+        this.draw.line.y = this.draw.line.y === PixelEditor.height ? 0 : this.draw.line.y
+    }
+
+    activate()
+    {
+        this.line = null
+    }
+
+    space()
+    {
+        this.drawStamp()
+    }
+}
+},{"../pixel-editor":25,"../settings":27,"../state":29,"./base":30}],36:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+
+module.exports = class Line extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+        document.body.addEventListener('keyup', (e) => this.keyup(e))
+    }
+
+    cursor()
+    {
+        const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        this.draw.cursorBlock.lineStyle(5, color)
+        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
+        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
+        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM * x, Settings.ZOOM * y)
+    }
+
+    erase()
+    {
+        this.eraseBox()
+    }
+
+    keyup(e)
+    {
+        if (e.code === 'Space')
+        {
+            this.spacing = null
+        }
+    }
+
+    move(x, y)
+    {
+        super.move(x, y)
+        if (this.spacing)
+        {
+            this.space()
+        }
+    }
+
+    space()
+    {
+        if (this.spacing && State.cursorX === this.spacing.x && State.cursorY === this.spacing.y)
+        {
+            return
+        }
+        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        {
+            PixelEditor.undoSave()
+            const current = PixelEditor.get(State.cursorX, State.cursorY)
+            const color = (current !== State.foreground) ? State.foreground : State.background
+            PixelEditor.set(State.cursorX, State.cursorY, color, true)
+        }
+        else
+        {
+            PixelEditor.undoSave()
+            const color = State.foreground
+            let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
+            if (State.cursorSizeX < 0)
+            {
+                xStart += State.cursorSizeX
+                xTo = xStart + Math.abs(State.cursorSizeX)
+            }
+            else
+            {
+                xTo = xStart + State.cursorSizeX
+            }
+            if (State.cursorSizeY < 0)
+            {
+                yStart += State.cursorSizeY
+                yTo = yStart + Math.abs(State.cursorSizeY) - 1
+            }
+            else
+            {
+                yTo = yStart + State.cursorSizeY
+            }
+            for (let y = yStart; y < yTo; y++)
+            {
+                for (let x = xStart; x < xTo; x++)
+                {
+                    PixelEditor.set(x, y, color, true)
+                }
+            }
+        }
+        this.draw.change()
+        this.spacing = { x: State.cursorX, y: State.cursorY }
+    }
+}
+},{"../pixel-editor":25,"../settings":27,"../state":29,"./base":30}],37:[function(require,module,exports){
+const Base = require('./base')
+const State = require('../state')
+const Settings = require('../settings')
+const PixelEditor = require('../pixel-editor')
+
+module.exports = class Select extends Base
+{
+    constructor(draw)
+    {
+        super(draw)
+    }
+
+    cursor()
+    {
+        const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
+        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        this.draw.cursorBlock.lineStyle(5, color)
+        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
+        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
+        let reverse = Settings.ZOOM * x < 0
+        for (let i = 0; reverse ? i > Settings.ZOOM * x : i < Settings.ZOOM * x; reverse ? i -= Settings.DOTTED * 2 : i += Settings.DOTTED * 2)
+        {
+            let far
+            if (reverse)
+            {
+                far = i - Settings.DOTTED < Settings.ZOOM * x ? Settings.ZOOM * x : i - Settings.DOTTED
+            }
+            else
+            {
+                far = i + Settings.DOTTED > Settings.ZOOM * x ? Settings.ZOOM * x : i + Settings.DOTTED
+            }
+            this.draw.cursorBlock.moveTo(i, 0)
+            this.draw.cursorBlock.lineTo(far, 0)
+            this.draw.cursorBlock.moveTo(i, Settings.ZOOM * y)
+            this.draw.cursorBlock.lineTo(far, Settings.ZOOM * y)
+        }
+        reverse = Settings.ZOOM * y < 0
+        for (let i = 0; reverse ? i > Settings.ZOOM * y : i < Settings.ZOOM * y; reverse ? i -= Settings.DOTTED * 2 : i += Settings.DOTTED * 2)
+        {
+            let far
+            if (reverse)
+            {
+                far = i - Settings.DOTTED < Settings.ZOOM * y ? Settings.ZOOM * y : i - Settings.DOTTED
+            }
+            else
+            {
+                far = i + Settings.DOTTED > Settings.ZOOM * y ? Settings.ZOOM * y : i + Settings.DOTTED
+            }
+            this.draw.cursorBlock.moveTo(0, i)
+            this.draw.cursorBlock.lineTo(0, far)
+            this.draw.cursorBlock.moveTo(Settings.ZOOM * x, i)
+            this.draw.cursorBlock.lineTo(Settings.ZOOM * x, far)
+        }
+    }
+
+    activate()
+    {
+        this.dragging = false
+        this.selecting = false
+    }
+
+    erase()
+    {
+        this.eraseBox()
+    }
+}
+},{"../pixel-editor":25,"../settings":27,"../state":29,"./base":30}],38:[function(require,module,exports){
+const State = require('./state')
+const Settings = require('./settings')
+const Menu = require('./menu')
+
+const Views = {
+
+    init: function (wm, main)
+    {
+        Views.wm = wm
+        Views.main = main
+        if (State.views.length === 0)
+        {
+            State.views.push(
+                this.positionDefault(),
+                this.positionDefault(true)
+            )
+            State.view = 0
+            State.save()
+        }
+        Views.wm.load(State.views[State.view])
+    },
+
+    update()
+    {
+        State.views[State.view] = Views.wm.save()
+        State.save()
+    },
+
+    resetWindows: function ()
+    {
+        State.views[State.view] = Views.positionDefault()
+        State.save()
+        Views.wm.load(State.views[State.view])
+    },
+
+    positionDefault: function(closed)
+    {
+        const top = 20
+        const space = Settings.BORDER
+        return [
+            { x: space, y: window.innerHeight - space - 200, width: 200, height: 200, closed, order: 0 }, // show
+            { x: space, y: top + space, closed, order: 1 }, // toolbar
+            { x: window.innerWidth - space - 200, y: top + space * 2 + 300, width: 200, height: 150, closed, order: 2 }, // palette
+            { x: window.innerWidth - space - 200, y: top + space, width: 200, height: 300, closed, order: 3 }, // picker
+            { x: window.innerWidth - space - 200, y: window.innerHeight - space - 205, closed, order: 4 }, // info
+            { x: window.innerWidth - space * 2 - 235 - 200, y: top + space, width: 230, height: 226, closed: true, order: 5 }, // animation (230, 226)
+            { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60, order: 6, closed }, // position (195, 60)
+            { x: space * 2 + 45, y: top + space, width: 194, height: 250, closed: true, order: 7 },
+            { x: window.innerWidth / 2 - 300, y: window.innerHeight / 2 - 200, width: 600, height: 400, closed: true, order: 8 } // keys
+        ]
+    },
+
+    getClosed(i)
+    {
+        return State.views[State.view][i].closed
+    },
+
+    toggleClosed(name, i)
+    {
+        State.views[State.view][i].closed = !State.views[State.view][i].closed
+        Views.main.toggleHidden(name)
+        State.save()
+    },
+
+    change(delta)
+    {
+        State.view += delta
+        State.view = State.view < 0 ? State.views.length - 1 : State.view
+        State.view = State.view >= State.views.length ? 0 : State.view
+        Views.wm.load(State.views[State.view])
+        Menu.toggleAll()
+    }
+}
+
+module.exports = Views
+},{"./menu":24,"./settings":27,"./state":29}],39:[function(require,module,exports){
+module.exports={
+    "New": "CommandOrControl+M|CommandOrControl+N",
+    "Open": "CommandOrControl+O",
+    "Save": "CommandOrControl+S",
+    "Export": "CommandOrControl+E",
+    "Exit": "CommandOrControl+Q",
+
+    "Undo": "CommandOrControl+Z",
+    "Redo": "CommandOrControl+Shift+Z",
+    "Copy": "CommandOrControl+C",
+    "Cut": "CommandOrControl+X",
+    "Paste": "CommandOrControl+V",
+    "SelectAll": "CommandOrControl+A",
+
+    "Draw": "space",
+    "Dropper": "i",
+    "Clear": "escape",
+    "Erase": "backspace",
+    "SwapForeground": "x",
+    "SelectTool": "v",
+    "PaintTool": "b",
+    "FillTool": "f",
+    "CircleTool": "c",
+    "EllipseTool": "e",
+    "LineTool": "l",
+    "CropTool": "w",
+
+    "NextView": "Tab",
+    "PreviousView": "shift+tab",
+
+    "ToolbarWindow": "",
+    "InfoWindow": "",
+    "AnimationWindow": "a",
+    "PaletteWindow": "",
+    "PickerWindow": "",
+    "FramesWindow": "",
+    "PositionWindow": "",
+    "ManagerWindow": "m",
+    "KeyboardWindow": "ctrl+k",
+
+    "ResetWindows": "",
+
+    "AddFrame": "CommandOrControl+F",
+    "DeleteFrame": "CommandOrControl+Backspace",
+    "NewFrame": "CommandOrControl+F",
+    "Duplicate": "CommandOrControl+D",
+    "Delete": "CommandOrControl+Backspace",
+    "Clockwise": "CommandOrControl+period",
+    "CounterClockwise": "CommandOrControl+comma",
+    "FlipHorizontal": "CommandOrControl+H",
+    "FlipVertical": "CommandOrControl+B"
+}
+},{}],40:[function(require,module,exports){
+module.exports={
+    "menuFile": "&File",
+    "menuNew": "&New",
+    "menuSaveAs": "&Save As...",
+    "menuOpen": "&Open...",
+    "menuExport": "&Export...",
+    "menuPreferences": "&Preferences",
+    "menuKeyboard": "&Keyboard Preferences",
+    "menuExit": "E&xit",
+
+    "menuEdit": "&Edit",
+    "menuUndo": "&Undo",
+    "menuRedo": "&Redo",
+    "menuCopy": "&Copy",
+    "menuCut": "Cu&t",
+    "menuPaste": "&Paste",
+    "menuSelectAll": "Select &All",
+    "menuDraw": "&Draw",
+    "menuSpace": "&Draw",
+    "menuErase": "&Erase",
+    "menuDropper": "Sample &Color",
+    "menuClear": "&Reset Cursor",
+    "menuSwapForeground": "Swap &Foreground",
+    "menuTools": "&Tools",
+    "menuSelectTool": "&Select",
+    "menuPaintTool": "&Paint",
+    "menuFillTool": "&Fill",
+    "menuCircleTool": "&Circle",
+    "menuEllipseTool": "&Ellipse",
+    "menuLineTool": "&Line",
+    "menuCropTool": "&Crop",
+
+    "menuView": "&View",
+    "menuNextView": "&Next View",
+    "menuPreviousView": "&Previous View",
+    "menuPanes": "&Windows",
+    "menuToolbar": "&Toolbar",
+    "menuInfo": "&Info",
+    "menuAnimation": "&Animation",
+    "menuPalette": "&Palette",
+    "menuPicker": "Pi&cker",
+    "menuFrames": "F&rames",
+    "menuPosition": "Positio&n",
+    "menuManager": "&Manager",
+    "menuDuplicate": "&Duplicate",
+    "menuDelete": "D&elete",
+    "menuNewFrame": "&New",
+    "menuClockwise": "Rotate Clockwise",
+    "menuCounterClockwise": "Rotate Counter Clockwise",
+    "menuFlipHorizontal": "Flip &Horizontal",
+    "menuFlipVertical": "Flip &Vertical",
+    "menuResetPanes": "Reset Windows Layout",
+
+    "nameOfSprite": "Name of Sprites",
+    "frameNumber": "Frame number",
+    "shortcut": "key: ",
+    "frameWidth": "Width of Frame",
+    "frameHeight": "Height of Frame",
+    "toggleImages": "Toggle Images",
+    "toggleSort": "Toggle Sorting (Alphabetical or Modify Date)",
+    "increaseZoom": "Increase Zoom",
+    "decreaseZoom": "Decrease Zoom",
+    "openFolder": "Open Folder",
+
+    "AddFrame": "Add Frame",
+    "DeleteFrame": "Delete Frame",
+    "NewFrame": "New Frame",
+    "Duplicate": "Duplicate Frame",
+    "Delete": "Delete Frame",
+    "Clockwise": "Rotate Frame Clockwise",
+    "CounterClockwise": "Rotate Frame Counterclockwise",
+    "FlipHorizontal": "Horizontal Flip Frame",
+    "FlipVertical": "Vertical Flip Frame",
+    "New": "New File",
+    "Open": "Open File",
+    "Save": "Save File As",
+    "Export": "Export File",
+    "Exit": "Exit",
+    "Undo": "Undo Action on Frame",
+    "Redo": "Redo Action on Frame",
+    "Copy": "Copy at Cursor",
+    "Cut": "Cut at Cursor",
+    "Paste": "Paste at Cursor",
+    "SelectAll": "Select All",
+    "Draw": "Use Tool",
+    "Dropper": "Change to Cursor Color",
+    "Clear": "Reset Cursor",
+    "Erase": "Erase at Cursor",
+    "SwapForeground": "Toggle Foreground and Background Color",
+    "SelectTool": "Select Tool",
+    "PaintTool": "Paint Tool",
+    "FillTool": "Fill Tool",
+    "CircleTool": "Circle Tool",
+    "EllipseTool": "Ellipse Tool",
+    "LineTool": "Line Tool",
+    "CropTool": "Crop Tool",
+    "NextView": "Next View",
+    "PreviousView": "Previous View",
+    "ToolbarWindow": "Toggle Toolbar Window",
+    "InfoWindow": "Toggle Info Window",
+    "AnimationWindow": "Toggle Animation Window",
+    "PaletteWindow": "Toggle Palette Window",
+    "PickerWindow": "Toggle Picker Window",
+    "FramesWindow": "Toggle Frames Window",
+    "PositionWindow": "Toggle Position Window",
+    "ManagerWindow": "Toggle Manager Window",
+    "KeyboardWindow": "Keyboard Preferences",
+    "ResetWindows": "Reset Current Windows Position and Size",
+
+    "AnimationTitle": "Animations",
+    "FramesTitle": "Frames",
+    "InfoTitle": "Pixel Info",
+    "ManagerTitle": "File Manager",
+    "PaletteTitle": "Color Palette",
+    "PickerTitle": "Color Picker",
+    "PositionTitle": "Frame Position",
+    "KeyboardTitle": "Key Binding Preferences",
+
+    "Command": "Command",
+    "Keybinding": "Key Binding",
+    "DialogKeyBinding": "Press key combination",
+    "SetKey": "Set Shortcut",
+    "ClearKey": "Delete Shortcut",
+    "DefaultKeys": "Reset Default Keys",
+    "DefaultKeysPrompt": "Are you sure you want to reset to the default key layout?"
+}
+},{}],41:[function(require,module,exports){
 module.exports={"name":"animation","imageData":[[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAASElEQVQoU53SwQkAMAgDQJ3M2TNZSx8FsVKj/k8wRmUwOjDyIDNbdxGAdOkXHZzBEmWQQhHSyEMa+dsoFMMoUTs9+k9MQ0Y12iSoJA7XeLa6AAAAAElFTkSuQmCC"],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAMklEQVQoU2NkIAMwkqGHgXJN9vb2/2E2Hzx4kBGdD5NDsWlUEzRYyAoIYiOa8sgl1iYA2T44DmRUBRcAAAAASUVORK5CYII="],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAATElEQVQoU2NkIAMwYtNjb2//HyZ+8OBBDDVwAWSFuCyHGYCiCZupMANAhmJoAknisw3ZQBT3wkzDRcNsHRGaCMURSB5riiCUssjSBABCU2gO1JZi6AAAAABJRU5ErkJggg=="],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAWElEQVQoU2NkIAMw2tvb/0fWd/DgQUZC5sA1gRSDDCBaE0wDyAaiNcEUk2QTup9gmnEZgtPTsADC5lysmpBDFNm/MBcRDF6QQmRngtiDUBNyCBPlPPRkBQDBNkS6oL94yAAAAABJRU5ErkJggg=="],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAANklEQVQoU2NkIAMwkqGHgTqa7O3t/6PbfvDgQRTDMWwCaUJWhM4HGThiNJEcesRENnUilxibADwIMA6guk/bAAAAAElFTkSuQmCC"],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAW0lEQVQoU52SQQoAIAgE82W+3ZcVBoqlptQxdmazgvGxIGIQcco+EbkM2EC3dEORLRNw/oCk9SUpofvoLHNQZ6YDyqxW5JoiKHsOvYivps48nNGZuoDkwm9USRae2lVmLf8ojAAAAABJRU5ErkJggg=="]],"animations":{}}
 
-},{}],34:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 module.exports={"name":"editor","imageData":[[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAATklEQVQ4T2NkoAAwUqCXYRBptre3/4/NKwcPHsRwJYYANs3YNIIsIKgZl0aiNIMUkWwzSAOyF4j2M7JCfAYQFc8wA9BtJ0ozrlQ4RDUDAHTOJBClGbLrAAAAAElFTkSuQmCC"],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAdElEQVQ4T6XSUQ7AIAgD0Hkyzs7JtvBRU7HCEvdloq/AwnguvvHHmtmLd+4+TYsZ5oASK8gBRwwYbZ6qSxyPMRvOOSDuN8wQLeYABC9YQQ6Is/zbFQyk7mflripXRDctrkIXnGfqRtkwr6tqle/b9ax2/wp/JYpYEMILWTAAAAAASUVORK5CYII="],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAa0lEQVQ4T62TUQ7AIAhD58k4OyfbwkcXZU+yRPyEFlqBcR28QVwzu3Pc3T/YJSASASn3kiNJpKxgxvWSya+6h7Jt5wBV0rPvPtlHnbM3FZPPUnY7eVcw4suHEZDWVxPB9axuZR4lHsbfQ3sAvzJ4EI8hoLAAAAAASUVORK5CYII="],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAT0lEQVQ4T2NkoAAwYtNrb2//H1384MGDGGoxBLBphBmEbgCKZnwasRkA10yMRnQDwJpJ0YhswIjVTGqgweKbOvEMiwKyUxg+A4hK26RkMgAifzQQG3yZYgAAAABJRU5ErkJggg=="],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAARklEQVQ4T2NkoAAwUqCXYRBptre3/4/LKwcPHkRxKZyDTxO6YTBDwJpJ0QgzCGTAAGsm1ekofkYOELJCm5yUNohSGCnOBwClWhwQ5zIWIwAAAABJRU5ErkJggg=="],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAW0lEQVQ4T6XTwRHAIAhEUayM2qlMx4OOisAy5P4fCZpGhacVWtoxM/cJiQgMqjgDXFPWdBRQr5gBvt+HAuZyEMDdbASEx+IBYTw3bwFQbAFwfALrFqbi9z8oxQNNzSwQX+G2zAAAAABJRU5ErkJggg=="],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAYElEQVQ4T72SUQoAIAhD82Se3ZMVBoJJ5SSoT/G11Ubt4ZBnmbmLyDLb3W17ZdgLTFgHqHvvDFY2gTJsVuOfpMoeKMFxGYZ3sUHwKe8U1shORYFgJHMVSKt4q+8/OD5nAO3ibBCbFFZaAAAAAElFTkSuQmCC"],[15,15,"iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAU0lEQVQ4T2NkoAAwUqCXgbqa7e3t/8Ncc/DgQbyGo0giayTGgEGiGeRUdD+D+Lj8jjdAYBpxGUAwqvAZQFAzNq/AYoIozTAD0P1OtGZsyXjgNAMAYRkwEKe9ZEsAAAAASUVORK5CYII="]],"animations":{"idle":[[0,0]]}}
 
-},{}],35:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 module.exports={"name":"manager","imageData":[[11,11,"iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAT0lEQVQoU2NkIAEwIqu1t7f/j6734MGDcDVwBjaFMI0wDWDFMIUgQWRNyHwQG0UxPueTrxjdCcjuBTkNw2Si3IzuSZipyB4HiZEXzsREJACtIEAMVNx2vAAAAABJRU5ErkJggg=="],[11,11,"iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAANklEQVQoU2NkIAEwkqCWgXLF9vb2/w8ePIhhEFaTiVIMUoTuB2QbyDcZZipRziAUjJQHHS4bADMWFAwX42F2AAAAAElFTkSuQmCC"],[11,11,"iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAJ0lEQVQoU2NkIAEwkqCWYTAqtre3/4/uh4MHD8KdOhjdTCjMSXIzAN5mBAxI5UfaAAAAAElFTkSuQmCC"],[11,11,"iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAARUlEQVQoU2NkIAEwkqCWgXTF9vb2/2E2HDx4EG4AujhYAiQIUgSj0Z0GE4crRjYZWRMyG6/J6DYRVIxsI+mhQWxYk2QyANU1OAwan8ClAAAAAElFTkSuQmCC"],[11,11,"iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAALElEQVQoU2NkIAEwgtTa29v/R9Zz8OBBsDg6wKoYm0KQAaOKYSFDXmgQG4kAbMckDLJ7fCIAAAAASUVORK5CYII="]],"animations":{"idle":[[0,0]]}}
 
-},{}],36:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 module.exports={"name":"position","imageData":[[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAANklEQVQoU2NkIAMwkqGHYShqsre3/w/z68GDBzG8gNVPIE0gxTAaPbBwaiLZJkLRMBSDnJCfAHZDEA4bTB1kAAAAAElFTkSuQmCC"],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAANklEQVQoU2NkIAMwkqGHgXJN9vb2/3HZfPDgQbgFKDaBNCFLwgxAFx8RmkgOPWIjmvLIJdYmADfIMA4S6vkiAAAAAElFTkSuQmCC"],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAANElEQVQoU2NkIAMwgvTY29v/J1bvwYMHGeGaQBxCGkGGj2qChvJQCghCEQuTh/uJWA0wdQD5PlAOzj1LHAAAAABJRU5ErkJggg=="],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAQklEQVQoU2NkIAMwgvTY29v/P3jwICOxNFgTqQDFJkKaYS7BsAkkga4Z5HRkMQyb8GkaqjbhC0GcfiIU7CB5+qUIALeDZA4QEEccAAAAAElFTkSuQmCC"],[13,13,"iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAARklEQVQoU2NkIAMwgvTY29v/R9d78OBBRpA4NhqvJlyOIEkTzGaSNMFsJkkTik2kBiDcJlAoEdI8FG3ClQLQxQl6HlvgAABpEVAOjvnWYQAAAABJRU5ErkJggg=="]],"animations":{}}
 
-},{}],37:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -6663,7 +5943,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],38:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * Bit twiddling hacks for JavaScript.
  *
@@ -6869,9 +6149,9 @@ exports.nextCombination = function(v) {
 }
 
 
-},{}],39:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 
-},{}],40:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -8609,7 +7889,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":37,"ieee754":49}],41:[function(require,module,exports){
+},{"base64-js":45,"ieee754":57}],49:[function(require,module,exports){
 /**
  * @file index.js
  * @summary calculate font-size for a given bounding box
@@ -8679,7 +7959,7 @@ module.exports = function FontSize(text, options)
     }
     return size - 1
 }
-},{}],42:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /**
  * Javascript: create click event for both mouse and touch
  * @example
@@ -8782,11 +8062,631 @@ function clicked(element, callback, options)
 }
 
 module.exports = clicked;
-},{}],43:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"./ease":44,"dup":2,"eventemitter3":47,"exists":48,"penner":56}],44:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3,"eventemitter3":47,"exists":48}],45:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventEmitter = require('eventemitter3');
+var Penner = require('penner');
+var exists = require('exists');
+
+var Ease = require('./ease');
+
+/**
+ * Manages all eases
+ * @extends EventEmitter
+ * @example
+ * var Ease = require('dom-ease');
+ * var ease = new Ease({ duration: 3000, ease: 'easeInOutSine' });
+ *
+ * var test = document.getElementById('test')
+ * ease.add(test, { left: 20, top: 15, opacity: 0.25 }, { repeat: true, reverse: true })
+ */
+
+var DomEase = function (_EventEmitter) {
+    _inherits(DomEase, _EventEmitter);
+
+    /**
+     * @param {object} [options]
+     * @param {number} [options.duration=1000] default duration
+     * @param {(string|function)} [options.ease=penner.linear] default ease
+     * @param {(string|function)} [options.autostart=true]
+     * @param {boolean} [options.pauseOnBlur] pause timer on blur, resume on focus
+     * @fires DomEase#each
+     * @fires DomEase#complete
+     */
+    function DomEase(options) {
+        _classCallCheck(this, DomEase);
+
+        var _this = _possibleConstructorReturn(this, (DomEase.__proto__ || Object.getPrototypeOf(DomEase)).call(this));
+
+        _this.options = options || {};
+        _this.options.duration = _this.options.duration || 1000;
+        _this.options.ease = _this.options.ease || Penner.linear;
+        _this.list = [];
+        _this.empty = true;
+        if (!options.autostart) {
+            _this.start();
+        }
+        if (options.pauseOnBlur) {
+            window.addEventListener('blur', function () {
+                return _this.blur();
+            });
+            window.addEventListener('focus', function () {
+                return _this.focus();
+            });
+        }
+        return _this;
+    }
+
+    /**
+     * start animation loop (automatically called unless options.autostart=false)
+     */
+
+
+    _createClass(DomEase, [{
+        key: 'start',
+        value: function start() {
+            if (!this._requested) {
+                this._requested = true;
+                this.loop();
+                this.running = true;
+            }
+        }
+    }, {
+        key: 'blur',
+        value: function blur() {
+            if (this.running) {
+                this.stop();
+                this.running = true;
+            }
+        }
+    }, {
+        key: 'focus',
+        value: function focus() {
+            if (this.running) {
+                this.start();
+            }
+        }
+    }, {
+        key: 'loop',
+        value: function loop(time) {
+            var _this2 = this;
+
+            if (time) {
+                var elapsed = this._last ? time - this._last : 0;
+                this.update(elapsed);
+            }
+            this._last = time;
+            this._requestId = window.requestAnimationFrame(function (time) {
+                return _this2.loop(time);
+            });
+        }
+
+        /**
+         * stop animation loop
+         */
+
+    }, {
+        key: 'stop',
+        value: function stop() {
+            if (this._requested) {
+                window.cancelAnimationFrame(this._requestId);
+                this._requested = false;
+                this.running = false;
+            }
+        }
+
+        /**
+         * add eases
+         * @param {HTMLElement} element
+         * @param {object} params
+         * @param {number} [params.left] in px
+         * @param {number} [params.top] in px
+         * @param {number} [params.width] in px
+         * @param {number} [params.height] in px
+         * @param {number} [params.scale]
+         * @param {number} [params.scaleX]
+         * @param {number} [params.scaleY]
+         * @param {number} [params.opacity]
+         * @param {(color|color[])} [params.color]
+         * @param {(color|color[])} [params.backgroundColor]
+         * @param {object} [options]
+         * @param {number} [options.duration]
+         * @param {(string|function)} [options.ease]
+         * @param {(boolean|number)} [options.repeat]
+         * @param {boolean} [options.reverse]
+         * @returns {Ease}
+         */
+
+    }, {
+        key: 'add',
+        value: function add(element, params, options) {
+            // set up default options
+            options = options || {};
+            options.duration = exists(options.duration) ? options.duration : this.options.duration;
+            options.ease = options.ease || this.options.ease;
+            if (typeof options.ease === 'string') {
+                options.ease = Penner[options.ease];
+            }
+            var ease = new Ease(element, params, options);
+            this.list.push(ease);
+            return ease;
+        }
+
+        /**
+         * remove all eases on element
+         * @param {HTMLElement} element
+         */
+
+    }, {
+        key: 'removeObjectEases',
+        value: function removeObjectEases(element) {
+            var list = this.list;
+            for (var i = 0, _i = list.length; i < _i; i++) {
+                var ease = list[i];
+                if (ease.element === element) {
+                    list.splice(i, 1);
+                    i--;
+                    _i--;
+                }
+            }
+        }
+
+        /**
+         * remove eases using Ease object returned by add()
+         * @param {Ease} ease
+         */
+
+    }, {
+        key: 'remove',
+        value: function remove(ease) {
+            var list = this.list;
+            for (var i = 0, _i = list.length; i < _i; i++) {
+                if (list[i] === ease) {
+                    list.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
+        /**
+         * remove all eases
+         */
+
+    }, {
+        key: 'removeAll',
+        value: function removeAll() {
+            this.list = [];
+        }
+
+        /**
+         * update frame; this is called automatically if start() is used
+         * @param {number} elapsed time in ms
+         */
+
+    }, {
+        key: 'update',
+        value: function update(elapsed) {
+            for (var i = 0, _i = this.list.length; i < _i; i++) {
+                if (this.list[i].update(elapsed)) {
+                    this.list.splice(i, 1);
+                    i--;
+                    _i--;
+                }
+            }
+            this.emit('each', this);
+            if (!this.empty && this.list.length === 0) {
+                this.emit('done', this);
+                this.empty = true;
+            }
+        }
+
+        /**
+         * number of eases
+         * @returns {number}
+         */
+
+    }, {
+        key: 'getCount',
+        value: function getCount() {
+            return this.list.length;
+        }
+    }]);
+
+    return DomEase;
+}(EventEmitter);
+
+/**
+ * fires when there are no more animations for a DOM element
+ * @event DomEase#complete
+ * @type {DomEase}
+ */
+
+/**
+ * fires on each loop for a DOM element where there are animations
+ * @event DomEase#each
+ * @type {DomEase}
+ */
+
+module.exports = DomEase;
+
+},{"./ease":52,"eventemitter3":55,"exists":56,"penner":64}],52:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventEmitter = require('eventemitter3');
+var exists = require('exists');
+
+var Ease = function (_EventEmitter) {
+    _inherits(Ease, _EventEmitter);
+
+    /**
+     * Ease class returned by DomEase.add()
+     * @extends EventEmitter
+     * @param {HTMLElement} element
+     * @param {object} params
+     * @param {number} [params.left] in px
+     * @param {number} [params.top] in px
+     * @param {number} [params.width] in px
+     * @param {number} [params.height] in px
+     * @param {number} [params.scale]
+     * @param {number} [params.scaleX]
+     * @param {number} [params.scaleY]
+     * @param {number} [params.opacity]
+     * @param {(color|color[])} [params.color]
+     * @param {(color|color[])} [params.backgroundColor]
+     * @param {object} [options]
+     * @param {number} [options.duration]
+     * @param {(string|function)} [options.ease]
+     * @param {(boolean|number)} [options.repeat]
+     * @param {boolean} [options.reverse]
+     * @param {number} [options.wait]
+     * @returns {Ease}
+     * @fires Ease#each
+     * @fires Ease#complete
+     * @fires Ease#loop
+     * @hideconstructor
+     */
+    function Ease(element, params, options) {
+        _classCallCheck(this, Ease);
+
+        var _this = _possibleConstructorReturn(this, (Ease.__proto__ || Object.getPrototypeOf(Ease)).call(this));
+
+        _this.element = element;
+        _this.list = [];
+        _this.time = 0;
+        _this.duration = options.duration;
+        _this.ease = options.ease;
+        _this.repeat = options.repeat;
+        _this.reverse = options.reverse;
+        _this.wait = options.wait || 0;
+        for (var entry in params) {
+            switch (entry) {
+                case 'left':
+                    _this.numberStart(entry, element.offsetLeft, params[entry], 'px');
+                    break;
+
+                case 'top':
+                    _this.numberStart(entry, element.offsetTop, params[entry], 'px');
+                    break;
+
+                case 'color':
+                    _this.colorStart('color', element.style.color, params[entry]);
+                    break;
+
+                case 'backgroundColor':
+                    _this.colorStart('backgroundColor', element.style.backgroundColor, params[entry]);
+                    break;
+
+                case 'scale':
+                    _this.transformStart(entry, params[entry]);
+                    break;
+
+                case 'scaleX':
+                    _this.transformStart(entry, params[entry]);
+                    break;
+
+                case 'scaleY':
+                    _this.transformStart(entry, params[entry]);
+                    break;
+
+                case 'opacity':
+                    _this.numberStart(entry, exists(element.style.opacity) ? parseFloat(element.style.opacity) : 1, params[entry]);
+                    break;
+
+                case 'width':
+                    _this.numberStart(entry, element.offsetWidth, params[entry], 'px');
+                    break;
+
+                case 'height':
+                    _this.numberStart(entry, element.offsetHeight, params[entry], 'px');
+                    break;
+
+                default:
+                    console.warn(entry + ' not setup for animation in dom-ease.');
+            }
+        }
+        return _this;
+    }
+
+    /**
+     * create number entry
+     * @private
+     * @param {string} entry
+     * @param {number} start
+     * @param {number} to
+     * @param {string} [units]
+     */
+
+
+    _createClass(Ease, [{
+        key: 'numberStart',
+        value: function numberStart(entry, start, to, units) {
+            var ease = { type: 'number', entry: entry, to: to, start: start, delta: to - start, units: units || '' };
+            this.list.push(ease);
+        }
+    }, {
+        key: 'numberUpdate',
+        value: function numberUpdate(ease, percent) {
+            this.element.style[ease.entry] = ease.start + ease.delta * percent + ease.units;
+        }
+
+        /**
+         * reverse number and transform
+         * @private
+         * @param {object} ease
+         */
+
+    }, {
+        key: 'easeReverse',
+        value: function easeReverse(ease) {
+            var swap = ease.to;
+            ease.to = ease.start;
+            ease.start = swap;
+            ease.delta = -ease.delta;
+        }
+    }, {
+        key: 'transformStart',
+        value: function transformStart(entry, to) {
+            var ease = { type: 'transform', entry: entry, to: to };
+            if (!this.transforms) {
+                this.readTransform();
+            }
+            var transforms = this.transforms;
+            var found = void 0;
+            for (var i = 0, _i = transforms.length; i < _i; i++) {
+                var transform = transforms[i];
+                if (transform.name === entry) {
+                    switch (entry) {
+                        case 'scale':case 'scaleX':case 'scaleY':
+                            ease.start = parseFloat(transform.values);
+                            break;
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                switch (entry) {
+                    case 'scale':case 'scaleX':case 'scaleY':
+                        ease.start = 1;
+                }
+            }
+            ease.delta = to - ease.start;
+            this.list.push(ease);
+        }
+    }, {
+        key: 'transformUpdate',
+        value: function transformUpdate(ease, percent) {
+            if (!this.changedTransform) {
+                this.readTransform();
+                this.changedTransform = true;
+            }
+            var name = ease.entry;
+            var transforms = this.transforms;
+            var values = ease.start + ease.delta * percent;
+            for (var i = 0, _i = transforms.length; i < _i; i++) {
+                if (transforms[i].name === name) {
+                    transforms[i].values = values;
+                    return;
+                }
+            }
+            this.transforms.push({ name: name, values: values });
+        }
+    }, {
+        key: 'colorUpdate',
+        value: function colorUpdate(ease) {
+            var elementStyle = this.element.style;
+            var style = ease.style;
+            var colors = ease.colors;
+            var i = Math.floor(this.time / ease.interval);
+            var color = colors[i];
+            if (elementStyle[style] !== color) {
+                elementStyle[style] = colors[i];
+            }
+        }
+    }, {
+        key: 'colorReverse',
+        value: function colorReverse(ease) {
+            var reverse = [];
+            var colors = ease.colors;
+            for (var color in colors) {
+                reverse.unshift(colors[color]);
+            }
+            reverse.push(reverse.shift());
+            ease.colors = reverse;
+        }
+    }, {
+        key: 'colorStart',
+        value: function colorStart(style, original, colors) {
+            var ease = { type: 'color', style: style };
+            if (Array.isArray(colors)) {
+                ease.colors = colors;
+            } else {
+                ease.colors = [colors];
+            }
+            colors.push(original);
+            ease.interval = this.duration / colors.length;
+            this.list.push(ease);
+        }
+    }, {
+        key: 'update',
+        value: function update(elapsed) {
+            if (this.wait) {
+                this.wait -= elapsed;
+                if (this.wait < 0) {
+                    elapsed = -this.wait;
+                    this.wait = 0;
+                } else {
+                    return;
+                }
+            }
+            this.changedTransform = false;
+            var list = this.list;
+            var leftover = null;
+            this.time += elapsed;
+            if (this.time >= this.duration) {
+                leftover = this.time - this.duration;
+                this.time -= leftover;
+            }
+            var percent = this.ease(this.time, 0, 1, this.duration);
+            for (var i = 0, _i = list.length; i < _i; i++) {
+                var ease = list[i];
+                switch (ease.type) {
+                    case 'number':
+                        this.numberUpdate(ease, percent);
+                        break;
+
+                    case 'color':
+                        this.colorUpdate(ease);
+                        break;
+
+                    case 'transform':
+                        this.transformUpdate(ease, percent);
+                        break;
+                }
+            }
+            if (this.changedTransform) {
+                this.writeTransform();
+            }
+            this.emit('each', this);
+
+            // handle end of duration
+            if (leftover !== null) {
+                if (this.reverse) {
+                    this.reverseEases();
+                    this.time = leftover;
+                    this.emit('loop', this);
+                    if (!this.repeat) {
+                        this.reverse = false;
+                    } else if (this.repeat !== true) {
+                        this.repeat--;
+                    }
+                } else if (this.repeat) {
+                    this.emit('loop', this);
+                    this.time = leftover;
+                    if (this.repeat !== true) {
+                        this.repeat--;
+                    }
+                } else {
+                    this.emit('complete', this);
+                    return true;
+                }
+            }
+        }
+    }, {
+        key: 'reverseEases',
+        value: function reverseEases() {
+            var list = this.list;
+            for (var i = 0, _i = list.length; i < _i; i++) {
+                var ease = list[i];
+                if (ease.type === 'color') {
+                    this.colorReverse(ease);
+                } else {
+                    this.easeReverse(ease);
+                }
+            }
+        }
+    }, {
+        key: 'readTransform',
+        value: function readTransform() {
+            this.transforms = [];
+            var transform = this.element.style.transform;
+            var inside = void 0,
+                name = '',
+                values = void 0;
+            for (var i = 0, _i = transform.length; i < _i; i++) {
+                var letter = transform[i];
+                if (inside) {
+                    if (letter === ')') {
+                        inside = false;
+                        this.transforms.push({ name: name, values: values });
+                        name = '';
+                    } else {
+                        values += letter;
+                    }
+                } else {
+                    if (letter === '(') {
+                        values = '';
+                        inside = true;
+                    } else if (letter !== ' ') {
+                        name += letter;
+                    }
+                }
+            }
+        }
+    }, {
+        key: 'writeTransform',
+        value: function writeTransform() {
+            var transforms = this.transforms;
+            var s = '';
+            for (var i = 0, _i = transforms.length; i < _i; i++) {
+                var transform = transforms[i];
+                s += transform.name + '(' + transform.values + ')';
+            }
+            this.element.style.transform = s;
+        }
+    }]);
+
+    return Ease;
+}(EventEmitter);
+
+/**
+ * fires when eases are complete
+ * @event Ease#complete
+ * @type {Ease}
+ */
+
+/**
+ * fires on each loop while eases are running
+ * @event Ease#each
+ * @type {Ease}
+ */
+
+/**
+ * fires when eases repeat or reverse
+ * @event Ease#loop
+ * @type {Ease}
+ */
+
+module.exports = Ease;
+
+},{"eventemitter3":55,"exists":56}],53:[function(require,module,exports){
 'use strict';
 
 module.exports = earcut;
@@ -9438,7 +9338,7 @@ earcut.flatten = function (data) {
     return result;
 };
 
-},{}],46:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 // MIT license
 // author: David Figatner (YOPEY YOPEY LLC)
 
@@ -9565,11 +9465,358 @@ class EasyEdit extends Events
 
 module.exports = EasyEdit;
 
-},{"clicked":42,"eventemitter3":47}],47:[function(require,module,exports){
-arguments[4][4][0].apply(exports,arguments)
-},{"dup":4}],48:[function(require,module,exports){
-arguments[4][5][0].apply(exports,arguments)
-},{"dup":5}],49:[function(require,module,exports){
+},{"clicked":50,"eventemitter3":55}],55:[function(require,module,exports){
+'use strict';
+
+var has = Object.prototype.hasOwnProperty
+  , prefix = '~';
+
+/**
+ * Constructor to create a storage for our `EE` objects.
+ * An `Events` instance is a plain object whose properties are event names.
+ *
+ * @constructor
+ * @private
+ */
+function Events() {}
+
+//
+// We try to not inherit from `Object.prototype`. In some engines creating an
+// instance in this way is faster than calling `Object.create(null)` directly.
+// If `Object.create(null)` is not supported we prefix the event names with a
+// character to make sure that the built-in object properties are not
+// overridden or used as an attack vector.
+//
+if (Object.create) {
+  Events.prototype = Object.create(null);
+
+  //
+  // This hack is needed because the `__proto__` property is still inherited in
+  // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
+  //
+  if (!new Events().__proto__) prefix = false;
+}
+
+/**
+ * Representation of a single event listener.
+ *
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} [once=false] Specify if the listener is a one-time listener.
+ * @constructor
+ * @private
+ */
+function EE(fn, context, once) {
+  this.fn = fn;
+  this.context = context;
+  this.once = once || false;
+}
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} context The context to invoke the listener with.
+ * @param {Boolean} once Specify if the listener is a one-time listener.
+ * @returns {EventEmitter}
+ * @private
+ */
+function addListener(emitter, event, fn, context, once) {
+  if (typeof fn !== 'function') {
+    throw new TypeError('The listener must be a function');
+  }
+
+  var listener = new EE(fn, context || emitter, once)
+    , evt = prefix ? prefix + event : event;
+
+  if (!emitter._events[evt]) emitter._events[evt] = listener, emitter._eventsCount++;
+  else if (!emitter._events[evt].fn) emitter._events[evt].push(listener);
+  else emitter._events[evt] = [emitter._events[evt], listener];
+
+  return emitter;
+}
+
+/**
+ * Clear event by name.
+ *
+ * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+ * @param {(String|Symbol)} evt The Event name.
+ * @private
+ */
+function clearEvent(emitter, evt) {
+  if (--emitter._eventsCount === 0) emitter._events = new Events();
+  else delete emitter._events[evt];
+}
+
+/**
+ * Minimal `EventEmitter` interface that is molded against the Node.js
+ * `EventEmitter` interface.
+ *
+ * @constructor
+ * @public
+ */
+function EventEmitter() {
+  this._events = new Events();
+  this._eventsCount = 0;
+}
+
+/**
+ * Return an array listing the events for which the emitter has registered
+ * listeners.
+ *
+ * @returns {Array}
+ * @public
+ */
+EventEmitter.prototype.eventNames = function eventNames() {
+  var names = []
+    , events
+    , name;
+
+  if (this._eventsCount === 0) return names;
+
+  for (name in (events = this._events)) {
+    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
+  }
+
+  if (Object.getOwnPropertySymbols) {
+    return names.concat(Object.getOwnPropertySymbols(events));
+  }
+
+  return names;
+};
+
+/**
+ * Return the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Array} The registered listeners.
+ * @public
+ */
+EventEmitter.prototype.listeners = function listeners(event) {
+  var evt = prefix ? prefix + event : event
+    , handlers = this._events[evt];
+
+  if (!handlers) return [];
+  if (handlers.fn) return [handlers.fn];
+
+  for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
+    ee[i] = handlers[i].fn;
+  }
+
+  return ee;
+};
+
+/**
+ * Return the number of listeners listening to a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Number} The number of listeners.
+ * @public
+ */
+EventEmitter.prototype.listenerCount = function listenerCount(event) {
+  var evt = prefix ? prefix + event : event
+    , listeners = this._events[evt];
+
+  if (!listeners) return 0;
+  if (listeners.fn) return 1;
+  return listeners.length;
+};
+
+/**
+ * Calls each of the listeners registered for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @returns {Boolean} `true` if the event had listeners, else `false`.
+ * @public
+ */
+EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return false;
+
+  var listeners = this._events[evt]
+    , len = arguments.length
+    , args
+    , i;
+
+  if (listeners.fn) {
+    if (listeners.once) this.removeListener(event, listeners.fn, undefined, true);
+
+    switch (len) {
+      case 1: return listeners.fn.call(listeners.context), true;
+      case 2: return listeners.fn.call(listeners.context, a1), true;
+      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+    }
+
+    for (i = 1, args = new Array(len -1); i < len; i++) {
+      args[i - 1] = arguments[i];
+    }
+
+    listeners.fn.apply(listeners.context, args);
+  } else {
+    var length = listeners.length
+      , j;
+
+    for (i = 0; i < length; i++) {
+      if (listeners[i].once) this.removeListener(event, listeners[i].fn, undefined, true);
+
+      switch (len) {
+        case 1: listeners[i].fn.call(listeners[i].context); break;
+        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+        case 4: listeners[i].fn.call(listeners[i].context, a1, a2, a3); break;
+        default:
+          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
+            args[j - 1] = arguments[j];
+          }
+
+          listeners[i].fn.apply(listeners[i].context, args);
+      }
+    }
+  }
+
+  return true;
+};
+
+/**
+ * Add a listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.on = function on(event, fn, context) {
+  return addListener(this, event, fn, context, false);
+};
+
+/**
+ * Add a one-time listener for a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn The listener function.
+ * @param {*} [context=this] The context to invoke the listener with.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.once = function once(event, fn, context) {
+  return addListener(this, event, fn, context, true);
+};
+
+/**
+ * Remove the listeners of a given event.
+ *
+ * @param {(String|Symbol)} event The event name.
+ * @param {Function} fn Only remove the listeners that match this function.
+ * @param {*} context Only remove the listeners that have this context.
+ * @param {Boolean} once Only remove one-time listeners.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeListener = function removeListener(event, fn, context, once) {
+  var evt = prefix ? prefix + event : event;
+
+  if (!this._events[evt]) return this;
+  if (!fn) {
+    clearEvent(this, evt);
+    return this;
+  }
+
+  var listeners = this._events[evt];
+
+  if (listeners.fn) {
+    if (
+      listeners.fn === fn &&
+      (!once || listeners.once) &&
+      (!context || listeners.context === context)
+    ) {
+      clearEvent(this, evt);
+    }
+  } else {
+    for (var i = 0, events = [], length = listeners.length; i < length; i++) {
+      if (
+        listeners[i].fn !== fn ||
+        (once && !listeners[i].once) ||
+        (context && listeners[i].context !== context)
+      ) {
+        events.push(listeners[i]);
+      }
+    }
+
+    //
+    // Reset the array, or remove it completely if we have no more listeners.
+    //
+    if (events.length) this._events[evt] = events.length === 1 ? events[0] : events;
+    else clearEvent(this, evt);
+  }
+
+  return this;
+};
+
+/**
+ * Remove all listeners, or those of the specified event.
+ *
+ * @param {(String|Symbol)} [event] The event name.
+ * @returns {EventEmitter} `this`.
+ * @public
+ */
+EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+  var evt;
+
+  if (event) {
+    evt = prefix ? prefix + event : event;
+    if (this._events[evt]) clearEvent(this, evt);
+  } else {
+    this._events = new Events();
+    this._eventsCount = 0;
+  }
+
+  return this;
+};
+
+//
+// Alias methods names because people roll like that.
+//
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+//
+// Expose the prefix.
+//
+EventEmitter.prefixed = prefix;
+
+//
+// Allow `EventEmitter` to be imported as module namespace.
+//
+EventEmitter.EventEmitter = EventEmitter;
+
+//
+// Expose the module.
+//
+if ('undefined' !== typeof module) {
+  module.exports = EventEmitter;
+}
+
+},{}],56:[function(require,module,exports){
+module.exports = exists;
+
+module.exports.allExist = allExist;
+
+function exists (v) {
+  return v !== null && v !== undefined;
+}
+
+function allExist (/* vals */) {
+  var vals = Array.prototype.slice.call(arguments);
+  return vals.every(exists);
+}
+},{}],57:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -9655,7 +9902,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],50:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 /**
  * isMobile.js v0.4.1
  *
@@ -9794,7 +10041,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 })(this);
 
-},{}],51:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 (function (global){
 /*!
     localForage -- Offline Storage, Improved
@@ -12594,7 +12841,7 @@ module.exports = localforage_js;
 },{"3":3}]},{},[4])(4)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],52:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12761,7 +13008,7 @@ MiniSignal.MiniSignalBinding = MiniSignalBinding;
 exports['default'] = MiniSignal;
 module.exports = exports['default'];
 
-},{}],53:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -12853,7 +13100,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],54:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict'
 
 module.exports = function parseURI (str, opts) {
@@ -12885,7 +13132,7 @@ module.exports = function parseURI (str, opts) {
   return uri
 }
 
-},{}],55:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -13113,9 +13360,275 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":248}],56:[function(require,module,exports){
-arguments[4][6][0].apply(exports,arguments)
-},{"dup":6}],57:[function(require,module,exports){
+},{"_process":256}],64:[function(require,module,exports){
+
+/*
+	Copyright © 2001 Robert Penner
+	All rights reserved.
+
+	Redistribution and use in source and binary forms, with or without modification, 
+	are permitted provided that the following conditions are met:
+
+	Redistributions of source code must retain the above copyright notice, this list of 
+	conditions and the following disclaimer.
+	Redistributions in binary form must reproduce the above copyright notice, this list 
+	of conditions and the following disclaimer in the documentation and/or other materials 
+	provided with the distribution.
+
+	Neither the name of the author nor the names of contributors may be used to endorse 
+	or promote products derived from this software without specific prior written permission.
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+	EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+	AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+	OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+(function() {
+  var penner, umd;
+
+  umd = function(factory) {
+    if (typeof exports === 'object') {
+      return module.exports = factory;
+    } else if (typeof define === 'function' && define.amd) {
+      return define([], factory);
+    } else {
+      return this.penner = factory;
+    }
+  };
+
+  penner = {
+    linear: function(t, b, c, d) {
+      return c * t / d + b;
+    },
+    easeInQuad: function(t, b, c, d) {
+      return c * (t /= d) * t + b;
+    },
+    easeOutQuad: function(t, b, c, d) {
+      return -c * (t /= d) * (t - 2) + b;
+    },
+    easeInOutQuad: function(t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t + b;
+      } else {
+        return -c / 2 * ((--t) * (t - 2) - 1) + b;
+      }
+    },
+    easeInCubic: function(t, b, c, d) {
+      return c * (t /= d) * t * t + b;
+    },
+    easeOutCubic: function(t, b, c, d) {
+      return c * ((t = t / d - 1) * t * t + 1) + b;
+    },
+    easeInOutCubic: function(t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t + b;
+      } else {
+        return c / 2 * ((t -= 2) * t * t + 2) + b;
+      }
+    },
+    easeInQuart: function(t, b, c, d) {
+      return c * (t /= d) * t * t * t + b;
+    },
+    easeOutQuart: function(t, b, c, d) {
+      return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+    },
+    easeInOutQuart: function(t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t * t + b;
+      } else {
+        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+      }
+    },
+    easeInQuint: function(t, b, c, d) {
+      return c * (t /= d) * t * t * t * t + b;
+    },
+    easeOutQuint: function(t, b, c, d) {
+      return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+    },
+    easeInOutQuint: function(t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return c / 2 * t * t * t * t * t + b;
+      } else {
+        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+      }
+    },
+    easeInSine: function(t, b, c, d) {
+      return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
+    },
+    easeOutSine: function(t, b, c, d) {
+      return c * Math.sin(t / d * (Math.PI / 2)) + b;
+    },
+    easeInOutSine: function(t, b, c, d) {
+      return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+    },
+    easeInExpo: function(t, b, c, d) {
+      if (t === 0) {
+        return b;
+      } else {
+        return c * Math.pow(2, 10 * (t / d - 1)) + b;
+      }
+    },
+    easeOutExpo: function(t, b, c, d) {
+      if (t === d) {
+        return b + c;
+      } else {
+        return c * (-Math.pow(2, -10 * t / d) + 1) + b;
+      }
+    },
+    easeInOutExpo: function(t, b, c, d) {
+      if (t === 0) {
+        b;
+      }
+      if (t === d) {
+        b + c;
+      }
+      if ((t /= d / 2) < 1) {
+        return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+      } else {
+        return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+      }
+    },
+    easeInCirc: function(t, b, c, d) {
+      return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
+    },
+    easeOutCirc: function(t, b, c, d) {
+      return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
+    },
+    easeInOutCirc: function(t, b, c, d) {
+      if ((t /= d / 2) < 1) {
+        return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+      } else {
+        return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
+      }
+    },
+    easeInElastic: function(t, b, c, d) {
+      var a, p, s;
+      s = 1.70158;
+      p = 0;
+      a = c;
+      if (t === 0) {
+        b;
+      } else if ((t /= d) === 1) {
+        b + c;
+      }
+      if (!p) {
+        p = d * .3;
+      }
+      if (a < Math.abs(c)) {
+        a = c;
+        s = p / 4;
+      } else {
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+      }
+      return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+    },
+    easeOutElastic: function(t, b, c, d) {
+      var a, p, s;
+      s = 1.70158;
+      p = 0;
+      a = c;
+      if (t === 0) {
+        b;
+      } else if ((t /= d) === 1) {
+        b + c;
+      }
+      if (!p) {
+        p = d * .3;
+      }
+      if (a < Math.abs(c)) {
+        a = c;
+        s = p / 4;
+      } else {
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+      }
+      return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
+    },
+    easeInOutElastic: function(t, b, c, d) {
+      var a, p, s;
+      s = 1.70158;
+      p = 0;
+      a = c;
+      if (t === 0) {
+        b;
+      } else if ((t /= d / 2) === 2) {
+        b + c;
+      }
+      if (!p) {
+        p = d * (.3 * 1.5);
+      }
+      if (a < Math.abs(c)) {
+        a = c;
+        s = p / 4;
+      } else {
+        s = p / (2 * Math.PI) * Math.asin(c / a);
+      }
+      if (t < 1) {
+        return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+      } else {
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+      }
+    },
+    easeInBack: function(t, b, c, d, s) {
+      if (s === void 0) {
+        s = 1.70158;
+      }
+      return c * (t /= d) * t * ((s + 1) * t - s) + b;
+    },
+    easeOutBack: function(t, b, c, d, s) {
+      if (s === void 0) {
+        s = 1.70158;
+      }
+      return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+    },
+    easeInOutBack: function(t, b, c, d, s) {
+      if (s === void 0) {
+        s = 1.70158;
+      }
+      if ((t /= d / 2) < 1) {
+        return c / 2 * (t * t * (((s *= 1.525) + 1) * t - s)) + b;
+      } else {
+        return c / 2 * ((t -= 2) * t * (((s *= 1.525) + 1) * t + s) + 2) + b;
+      }
+    },
+    easeInBounce: function(t, b, c, d) {
+      var v;
+      v = penner.easeOutBounce(d - t, 0, c, d);
+      return c - v + b;
+    },
+    easeOutBounce: function(t, b, c, d) {
+      if ((t /= d) < 1 / 2.75) {
+        return c * (7.5625 * t * t) + b;
+      } else if (t < 2 / 2.75) {
+        return c * (7.5625 * (t -= 1.5 / 2.75) * t + .75) + b;
+      } else if (t < 2.5 / 2.75) {
+        return c * (7.5625 * (t -= 2.25 / 2.75) * t + .9375) + b;
+      } else {
+        return c * (7.5625 * (t -= 2.625 / 2.75) * t + .984375) + b;
+      }
+    },
+    easeInOutBounce: function(t, b, c, d) {
+      var v;
+      if (t < d / 2) {
+        v = penner.easeInBounce(t * 2, 0, c, d);
+        return v * .5 + b;
+      } else {
+        v = penner.easeOutBounce(t * 2 - d, 0, c, d);
+        return v * .5 + c * .5 + b;
+      }
+    }
+  };
+
+  umd(penner);
+
+}).call(this);
+
+},{}],65:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13203,7 +13716,7 @@ var angle = function (_wait) {
 
 module.exports = angle;
 
-},{"./wait":67}],58:[function(require,module,exports){
+},{"./wait":75}],66:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13290,7 +13803,7 @@ var face = function (_wait) {
 
 module.exports = face;
 
-},{"./wait":67,"yy-angle":276}],59:[function(require,module,exports){
+},{"./wait":75,"yy-angle":284}],67:[function(require,module,exports){
 'use strict';
 
 var list = require('./list');
@@ -13308,7 +13821,7 @@ module.exports = {
     load: require('./load')
 };
 
-},{"./angle":57,"./face":58,"./list":60,"./load":61,"./movie":62,"./shake":63,"./target":64,"./tint":65,"./to":66,"./wait":67}],60:[function(require,module,exports){
+},{"./angle":65,"./face":66,"./list":68,"./load":69,"./movie":70,"./shake":71,"./target":72,"./tint":73,"./to":74,"./wait":75}],68:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13659,7 +14172,7 @@ var Ease = function (_Events) {
 
 module.exports = Ease;
 
-},{"./angle":57,"./face":58,"./load":61,"./movie":62,"./shake":63,"./target":64,"./tint":65,"./to":66,"./wait":67,"eventemitter3":47,"pixi.js":213}],61:[function(require,module,exports){
+},{"./angle":65,"./face":66,"./load":69,"./movie":70,"./shake":71,"./target":72,"./tint":73,"./to":74,"./wait":75,"eventemitter3":55,"pixi.js":221}],69:[function(require,module,exports){
 'use strict';
 
 var wait = require('./wait');
@@ -13702,7 +14215,7 @@ function load(object, load) {
 
 module.exports = load;
 
-},{"./angle":57,"./face":58,"./movie":62,"./shake":63,"./target":64,"./tint":65,"./to":66,"./wait":67}],62:[function(require,module,exports){
+},{"./angle":65,"./face":66,"./movie":70,"./shake":71,"./target":72,"./tint":73,"./to":74,"./wait":75}],70:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13821,7 +14334,7 @@ var movie = function (_wait) {
 
 module.exports = movie;
 
-},{"./wait":67}],63:[function(require,module,exports){
+},{"./wait":75}],71:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13937,7 +14450,7 @@ var shake = function (_wait) {
 
 module.exports = shake;
 
-},{"./wait":67}],64:[function(require,module,exports){
+},{"./wait":75}],72:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14026,7 +14539,7 @@ var target = function (_wait) {
 
 module.exports = target;
 
-},{"./wait":67}],65:[function(require,module,exports){
+},{"./wait":75}],73:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14188,7 +14701,7 @@ var tint = function (_wait) {
 
 module.exports = tint;
 
-},{"./wait":67,"yy-color":277}],66:[function(require,module,exports){
+},{"./wait":75,"yy-color":285}],74:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14387,7 +14900,7 @@ var to = function (_wait) {
 
 module.exports = to;
 
-},{"./wait":67}],67:[function(require,module,exports){
+},{"./wait":75}],75:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14596,7 +15109,7 @@ var wait = function (_EventEmitter) {
 
 module.exports = wait;
 
-},{"eventemitter3":47,"penner":56}],68:[function(require,module,exports){
+},{"eventemitter3":55,"penner":64}],76:[function(require,module,exports){
 var EMPTY_ARRAY_BUFFER = new ArrayBuffer(0);
 
 /**
@@ -14717,7 +15230,7 @@ Buffer.prototype.destroy = function(){
 
 module.exports = Buffer;
 
-},{}],69:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 
 var Texture = require('./GLTexture');
 
@@ -14945,7 +15458,7 @@ Framebuffer.createFloat32 = function(gl, width, height, data)
 
 module.exports = Framebuffer;
 
-},{"./GLTexture":71}],70:[function(require,module,exports){
+},{"./GLTexture":79}],78:[function(require,module,exports){
 
 var compileProgram = require('./shader/compileProgram'),
 	extractAttributes = require('./shader/extractAttributes'),
@@ -15041,7 +15554,7 @@ Shader.prototype.destroy = function()
 
 module.exports = Shader;
 
-},{"./shader/compileProgram":76,"./shader/extractAttributes":78,"./shader/extractUniforms":79,"./shader/generateUniformAccessObject":80,"./shader/setPrecision":84}],71:[function(require,module,exports){
+},{"./shader/compileProgram":84,"./shader/extractAttributes":86,"./shader/extractUniforms":87,"./shader/generateUniformAccessObject":88,"./shader/setPrecision":92}],79:[function(require,module,exports){
 
 /**
  * Helper class to create a WebGL Texture
@@ -15376,7 +15889,7 @@ Texture.fromData = function(gl, data, width, height)
 
 module.exports = Texture;
 
-},{}],72:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 
 // state object//
 var setVertexAttribArrays = require( './setVertexAttribArrays' );
@@ -15644,7 +16157,7 @@ VertexArrayObject.prototype.getSize = function()
     return attrib.buffer.data.length / (( attrib.stride/4 ) || attrib.attribute.size);
 };
 
-},{"./setVertexAttribArrays":75}],73:[function(require,module,exports){
+},{"./setVertexAttribArrays":83}],81:[function(require,module,exports){
 
 /**
  * Helper class to create a webGL Context
@@ -15672,7 +16185,7 @@ var createContext = function(canvas, options)
 
 module.exports = createContext;
 
-},{}],74:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 var gl = {
     createContext:          require('./createContext'),
     setVertexAttribArrays:  require('./setVertexAttribArrays'),
@@ -15699,7 +16212,7 @@ if (typeof window !== 'undefined')
     window.PIXI.glCore = gl;
 }
 
-},{"./GLBuffer":68,"./GLFramebuffer":69,"./GLShader":70,"./GLTexture":71,"./VertexArrayObject":72,"./createContext":73,"./setVertexAttribArrays":75,"./shader":81}],75:[function(require,module,exports){
+},{"./GLBuffer":76,"./GLFramebuffer":77,"./GLShader":78,"./GLTexture":79,"./VertexArrayObject":80,"./createContext":81,"./setVertexAttribArrays":83,"./shader":89}],83:[function(require,module,exports){
 // var GL_MAP = {};
 
 /**
@@ -15756,7 +16269,7 @@ var setVertexAttribArrays = function (gl, attribs, state)
 
 module.exports = setVertexAttribArrays;
 
-},{}],76:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 
 /**
  * @class
@@ -15838,7 +16351,7 @@ var compileShader = function (gl, type, src)
 
 module.exports = compileProgram;
 
-},{}],77:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /**
  * @class
  * @memberof PIXI.glCore.shader
@@ -15918,7 +16431,7 @@ var booleanArray = function(size)
 
 module.exports = defaultValue;
 
-},{}],78:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 
 var mapType = require('./mapType');
 var mapSize = require('./mapSize');
@@ -15961,7 +16474,7 @@ var pointer = function(type, normalized, stride, start){
 
 module.exports = extractAttributes;
 
-},{"./mapSize":82,"./mapType":83}],79:[function(require,module,exports){
+},{"./mapSize":90,"./mapType":91}],87:[function(require,module,exports){
 var mapType = require('./mapType');
 var defaultValue = require('./defaultValue');
 
@@ -15998,7 +16511,7 @@ var extractUniforms = function(gl, program)
 
 module.exports = extractUniforms;
 
-},{"./defaultValue":77,"./mapType":83}],80:[function(require,module,exports){
+},{"./defaultValue":85,"./mapType":91}],88:[function(require,module,exports){
 /**
  * Extracts the attributes
  * @class
@@ -16121,7 +16634,7 @@ function getUniformGroup(nameTokens, uniform)
 
 module.exports = generateUniformAccessObject;
 
-},{}],81:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 module.exports = {
     compileProgram: require('./compileProgram'),
     defaultValue: require('./defaultValue'),
@@ -16132,7 +16645,7 @@ module.exports = {
     mapSize: require('./mapSize'),
     mapType: require('./mapType')
 };
-},{"./compileProgram":76,"./defaultValue":77,"./extractAttributes":78,"./extractUniforms":79,"./generateUniformAccessObject":80,"./mapSize":82,"./mapType":83,"./setPrecision":84}],82:[function(require,module,exports){
+},{"./compileProgram":84,"./defaultValue":85,"./extractAttributes":86,"./extractUniforms":87,"./generateUniformAccessObject":88,"./mapSize":90,"./mapType":91,"./setPrecision":92}],90:[function(require,module,exports){
 /**
  * @class
  * @memberof PIXI.glCore.shader
@@ -16170,7 +16683,7 @@ var GLSL_TO_SIZE = {
 
 module.exports = mapSize;
 
-},{}],83:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 
 
 var mapType = function(gl, type) 
@@ -16218,7 +16731,7 @@ var GL_TO_GLSL_TYPES = {
 
 module.exports = mapType;
 
-},{}],84:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 /**
  * Sets the float precision on the shader. If the precision is already present this function will do nothing
  * @param {string} src       the shader source
@@ -16238,7 +16751,7 @@ var setPrecision = function(src, precision)
 
 module.exports = setPrecision;
 
-},{}],85:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16439,7 +16952,7 @@ module.exports = function (_Plugin) {
     return Bounce;
 }(Plugin);
 
-},{"./plugin":93,"exists":48,"pixi-ease":59}],86:[function(require,module,exports){
+},{"./plugin":101,"exists":56,"pixi-ease":67}],94:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16513,7 +17026,7 @@ module.exports = function (_Plugin) {
     return ClampZoom;
 }(Plugin);
 
-},{"./plugin":93}],87:[function(require,module,exports){
+},{"./plugin":101}],95:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16635,7 +17148,7 @@ module.exports = function (_Plugin) {
     return clamp;
 }(Plugin);
 
-},{"./plugin":93}],88:[function(require,module,exports){
+},{"./plugin":101}],96:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16786,7 +17299,7 @@ module.exports = function (_Plugin) {
     return Decelerate;
 }(Plugin);
 
-},{"./plugin":93,"exists":48}],89:[function(require,module,exports){
+},{"./plugin":101,"exists":56}],97:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16995,7 +17508,7 @@ module.exports = function (_Plugin) {
     return Drag;
 }(Plugin);
 
-},{"./plugin":93,"exists":48}],90:[function(require,module,exports){
+},{"./plugin":101,"exists":56}],98:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17071,7 +17584,7 @@ module.exports = function (_Plugin) {
     return Follow;
 }(Plugin);
 
-},{"./plugin":93}],91:[function(require,module,exports){
+},{"./plugin":101}],99:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17246,7 +17759,7 @@ module.exports = function (_Plugin) {
     return MouseEdges;
 }(Plugin);
 
-},{"./plugin":93,"exists":48,"yy-angle":276}],92:[function(require,module,exports){
+},{"./plugin":101,"exists":56,"yy-angle":284}],100:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17363,7 +17876,7 @@ module.exports = function (_Plugin) {
     return Pinch;
 }(Plugin);
 
-},{"./plugin":93}],93:[function(require,module,exports){
+},{"./plugin":101}],101:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17414,7 +17927,7 @@ module.exports = function () {
     return Plugin;
 }();
 
-},{}],94:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17559,7 +18072,7 @@ module.exports = function (_Plugin) {
     return SnapZoom;
 }(Plugin);
 
-},{"./plugin":93,"exists":48,"pixi-ease":59}],95:[function(require,module,exports){
+},{"./plugin":101,"exists":56,"pixi-ease":67}],103:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17678,7 +18191,7 @@ module.exports = function (_Plugin) {
     return Snap;
 }(Plugin);
 
-},{"./plugin":93,"exists":48,"pixi-ease":59}],96:[function(require,module,exports){
+},{"./plugin":101,"exists":56,"pixi-ease":67}],104:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -19021,7 +19534,7 @@ var Viewport = function (_PIXI$Container) {
 
 module.exports = Viewport;
 
-},{"./bounce":85,"./clamp":87,"./clamp-zoom":86,"./decelerate":88,"./drag":89,"./follow":90,"./mouse-edges":91,"./pinch":92,"./snap":95,"./snap-zoom":94,"./wheel":97,"exists":48,"pixi.js":213}],97:[function(require,module,exports){
+},{"./bounce":93,"./clamp":95,"./clamp-zoom":94,"./decelerate":96,"./drag":97,"./follow":98,"./mouse-edges":99,"./pinch":100,"./snap":103,"./snap-zoom":102,"./wheel":105,"exists":56,"pixi.js":221}],105:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -19099,7 +19612,7 @@ module.exports = function (_Plugin) {
     return Wheel;
 }(Plugin);
 
-},{"./plugin":93}],98:[function(require,module,exports){
+},{"./plugin":101}],106:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -19593,7 +20106,7 @@ exports.default = AccessibilityManager;
 core.WebGLRenderer.registerPlugin('accessibility', AccessibilityManager);
 core.CanvasRenderer.registerPlugin('accessibility', AccessibilityManager);
 
-},{"../core":123,"./accessibleTarget":99,"ismobilejs":50}],99:[function(require,module,exports){
+},{"../core":131,"./accessibleTarget":107,"ismobilejs":58}],107:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -19651,7 +20164,7 @@ exports.default = {
   _accessibleDiv: false
 };
 
-},{}],100:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -19676,7 +20189,7 @@ Object.defineProperty(exports, 'AccessibilityManager', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./AccessibilityManager":98,"./accessibleTarget":99}],101:[function(require,module,exports){
+},{"./AccessibilityManager":106,"./accessibleTarget":107}],109:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -19899,7 +20412,7 @@ var Application = function () {
 
 exports.default = Application;
 
-},{"./autoDetectRenderer":103,"./const":104,"./display/Container":106,"./settings":159,"./ticker":179}],102:[function(require,module,exports){
+},{"./autoDetectRenderer":111,"./const":112,"./display/Container":114,"./settings":167,"./ticker":187}],110:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -19966,7 +20479,7 @@ var Shader = function (_GLShader) {
 
 exports.default = Shader;
 
-},{"./settings":159,"pixi-gl-core":74}],103:[function(require,module,exports){
+},{"./settings":167,"pixi-gl-core":82}],111:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -20035,7 +20548,7 @@ function autoDetectRenderer(options, arg1, arg2, arg3) {
     return new _CanvasRenderer2.default(options, arg1, arg2);
 }
 
-},{"./renderers/canvas/CanvasRenderer":135,"./renderers/webgl/WebGLRenderer":142,"./utils":183}],104:[function(require,module,exports){
+},{"./renderers/canvas/CanvasRenderer":143,"./renderers/webgl/WebGLRenderer":150,"./utils":191}],112:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -20378,7 +20891,7 @@ var UPDATE_PRIORITY = exports.UPDATE_PRIORITY = {
   UTILITY: -50
 };
 
-},{}],105:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -20721,7 +21234,7 @@ var Bounds = function () {
 
 exports.default = Bounds;
 
-},{"../math":128}],106:[function(require,module,exports){
+},{"../math":136}],114:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -21339,7 +21852,7 @@ var Container = function (_DisplayObject) {
 exports.default = Container;
 Container.prototype.containerUpdateTransform = Container.prototype.updateTransform;
 
-},{"../utils":183,"./DisplayObject":107}],107:[function(require,module,exports){
+},{"../utils":191,"./DisplayObject":115}],115:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -22033,7 +22546,7 @@ var DisplayObject = function (_EventEmitter) {
 exports.default = DisplayObject;
 DisplayObject.prototype.displayObjectUpdateTransform = DisplayObject.prototype.updateTransform;
 
-},{"../const":104,"../math":128,"../settings":159,"./Bounds":105,"./Transform":108,"./TransformStatic":110,"eventemitter3":247}],108:[function(require,module,exports){
+},{"../const":112,"../math":136,"../settings":167,"./Bounds":113,"./Transform":116,"./TransformStatic":118,"eventemitter3":255}],116:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -22214,7 +22727,7 @@ var Transform = function (_TransformBase) {
 
 exports.default = Transform;
 
-},{"../math":128,"./TransformBase":109}],109:[function(require,module,exports){
+},{"../math":136,"./TransformBase":117}],117:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -22301,7 +22814,7 @@ TransformBase.prototype.updateWorldTransform = TransformBase.prototype.updateTra
 
 TransformBase.IDENTITY = new TransformBase();
 
-},{"../math":128}],110:[function(require,module,exports){
+},{"../math":136}],118:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -22511,7 +23024,7 @@ var TransformStatic = function (_TransformBase) {
 
 exports.default = TransformStatic;
 
-},{"../math":128,"./TransformBase":109}],111:[function(require,module,exports){
+},{"../math":136,"./TransformBase":117}],119:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -23716,7 +24229,7 @@ exports.default = Graphics;
 
 Graphics._SPRITE_TEXTURE = null;
 
-},{"../const":104,"../display/Bounds":105,"../display/Container":106,"../math":128,"../renderers/canvas/CanvasRenderer":135,"../sprites/Sprite":160,"../textures/RenderTexture":171,"../textures/Texture":173,"../utils":183,"./GraphicsData":112,"./utils/bezierCurveTo":114}],112:[function(require,module,exports){
+},{"../const":112,"../display/Bounds":113,"../display/Container":114,"../math":136,"../renderers/canvas/CanvasRenderer":143,"../sprites/Sprite":168,"../textures/RenderTexture":179,"../textures/Texture":181,"../utils":191,"./GraphicsData":120,"./utils/bezierCurveTo":122}],120:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -23852,7 +24365,7 @@ var GraphicsData = function () {
 
 exports.default = GraphicsData;
 
-},{}],113:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24121,7 +24634,7 @@ exports.default = CanvasGraphicsRenderer;
 
 _CanvasRenderer2.default.registerPlugin('graphics', CanvasGraphicsRenderer);
 
-},{"../../const":104,"../../renderers/canvas/CanvasRenderer":135}],114:[function(require,module,exports){
+},{"../../const":112,"../../renderers/canvas/CanvasRenderer":143}],122:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -24171,7 +24684,7 @@ function bezierCurveTo(fromX, fromY, cpX, cpY, cpX2, cpY2, toX, toY) {
     return path;
 }
 
-},{}],115:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24436,7 +24949,7 @@ exports.default = GraphicsRenderer;
 
 _WebGLRenderer2.default.registerPlugin('graphics', GraphicsRenderer);
 
-},{"../../const":104,"../../renderers/webgl/WebGLRenderer":142,"../../renderers/webgl/utils/ObjectRenderer":152,"../../utils":183,"./WebGLGraphicsData":116,"./shaders/PrimitiveShader":117,"./utils/buildCircle":118,"./utils/buildPoly":120,"./utils/buildRectangle":121,"./utils/buildRoundedRectangle":122}],116:[function(require,module,exports){
+},{"../../const":112,"../../renderers/webgl/WebGLRenderer":150,"../../renderers/webgl/utils/ObjectRenderer":160,"../../utils":191,"./WebGLGraphicsData":124,"./shaders/PrimitiveShader":125,"./utils/buildCircle":126,"./utils/buildPoly":128,"./utils/buildRectangle":129,"./utils/buildRoundedRectangle":130}],124:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24579,7 +25092,7 @@ var WebGLGraphicsData = function () {
 
 exports.default = WebGLGraphicsData;
 
-},{"pixi-gl-core":74}],117:[function(require,module,exports){
+},{"pixi-gl-core":82}],125:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24624,7 +25137,7 @@ var PrimitiveShader = function (_Shader) {
 
 exports.default = PrimitiveShader;
 
-},{"../../../Shader":102}],118:[function(require,module,exports){
+},{"../../../Shader":110}],126:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24717,7 +25230,7 @@ function buildCircle(graphicsData, webGLData, webGLDataNativeLines) {
     }
 }
 
-},{"../../../const":104,"../../../utils":183,"./buildLine":119}],119:[function(require,module,exports){
+},{"../../../const":112,"../../../utils":191,"./buildLine":127}],127:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -24987,7 +25500,7 @@ function buildNativeLine(graphicsData, webGLData) {
     }
 }
 
-},{"../../../math":128,"../../../utils":183}],120:[function(require,module,exports){
+},{"../../../math":136,"../../../utils":191}],128:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25073,7 +25586,7 @@ function buildPoly(graphicsData, webGLData, webGLDataNativeLines) {
     }
 }
 
-},{"../../../utils":183,"./buildLine":119,"earcut":45}],121:[function(require,module,exports){
+},{"../../../utils":191,"./buildLine":127,"earcut":53}],129:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25149,7 +25662,7 @@ function buildRectangle(graphicsData, webGLData, webGLDataNativeLines) {
     }
 }
 
-},{"../../../utils":183,"./buildLine":119}],122:[function(require,module,exports){
+},{"../../../utils":191,"./buildLine":127}],130:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25305,7 +25818,7 @@ function quadraticBezierCurve(fromX, fromY, cpX, cpY, toX, toY) {
     return points;
 }
 
-},{"../../../utils":183,"./buildLine":119,"earcut":45}],123:[function(require,module,exports){
+},{"../../../utils":191,"./buildLine":127,"earcut":53}],131:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25691,7 +26204,7 @@ exports.WebGLRenderer = _WebGLRenderer2.default; /**
                                                   * @namespace PIXI
                                                   */
 
-},{"./Application":101,"./Shader":102,"./autoDetectRenderer":103,"./const":104,"./display/Bounds":105,"./display/Container":106,"./display/DisplayObject":107,"./display/Transform":108,"./display/TransformBase":109,"./display/TransformStatic":110,"./graphics/Graphics":111,"./graphics/GraphicsData":112,"./graphics/canvas/CanvasGraphicsRenderer":113,"./graphics/webgl/GraphicsRenderer":115,"./math":128,"./renderers/canvas/CanvasRenderer":135,"./renderers/canvas/utils/CanvasRenderTarget":137,"./renderers/webgl/WebGLRenderer":142,"./renderers/webgl/filters/Filter":144,"./renderers/webgl/filters/spriteMask/SpriteMaskFilter":147,"./renderers/webgl/managers/WebGLManager":151,"./renderers/webgl/utils/ObjectRenderer":152,"./renderers/webgl/utils/Quad":153,"./renderers/webgl/utils/RenderTarget":154,"./settings":159,"./sprites/Sprite":160,"./sprites/canvas/CanvasSpriteRenderer":161,"./sprites/canvas/CanvasTinter":162,"./sprites/webgl/SpriteRenderer":164,"./text/Text":166,"./text/TextMetrics":167,"./text/TextStyle":168,"./textures/BaseRenderTexture":169,"./textures/BaseTexture":170,"./textures/RenderTexture":171,"./textures/Spritesheet":172,"./textures/Texture":173,"./textures/TextureMatrix":174,"./textures/TextureUvs":175,"./textures/VideoBaseTexture":176,"./ticker":179,"./utils":183,"pixi-gl-core":74}],124:[function(require,module,exports){
+},{"./Application":109,"./Shader":110,"./autoDetectRenderer":111,"./const":112,"./display/Bounds":113,"./display/Container":114,"./display/DisplayObject":115,"./display/Transform":116,"./display/TransformBase":117,"./display/TransformStatic":118,"./graphics/Graphics":119,"./graphics/GraphicsData":120,"./graphics/canvas/CanvasGraphicsRenderer":121,"./graphics/webgl/GraphicsRenderer":123,"./math":136,"./renderers/canvas/CanvasRenderer":143,"./renderers/canvas/utils/CanvasRenderTarget":145,"./renderers/webgl/WebGLRenderer":150,"./renderers/webgl/filters/Filter":152,"./renderers/webgl/filters/spriteMask/SpriteMaskFilter":155,"./renderers/webgl/managers/WebGLManager":159,"./renderers/webgl/utils/ObjectRenderer":160,"./renderers/webgl/utils/Quad":161,"./renderers/webgl/utils/RenderTarget":162,"./settings":167,"./sprites/Sprite":168,"./sprites/canvas/CanvasSpriteRenderer":169,"./sprites/canvas/CanvasTinter":170,"./sprites/webgl/SpriteRenderer":172,"./text/Text":174,"./text/TextMetrics":175,"./text/TextStyle":176,"./textures/BaseRenderTexture":177,"./textures/BaseTexture":178,"./textures/RenderTexture":179,"./textures/Spritesheet":180,"./textures/Texture":181,"./textures/TextureMatrix":182,"./textures/TextureUvs":183,"./textures/VideoBaseTexture":184,"./ticker":187,"./utils":191,"pixi-gl-core":82}],132:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -25884,7 +26397,7 @@ var GroupD8 = {
 
 exports.default = GroupD8;
 
-},{"./Matrix":125}],125:[function(require,module,exports){
+},{"./Matrix":133}],133:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -26415,7 +26928,7 @@ var Matrix = function () {
 
 exports.default = Matrix;
 
-},{"./Point":127}],126:[function(require,module,exports){
+},{"./Point":135}],134:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -26532,7 +27045,7 @@ var ObservablePoint = function () {
 
 exports.default = ObservablePoint;
 
-},{}],127:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -26623,7 +27136,7 @@ var Point = function () {
 
 exports.default = Point;
 
-},{}],128:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -26711,7 +27224,7 @@ Object.defineProperty(exports, 'RoundedRectangle', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./GroupD8":124,"./Matrix":125,"./ObservablePoint":126,"./Point":127,"./shapes/Circle":129,"./shapes/Ellipse":130,"./shapes/Polygon":131,"./shapes/Rectangle":132,"./shapes/RoundedRectangle":133}],129:[function(require,module,exports){
+},{"./GroupD8":132,"./Matrix":133,"./ObservablePoint":134,"./Point":135,"./shapes/Circle":137,"./shapes/Ellipse":138,"./shapes/Polygon":139,"./shapes/Rectangle":140,"./shapes/RoundedRectangle":141}],137:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -26825,7 +27338,7 @@ var Circle = function () {
 
 exports.default = Circle;
 
-},{"../../const":104,"./Rectangle":132}],130:[function(require,module,exports){
+},{"../../const":112,"./Rectangle":140}],138:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -26947,7 +27460,7 @@ var Ellipse = function () {
 
 exports.default = Ellipse;
 
-},{"../../const":104,"./Rectangle":132}],131:[function(require,module,exports){
+},{"../../const":112,"./Rectangle":140}],139:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -27078,7 +27591,7 @@ var Polygon = function () {
 
 exports.default = Polygon;
 
-},{"../../const":104,"../Point":127}],132:[function(require,module,exports){
+},{"../../const":112,"../Point":135}],140:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -27341,7 +27854,7 @@ var Rectangle = function () {
 
 exports.default = Rectangle;
 
-},{"../../const":104}],133:[function(require,module,exports){
+},{"../../const":112}],141:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -27474,7 +27987,7 @@ var RoundedRectangle = function () {
 
 exports.default = RoundedRectangle;
 
-},{"../../const":104}],134:[function(require,module,exports){
+},{"../../const":112}],142:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -27839,7 +28352,7 @@ var SystemRenderer = function (_EventEmitter) {
 
 exports.default = SystemRenderer;
 
-},{"../const":104,"../display/Container":106,"../math":128,"../settings":159,"../textures/RenderTexture":171,"../utils":183,"eventemitter3":247}],135:[function(require,module,exports){
+},{"../const":112,"../display/Container":114,"../math":136,"../settings":167,"../textures/RenderTexture":179,"../utils":191,"eventemitter3":255}],143:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28204,7 +28717,7 @@ var CanvasRenderer = function (_SystemRenderer) {
 exports.default = CanvasRenderer;
 _utils.pluginTarget.mixin(CanvasRenderer);
 
-},{"../../const":104,"../../settings":159,"../../utils":183,"../SystemRenderer":134,"./utils/CanvasMaskManager":136,"./utils/CanvasRenderTarget":137,"./utils/mapCanvasBlendModesToPixi":139}],136:[function(require,module,exports){
+},{"../../const":112,"../../settings":167,"../../utils":191,"../SystemRenderer":142,"./utils/CanvasMaskManager":144,"./utils/CanvasRenderTarget":145,"./utils/mapCanvasBlendModesToPixi":147}],144:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28373,7 +28886,7 @@ var CanvasMaskManager = function () {
 
 exports.default = CanvasMaskManager;
 
-},{"../../../const":104}],137:[function(require,module,exports){
+},{"../../../const":112}],145:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28497,7 +29010,7 @@ var CanvasRenderTarget = function () {
 
 exports.default = CanvasRenderTarget;
 
-},{"../../../settings":159}],138:[function(require,module,exports){
+},{"../../../settings":167}],146:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28558,7 +29071,7 @@ function canUseNewCanvasBlendModes() {
     return data[0] === 255 && data[1] === 0 && data[2] === 0;
 }
 
-},{}],139:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28630,7 +29143,7 @@ function mapCanvasBlendModesToPixi() {
     return array;
 }
 
-},{"../../../const":104,"./canUseNewCanvasBlendModes":138}],140:[function(require,module,exports){
+},{"../../../const":112,"./canUseNewCanvasBlendModes":146}],148:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -28750,7 +29263,7 @@ var TextureGarbageCollector = function () {
 
 exports.default = TextureGarbageCollector;
 
-},{"../../const":104,"../../settings":159}],141:[function(require,module,exports){
+},{"../../const":112,"../../settings":167}],149:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -29006,7 +29519,7 @@ var TextureManager = function () {
 
 exports.default = TextureManager;
 
-},{"../../const":104,"../../utils":183,"./utils/RenderTarget":154,"pixi-gl-core":74}],142:[function(require,module,exports){
+},{"../../const":112,"../../utils":191,"./utils/RenderTarget":162,"pixi-gl-core":82}],150:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -29823,7 +30336,7 @@ var WebGLRenderer = function (_SystemRenderer) {
 exports.default = WebGLRenderer;
 _utils.pluginTarget.mixin(WebGLRenderer);
 
-},{"../../const":104,"../../textures/BaseTexture":170,"../../utils":183,"../SystemRenderer":134,"./TextureGarbageCollector":140,"./TextureManager":141,"./WebGLState":143,"./managers/FilterManager":148,"./managers/MaskManager":149,"./managers/StencilManager":150,"./utils/ObjectRenderer":152,"./utils/RenderTarget":154,"./utils/mapWebGLDrawModesToPixi":157,"./utils/validateContext":158,"pixi-gl-core":74}],143:[function(require,module,exports){
+},{"../../const":112,"../../textures/BaseTexture":178,"../../utils":191,"../SystemRenderer":142,"./TextureGarbageCollector":148,"./TextureManager":149,"./WebGLState":151,"./managers/FilterManager":156,"./managers/MaskManager":157,"./managers/StencilManager":158,"./utils/ObjectRenderer":160,"./utils/RenderTarget":162,"./utils/mapWebGLDrawModesToPixi":165,"./utils/validateContext":166,"pixi-gl-core":82}],151:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -30103,7 +30616,7 @@ var WebGLState = function () {
 
 exports.default = WebGLState;
 
-},{"./utils/mapWebGLBlendModesToPixi":156}],144:[function(require,module,exports){
+},{"./utils/mapWebGLBlendModesToPixi":164}],152:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -30299,7 +30812,7 @@ var Filter = function () {
 
 exports.default = Filter;
 
-},{"../../../const":104,"../../../settings":159,"../../../utils":183,"./extractUniformsFromSrc":145}],145:[function(require,module,exports){
+},{"../../../const":112,"../../../settings":167,"../../../utils":191,"./extractUniformsFromSrc":153}],153:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -30361,7 +30874,7 @@ function extractUniformsFromString(string) {
     return uniforms;
 }
 
-},{"pixi-gl-core":74}],146:[function(require,module,exports){
+},{"pixi-gl-core":82}],154:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -30421,7 +30934,7 @@ function calculateSpriteMatrix(outputMatrix, filterArea, textureSize, sprite) {
     return mappedMatrix;
 }
 
-},{"../../../math":128}],147:[function(require,module,exports){
+},{"../../../math":136}],155:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -30509,7 +31022,7 @@ var SpriteMaskFilter = function (_Filter) {
 
 exports.default = SpriteMaskFilter;
 
-},{"../../../../math":128,"../../../../textures/TextureMatrix":174,"../Filter":144,"path":55}],148:[function(require,module,exports){
+},{"../../../../math":136,"../../../../textures/TextureMatrix":182,"../Filter":152,"path":63}],156:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31103,7 +31616,7 @@ var FilterManager = function (_WebGLManager) {
 
 exports.default = FilterManager;
 
-},{"../../../Shader":102,"../../../math":128,"../filters/filterTransforms":146,"../utils/Quad":153,"../utils/RenderTarget":154,"./WebGLManager":151,"bit-twiddle":38}],149:[function(require,module,exports){
+},{"../../../Shader":110,"../../../math":136,"../filters/filterTransforms":154,"../utils/Quad":161,"../utils/RenderTarget":162,"./WebGLManager":159,"bit-twiddle":46}],157:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31313,7 +31826,7 @@ var MaskManager = function (_WebGLManager) {
 
 exports.default = MaskManager;
 
-},{"../filters/spriteMask/SpriteMaskFilter":147,"./WebGLManager":151}],150:[function(require,module,exports){
+},{"../filters/spriteMask/SpriteMaskFilter":155,"./WebGLManager":159}],158:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31466,7 +31979,7 @@ var StencilManager = function (_WebGLManager) {
 
 exports.default = StencilManager;
 
-},{"./WebGLManager":151}],151:[function(require,module,exports){
+},{"./WebGLManager":159}],159:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31521,7 +32034,7 @@ var WebGLManager = function () {
 
 exports.default = WebGLManager;
 
-},{}],152:[function(require,module,exports){
+},{}],160:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31599,7 +32112,7 @@ var ObjectRenderer = function (_WebGLManager) {
 
 exports.default = ObjectRenderer;
 
-},{"../managers/WebGLManager":151}],153:[function(require,module,exports){
+},{"../managers/WebGLManager":159}],161:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -31780,7 +32293,7 @@ var Quad = function () {
 
 exports.default = Quad;
 
-},{"../../../utils/createIndicesForQuads":181,"pixi-gl-core":74}],154:[function(require,module,exports){
+},{"../../../utils/createIndicesForQuads":189,"pixi-gl-core":82}],162:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32107,7 +32620,7 @@ var RenderTarget = function () {
 
 exports.default = RenderTarget;
 
-},{"../../../const":104,"../../../math":128,"../../../settings":159,"pixi-gl-core":74}],155:[function(require,module,exports){
+},{"../../../const":112,"../../../math":136,"../../../settings":167,"pixi-gl-core":82}],163:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32182,7 +32695,7 @@ function generateIfTestSrc(maxIfs) {
     return src;
 }
 
-},{"pixi-gl-core":74}],156:[function(require,module,exports){
+},{"pixi-gl-core":82}],164:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32231,7 +32744,7 @@ function mapWebGLBlendModesToPixi(gl) {
     return array;
 }
 
-},{"../../../const":104}],157:[function(require,module,exports){
+},{"../../../const":112}],165:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32263,7 +32776,7 @@ function mapWebGLDrawModesToPixi(gl) {
   return object;
 }
 
-},{"../../../const":104}],158:[function(require,module,exports){
+},{"../../../const":112}],166:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32279,7 +32792,7 @@ function validateContext(gl) {
     }
 }
 
-},{}],159:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -32524,7 +33037,7 @@ exports.default = {
   MESH_CANVAS_PADDING: 0
 };
 
-},{"./utils/canUploadSameBuffer":180,"./utils/maxRecommendedTextures":185}],160:[function(require,module,exports){
+},{"./utils/canUploadSameBuffer":188,"./utils/maxRecommendedTextures":193}],168:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -33147,7 +33660,7 @@ var Sprite = function (_Container) {
 
 exports.default = Sprite;
 
-},{"../const":104,"../display/Container":106,"../math":128,"../textures/Texture":173,"../utils":183}],161:[function(require,module,exports){
+},{"../const":112,"../display/Container":114,"../math":136,"../textures/Texture":181,"../utils":191}],169:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -33300,7 +33813,7 @@ exports.default = CanvasSpriteRenderer;
 
 _CanvasRenderer2.default.registerPlugin('sprite', CanvasSpriteRenderer);
 
-},{"../../const":104,"../../math":128,"../../renderers/canvas/CanvasRenderer":135,"./CanvasTinter":162}],162:[function(require,module,exports){
+},{"../../const":112,"../../math":136,"../../renderers/canvas/CanvasRenderer":143,"./CanvasTinter":170}],170:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -33551,7 +34064,7 @@ CanvasTinter.tintMethod = CanvasTinter.canUseMultiply ? CanvasTinter.tintWithMul
 
 exports.default = CanvasTinter;
 
-},{"../../renderers/canvas/utils/canUseNewCanvasBlendModes":138,"../../utils":183}],163:[function(require,module,exports){
+},{"../../renderers/canvas/utils/canUseNewCanvasBlendModes":146,"../../utils":191}],171:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -33604,7 +34117,7 @@ var Buffer = function () {
 
 exports.default = Buffer;
 
-},{}],164:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -34155,7 +34668,7 @@ exports.default = SpriteRenderer;
 
 _WebGLRenderer2.default.registerPlugin('sprite', SpriteRenderer);
 
-},{"../../renderers/webgl/WebGLRenderer":142,"../../renderers/webgl/utils/ObjectRenderer":152,"../../renderers/webgl/utils/checkMaxIfStatmentsInShader":155,"../../settings":159,"../../utils":183,"../../utils/createIndicesForQuads":181,"./BatchBuffer":163,"./generateMultiTextureShader":165,"bit-twiddle":38,"pixi-gl-core":74}],165:[function(require,module,exports){
+},{"../../renderers/webgl/WebGLRenderer":150,"../../renderers/webgl/utils/ObjectRenderer":160,"../../renderers/webgl/utils/checkMaxIfStatmentsInShader":163,"../../settings":167,"../../utils":191,"../../utils/createIndicesForQuads":189,"./BatchBuffer":171,"./generateMultiTextureShader":173,"bit-twiddle":46,"pixi-gl-core":82}],173:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -34218,7 +34731,7 @@ function generateSampleSrc(maxTextures) {
     return src;
 }
 
-},{"../../Shader":102,"path":55}],166:[function(require,module,exports){
+},{"../../Shader":110,"path":63}],174:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -34873,7 +35386,7 @@ var Text = function (_Sprite) {
 
 exports.default = Text;
 
-},{"../const":104,"../math":128,"../settings":159,"../sprites/Sprite":160,"../textures/Texture":173,"../utils":183,"../utils/trimCanvas":188,"./TextMetrics":167,"./TextStyle":168}],167:[function(require,module,exports){
+},{"../const":112,"../math":136,"../settings":167,"../sprites/Sprite":168,"../textures/Texture":181,"../utils":191,"../utils/trimCanvas":196,"./TextMetrics":175,"./TextStyle":176}],175:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -35176,7 +35689,7 @@ TextMetrics._context = canvas.getContext('2d');
  */
 TextMetrics._fonts = {};
 
-},{}],168:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -35978,7 +36491,7 @@ function deepCopyProperties(target, source, propertyObj) {
     }
 }
 
-},{"../const":104,"../utils":183}],169:[function(require,module,exports){
+},{"../const":112,"../utils":191}],177:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -36140,7 +36653,7 @@ var BaseRenderTexture = function (_BaseTexture) {
 
 exports.default = BaseRenderTexture;
 
-},{"../settings":159,"./BaseTexture":170}],170:[function(require,module,exports){
+},{"../settings":167,"./BaseTexture":178}],178:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -36986,7 +37499,7 @@ var BaseTexture = function (_EventEmitter) {
 
 exports.default = BaseTexture;
 
-},{"../settings":159,"../utils":183,"../utils/determineCrossOrigin":182,"bit-twiddle":38,"eventemitter3":247}],171:[function(require,module,exports){
+},{"../settings":167,"../utils":191,"../utils/determineCrossOrigin":190,"bit-twiddle":46,"eventemitter3":255}],179:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -37140,7 +37653,7 @@ var RenderTexture = function (_Texture) {
 
 exports.default = RenderTexture;
 
-},{"./BaseRenderTexture":169,"./Texture":173}],172:[function(require,module,exports){
+},{"./BaseRenderTexture":177,"./Texture":181}],180:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -37405,7 +37918,7 @@ var Spritesheet = function () {
 
 exports.default = Spritesheet;
 
-},{"../":123,"../utils":183}],173:[function(require,module,exports){
+},{"../":131,"../utils":191}],181:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -38097,7 +38610,7 @@ Texture.WHITE = createWhiteTexture();
 removeAllHandlers(Texture.WHITE);
 removeAllHandlers(Texture.WHITE.baseTexture);
 
-},{"../math":128,"../settings":159,"../utils":183,"./BaseTexture":170,"./TextureUvs":175,"./VideoBaseTexture":176,"eventemitter3":247}],174:[function(require,module,exports){
+},{"../math":136,"../settings":167,"../utils":191,"./BaseTexture":178,"./TextureUvs":183,"./VideoBaseTexture":184,"eventemitter3":255}],182:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -38261,7 +38774,7 @@ var TextureMatrix = function () {
 
 exports.default = TextureMatrix;
 
-},{"../math/Matrix":125}],175:[function(require,module,exports){
+},{"../math/Matrix":133}],183:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -38366,7 +38879,7 @@ var TextureUvs = function () {
 
 exports.default = TextureUvs;
 
-},{"../math/GroupD8":124}],176:[function(require,module,exports){
+},{"../math/GroupD8":132}],184:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -38708,7 +39221,7 @@ function createSource(path, type) {
     return source;
 }
 
-},{"../const":104,"../ticker":179,"../utils":183,"../utils/determineCrossOrigin":182,"./BaseTexture":170}],177:[function(require,module,exports){
+},{"../const":112,"../ticker":187,"../utils":191,"../utils/determineCrossOrigin":190,"./BaseTexture":178}],185:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -39181,7 +39694,7 @@ var Ticker = function () {
 
 exports.default = Ticker;
 
-},{"../const":104,"../settings":159,"./TickerListener":178}],178:[function(require,module,exports){
+},{"../const":112,"../settings":167,"./TickerListener":186}],186:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -39355,7 +39868,7 @@ var TickerListener = function () {
 
 exports.default = TickerListener;
 
-},{}],179:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -39435,7 +39948,7 @@ shared.destroy = function () {
 exports.shared = shared;
 exports.Ticker = _Ticker2.default;
 
-},{"./Ticker":177}],180:[function(require,module,exports){
+},{"./Ticker":185}],188:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -39449,7 +39962,7 @@ function canUploadSameBuffer() {
 	return !ios;
 }
 
-},{}],181:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -39483,7 +39996,7 @@ function createIndicesForQuads(size) {
     return indices;
 }
 
-},{}],182:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -39539,7 +40052,7 @@ function determineCrossOrigin(url) {
     return '';
 }
 
-},{"url":274}],183:[function(require,module,exports){
+},{"url":282}],191:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -40016,7 +40529,7 @@ function premultiplyTintToRgba(tint, alpha, out, premultiply) {
     return out;
 }
 
-},{"../const":104,"../settings":159,"./mapPremultipliedBlendModes":184,"./mixin":186,"./pluginTarget":187,"eventemitter3":247,"ismobilejs":50,"remove-array-items":253}],184:[function(require,module,exports){
+},{"../const":112,"../settings":167,"./mapPremultipliedBlendModes":192,"./mixin":194,"./pluginTarget":195,"eventemitter3":255,"ismobilejs":58,"remove-array-items":261}],192:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -40059,7 +40572,7 @@ function mapPremultipliedBlendModes() {
     return array;
 }
 
-},{"../const":104}],185:[function(require,module,exports){
+},{"../const":112}],193:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -40081,7 +40594,7 @@ function maxRecommendedTextures(max) {
     return max;
 }
 
-},{"ismobilejs":50}],186:[function(require,module,exports){
+},{"ismobilejs":58}],194:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -40143,7 +40656,7 @@ function performMixins() {
     mixins.length = 0;
 }
 
-},{}],187:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -40209,7 +40722,7 @@ exports.default = {
     }
 };
 
-},{}],188:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -40285,7 +40798,7 @@ function trimCanvas(canvas) {
     };
 }
 
-},{}],189:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -41429,7 +41942,7 @@ function deprecation(core) {
     }
 }
 
-},{}],190:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -41609,7 +42122,7 @@ exports.default = CanvasExtract;
 
 core.CanvasRenderer.registerPlugin('extract', CanvasExtract);
 
-},{"../../core":123}],191:[function(require,module,exports){
+},{"../../core":131}],199:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -41634,7 +42147,7 @@ Object.defineProperty(exports, 'canvas', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./canvas/CanvasExtract":190,"./webgl/WebGLExtract":192}],192:[function(require,module,exports){
+},{"./canvas/CanvasExtract":198,"./webgl/WebGLExtract":200}],200:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -41869,7 +42382,7 @@ exports.default = WebGLExtract;
 
 core.WebGLRenderer.registerPlugin('extract', WebGLExtract);
 
-},{"../../core":123}],193:[function(require,module,exports){
+},{"../../core":131}],201:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -42278,7 +42791,7 @@ var AnimatedSprite = function (_core$Sprite) {
 
 exports.default = AnimatedSprite;
 
-},{"../core":123}],194:[function(require,module,exports){
+},{"../core":131}],202:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -42869,7 +43382,7 @@ exports.default = BitmapText;
 
 BitmapText.fonts = {};
 
-},{"../core":123,"../core/math/ObservablePoint":126,"../core/settings":159,"../core/utils":183}],195:[function(require,module,exports){
+},{"../core":131,"../core/math/ObservablePoint":134,"../core/settings":167,"../core/utils":191}],203:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -43315,7 +43828,7 @@ var TilingSprite = function (_core$Sprite) {
 
 exports.default = TilingSprite;
 
-},{"../core":123,"../core/sprites/canvas/CanvasTinter":162}],196:[function(require,module,exports){
+},{"../core":131,"../core/sprites/canvas/CanvasTinter":170}],204:[function(require,module,exports){
 'use strict';
 
 var _core = require('../core');
@@ -43719,7 +44232,7 @@ DisplayObject.prototype._cacheAsBitmapDestroy = function _cacheAsBitmapDestroy(o
     this.destroy(options);
 };
 
-},{"../core":123,"../core/textures/BaseTexture":170,"../core/textures/Texture":173,"../core/utils":183}],197:[function(require,module,exports){
+},{"../core":131,"../core/textures/BaseTexture":178,"../core/textures/Texture":181,"../core/utils":191}],205:[function(require,module,exports){
 'use strict';
 
 var _core = require('../core');
@@ -43754,7 +44267,7 @@ core.Container.prototype.getChildByName = function getChildByName(name) {
     return null;
 };
 
-},{"../core":123}],198:[function(require,module,exports){
+},{"../core":131}],206:[function(require,module,exports){
 'use strict';
 
 var _core = require('../core');
@@ -43788,7 +44301,7 @@ core.DisplayObject.prototype.getGlobalPosition = function getGlobalPosition() {
     return point;
 };
 
-},{"../core":123}],199:[function(require,module,exports){
+},{"../core":131}],207:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -43840,7 +44353,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // imported for side effect of extending the prototype only, contains no exports
 
-},{"./AnimatedSprite":193,"./BitmapText":194,"./TilingSprite":195,"./cacheAsBitmap":196,"./getChildByName":197,"./getGlobalPosition":198,"./webgl/TilingSpriteRenderer":200}],200:[function(require,module,exports){
+},{"./AnimatedSprite":201,"./BitmapText":202,"./TilingSprite":203,"./cacheAsBitmap":204,"./getChildByName":205,"./getGlobalPosition":206,"./webgl/TilingSpriteRenderer":208}],208:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44002,7 +44515,7 @@ exports.default = TilingSpriteRenderer;
 
 core.WebGLRenderer.registerPlugin('tilingSprite', TilingSpriteRenderer);
 
-},{"../../core":123,"../../core/const":104,"path":55}],201:[function(require,module,exports){
+},{"../../core":131,"../../core/const":112,"path":63}],209:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44086,7 +44599,7 @@ var AlphaFilter = function (_core$Filter) {
 
 exports.default = AlphaFilter;
 
-},{"../../core":123,"path":55}],202:[function(require,module,exports){
+},{"../../core":131,"path":63}],210:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44260,7 +44773,7 @@ var BlurFilter = function (_core$Filter) {
 
 exports.default = BlurFilter;
 
-},{"../../core":123,"./BlurXFilter":203,"./BlurYFilter":204}],203:[function(require,module,exports){
+},{"../../core":131,"./BlurXFilter":211,"./BlurYFilter":212}],211:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44426,7 +44939,7 @@ var BlurXFilter = function (_core$Filter) {
 
 exports.default = BlurXFilter;
 
-},{"../../core":123,"./generateBlurFragSource":205,"./generateBlurVertSource":206,"./getMaxBlurKernelSize":207}],204:[function(require,module,exports){
+},{"../../core":131,"./generateBlurFragSource":213,"./generateBlurVertSource":214,"./getMaxBlurKernelSize":215}],212:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44591,7 +45104,7 @@ var BlurYFilter = function (_core$Filter) {
 
 exports.default = BlurYFilter;
 
-},{"../../core":123,"./generateBlurFragSource":205,"./generateBlurVertSource":206,"./getMaxBlurKernelSize":207}],205:[function(require,module,exports){
+},{"../../core":131,"./generateBlurFragSource":213,"./generateBlurVertSource":214,"./getMaxBlurKernelSize":215}],213:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44638,7 +45151,7 @@ function generateFragBlurSource(kernelSize) {
     return fragSource;
 }
 
-},{}],206:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -44682,7 +45195,7 @@ function generateVertBlurSource(kernelSize, x) {
     return vertSource;
 }
 
-},{}],207:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -44698,7 +45211,7 @@ function getMaxKernelSize(gl) {
     return kernelSize;
 }
 
-},{}],208:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45249,7 +45762,7 @@ var ColorMatrixFilter = function (_core$Filter) {
 exports.default = ColorMatrixFilter;
 ColorMatrixFilter.prototype.grayscale = ColorMatrixFilter.prototype.greyscale;
 
-},{"../../core":123,"path":55}],209:[function(require,module,exports){
+},{"../../core":131,"path":63}],217:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45357,7 +45870,7 @@ var DisplacementFilter = function (_core$Filter) {
 
 exports.default = DisplacementFilter;
 
-},{"../../core":123,"path":55}],210:[function(require,module,exports){
+},{"../../core":131,"path":63}],218:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45411,7 +45924,7 @@ var FXAAFilter = function (_core$Filter) {
 
 exports.default = FXAAFilter;
 
-},{"../../core":123,"path":55}],211:[function(require,module,exports){
+},{"../../core":131,"path":63}],219:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45490,7 +46003,7 @@ Object.defineProperty(exports, 'AlphaFilter', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./alpha/AlphaFilter":201,"./blur/BlurFilter":202,"./blur/BlurXFilter":203,"./blur/BlurYFilter":204,"./colormatrix/ColorMatrixFilter":208,"./displacement/DisplacementFilter":209,"./fxaa/FXAAFilter":210,"./noise/NoiseFilter":212}],212:[function(require,module,exports){
+},{"./alpha/AlphaFilter":209,"./blur/BlurFilter":210,"./blur/BlurXFilter":211,"./blur/BlurYFilter":212,"./colormatrix/ColorMatrixFilter":216,"./displacement/DisplacementFilter":217,"./fxaa/FXAAFilter":218,"./noise/NoiseFilter":220}],220:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45587,7 +46100,7 @@ var NoiseFilter = function (_core$Filter) {
 
 exports.default = NoiseFilter;
 
-},{"../../core":123,"path":55}],213:[function(require,module,exports){
+},{"../../core":131,"path":63}],221:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -45701,7 +46214,7 @@ if (typeof _deprecation2.default === 'function') {
 global.PIXI = exports; // eslint-disable-line
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./accessibility":100,"./core":123,"./deprecation":189,"./extract":191,"./extras":199,"./filters":211,"./interaction":218,"./loaders":221,"./mesh":230,"./particles":233,"./polyfill":239,"./prepare":243}],214:[function(require,module,exports){
+},{"./accessibility":108,"./core":131,"./deprecation":197,"./extract":199,"./extras":207,"./filters":219,"./interaction":226,"./loaders":229,"./mesh":238,"./particles":241,"./polyfill":247,"./prepare":251}],222:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -45925,7 +46438,7 @@ var InteractionData = function () {
 
 exports.default = InteractionData;
 
-},{"../core":123}],215:[function(require,module,exports){
+},{"../core":131}],223:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -46010,7 +46523,7 @@ var InteractionEvent = function () {
 
 exports.default = InteractionEvent;
 
-},{}],216:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -47781,7 +48294,7 @@ exports.default = InteractionManager;
 core.WebGLRenderer.registerPlugin('interaction', InteractionManager);
 core.CanvasRenderer.registerPlugin('interaction', InteractionManager);
 
-},{"../core":123,"./InteractionData":214,"./InteractionEvent":215,"./InteractionTrackingData":217,"./interactiveTarget":219,"eventemitter3":247}],217:[function(require,module,exports){
+},{"../core":131,"./InteractionData":222,"./InteractionEvent":223,"./InteractionTrackingData":225,"./interactiveTarget":227,"eventemitter3":255}],225:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -47957,7 +48470,7 @@ InteractionTrackingData.FLAGS = Object.freeze({
     RIGHT_DOWN: 1 << 2
 });
 
-},{}],218:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48009,7 +48522,7 @@ Object.defineProperty(exports, 'InteractionEvent', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./InteractionData":214,"./InteractionEvent":215,"./InteractionManager":216,"./InteractionTrackingData":217,"./interactiveTarget":219}],219:[function(require,module,exports){
+},{"./InteractionData":222,"./InteractionEvent":223,"./InteractionManager":224,"./InteractionTrackingData":225,"./interactiveTarget":227}],227:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48126,7 +48639,7 @@ exports.default = {
   _trackedPointers: undefined
 };
 
-},{}],220:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48218,7 +48731,7 @@ function parse(resource, texture) {
     resource.bitmapFont = _extras.BitmapText.registerFont(resource.data, texture);
 }
 
-},{"../core":123,"../extras":199,"path":55,"resource-loader":258}],221:[function(require,module,exports){
+},{"../core":131,"../extras":207,"path":63,"resource-loader":266}],229:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48346,7 +48859,7 @@ AppPrototype.destroy = function destroy(removeView) {
     this._parentDestroy(removeView);
 };
 
-},{"../core/Application":101,"./bitmapFontParser":220,"./loader":222,"./spritesheetParser":223,"./textureParser":224,"resource-loader":258}],222:[function(require,module,exports){
+},{"../core/Application":109,"./bitmapFontParser":228,"./loader":230,"./spritesheetParser":231,"./textureParser":232,"resource-loader":266}],230:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48517,7 +49030,7 @@ var Resource = _resourceLoader2.default.Resource;
 
 Resource.setExtensionXhrType('fnt', Resource.XHR_RESPONSE_TYPE.DOCUMENT);
 
-},{"./bitmapFontParser":220,"./spritesheetParser":223,"./textureParser":224,"eventemitter3":247,"resource-loader":258,"resource-loader/lib/middlewares/parsing/blob":259}],223:[function(require,module,exports){
+},{"./bitmapFontParser":228,"./spritesheetParser":231,"./textureParser":232,"eventemitter3":255,"resource-loader":266,"resource-loader/lib/middlewares/parsing/blob":267}],231:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48581,7 +49094,7 @@ function getResourcePath(resource, baseUrl) {
     return _url2.default.resolve(resource.url.replace(baseUrl, ''), resource.data.meta.image);
 }
 
-},{"../core":123,"resource-loader":258,"url":274}],224:[function(require,module,exports){
+},{"../core":131,"resource-loader":266,"url":282}],232:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48604,7 +49117,7 @@ var _Texture2 = _interopRequireDefault(_Texture);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"../core/textures/Texture":173,"resource-loader":258}],225:[function(require,module,exports){
+},{"../core/textures/Texture":181,"resource-loader":266}],233:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -48973,7 +49486,7 @@ Mesh.DRAW_MODES = {
   TRIANGLES: 1
 };
 
-},{"../core":123,"../core/textures/Texture":173}],226:[function(require,module,exports){
+},{"../core":131,"../core/textures/Texture":181}],234:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -49360,7 +49873,7 @@ var NineSlicePlane = function (_Plane) {
 
 exports.default = NineSlicePlane;
 
-},{"./Plane":227}],227:[function(require,module,exports){
+},{"./Plane":235}],235:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -49501,7 +50014,7 @@ var Plane = function (_Mesh) {
 
 exports.default = Plane;
 
-},{"./Mesh":225}],228:[function(require,module,exports){
+},{"./Mesh":233}],236:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -49737,7 +50250,7 @@ var Rope = function (_Mesh) {
 
 exports.default = Rope;
 
-},{"./Mesh":225}],229:[function(require,module,exports){
+},{"./Mesh":233}],237:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50023,7 +50536,7 @@ exports.default = MeshSpriteRenderer;
 
 core.CanvasRenderer.registerPlugin('mesh', MeshSpriteRenderer);
 
-},{"../../core":123,"../Mesh":225}],230:[function(require,module,exports){
+},{"../../core":131,"../Mesh":233}],238:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50084,7 +50597,7 @@ Object.defineProperty(exports, 'Rope', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./Mesh":225,"./NineSlicePlane":226,"./Plane":227,"./Rope":228,"./canvas/CanvasMeshRenderer":229,"./webgl/MeshRenderer":231}],231:[function(require,module,exports){
+},{"./Mesh":233,"./NineSlicePlane":234,"./Plane":235,"./Rope":236,"./canvas/CanvasMeshRenderer":237,"./webgl/MeshRenderer":239}],239:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50235,7 +50748,7 @@ exports.default = MeshRenderer;
 
 core.WebGLRenderer.registerPlugin('mesh', MeshRenderer);
 
-},{"../../core":123,"../Mesh":225,"path":55,"pixi-gl-core":74}],232:[function(require,module,exports){
+},{"../../core":131,"../Mesh":233,"path":63,"pixi-gl-core":82}],240:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50615,7 +51128,7 @@ var ParticleContainer = function (_core$Container) {
 
 exports.default = ParticleContainer;
 
-},{"../core":123,"../core/utils":183}],233:[function(require,module,exports){
+},{"../core":131,"../core/utils":191}],241:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50640,7 +51153,7 @@ Object.defineProperty(exports, 'ParticleRenderer', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./ParticleContainer":232,"./webgl/ParticleRenderer":235}],234:[function(require,module,exports){
+},{"./ParticleContainer":240,"./webgl/ParticleRenderer":243}],242:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -50887,7 +51400,7 @@ var ParticleBuffer = function () {
 
 exports.default = ParticleBuffer;
 
-},{"../../core/utils/createIndicesForQuads":181,"pixi-gl-core":74}],235:[function(require,module,exports){
+},{"../../core/utils/createIndicesForQuads":189,"pixi-gl-core":82}],243:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -51363,7 +51876,7 @@ exports.default = ParticleRenderer;
 
 core.WebGLRenderer.registerPlugin('particle', ParticleRenderer);
 
-},{"../../core":123,"../../core/utils":183,"./ParticleBuffer":234,"./ParticleShader":236}],236:[function(require,module,exports){
+},{"../../core":131,"../../core/utils":191,"./ParticleBuffer":242,"./ParticleShader":244}],244:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -51406,7 +51919,7 @@ var ParticleShader = function (_Shader) {
 
 exports.default = ParticleShader;
 
-},{"../../core/Shader":102}],237:[function(require,module,exports){
+},{"../../core/Shader":110}],245:[function(require,module,exports){
 "use strict";
 
 // References:
@@ -51424,7 +51937,7 @@ if (!Math.sign) {
     };
 }
 
-},{}],238:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 'use strict';
 
 var _objectAssign = require('object-assign');
@@ -51439,7 +51952,7 @@ if (!Object.assign) {
 // https://github.com/sindresorhus/object-assign
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
 
-},{"object-assign":53}],239:[function(require,module,exports){
+},{"object-assign":61}],247:[function(require,module,exports){
 'use strict';
 
 require('./Object.assign');
@@ -51464,7 +51977,7 @@ if (!window.Uint16Array) {
     window.Uint16Array = Array;
 }
 
-},{"./Math.sign":237,"./Object.assign":238,"./requestAnimationFrame":240}],240:[function(require,module,exports){
+},{"./Math.sign":245,"./Object.assign":246,"./requestAnimationFrame":248}],248:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -51541,7 +52054,7 @@ if (!global.cancelAnimationFrame) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],241:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -52029,7 +52542,7 @@ function findTextStyle(item, queue) {
     return false;
 }
 
-},{"../core":123,"./limiters/CountLimiter":244}],242:[function(require,module,exports){
+},{"../core":131,"./limiters/CountLimiter":252}],250:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -52149,7 +52662,7 @@ function uploadBaseTextures(prepare, item) {
 
 core.CanvasRenderer.registerPlugin('prepare', CanvasPrepare);
 
-},{"../../core":123,"../BasePrepare":241}],243:[function(require,module,exports){
+},{"../../core":131,"../BasePrepare":249}],251:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -52201,7 +52714,7 @@ Object.defineProperty(exports, 'TimeLimiter', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./BasePrepare":241,"./canvas/CanvasPrepare":242,"./limiters/CountLimiter":244,"./limiters/TimeLimiter":245,"./webgl/WebGLPrepare":246}],244:[function(require,module,exports){
+},{"./BasePrepare":249,"./canvas/CanvasPrepare":250,"./limiters/CountLimiter":252,"./limiters/TimeLimiter":253,"./webgl/WebGLPrepare":254}],252:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -52259,7 +52772,7 @@ var CountLimiter = function () {
 
 exports.default = CountLimiter;
 
-},{}],245:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -52317,7 +52830,7 @@ var TimeLimiter = function () {
 
 exports.default = TimeLimiter;
 
-},{}],246:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -52439,7 +52952,7 @@ function findGraphics(item, queue) {
 
 core.WebGLRenderer.registerPlugin('prepare', WebGLPrepare);
 
-},{"../../core":123,"../BasePrepare":241}],247:[function(require,module,exports){
+},{"../../core":131,"../BasePrepare":249}],255:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -52752,7 +53265,7 @@ if ('undefined' !== typeof module) {
   module.exports = EventEmitter;
 }
 
-},{}],248:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -52938,7 +53451,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],249:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -53475,7 +53988,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],250:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -53561,7 +54074,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],251:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -53648,13 +54161,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],252:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":250,"./encode":251}],253:[function(require,module,exports){
+},{"./decode":258,"./encode":259}],261:[function(require,module,exports){
 'use strict'
 
 /**
@@ -53684,7 +54197,7 @@ module.exports = function removeItems(arr, startIdx, removeCount)
   arr.length = len
 }
 
-},{}],254:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -54337,7 +54850,7 @@ var Loader = function () {
 
 exports.default = Loader;
 
-},{"./Resource":255,"./async":256,"mini-signals":52,"parse-uri":54}],255:[function(require,module,exports){
+},{"./Resource":263,"./async":264,"mini-signals":60,"parse-uri":62}],263:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -55493,7 +56006,7 @@ function reqType(xhr) {
     return xhr.toString().replace('object ', '');
 }
 
-},{"mini-signals":52,"parse-uri":54}],256:[function(require,module,exports){
+},{"mini-signals":60,"parse-uri":62}],264:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -55702,7 +56215,7 @@ function queue(worker, concurrency) {
     return q;
 }
 
-},{}],257:[function(require,module,exports){
+},{}],265:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -55770,7 +56283,7 @@ function encodeBinary(input) {
     return output;
 }
 
-},{}],258:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 'use strict';
 
 // import Loader from './Loader';
@@ -55794,7 +56307,7 @@ module.exports = Loader;
 // export default Loader;
 module.exports.default = Loader;
 
-},{"./Loader":254,"./Resource":255,"./async":256,"./b64":257}],259:[function(require,module,exports){
+},{"./Loader":262,"./Resource":263,"./async":264,"./b64":265}],267:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -55882,7 +56395,7 @@ function blobMiddlewareFactory() {
     };
 }
 
-},{"../../Resource":255,"../../b64":257}],260:[function(require,module,exports){
+},{"../../Resource":263,"../../b64":265}],268:[function(require,module,exports){
 // A library of seedable RNGs implemented in Javascript.
 //
 // Usage:
@@ -55944,7 +56457,7 @@ sr.tychei = tychei;
 
 module.exports = sr;
 
-},{"./lib/alea":261,"./lib/tychei":262,"./lib/xor128":263,"./lib/xor4096":264,"./lib/xorshift7":265,"./lib/xorwow":266,"./seedrandom":267}],261:[function(require,module,exports){
+},{"./lib/alea":269,"./lib/tychei":270,"./lib/xor128":271,"./lib/xor4096":272,"./lib/xorshift7":273,"./lib/xorwow":274,"./seedrandom":275}],269:[function(require,module,exports){
 // A port of an algorithm by Johannes Baagøe <baagoe@baagoe.com>, 2010
 // http://baagoe.com/en/RandomMusings/javascript/
 // https://github.com/nquinlan/better-random-numbers-for-javascript-mirror
@@ -56060,7 +56573,7 @@ if (module && module.exports) {
 
 
 
-},{}],262:[function(require,module,exports){
+},{}],270:[function(require,module,exports){
 // A Javascript implementaion of the "Tyche-i" prng algorithm by
 // Samuel Neves and Filipe Araujo.
 // See https://eden.dei.uc.pt/~sneves/pubs/2011-snfa2.pdf
@@ -56165,7 +56678,7 @@ if (module && module.exports) {
 
 
 
-},{}],263:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 // A Javascript implementaion of the "xor128" prng algorithm by
 // George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
 
@@ -56248,7 +56761,7 @@ if (module && module.exports) {
 
 
 
-},{}],264:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 // A Javascript implementaion of Richard Brent's Xorgens xor4096 algorithm.
 //
 // This fast non-cryptographic random number generator is designed for
@@ -56396,7 +56909,7 @@ if (module && module.exports) {
   (typeof define) == 'function' && define   // present with an AMD loader
 );
 
-},{}],265:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 // A Javascript implementaion of the "xorshift7" algorithm by
 // François Panneton and Pierre L'ecuyer:
 // "On the Xorgshift Random Number Generators"
@@ -56495,7 +57008,7 @@ if (module && module.exports) {
 );
 
 
-},{}],266:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 // A Javascript implementaion of the "xorwow" prng algorithm by
 // George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
 
@@ -56583,7 +57096,7 @@ if (module && module.exports) {
 
 
 
-},{}],267:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 /*
 Copyright 2014 David Bau.
 
@@ -56832,7 +57345,7 @@ if ((typeof module) == 'object' && module.exports) {
   Math    // math: package containing random, pow, and seedrandom
 );
 
-},{"crypto":39}],268:[function(require,module,exports){
+},{"crypto":47}],276:[function(require,module,exports){
 module.exports = function (options)
 {
     options = options || {}
@@ -56854,7 +57367,7 @@ module.exports = function (options)
     }
     return object
 }
-},{}],269:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 const exists = require('exists')
 
 const html = require('./html')
@@ -57097,7 +57610,7 @@ module.exports = class Snap
         this.horizontal.style.display = this.vertical.style.display = 'none'
     }
 }
-},{"./html":268,"exists":48}],270:[function(require,module,exports){
+},{"./html":276,"exists":56}],278:[function(require,module,exports){
 const exists = require('exists')
 
 const html = require('./html')
@@ -57129,7 +57642,6 @@ class WindowManager
      */
     constructor(defaultOptions)
     {
-        this._createDom()
         this.windows = []
         this.active = null
         this.modal = null
@@ -57149,6 +57661,7 @@ class WindowManager
         {
             console.log('%c ☕ simple-window-manager initialized ☕', 'color: #ff00ff')
         }
+        this._createDom()
         this.plugins = []
         if (defaultOptions && defaultOptions['snap'])
         {
@@ -57185,11 +57698,39 @@ class WindowManager
         win.win.addEventListener('touchmove', (e) => this._move(e))
         win.win.addEventListener('mouseup', (e) => this._up(e))
         win.win.addEventListener('touchend', (e) => this._up(e))
-        if (options.modal)
+        if (this.plugins['snap'] && !options.noSnap)
+        {
+            this.plugins['snap'].addWindow(win)
+        }
+        return win
+    }
+
+    /**
+     * Attach an existing window to the WindowManager
+     * Note: WindowManager.createWindow is the preferred way to create windows to ensure that all the global options
+     * are applied to the Window. If you use this function, then Window needs to be initialized with WindowOptions.
+     * @param {Window} win
+     * @returns {Window} the window
+     */
+    attachWindow(win)
+    {
+        win.on('open', this._open, this)
+        win.on('focus', this._focus, this)
+        win.on('blur', this._blur, this)
+        win.on('close', this._close, this)
+        this.win.appendChild(win.win)
+        win.wm = this
+        win.ease.options.duration = this.options.animateTime
+        win.ease.options.ease = this.options.ease
+        win.win.addEventListener('mousemove', (e) => this._move(e))
+        win.win.addEventListener('touchmove', (e) => this._move(e))
+        win.win.addEventListener('mouseup', (e) => this._up(e))
+        win.win.addEventListener('touchend', (e) => this._up(e))
+        if (win.modal)
         {
             this.modal = win
         }
-        if (this.plugins['snap'])
+        if (this.plugins['snap'] && !this.options.noSnap)
         {
             this.plugins['snap'].addWindow(win)
         }
@@ -57210,7 +57751,10 @@ class WindowManager
         this.plugins['snap'] = new Snap(this, options)
         for (let win of this.windows)
         {
-            this.plugins['snap'].addWindow(win)
+            if (!win.options.noSnap)
+            {
+                this.plugins['snap'].addWindow(win)
+            }
         }
     }
 
@@ -57301,6 +57845,7 @@ class WindowManager
             win.close()
         }
         this.windows = []
+        this.modalOverlay.remove()
         this.active = this.modal = null
     }
 
@@ -57356,6 +57901,25 @@ class WindowManager
         this.overlay.addEventListener('touchmove', (e) => this._move(e))
         this.overlay.addEventListener('mouseup', (e) => this._up(e))
         this.overlay.addEventListener('touchend', (e) => this._up(e))
+
+        this.modalOverlay = html({
+            styles: {
+                'user-select': 'none',
+                'position': 'absolute',
+                'top': 0,
+                'left': 0,
+                'width': '100%',
+                'height': '100%',
+                'overflow': 'hidden',
+                'background': this.options.modalBackground
+            }
+        })
+        this.modalOverlay.addEventListener('mousemove', (e) => { this._move(e); e.preventDefault(); e.stopPropagation() })
+        this.modalOverlay.addEventListener('touchmove', (e) => { this._move(e); e.preventDefault(); e.stopPropagation() })
+        this.modalOverlay.addEventListener('mouseup', (e) => { this._up(e); e.preventDefault(); e.stopPropagation() })
+        this.modalOverlay.addEventListener('touchend', (e) => { this._up(e); e.preventDefault(); e.stopPropagation() })
+        this.modalOverlay.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation() })
+        this.modalOverlay.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation() })
     }
 
     _open(win)
@@ -57364,6 +57928,13 @@ class WindowManager
         if (index === -1)
         {
             this.windows.push(win)
+        }
+        if (win.options.modal)
+        {
+            this._focus(win)
+            this.modal = win
+            this.win.appendChild(this.modalOverlay)
+            this.modalOverlay.style.zIndex = win.z - 1
         }
     }
 
@@ -57402,6 +57973,7 @@ class WindowManager
     {
         if (this.modal === win)
         {
+            this.modalOverlay.remove()
             this.modal = null
         }
         const index = this.windows.indexOf(win)
@@ -57437,8 +58009,11 @@ class WindowManager
     }
 }
 
+WindowManager.Window = Window
+WindowManager.WindowOptions = WindowOptions
+
 module.exports = WindowManager
-},{"./html":268,"./snap":269,"./window":272,"./window-options":271,"exists":48}],271:[function(require,module,exports){
+},{"./html":276,"./snap":277,"./window":280,"./window-options":279,"exists":56}],279:[function(require,module,exports){
 /**
  * @typedef {object} Window~WindowOptions
  * @property {number} [x=0]
@@ -57458,6 +58033,7 @@ module.exports = WindowManager
  * @property {string} [minHeight=60px]
  * @property {string} [borderRadius=4px]
  * @property {number} [minimizeSize=50]
+ * @property {string} [modalBackground=rgba(0,0,0,0.6)]
  * @property {string} [shadow='0 0 12px 1px rgba(0, 0, 0, 0.6)']
  * @property {number} [animateTime=250]
  * @property {(string|function)} [ease] easing name (see {@link https://www.npmjs.com/package/penner} for list or function)
@@ -57480,6 +58056,7 @@ const WindowOptions = {
 
     borderRadius: '4px',
     minimizeSize: 50,
+    modalBackground: 'rgba(0, 0, 0, 0.6)',
     shadow: '0 0 12px 1px rgba(0, 0, 0, 0.6)',
     movable: true,
     resizable: true,
@@ -57508,7 +58085,7 @@ const WindowOptions = {
 }
 
 module.exports = WindowOptions
-},{}],272:[function(require,module,exports){
+},{}],280:[function(require,module,exports){
 const Events = require('eventemitter3')
 const clicked = require('clicked')
 const Ease = require('dom-ease')
@@ -57521,7 +58098,6 @@ let id = 0
 /**
  * Window class returned by WindowManager.createWindow()
  * @extends EventEmitter
- * @hideconstructor
  * @fires open
  * @fires focus
  * @fires blur
@@ -57544,15 +58120,15 @@ let id = 0
 class Window extends Events
 {
     /**
-     * @param {WindowManager} wm
-     * @param {object} options
+     * @param {WindowManager} [wm]
+     * @param {object} [options]
      */
     constructor(wm, options)
     {
         super()
         this.wm = wm
 
-        this.options = options
+        this.options = options || {}
 
         this.id = exists(this.options.id) ? this.options.id : id++
 
@@ -57586,6 +58162,10 @@ class Window extends Events
             {
                 this.win.style.transform = 'scale(0)'
                 this.ease.add(this.win, { scale: 1 })
+            }
+            else
+            {
+                this.win.style.transform = ''
             }
             this._closed = false
             if (!noFocus)
@@ -57999,6 +58579,10 @@ class Window extends Events
         {
             this.close(true)
         }
+        else if (this.closed)
+        {
+            this.open(true, true)
+        }
     }
 
     /**
@@ -58034,15 +58618,25 @@ class Window extends Events
     }
 
     /**
-     * centers window in middle of other window
-     * @param {Window} win
+     * centers window in middle of other window or document.body
+     * @param {Window} [win]
      */
     center(win)
     {
-        this.move(
-            win.x + win.width / 2 - this.width / 2,
-            win.y + win.height / 2 - this.height / 2
-        )
+        if (win)
+        {
+            this.move(
+                win.x + win.width / 2 - this.width / 2,
+                win.y + win.height / 2 - this.height / 2
+            )
+        }
+        else
+        {
+            this.move(
+                window.innerWidth / 2 - this.width / 2,
+                window.innerHeight / 2 - this.height / 2
+            )
+        }
     }
 
     /**
@@ -58154,7 +58748,7 @@ class Window extends Events
          * @readonly
          */
         this.win = html({
-            parent: this.wm.win, styles: {
+            parent: (this.wm ? this.wm.win : null), styles: {
                 'display': 'none',
                 'border-radius': this.options.borderRadius,
                 'user-select': 'none',
@@ -58460,7 +59054,7 @@ class Window extends Events
 }
 
 module.exports = Window
-},{"./html":268,"clicked":42,"dom-ease":43,"eventemitter3":47,"exists":48}],273:[function(require,module,exports){
+},{"./html":276,"clicked":50,"dom-ease":51,"eventemitter3":55,"exists":56}],281:[function(require,module,exports){
 // TinyColor v1.4.1
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
@@ -59657,7 +60251,7 @@ else {
 
 })(Math);
 
-},{}],274:[function(require,module,exports){
+},{}],282:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -60391,7 +60985,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":275,"punycode":249,"querystring":252}],275:[function(require,module,exports){
+},{"./util":283,"punycode":257,"querystring":260}],283:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -60409,7 +61003,7 @@ module.exports = {
   }
 };
 
-},{}],276:[function(require,module,exports){
+},{}],284:[function(require,module,exports){
 // angle.js <https://github.com/davidfig/anglejs>
 // Released under MIT license <https://github.com/davidfig/angle/blob/master/LICENSE>
 // Author: David Figatner
@@ -60685,7 +61279,7 @@ module.exports = {
     equals,
     explain
 }
-},{}],277:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
 /**
  * @file color.js
  * @author David Figatner
@@ -60994,7 +61588,7 @@ class Color
 };
 
 module.exports = new Color();
-},{"yy-random":285}],278:[function(require,module,exports){
+},{"yy-random":298}],286:[function(require,module,exports){
 // yy-counter
 // In-browser counter to watch changeable values like counters or FPS
 // David Figatner
@@ -61112,7 +61706,7 @@ module.exports = class Counter
         this.div.innerHTML = s
     }
 }
-},{}],279:[function(require,module,exports){
+},{}],287:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -61339,14 +61933,967 @@ module.exports = function () {
     return FPS;
 }();
 
-},{"tinycolor2":273,"yy-counter":278}],280:[function(require,module,exports){
+},{"tinycolor2":281,"yy-counter":286}],288:[function(require,module,exports){
+const Config = {
+
+    /**
+     * application menu container styles
+     * @type {object}
+     */
+    ApplicationContainerStyle: {
+        'z-index': 999999,
+        'position': 'fixed',
+        'top': 0,
+        'left': 0,
+        'user-select': 'none',
+        'font-size': '0.85em'
+    },
+
+    /**
+     * application menu-bar styles
+     * @type {object}
+     */
+    ApplicationMenuStyle: {
+        'position': 'fixed',
+        'display': 'flex',
+        'flex-direction': 'row',
+        'color': 'black',
+        'backgroundColor': 'rgb(230,230,230)',
+        'width': '100vw',
+        'border': 'none',
+        'box-shadow': 'unset',
+        'outline': 'none'
+    },
+
+    /**
+     * application menu entry styles
+     * @type {object}
+     */
+    ApplicationMenuRowStyle: {
+        'padding': '0.25em 0.5em',
+        'margin': 0,
+        'line-height': '1em'
+    },
+
+    /**
+     * lower-level menu window styles
+     * @type {object}
+     */
+    MenuStyle: {
+        'flex-direction': 'column',
+        'position': 'fixed',
+        'user-select': 'none',
+        'color': 'black',
+        'z-index': 999999,
+        'backgroundColor': 'white',
+        'border': '1px solid rgba(0,0,0,0.5)',
+        'boxShadow': '1px 3px 3px rgba(0,0,0,0.25)'
+    },
+
+    /**
+     * lower-level menu row styles
+     * @type {object}
+     */
+    RowStyle: {
+        'display': 'flex',
+        'padding': '0.25em 1.5em 0.25em',
+        'line-height': '1.5em'
+    },
+
+    /**
+     * lower-level menu accelerator styles
+     * @type {object}
+     */
+    AcceleratorStyle: {
+        'opacity': 0.5
+    },
+
+    /**
+     * lower-level menu separator styles
+     * @type {object}
+     */
+    SeparatorStyle: {
+        'border-bottom': '1px solid rgba(0,0,0,0.1)',
+        'margin': '0.5em 0'
+    },
+
+    /**
+     * accelerator key styles
+     * NOTE: accelerator keys must use text-decoration as its used as a toggle in the code
+     * @type {object}
+     */
+    AcceleratorKeyStyle: {
+        'text-decoration': 'underline',
+        'text-decoration-color': 'rgba(0,0,0,0.5)'
+    },
+
+    /**
+     * minimum column width in pixels for checked and arrow in the lower-level menus
+     * @type {number}
+     */
+    MinimumColumnWidth: 20,
+
+    /**
+     * CSS background style for selected MenuItems
+     * NOTE: unselected have 'transparent' style
+     * @type {string}
+     */
+    SelectedBackgroundStyle: 'rgba(0,0,0,0.1)',
+
+    /**
+     * number of pixels to overlap child menus
+     * @type {number}
+     */
+    Overlap: 5,
+
+    /**
+     * time in milliseconds to wait for submenu to open when mouse hovers
+     * @param {number}
+     */
+    SubmenuOpenDelay: 500
+};
+
+module.exports = Config;
+
+},{}],289:[function(require,module,exports){
+module.exports = function (options) {
+    options = options || {};
+    const object = document.createElement(options.type || 'div');
+    if (options.parent) {
+        options.parent.appendChild(object);
+    }
+    if (options.styles) {
+        for (let style in options.styles) {
+            object.style[style] = options.styles[style];
+        }
+    }
+    if (options.html) {
+        object.innerHTML = options.html;
+    }
+    return object;
+};
+
+},{}],290:[function(require,module,exports){
+/**
+ * Handles all keyboard input for the menu and user-registered keys
+ */
+const LocalAccelerator = {
+
+    init: function () {
+        if (!LocalAccelerator.menuKeys) {
+            LocalAccelerator.menuKeys = {};
+            LocalAccelerator.keys = {};
+            document.body.addEventListener('keydown', e => LocalAccelerator.keydown(LocalAccelerator, e));
+            document.body.addEventListener('keyup', e => LocalAccelerator.keyup(LocalAccelerator, e));
+        }
+    },
+
+    /**
+     * clear all user-registered keys
+     */
+    clearKeys: function () {
+        LocalAccelerator.keys = {};
+    },
+
+    /**
+     * Register a shortcut key for use by an open menu
+     * @param {KeyCodes} letter
+     * @param {MenuItem} menuItem
+     * @param {boolean} applicationMenu
+     * @private
+     */
+    registerMenuShortcut: function (letter, menuItem) {
+        if (letter) {
+            const keyCode = (menuItem.menu.applicationMenu ? 'alt+' : '') + letter;
+            LocalAccelerator.menuKeys[LocalAccelerator.prepareKey(keyCode)] = e => {
+                menuItem.handleClick(e);
+                e.stopPropagation();
+                e.preventDefault();
+            };
+        }
+    },
+
+    /**
+     * Register special shortcut keys for menu
+     * @param {MenuItem} menuItem
+     * @private
+     */
+    registerMenuSpecial: function (menu) {
+        LocalAccelerator.menuKeys['escape'] = () => menu.closeAll();
+        LocalAccelerator.menuKeys['enter'] = e => menu.enter(e);
+        LocalAccelerator.menuKeys['space'] = e => menu.enter(e);
+        LocalAccelerator.menuKeys['arrowright'] = e => menu.move(e, 'right');
+        LocalAccelerator.menuKeys['arrowleft'] = e => menu.move(e, 'left');
+        LocalAccelerator.menuKeys['arrowup'] = e => menu.move(e, 'up');
+        LocalAccelerator.menuKeys['arrowdown'] = e => menu.move(e, 'down');
+    },
+
+    /**
+     * special key registration for alt
+     * @param {function} pressed
+     * @param {function} released
+     * @private
+     */
+    registerAlt: function (pressed, released) {
+        LocalAccelerator.alt = { pressed, released };
+    },
+
+    /**
+     * Removes menu shortcuts
+     * @private
+     */
+    unregisterMenuShortcuts: function () {
+        LocalAccelerator.menuKeys = {};
+    },
+
+    /**
+     * Keycodes definition. In the form of modifier[+modifier...]+key
+     * <p>For example: ctrl+shift+e</p>
+     * <p>KeyCodes are case insensitive (i.e., shift+a is the same as Shift+A). And spaces are removed</p>
+     * <p>You can assign more than one key to the same shortcut by using a | between the keys (e.g., 'shift+a | ctrl+a')</p>
+     * <pre>
+     * Modifiers:
+     *    ctrl, alt, shift, meta, (ctrl aliases: command, control, commandorcontrol)
+     * </pre>
+     * <pre>
+     * Keys:
+     *    escape, 0-9, minus, equal, backspace, tab, a-z, backetleft, bracketright, semicolon, quote,
+     *    backquote, backslash, comma, period, slash, numpadmultiply, space, capslock, f1-f24, pause,
+     *    scrolllock, printscreen, home, arrowup, arrowleft, arrowright, arrowdown, pageup, pagedown,
+     *    end, insert, delete, enter, shiftleft, shiftright, ctrlleft, ctrlright, altleft, altright, shiftleft,
+     *    shiftright, numlock, numpad...
+     * </pre>
+     * For OS-specific codes and a more detailed explanation see {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code}. Also note that 'Digit' and 'Key' are removed from the code to make it easier to type.
+     *
+     * @typedef {string} LocalAccelerator~KeyCodes
+     */
+
+    /**
+     * translate a user-provided keycode
+     * @param {KeyCodes} keyCode
+     * @return {KeyCodes} formatted and sorted keyCode
+     * @private
+     */
+    prepareKey: function (keyCode) {
+        const keys = [];
+        let split;
+        keyCode += '';
+        if (keyCode.length > 1 && keyCode.indexOf('|') !== -1) {
+            split = keyCode.split('|');
+        } else {
+            split = [keyCode];
+        }
+        for (let code of split) {
+            let key = '';
+            let modifiers = [];
+            code = code.toLowerCase().replace(' ', '');
+            if (code.indexOf('+') !== -1) {
+                const split = code.split('+');
+                for (let i = 0; i < split.length - 1; i++) {
+                    let modifier = split[i];
+                    modifier = modifier.replace('commandorcontrol', 'ctrl');
+                    modifier = modifier.replace('command', 'ctrl');
+                    modifier = modifier.replace('control', 'ctrl');
+                    modifiers.push(modifier);
+                }
+                modifiers = modifiers.sort((a, b) => {
+                    return a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0;
+                });
+                for (let part of modifiers) {
+                    key += part + '+';
+                }
+                key += split[split.length - 1];
+            } else {
+                key = code;
+            }
+            keys.push(key);
+        }
+        return keys;
+    },
+
+    /**
+     * Make the KeyCode pretty for printing on the menu
+     * @param {KeyCode} keyCode
+     * @return {string}
+     * @private
+     */
+    prettifyKey: function (keyCode) {
+        let key = '';
+        const codes = LocalAccelerator.prepareKey(keyCode);
+        for (let i = 0; i < codes.length; i++) {
+            const keyCode = codes[i];
+            if (keyCode.indexOf('+') !== -1) {
+                const split = keyCode.toLowerCase().split('+');
+                for (let i = 0; i < split.length - 1; i++) {
+                    let modifier = split[i];
+                    key += modifier[0].toUpperCase() + modifier.substr(1) + '+';
+                }
+                key += split[split.length - 1].toUpperCase();
+            } else {
+                key = keyCode.toUpperCase();
+            }
+            if (i !== codes.length - 1) {
+                key += ' or ';
+            }
+        }
+        return key;
+    },
+
+    /**
+     * register a key as a global accelerator
+     * @param {KeyCodes} keyCode (e.g., Ctrl+shift+E)
+     * @param {function} callback
+     */
+    register: function (keyCode, callback) {
+        const keys = LocalAccelerator.prepareKey(keyCode);
+        for (let key of keys) {
+            LocalAccelerator.keys[key] = e => {
+                callback(e);
+                e.preventDefault();
+                e.stopPropagation();
+            };
+        }
+    },
+
+    keyup: function (accelerator, e) {
+        if (LocalAccelerator.alt && (e.code === 'AltLeft' || e.code === 'AltRight')) {
+            LocalAccelerator.alt.released();
+            LocalAccelerator.alt.isPressed = false;
+        }
+    },
+
+    keydown: function (accelerator, e) {
+        if (LocalAccelerator.alt && !LocalAccelerator.alt.isPressed && (e.code === 'AltLeft' || e.code === 'AltRight')) {
+            LocalAccelerator.alt.pressed();
+            LocalAccelerator.alt.isPressed = true;
+            e.preventDefault();
+        }
+        const modifiers = [];
+        if (e.altKey) {
+            modifiers.push('alt');
+        }
+        if (e.ctrlKey) {
+            modifiers.push('ctrl');
+        }
+        if (e.metaKey) {
+            modifiers.push('meta');
+        }
+        if (e.shiftKey) {
+            modifiers.push('shift');
+        }
+        let keyCode = '';
+        for (let modifier of modifiers) {
+            keyCode += modifier + '+';
+        }
+        let translate = e.code.toLowerCase();
+        translate = translate.replace('digit', '');
+        translate = translate.replace('key', '');
+        keyCode += translate;
+        if (LocalAccelerator.menuKeys[keyCode]) {
+            LocalAccelerator.menuKeys[keyCode](e, LocalAccelerator);
+        } else if (LocalAccelerator.keys[keyCode]) {
+            LocalAccelerator.keys[keyCode](e, LocalAccelerator);
+        }
+    }
+};
+
+module.exports = LocalAccelerator;
+
+},{}],291:[function(require,module,exports){
+const Config = require('./config');
+const MenuItem = require('./menuItem');
+const LocalAccelerator = require('./localAccelerator');
+const html = require('./html');
+
+let _application;
+
+class Menu {
+    /**
+     * creates a menu bar
+     * @param {object} [options]
+     * @param {object} [options.styles] additional CSS styles for menu
+     */
+    constructor(options) {
+        options = options || {};
+        this.div = document.createElement('div');
+        this.styles = options.styles;
+        this.children = [];
+        this.applyConfig(Config.MenuStyle);
+        this.div.tabIndex = -1;
+    }
+
+    /**
+     * append a MenuItem to the Menu
+     * @param {MenuItem} menuItem
+     */
+    append(menuItem) {
+        if (menuItem.submenu) {
+            menuItem.submenu.menu = this;
+        }
+        menuItem.menu = this;
+        this.div.appendChild(menuItem.div);
+        if (menuItem.type !== 'separator') {
+            this.children.push(menuItem);
+        }
+    }
+
+    /**
+     * inserts a MenuItem into the Menu
+     * @param {number} pos
+     * @param {MenuItem} menuItem
+     */
+    insert(pos, menuItem) {
+        if (pos >= this.div.childNodes.length) {
+            this.append(menuItem);
+        } else {
+            if (menuItem.submenu) {
+                menuItem.submenu.menu = this;
+            }
+            menuItem.menu = this;
+            this.div.insertBefore(menuItem.div, this.div.childNodes[pos]);
+            if (menuItem.type !== 'separator') {
+                this.children.splice(pos, 0, menuItem);
+            }
+        }
+    }
+
+    hide() {
+        let current = this.menu.showing;
+        while (current && current.submenu) {
+            current.div.style.backgroundColor = 'transparent';
+            current.submenu.div.remove();
+            let next = current.submenu.showing;
+            if (next) {
+                current.submenu.showing.div.style.backgroundColor = 'transparent';
+                current.submenu.showing = null;
+            }
+            current = next;
+        }
+    }
+
+    show(menuItem) {
+        Menu.LocalAccelerator.unregisterMenuShortcuts();
+        if (this.menu && this.menu.showing === menuItem) {
+            this.hide();
+            this.menu.showing = null;
+            this.div.remove();
+            this.menu.showAccelerators();
+        } else {
+            if (this.menu) {
+                if (this.menu.showing && this.menu.children.indexOf(menuItem) !== -1) {
+                    this.hide();
+                }
+                this.menu.showing = menuItem;
+                this.menu.hideAccelerators();
+            }
+            const div = menuItem.div;
+            const parent = this.menu.div;
+            if (this.menu.applicationMenu) {
+                this.div.style.left = div.offsetLeft + 'px';
+                this.div.style.top = div.offsetTop + div.offsetHeight + 'px';
+            } else {
+                this.div.style.left = parent.offsetLeft + parent.offsetWidth - Config.Overlap + 'px';
+                this.div.style.top = parent.offsetTop + div.offsetTop - Config.Overlap + 'px';
+            }
+            this.attached = menuItem;
+            this.showAccelerators();
+            this.getApplicationDiv().appendChild(this.div);
+            let label = 0,
+                accelerator = 0,
+                arrow = 0,
+                checked = 0;
+            for (let child of this.children) {
+                child.check.style.width = 'auto';
+                child.label.style.width = 'auto';
+                child.accelerator.style.width = 'auto';
+                child.arrow.style.width = 'auto';
+                if (child.type === 'checkbox') {
+                    checked = Config.MinimumColumnWidth;
+                }
+                if (child.submenu) {
+                    arrow = Config.MinimumColumnWidth;
+                }
+            }
+            for (let child of this.children) {
+                const childLabel = child.label.offsetWidth * 2;
+                label = childLabel > label ? childLabel : label;
+                const childAccelerator = child.accelerator.offsetWidth;
+                accelerator = childAccelerator > accelerator ? childAccelerator : accelerator;
+                if (child.submenu) {
+                    arrow = child.arrow.offsetWidth;
+                }
+            }
+            for (let child of this.children) {
+                child.check.style.width = checked + 'px';
+                child.label.style.width = label + 'px';
+                child.accelerator.style.width = accelerator + 'px';
+                child.arrow.style.width = arrow + 'px';
+            }
+            if (this.div.offsetLeft + this.div.offsetWidth > window.innerWidth) {
+                this.div.style.left = window.innerWidth - this.div.offsetWidth + 'px';
+            }
+            if (this.div.offsetTop + this.div.offsetHeight > window.innerHeight) {
+                this.div.style.top = window.innerHeight - this.div.offsetHeight + 'px';
+            }
+        }
+    }
+
+    applyConfig(base) {
+        const styles = {};
+        for (let style in base) {
+            styles[style] = base[style];
+        }
+        if (this.styles) {
+            for (let style in this.styles) {
+                styles[style] = this.styles[style];
+            }
+        }
+        for (let style in styles) {
+            this.div.style[style] = styles[style];
+        }
+    }
+
+    showAccelerators() {
+        for (let child of this.children) {
+            child.showShortcut();
+            if (child.type !== 'separator') {
+                const index = child.text.indexOf('&');
+                if (index !== -1) {
+                    Menu.LocalAccelerator.registerMenuShortcut(child.text[index + 1], child);
+                }
+            }
+        }
+        if (!this.applicationMenu) {
+            Menu.LocalAccelerator.registerMenuSpecial(this);
+        }
+    }
+
+    hideAccelerators() {
+        for (let child of this.children) {
+            child.hideShortcut();
+        }
+    }
+
+    closeAll() {
+        Menu.LocalAccelerator.unregisterMenuShortcuts();
+        let application = _application.menu;
+        if (application.showing) {
+            let menu = application;
+            while (menu.showing) {
+                menu = menu.showing.submenu;
+            }
+            while (menu && !menu.applicationMenu) {
+                if (menu.showing) {
+                    menu.showing.div.style.backgroundColor = 'transparent';
+                    menu.showing = null;
+                }
+                menu.div.remove();
+                menu = menu.menu;
+            }
+            if (menu) {
+                menu.showing.div.style.background = 'transparent';
+                menu.showing = null;
+                menu.hideAccelerators();
+            }
+        }
+    }
+
+    getApplicationDiv() {
+        return _application;
+    }
+
+    /**
+     * move selector to the next child pane
+     * @param {string} direction (left or right)
+     * @private
+     */
+    moveChild(direction) {
+        let index;
+        if (direction === 'left') {
+            const parent = this.selector.menu.menu;
+            index = parent.children.indexOf(parent.showing);
+            index--;
+            index = index < 0 ? parent.children.length - 1 : index;
+            parent.children[index].handleClick();
+        } else {
+            let parent = this.selector.menu.menu;
+            let selector = parent.showing;
+            while (!parent.applicationMenu) {
+                selector.handleClick();
+                selector.div.style.backgroundColor = 'transparent';
+                parent = parent.menu;
+                selector = parent.showing;
+            }
+            index = parent.children.indexOf(selector);
+            index++;
+            index = index === parent.children.length ? 0 : index;
+            parent.children[index].handleClick();
+        }
+        this.selector = null;
+    }
+
+    /**
+     * move selector right and left
+     * @param {MouseEvent} e
+     * @param {string} direction
+     * @private
+     */
+    horizontalSelector(e, direction) {
+        if (direction === 'right') {
+            if (this.selector.submenu) {
+                this.selector.handleClick(e);
+                this.selector.submenu.selector = this.selector.submenu.children[0];
+                this.selector.submenu.selector.div.style.backgroundColor = Config.SelectedBackgroundStyle;
+                this.selector = null;
+            } else {
+                this.moveChild(direction);
+            }
+        } else if (direction === 'left') {
+            if (!this.selector.menu.menu.applicationMenu) {
+                this.selector.menu.attached.handleClick(e);
+                this.selector.menu.menu.selector = this.selector.menu.attached;
+                this.selector = null;
+            } else {
+                this.moveChild(direction);
+            }
+        }
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    /**
+     * move the selector in the menu
+     * @param {KeyboardEvent} e
+     * @param {string} direction (left, right, up, down)
+     * @private
+     */
+    move(e, direction) {
+        if (this.selector) {
+            this.selector.div.style.backgroundColor = 'transparent';
+            let index = this.children.indexOf(this.selector);
+            if (direction === 'down') {
+                index++;
+                index = index === this.children.length ? 0 : index;
+            } else if (direction === 'up') {
+                index--;
+                index = index < 0 ? this.children.length - 1 : index;
+            } else {
+                return this.horizontalSelector(e, direction);
+            }
+            this.selector = this.children[index];
+        } else {
+            if (direction === 'up') {
+                this.selector = this.children[this.children.length - 1];
+            } else {
+                this.selector = this.children[0];
+            }
+        }
+        this.selector.div.style.backgroundColor = Config.SelectedBackgroundStyle;
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    /**
+     * click the selector with keyboard
+     * @private
+     */
+    enter(e) {
+        if (this.selector) {
+            this.selector.handleClick(e);
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
+    /**
+     * array containing the menu's items
+     * @property {MenuItems[]} items
+     * @readonly
+     */
+    get items() {
+        return this.children;
+    }
+
+    /**
+     * show application menu accelerators when alt is pressed
+     * @private
+     */
+    showApplicationAccelerators() {
+        this.hideAccelerators();
+        LocalAccelerator.registerAlt(() => {
+            if (!this.showing) {
+                this.showAccelerators();
+            }
+        }, () => {
+            this.hideAccelerators();
+        });
+    }
+
+    /**
+     * sets active application Menu (and removes any existing application menus)
+     * @param {Menu} menu
+     */
+    static setApplicationMenu(menu) {
+        LocalAccelerator.init();
+        if (_application) {
+            _application.remove();
+        }
+        _application = html({ parent: document.body, styles: Config.ApplicationContainerStyle });
+        _application.menu = menu;
+        menu.applyConfig(Config.ApplicationMenuStyle);
+        for (let child of menu.children) {
+            child.applyConfig(Config.ApplicationMenuRowStyle);
+            if (child.arrow) {
+                child.arrow.style.display = 'none';
+            }
+            menu.div.appendChild(child.div);
+        }
+
+        _application.appendChild(menu.div);
+        menu.applicationMenu = true;
+        menu.div.tabIndex = -1;
+
+        // don't let menu bar focus unless windows are open (this fixes a focus bug)
+        menu.div.addEventListener('focus', () => {
+            if (!menu.showing) {
+                menu.div.blur();
+            }
+        });
+
+        // close all windows if menu is no longer the focus
+        menu.div.addEventListener('blur', () => {
+            if (menu.showing) {
+                menu.closeAll();
+            }
+        });
+        menu.showApplicationAccelerators();
+    }
+
+    /**
+     * localAccelerator definition
+     * @type {Accelerator}
+     */
+    static get LocalAccelerator() {
+        return LocalAccelerator;
+    }
+
+    /**
+     * use this to change the default Config settings across all menus
+     * @type {Config}
+     */
+    static get Config() {
+        return Config;
+    }
+
+    /**
+     * MenuItem definition
+     * @type {MenuItem}
+     */
+    static get MenuItem() {
+        return MenuItem;
+    }
+}
+
+module.exports = Menu;
+
+},{"./config":288,"./html":289,"./localAccelerator":290,"./menuItem":292}],292:[function(require,module,exports){
+const html = require('./html');
+const Config = require('./config');
+const localAccelerator = require('./localAccelerator');
+
+class MenuItem {
+    /**
+     * @param {object} options
+     * @param {string} [options.label] label for menu entry may include accelerator by placing & before letter)
+     * @param {string} [options.type] separator, checkbox, or undefined
+     * @param {object} [options.styles] additional CSS styles to apply to this MenuItem
+     * @param {string} [options.accelerator] see Accelerator for inputs (e.g., ctrl+shift+A)
+     * @param {MenuItem} [options.submenu] attaches a submenu (and changes type to submenu)
+     * @param {boolean} [options.checked] check the checkbox
+     */
+    constructor(options) {
+        localAccelerator.init();
+        options = options || {};
+        this.styles = options.styles;
+        this.div = html();
+        this.type = options.type;
+        this.click = options.click;
+        if (this.type === 'separator') {
+            this.applyConfig(Config.SeparatorStyle);
+        } else {
+            this._checked = options.checked;
+            this.createChecked(options.checked);
+            this.text = options.label || '&nbsp;&nbsp;&nbsp;';
+            this.createShortcut();
+            this.createAccelerator(options.accelerator);
+            this.createSubmenu(options.submenu);
+            if (options.submenu) {
+                this.submenu = options.submenu;
+                this.submenu.applyConfig(Config.MenuStyle);
+            }
+            this.applyConfig(Config.RowStyle);
+            this.div.addEventListener('mousedown', e => this.handleClick(e));
+            this.div.addEventListener('touchstart', e => this.handleClick(e));
+            this.div.addEventListener('mouseenter', () => this.mouseenter());
+            this.div.addEventListener('mouseleave', () => this.mouseleave());
+        }
+    }
+
+    /**
+     * The click callback
+     * @callback MenuItem~ClickCallback
+     * @param {InputEvent} e
+     */
+
+    mouseenter() {
+        if (!this.submenu || this.menu.showing !== this) {
+            this.div.style.backgroundColor = Config.SelectedBackgroundStyle;
+            if (this.submenu && !this.menu.applicationMenu) {
+                this.submenuTimeout = setTimeout(() => {
+                    this.submenuTimeout = null;
+                    this.submenu.show(this);
+                }, Config.SubmenuOpenDelay);
+            }
+        }
+    }
+
+    mouseleave() {
+        if (!this.submenu || this.menu.showing !== this) {
+            if (this.submenuTimeout) {
+                clearTimeout(this.submenuTimeout);
+                this.submenuTimeout = null;
+            }
+            this.div.style.backgroundColor = 'transparent';
+        }
+    }
+
+    applyConfig(base) {
+        const styles = {};
+        for (let style in base) {
+            styles[style] = base[style];
+        }
+        if (this.styles) {
+            for (let style in this.styles) {
+                styles[style] = this.styles[style];
+            }
+        }
+        for (let style in styles) {
+            this.div.style[style] = styles[style];
+        }
+    }
+
+    createChecked(checked) {
+        this.check = html({ parent: this.div, html: checked ? '&#10004;' : '' });
+    }
+
+    createShortcut() {
+        if (this.type !== 'separator') {
+            const text = this.text;
+            this.label = html({ parent: this.div });
+            let current = html({ parent: this.label, type: 'span' });
+            if (text.indexOf('&') !== -1) {
+                let i = 0;
+                do {
+                    const letter = text[i];
+                    if (letter === '&') {
+                        i++;
+                        this.shortcutSpan = html({ parent: this.label, type: 'span', html: text[i], styles: Config.AcceleratorKeyStyle });
+                        current = html({ parent: this.label, type: 'span' });
+                    } else {
+                        current.innerHTML += letter;
+                    }
+                    i++;
+                } while (i < text.length);
+            } else {
+                this.label.innerHTML = text;
+            }
+        }
+    }
+
+    showShortcut() {
+        if (this.shortcutSpan) {
+            this.shortcutSpan.style.textDecoration = 'underline';
+        }
+    }
+
+    hideShortcut() {
+        if (this.shortcutSpan) {
+            this.shortcutSpan.style.textDecoration = 'none';
+        }
+    }
+
+    createAccelerator(accelerator) {
+        this.accelerator = html({ parent: this.div, html: accelerator ? localAccelerator.prettifyKey(accelerator) : '', styles: Config.AcceleratorStyle });
+        if (accelerator) {
+            localAccelerator.register(accelerator, e => this.click(e));
+        }
+    }
+
+    createSubmenu(submenu) {
+        this.arrow = html({ parent: this.div, html: submenu ? '&#9658;' : '' });
+    }
+
+    closeAll() {
+        let menu = this.menu;
+        localAccelerator.unregisterMenuShortcuts();
+        while (menu && !menu.applicationMenu) {
+            if (menu.showing) {
+                menu.showing.div.style.backgroundColor = 'transparent';
+                menu.showing = null;
+            }
+            menu.div.remove();
+            menu = menu.menu;
+        }
+        if (menu.showing) {
+            menu.showing.div.style.background = 'transparent';
+            menu.showing = null;
+            menu.hideAccelerators();
+        }
+    }
+
+    handleClick(e) {
+        if (this.submenu) {
+            if (this.submenuTimeout) {
+                clearTimeout(this.submenuTimeout);
+                this.submenuTimeout = null;
+            }
+            this.submenu.show(this);
+            this.div.style.backgroundColor = Config.SelectedBackgroundStyle;
+            if (typeof e.keyCode !== 'undefined' && this.menu.applicationMenu && document.activeElement !== this.menu.div) {
+                this.menu.div.focus();
+            }
+            e.preventDefault();
+        } else if (this.type === 'checkbox') {
+            this.checked = !this.checked;
+            this.closeAll();
+        } else {
+            this.closeAll();
+        }
+
+        if (this.click) {
+            this.click(e, this);
+        }
+    }
+
+    get checked() {
+        return this._checked;
+    }
+    set checked(value) {
+        this._checked = value;
+        this.check.innerHTML = this._checked ? '&#10004;' : '';
+    }
+}
+
+module.exports = MenuItem;
+
+},{"./config":288,"./html":289,"./localAccelerator":290}],293:[function(require,module,exports){
 module.exports = {
     Pixel: require('./pixel'),
     PixelSheet: require('./pixel-sheet'),
     Scene: require('./scene'),
     PixelArt: require('./pixelart')
 }
-},{"./pixel":282,"./pixel-sheet":281,"./pixelart":283,"./scene":284}],281:[function(require,module,exports){
+},{"./pixel":295,"./pixel-sheet":294,"./pixelart":296,"./scene":297}],294:[function(require,module,exports){
 const Pixel = require('./pixel')
 
 /**
@@ -61376,7 +62923,7 @@ module.exports = function PixelSheet(map, data, sheet)
         Pixel.add(pixel, sheet)
     }
 }
-},{"./pixel":282}],282:[function(require,module,exports){
+},{"./pixel":295}],295:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const Random = require('yy-random')
 const exists = require('exists')
@@ -61693,7 +63240,7 @@ module.exports = class Pixel extends PIXI.Sprite
         this.currentAnimation = ''
     }
 }
-},{"exists":48,"pixi.js":213,"yy-random":285}],283:[function(require,module,exports){
+},{"exists":56,"pixi.js":221,"yy-random":298}],296:[function(require,module,exports){
 // Note: these algorithms are WOEFULLY inefficient. They are designed for low-resolution pixel drawings that are rendered to a spritesheet.
 // Please do NOT use these where you want to render shapes during each frame
 
@@ -62182,7 +63729,7 @@ const PixelArt = {
 }
 
 module.exports = PixelArt
-},{"yy-color":277}],284:[function(require,module,exports){
+},{"yy-color":285}],297:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const Pixel = require('./pixel')
 
@@ -62348,7 +63895,7 @@ module.exports = class Scene extends PIXI.Container
         }
     }
 }
-},{"./pixel":282,"pixi.js":213}],285:[function(require,module,exports){
+},{"./pixel":295,"pixi.js":221}],298:[function(require,module,exports){
 // yy-random
 // by David Figatner
 // MIT license
@@ -62774,7 +64321,7 @@ class Random
 }
 
 module.exports = new Random()
-},{"seedrandom":260}],286:[function(require,module,exports){
+},{"seedrandom":268}],299:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -62932,7 +64479,7 @@ var GrowingPacker = function () {
 
 module.exports = GrowingPacker;
 
-},{}],287:[function(require,module,exports){
+},{}],300:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -63533,7 +65080,7 @@ module.exports = RenderSheet;
  * @event RenderSheet#render
  */
 
-},{"./growingpacker":286,"./simplepacker":288,"eventemitter3":47,"pixi.js":213}],288:[function(require,module,exports){
+},{"./growingpacker":299,"./simplepacker":301,"eventemitter3":55,"pixi.js":221}],301:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63614,51 +65161,176 @@ module.exports = function () {
     return SimplePacker;
 }();
 
-},{}],289:[function(require,module,exports){
-arguments[4][1][0].apply(exports,arguments)
-},{"dom-ease":290,"dup":1}],290:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"./ease":291,"dup":2,"eventemitter3":47,"exists":48,"penner":56}],291:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3,"eventemitter3":47,"exists":48}],292:[function(require,module,exports){
-module.exports={
-    "menuFile": "&File",
-    "menuNew": "&New...",
-    "menuSaveAs": "&Save As...",
-    "menuOpen": "&Open...",
-    "menuExport": "&Export...",
-    "menuExit": "Exit",
-    "menuEdit": "&Edit",
-    "menuCopy": "&Copy",
-    "menuCut": "Cu&t",
-    "menuPaste": "&Paste",
-    "menuView": "&View",
-    "menuPanes": "&Windows",
-    "menuToolbar": "&Toolbar",
-    "menuInfo": "&Info",
-    "menuAnimation": "&Animation",
-    "menuPalette": "&Palette",
-    "menuPicker": "Pi&cker",
-    "menuFrames": "F&rames",
-    "menuPosition": "Positio&n",
-    "menuManager": "&Manager",
-    "menuDuplicate": "&Duplicate",
-    "menuDelete": "D&elete",
-    "menuNewFrame": "&New",
-    "menuClockwise": "Rotate Clockwise",
-    "menuCounterClockwise": "Rotate Counter Clockwise",
-    "menuFlipHorizontal": "Flip &Horizontal",
-    "menuFlipVertical": "Flip &Vertical",
-    "menuResetPanes": "Reset Window Layout",
-    "nameOfSprite": "Name of Sprites",
-    "frameNumber": "Frame number",
-    "shortcut": "key: ",
-    "frameWidth": "Width of Frame",
-    "frameHeight": "Height of Frame",
-    "toggleImages": "Toggle Images",
-    "toggleSort": "Toggle Sorting (Alphabetical or Modify Date)",
-    "increaseZoom": "Increase Zoom",
-    "decreaseZoom": "Decrease Zoom",
-    "openFolder": "Open Folder"
+},{}],302:[function(require,module,exports){
+const Ease = require('dom-ease')
+
+class Tooltip
+{
+    /**
+     * Add tooltip to an element
+     * @param {HTMLElement} element
+     * @param {string} html
+     * @param {object} [options]
+     * @param {object} [options.styles] additional styles to apply to tooltip (e.g., backgroundColor: 'red')
+     * @param {number} [options.parent] parent to attach tooltip div
+     */
+    constructor(element, html, options)
+    {
+        options = options || {}
+
+        const styles = {}
+        for (let style in Tooltip.styles)
+        {
+            styles[style] = Tooltip.styles[style]
+        }
+        if (options.styles)
+        {
+            for (let style in options.styles)
+            {
+                styles[style] = options.styles[style]
+            }
+        }
+        this.display = styles['display'] || 'block'
+        this.showing = false
+
+        this.parent = options.parent || Tooltip.parent || document.body
+        this.div = document.createElement('div')
+        for (let style in styles)
+        {
+            this.div.style[style] = styles[style]
+        }
+        this.div.innerHTML = html
+
+        element.addEventListener('mouseenter', (e) => this.mouseenter(e))
+        element.addEventListener('mousemove', (e) => this.mousemove(e))
+        element.addEventListener('mousedown', (e) => this.mouseleave(e))
+        element.addEventListener('mouseleave', (e) => this.mouseleave(e))
+    }
+
+    /** removes tooltip */
+    remove()
+    {
+        this.parent.removeChild(this.div)
+        this.div = null
+    }
+
+    /**
+     * @type {string}
+     * gets/sets change html of tooltip
+     */
+    get html()
+    {
+        return this.div.innerHTML
+    }
+    set html(value)
+    {
+        this.div.innerHTML = value
+    }
+
+    /**
+     * @type {number}
+     * get/set fade in/out duration in milliseconds
+     */
+    static get animationDuration()
+    {
+        return Tooltip.ease.options.duration
+    }
+    static set animationDuration(value)
+    {
+        Tooltip.ease.options.duration = value
+    }
+
+    /**
+     * @type {(string|function)}
+     * get/set ease function (or function name) to use for tooltip fade
+     * defaults to 'easeInOutSine'
+     */
+    static get animationEase()
+    {
+        return Tooltip.ease.options.ease
+    }
+    static set animationEase(value)
+    {
+        Tooltip.ease.options.ease = value
+    }
+
+    position(e)
+    {
+        this.div.style.left = e.pageX - (e.pageX > window.innerWidth / 2 ? this.div.offsetWidth : 0) + 'px'
+        this.div.style.top = e.pageY - (e.pageY > window.innerHeight / 2 ? this.div.offsetHeight : 0) + 'px'
+    }
+
+    mouseenter(e)
+    {
+        if (!this.div)
+        {
+            return
+        }
+        if (e.buttons === 0)
+        {
+            if (!this.showing)
+            {
+                this.div.style.opacity = 0
+                this.div.style.display = this.display
+                this.parent.appendChild(this.div)
+                Tooltip.ease.remove(this.easing)
+                this.easing = Tooltip.ease.add(this.div, { opacity: 1 }, { wait: Tooltip.wait })
+                this.position(e)
+                this.showing = true
+            }
+        }
+    }
+
+    mousemove(e)
+    {
+        if (this.div && this.showing)
+        {
+            this.position(e)
+        }
+    }
+
+    mouseleave()
+    {
+        if (this.div && this.showing)
+        {
+            this.showing = false
+            Tooltip.ease.remove(this.easing)
+            this.easing = Tooltip.ease.add(this.div, { opacity: 0 })
+            this.easing.on('complete', () =>
+            {
+                this.div.remove()
+            })
+        }
+    }
 }
-},{}]},{},[21]);
+
+/**
+ * @type {object}
+ * default styles to apply to tooltip div
+ */
+Tooltip.styles = {
+    'position': 'absolute',
+    'zIndex': 99999,
+    'background': 'white',
+    'border': 'solid black 1px',
+    'padding': '0.75em',
+    'pointerEvents': 'none'
+}
+
+Tooltip.ease = new Ease({ duration: 250, ease: 'easeInOutSine' })
+
+/**
+ * @type {number}
+ * @static
+ * milliseconds to wait before showing tooltip
+ */
+Tooltip.wait = 500
+
+/**
+ * @type {HTMLElement}
+ * element to attach div
+ */
+Tooltip.parent = document.body
+
+module.exports = Tooltip
+},{"dom-ease":51}]},{},[23]);

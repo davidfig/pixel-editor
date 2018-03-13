@@ -79,10 +79,16 @@ function view()
 
     _panes = {}
     const panes = new Menu()
-    const list = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager']
-    for (let i = 0; i < list.length; i++)
+    const normal = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager']
+    for (let i = 0; i < normal.length; i++)
     {
-        paneCreate(list[i], i)
+        paneCreate(normal[i], i)
+    }
+    panes.append(new MenuItem({ type: 'separator' }))
+    const preferences = ['keyboard']
+    for (let i = 0; i < preferences.length; i++)
+    {
+        paneCreate(preferences[i], i + normal.length)
     }
 
     const submenu = new Menu()

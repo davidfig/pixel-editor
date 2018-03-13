@@ -23,8 +23,9 @@ const Frames = require('./frames/frames')
 const Animation = require('./frames/animation')
 const Position = require('./frames/position')
 const Manager = require('./frames/manager')
+const Keyboard = require('./frames/preferences/keyboard')
 
-let ui, loading = 2, windows = {}, fps
+let wm, loading = 2, windows = {}, fps
 
 const Main = {
 
@@ -61,7 +62,7 @@ const Main = {
 
     create: function()
     {
-        ui = new WM({
+        wm = new WM({
             backgroundColorTitlebarActive: '#555555',
             backgroundColorTitlebarInactive: '#444444',
             backgroundColorWindow: '#333333',
@@ -72,15 +73,16 @@ const Main = {
             snap: {}
         })
 
-        windows.draw = new Draw(ui.overlay, ui)
-        windows.frames = new Frames(ui)
-        windows.toolbar = new Toolbar(ui)
-        windows.palette = new Palette(ui)
-        windows.picker = new Picker(ui)
-        windows.info = new Info(ui)
-        windows.animation = new Animation(ui)
-        windows.position = new Position(ui, windows.draw)
-        windows.manager = new Manager(ui)
+        windows.draw = new Draw(wm.overlay, wm)
+        windows.frames = new Frames(wm)
+        windows.toolbar = new Toolbar(wm)
+        windows.palette = new Palette(wm)
+        windows.picker = new Picker(wm)
+        windows.info = new Info(wm)
+        windows.animation = new Animation(wm)
+        windows.position = new Position(wm, windows.draw)
+        windows.manager = new Manager(wm)
+        windows.keyboard = new Keyboard(wm)
 
         for (let name in windows)
         {
@@ -104,16 +106,10 @@ const Main = {
                 }
             }
         }
-        Views.init(ui, Main)
+        Views.init(wm, Main)
         State.start()
         setTimeout(() => document.body.style.opacity = 1, 500)
     },
-
-    // reposition: function()
-    // {
-    //     windows.frames.resize()
-    //     windows.palette.resize()
-    // },
 
     toggleHidden: function(name)
     {
@@ -188,12 +184,17 @@ const Main = {
 
     exportFile: function()
     {
-        new Export(ui)
+        new Export(wm)
     },
 
     get windows()
     {
         return windows
+    },
+
+    get wm()
+    {
+        return wm
     }
 }
 

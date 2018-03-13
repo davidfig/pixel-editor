@@ -45,9 +45,14 @@ class State extends Events
             this.state.lastFiles = this.state.lastFiles || []
             this.state.relative = this.state.relative || 'top-left'
             this.state.keys = this.state.keys || DEFAULT_KEYS
-this.state.keys = DEFAULT_KEYS
             callback()
         })
+    }
+
+    resetKeys()
+    {
+        this.state.keys = DEFAULT_KEYS
+        this.save()
     }
 
     start()

@@ -45,7 +45,8 @@ const Views = {
             { x: window.innerWidth - space - 200, y: window.innerHeight - space - 205, closed, order: 4 }, // info
             { x: window.innerWidth - space * 2 - 235 - 200, y: top + space, width: 230, height: 226, closed: true, order: 5 }, // animation (230, 226)
             { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60, order: 6, closed }, // position (195, 60)
-            { x: space * 2 + 45, y: top + space, width: 194, height: 250, closed: true, order: 7 }
+            { x: space * 2 + 45, y: top + space, width: 194, height: 250, closed: true, order: 7 },
+            { x: window.innerWidth / 2 - 300, y: window.innerHeight / 2 - 200, width: 600, height: 400, closed: true, order: 8 } // keys
         ]
     },
 

@@ -40,6 +40,41 @@ const LocalAccelerator = {
      */
 
     /**
+     * Make the KeyCode pretty for printing on the menu
+     * @param {KeyCode} keyCode
+     * @return {string}
+     * @private
+     */
+    prettifyKey: function (keyCode)
+    {
+        let key = ''
+        const codes = LocalAccelerator.prepareKey(keyCode)
+        for (let i = 0; i < codes.length; i++)
+        {
+            const keyCode = codes[i]
+            if (keyCode.indexOf('+') !== -1)
+            {
+                const split = keyCode.toLowerCase().split('+')
+                for (let i = 0; i < split.length - 1; i++)
+                {
+                    let modifier = split[i]
+                    key += modifier[0].toUpperCase() + modifier.substr(1) + '+'
+                }
+                key += split[split.length - 1].toUpperCase()
+            }
+            else
+            {
+                key = keyCode.toUpperCase()
+            }
+            if (i !== codes.length - 1)
+            {
+                key += ' or '
+            }
+        }
+        return key
+    },
+
+    /**
      * translate a user-provided keycode
      * @param {KeyCodes} keyCode
      * @return {KeyCodes} formatted and sorted keyCode

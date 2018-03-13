@@ -3,7 +3,6 @@
     "Open": "CommandOrControl+O",
     "Save": "CommandOrControl+S",
     "Export": "CommandOrControl+E",
-    "Keyboard": "CommandOrControl+K",
     "Exit": "CommandOrControl+Q",
 
     "Undo": "CommandOrControl+Z",

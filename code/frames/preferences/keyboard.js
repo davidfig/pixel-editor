@@ -5,6 +5,8 @@ const locale = require('../../locale')
 const html = require('../../html')
 const KeyBinding = require('./keybinding')
 const State = require('../../state')
+const Menu = require('../../menu')
+const Dialog = require('../../dialog')
 
 module.exports = class Keys
 {
@@ -26,6 +28,7 @@ module.exports = class Keys
         html({ parent: table, type: 'thead', html: '<tr><th>' + locale.get('Command') + '</th><th>' + locale.get('Keybinding') + '</th></tr>' })
         const body = html({ parent: table, type: 'tbody' })
         let other = true
+        this.keysList = []
         for (let key in State.keys)
         {
             const tr = html({ parent: body, type: 'tr', styles: { cursor: 'pointer', backgroundColor: (other ? 'rgba(255, 255, 255, 0.15)' : '') } })
@@ -35,12 +38,30 @@ module.exports = class Keys
             tr.addEventListener('mouseleave', () => this.mouseleave(tr))
             clicked(tr, () =>
             {
-                new KeyBinding(this.win.content.win, key, (change) => this.changeKey(key, change, accelerator))
+                new KeyBinding(this.win, key, (change) => this.changeKey(key, change, accelerator))
             })
+            this.keysList.push({ accelerator, key })
             other = !other
         }
         const buttons = html({ parent: this.keys, styles: { margin: '1em 0', textAlign: 'right' } })
-        clicked(html({ parent: buttons, type: 'button', html: locale.get('DefaultKeys') }), () => State.resetKeys())
+        clicked(html({ parent: buttons, type: 'button', html: locale.get('DefaultKeys'), styles: { color: 'red' } }), () => this.resetDialog())
+    }
+
+    resetDialog()
+    {
+        new Dialog(this.win, locale.get('DefaultKeys'), 'confirmation', locale.get('DefaultKeysPrompt'), (result) => this.reset(result))
+    }
+
+    reset(result)
+    {
+        if (result)
+        {
+            State.resetKeys()
+            for (let key of this.keysList)
+            {
+                key.accelerator.innerHTML = Accelerator.prettifyKey(State.keys[key.key])
+            }
+        }
     }
 
     changeKey(key, change, accelerator)
@@ -50,6 +71,14 @@ module.exports = class Keys
             accelerator.innerHTML = change
             State.keys[key] = change
             State.save()
+            Menu.create()
+        }
+        else if (change === false)
+        {
+            accelerator.innerHTML = ''
+            State.keys[key] = ''
+            State.save()
+            Menu.create()
         }
     }
 

@@ -24,7 +24,7 @@ module.exports = class KeyBinding
         const buttons = html({ parent: content, styles: { display: 'flex', justifyContent: 'space-between' } })
         const setKey = html({ parent: buttons, type: 'button', html: locale.get('SetKey'), styles: { margin: '0 0.5em' } })
         clicked(setKey, () => this.set())
-        const clearKey = html({ parent: buttons, type: 'button', html: locale.get('ClearKey'), styles: { margin: '0 0.5em' } })
+        const clearKey = html({ parent: buttons, type: 'button', html: locale.get('ClearKey'), styles: { color: 'red', margin: '0 0.5em' } })
         clicked(clearKey, () => this.clear())
         this.win.open()
         this.win.center(win)
@@ -82,6 +82,7 @@ module.exports = class KeyBinding
 
     clear()
     {
-        this.win.close(false)
+        this.win.close()
+        this.callback(false)
     }
 }

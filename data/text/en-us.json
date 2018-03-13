@@ -112,7 +112,7 @@
     "Keybinding": "Key Binding",
     "DialogKeyBinding": "Press key combination",
     "SetKey": "Set Shortcut",
-    "ClearKey": "Clear Shortcut",
+    "ClearKey": "Delete Shortcut",
     "DefaultKeys": "Reset Default Keys",
     "DefaultKeysPrompt": "Are you sure you want to reset to the default key layout?"
 }

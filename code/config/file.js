@@ -1,105 +1,84 @@
-const localforage = require('localforage')
+const electron = require('electron')
+const remote = electron.remote
+const path = require('path')
+const jsonfile = require('jsonfile')
+const fs = require('fs')
 
-const Settings = require('../settings')
-
-const STATE_FILENAME = 'state-save'
-
-localforage.config({
-    name: Settings.NAME
-})
-
-function saveFileDialog(path, callback)
+function saveFileDialog(defaultPath, callback)
 {
-    // remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath: State.lastPath }, callback)
-    console.log('todo: save file')
+    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath }, callback)
 }
 
-function exportFileDialog(path, callback)
+function exportFileDialog(defaultPath, callback)
 {
-
+    remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
+        title: 'Export PNG file',
+        defaultPath,
+        filters: [{ name: 'PNG', extensions: ['png'] }]
+    }, callback)
 }
 
-function openFileDialog(path, callback)
+function openFileDialog(defaultPath, callback)
 {
-    // remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath: State.lastPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, callback)
-    console.log('todo: load file')
+    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, callback)
 }
 
 function openDirDialog(callback)
 {
-
+    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] }, callback)
 }
 
 function readState(callback)
 {
-    localforage.getItem(STATE_FILENAME)
-        .then((value) => callback(JSON.parse(value)))
-        .catch(() => callback())
+    const app = electron.remote ? electron.remote.app : electron.app
+    const filename = path.join(app.getPath('userData'), 'state.json')
+    try
+    {
+        callback(jsonfile.readFileSync(filename))
+    }
+    catch (err)
+    {
+        callback()
+    }
 }
 
 function writeState(data)
 {
-    localforage.setItem(STATE_FILENAME, JSON.stringify(data))
+    const app = electron.remote ? electron.remote.app : electron.app
+    const filename = path.join(app.getPath('userData'), 'state.json')
+    jsonfile.writeFileSync(filename, data)
 }
 
 function getTempFilename(callback)
 {
-    localforage.keys()
-        .then((keys) =>
-        {
-            function search(filename)
-            {
-                for (let key of keys)
-                {
-                    if (key === filename)
-                    {
-                        return true
-                    }
-                }
-                return false
-            }
-
-            let filename, i = 0
-            do
-            {
-                i++
-                filename = 'pixel-' + i + '.json'
-            }
-            while (search(filename))
-            callback(filename)
-        }).catch((err) =>
-        {
-            console.error(err)
-        })
+    let filename, i = 0
+    do
+    {
+        i++
+        filename = path.join(remote.app.getPath('temp'), 'pixel-' + i + '.json')
+    }
+    while (fs.existsSync(filename))
+    callback(filename)
 }
 
 function readJSON(filename, callback)
 {
-    localforage.getItem(filename)
-        .then((value) => callback(JSON.parse(value)))
-        .catch(() => callback())
+    callback(jsonfile.readFileSync(filename))
 }
 
-function writeJSON(filename, data)
+function writeJSON(filename, json)
 {
-    localforage.setItem(filename, JSON.stringify(data))
+    jsonfile.writeFileSync(filename, json)
 }
 
-function writeFile()
+function fileDate(filename)
 {
+    return fs.statSync(filename).mtimeMs
 }
 
 function readDir(dir, callback)
 {
-    localforage.keys((err, keys) =>
-    {
-        callback(keys)
-    })
-}
-
-function fileDate(file)
-{
-    return 0
+    callback(fs.readdirSync(dir))
 }
 
 module.exports = {
@@ -112,7 +91,7 @@ module.exports = {
     readJSON,
     writeJSON,
     exportFileDialog,
-    writeFile,
+    writeFile: fs.writeFileSync,
     readDir,
     fileDate
 }

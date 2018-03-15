@@ -1,4 +1,5 @@
-// const Menu = require('../../../components/menu')
+const remote = require('electron').remote
+
 const Menu = require('yy-menu')
 const MenuItem = Menu.MenuItem
 
@@ -6,5 +7,10 @@ module.exports = {
 
     Menu,
     MenuItem,
-    isElectron: false
+
+    toggleDevTools: () => remote.getCurrentWindow().toggleDevTools(),
+
+    quit: () => remote.app.quit(),
+
+    isElectron: true
 }

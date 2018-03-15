@@ -665,6 +665,30 @@ class PixelEditor extends Pixel
             this.dirty = false
         }
     }
+
+    nextFrame()
+    {
+        if (this.current === this.imageData.length - 1)
+        {
+            this.current = 0
+        }
+        else
+        {
+            this.current++
+        }
+    }
+
+    previousFrame()
+    {
+        if (this.current === 0)
+        {
+            this.current = this.imageData.length - 1
+        }
+        else
+        {
+            this.current--
+        }
+    }
 }
 
 module.exports = new PixelEditor()

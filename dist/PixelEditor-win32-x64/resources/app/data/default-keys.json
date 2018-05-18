@@ -23,7 +23,7 @@
     "CircleTool": "c",
     "EllipseTool": "e",
     "LineTool": "l",
-    "CropTool": "i",
+    "CropTool": "w",
 
     "NextView": "Tab",
     "PreviousView": "shift+tab",
@@ -45,6 +45,8 @@
     "NewFrame": "CommandOrControl+F",
     "Duplicate": "CommandOrControl+D",
     "Delete": "CommandOrControl+Backspace",
+    "NextFrame": "CommandOrControl+arrowright",
+    "PreviousFrame": "CommandOrControl+arrowleft",
     "Clockwise": "CommandOrControl+period",
     "CounterClockwise": "CommandOrControl+comma",
     "FlipHorizontal": "CommandOrControl+H",

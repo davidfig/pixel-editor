@@ -8,7 +8,7 @@
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": "C:/Users/dsfig/AppData/Roaming/npm/node_modules/electron/dist/electron.exe",
             "program": "${workspaceRoot}/main.js",
-            "preLaunchTask": "electron-ready",
+            "preLaunchTask": "electron-ready"
         }
     ]
 }

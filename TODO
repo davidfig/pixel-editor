@@ -1,0 +1,4 @@
+☐ add a parts window to edit multi-part Pixels
+☐ bug when duplicating, rotating, etc. where the frames are not properly loaded
+☐ slows down when other webgl-intensive app is running (turn off webgl as much as possible)
+☐ manager screen doesn't refresh animations when switching projects

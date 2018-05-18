@@ -16,6 +16,7 @@ const Line = require('./tools/line')
 const Paint = require('./tools/paint')
 const Select = require('./tools/select')
 const Fill = require('./tools/fill')
+const Crop = require('./tools/crop')
 
 const BORDER = 1
 const THRESHOLD = 5
@@ -28,7 +29,7 @@ module.exports = class Draw extends PIXI.Container
         this.body = body
         this.ui = ui
         this.main = main
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
+        this.renderer = new PIXI.autoDetectRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
@@ -51,7 +52,8 @@ module.exports = class Draw extends PIXI.Container
             line: new Line(this),
             fill: new Fill(this),
             paint: new Paint(this),
-            select: new Select(this)
+            select: new Select(this),
+            crop: new Crop(this)
         }
         this.tool = this.tools[State.tool]
 

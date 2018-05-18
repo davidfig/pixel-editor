@@ -10,6 +10,7 @@ const State = require('../state')
 const PixelEditor = require('../pixel-editor')
 const sheet = require('../pixel-sheet')
 const Dialog = require('../dialog')
+const locale = require('../locale')
 
 const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
@@ -23,14 +24,14 @@ module.exports = class Animation extends PIXI.Container
         super()
         this.current = 0
         this.time = 150
-        this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
+        this.win = wm.createWindow({ title: locale.get('AnimationTitle'), height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
         this.content.style.color = '#eeeeee'
         this.content.style.margin = '0.25em'
         this.content.style.height = '100%'
         this.content.style.display = 'flex'
         this.content.style.flexDirection = 'column'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.autoDetectRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
         const canvas = html({ parent: this.content, styles: { width: '100%' } })

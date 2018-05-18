@@ -7,6 +7,7 @@ const Settings = require('../settings')
 const sheet = require('../pixel-sheet')
 const PixelEditor = require('../pixel-editor')
 const State = require('../state')
+const locale = require('../locale')
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
@@ -19,10 +20,10 @@ module.exports = class Frames extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
+        this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
         this.content = this.win.content
-        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.autoDetectRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'

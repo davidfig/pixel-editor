@@ -69,6 +69,7 @@ const Views = {
         State.view = State.view >= State.views.length ? 0 : State.view
         Views.wm.load(State.views[State.view])
         Menu.toggleAll()
+        Views.main.windows.palette.resize()
     }
 }
 

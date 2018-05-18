@@ -5,6 +5,7 @@ module.exports = {
     DEBUG: false,
     NO_LOAD: false,
     TEST_CLEAN_OPENING: false,
+    FPS: true,
 
     SAVE_INTERVAL: 500,
     CURSOR_COLOR: 0xff0000,

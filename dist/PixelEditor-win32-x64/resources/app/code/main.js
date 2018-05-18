@@ -36,16 +36,14 @@ const Main = {
         {
             return
         }
-        if (Settings.DEBUG)
+        if (Settings.FPS)
         {
             Main.fpsSetup()
         }
-        PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile, () =>
-        {
-            Main.create()
-            Menu.create()
-            Keys.setup(Main)
-        })
+        PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile)
+        Main.create()
+        Menu.create()
+        Keys.setup(Main)
 
     },
 
@@ -66,6 +64,7 @@ const Main = {
             backgroundColorTitlebarActive: '#555555',
             backgroundColorTitlebarInactive: '#444444',
             backgroundColorWindow: '#333333',
+            foregroundColorTitle: '#666666',
             maximizable: false,
             titlebarHeight: '1.25em',
             borderRadius: 'none',

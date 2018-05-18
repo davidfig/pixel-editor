@@ -10,7 +10,7 @@ module.exports = class Info
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ x: 10, y: 10, width: 220, resizable: false })
+        this.win = ui.createWindow({ title: locale.get('InfoTitle'), x: 10, y: 10, width: 220, resizable: false })
         this.win.open()
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'

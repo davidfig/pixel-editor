@@ -6,6 +6,7 @@ const clicked = require('clicked')
 
 const State = require('../state.js')
 const sheet = require('../sheet')
+const locale = require('../locale')
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300
@@ -22,13 +23,13 @@ module.exports = class Picker
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ title: locale.get('PickerTitle'), height: MIN_HEIGHT, width: MIN_WIDTH })
         this.win.open()
         this.ui = ui
         this.content = this.win.content
         this.content.style.margin = '0.5em'
         this.content.style.color = '#eeeeee'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
+        this.renderer = new PIXI.autoDetectRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
         this.content.appendChild(this.renderer.view)

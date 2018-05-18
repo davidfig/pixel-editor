@@ -1,9 +1,9 @@
 const clicked = require('clicked')
 
 const Settings = require('../settings')
-const State = require('../state')
 const button = require('../button')
 const PixelEditor = require('../pixel-editor')
+const locale = require('../locale')
 
 const ICONS = require('../../images/position.json')
 
@@ -17,7 +17,7 @@ module.exports = class Position
         this.ui = ui
         this.draw = draw
         this.buttons = []
-        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
+        this.win = this.ui.createWindow({ title: locale.get('PositionTitle'), minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
         this.win.content.style.display = 'flex'
         for (let i = 0; i < BUTTONS; i++)
         {

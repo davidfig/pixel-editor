@@ -109,15 +109,6 @@ class PixelEditor extends Pixel
         }
     }
 
-    remove(index)
-    {
-        if (index < this.imageData.length)
-        {
-            this.imageData.splice(index, 1)
-            this.dirty = true
-        }
-    }
-
     duplicate()
     {
         const frame = this.imageData[this.current]
@@ -138,7 +129,7 @@ class PixelEditor extends Pixel
             this.imageData.splice(index, 1)
             this.editor.imageData.splice(index, 1)
             this.current = (index < this.imageData.length) ? index : 0
-            this.emit('changed')
+            this.saveAndRender()
         }
     }
 

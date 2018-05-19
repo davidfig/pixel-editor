@@ -570,7 +570,6 @@ debugger
             this.imageData[this.current][0] = undo.width
             this.imageData[this.current][1] = undo.height
             this.imageData[this.current][2] = undo.data
-            this.render(true)
             this.saveAndRender()
         }
     }
@@ -584,8 +583,7 @@ debugger
             this.imageData[this.current][1] = redo.height
             this.imageData[this.current][2] = redo.data
             this.undo.push({ width: this.width, height: this.height, data: this.imageData[this.current][2] })
-            this.render(true)
-            sheet.render(() => this.emit('changed'))
+            this.saveAndRender()
         }
     }
 

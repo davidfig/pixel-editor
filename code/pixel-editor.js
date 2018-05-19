@@ -192,15 +192,19 @@ class PixelEditor extends Pixel
         const swap = current[1]
         current[1] = current[0]
         current[0] = swap
-debugger
-        for (let y = 0; y < this.height; y++)
+        current[2] = this.blank(current[0], current[1])
+        Pixel.addFrame(this.current, this.getData(), sheet)
+        sheet.render(() =>
         {
-            for (let x = 0; x < this.width; x++)
+            for (let y = 0; y < this.height; y++)
             {
-                this.set(x, y, data[x + y * this.width], true)
+                for (let x = 0; x < this.width; x++)
+                {
+                    this.set(x, y, data[x + y * this.width], true)
+                }
             }
-        }
-        this.saveAndRender()
+            this.saveAndRender()
+        })
     }
 
     flipHorizontal()
@@ -221,7 +225,7 @@ debugger
                 this.set(x, y, data[x + y * this.width], true)
             }
         }
-        this.dirty = true
+        this.saveAndRender()
     }
 
     flipVertical()
@@ -242,7 +246,7 @@ debugger
                 this.set(x, y, data[x + y * this.width], true)
             }
         }
-        this.dirty = true
+        this.saveAndRender()
     }
 
     set(x, y, value, noUndo)

@@ -112,13 +112,13 @@ class PixelEditor extends Pixel
     duplicate()
     {
         const frame = this.imageData[this.current]
-        this.imageData.push([frame[0], frame[1], frame[2]])
+        this.imageData.push([frame[0], frame[1], frame[2].slice(0)])
         this.editor.imageData.push({ undo: [], redo: [] })
         Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
         sheet.render(() =>
         {
+            this.dirty = true
             this.emit('changed')
-            this.current = this.imageData.length - 1
         })
     }
 
@@ -128,6 +128,7 @@ class PixelEditor extends Pixel
         {
             this.imageData.splice(index, 1)
             this.editor.imageData.splice(index, 1)
+            index--
             this.current = (index < this.imageData.length) ? index : 0
             this.saveAndRender()
         }
@@ -188,11 +189,18 @@ class PixelEditor extends Pixel
             }
         }
         const current = this.imageData[this.editor.current]
-        current.data = data
         const swap = current[1]
         current[1] = current[0]
         current[0] = swap
-        sheet.render(() => this.save)
+debugger
+        for (let y = 0; y < this.height; y++)
+        {
+            for (let x = 0; x < this.width; x++)
+            {
+                this.set(x, y, data[x + y * this.width], true)
+            }
+        }
+        this.saveAndRender()
     }
 
     flipHorizontal()
@@ -563,7 +571,7 @@ class PixelEditor extends Pixel
             this.imageData[this.current][1] = undo.height
             this.imageData[this.current][2] = undo.data
             this.render(true)
-            sheet.render(() => this.emit('changed'))
+            this.saveAndRender()
         }
     }
 

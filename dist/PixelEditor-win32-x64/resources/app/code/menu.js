@@ -124,7 +124,7 @@ function create()
     Views = require('./views')
     Keys = State.keys
 
-    _menu = new Menu({ styles: { position: 'unset' } })
+    _menu = new Menu({ styles: { position: 'unset', cursor: 'default' } })
 
     file()
     edit()

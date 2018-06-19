@@ -29,7 +29,7 @@ module.exports = class Palette extends PIXI.Container
 
         this.content = this.win.content
         this.content.style.margin = '0 0.25em'
-        this.renderer = new PIXI.autoDetectRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'

@@ -29,7 +29,7 @@ module.exports = class Draw extends PIXI.Container
         this.body = body
         this.ui = ui
         this.main = main
-        this.renderer = new PIXI.autoDetectRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'

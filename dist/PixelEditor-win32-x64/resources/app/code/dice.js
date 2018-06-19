@@ -12,7 +12,7 @@ module.exports = class Dice extends PIXI.Container
     constructor(parent)
     {
         super()
-        this.renderer = new PIXI.autoDetectRenderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
+        this.renderer = new PIXI.CanvasRenderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
         parent.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'

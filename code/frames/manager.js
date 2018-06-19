@@ -1,5 +1,6 @@
 const path = require('path')
 const clicked = require('clicked')
+const fs = require('fs-extra')
 
 const Misc = require('../config/misc')
 const Tooltip = require('../config/libraries').Tooltip
@@ -100,54 +101,54 @@ module.exports = class Manager
         }
     }
 
-    nextImageFile()
+    async nextImageFile(file)
     {
-        if (this.files.length)
+        if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
         {
-            const file = this.files.pop()
-            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+            const filename = path.join(this.dir, file)
+            const data = JSON.parse(await fs.readFile(filename))
             {
-                const filename = path.join(this.dir, file)
-                File.readJSON(filename, (data) =>
+                if (data && data.imageData)
                 {
-                    if (data && data.imageData)
+                    const image = new Image()
+                    image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                    image.src = 'data:image/png;base64,' + data.imageData[0][2]
+                    image.width = data.imageData[0][0]
+                    image.height = data.imageData[0][1]
+                    image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
+                    image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
+                    image.style.margin = '0.25em'
+                    image.style.imageRendering = 'pixelated'
+                    image.addEventListener('mouseenter', () =>
                     {
-                        const image = new Image()
-                        image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
-                        image.src = 'data:image/png;base64,' + data.imageData[0][2]
-                        image.width = data.imageData[0][0]
-                        image.height = data.imageData[0][1]
-                        image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
-                        image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
-                        image.style.margin = '0.25em'
-                        image.style.imageRendering = 'pixelated'
-                        image.addEventListener('mouseenter', () =>
+                        image.style.backgroundColor = '#aaaaaa'
+                    })
+                    image.addEventListener('mouseleave', () =>
+                    {
+                        image.style.backgroundColor = 'transparent'
+                    })
+                    clicked(image, () =>
+                    {
+                        PixelEditor.load(filename)
+                        State.lastFile = filename
+                        State.current = 0
+                        if (State.cursorX >= PixelEditor.width)
                         {
-                            image.style.backgroundColor = '#aaaaaa'
-                        })
-                        image.addEventListener('mouseleave', () =>
+                            State.cursorX = 0
+                        }
+                        if (State.cursorY >= PixelEditor.height)
                         {
-                            image.style.backgroundColor = 'transparent'
-                        })
-                        clicked(image, () => { PixelEditor.load(filename) })
-                        new Tooltip(image, data.name)
-                        this.images.push(image)
-                    }
-                    this.nextImageFile()
-                })
+                            State.cursorY = 0
+                        }
+                    })
+                    new Tooltip(image, data.name)
+                    this.images.push(image)
+                }
             }
-            else
-            {
-                this.nextImageFile()
-            }
-        }
-        else
-        {
-            this.imagesComplete()
         }
     }
 
-    drawImages(dir)
+    async drawImages(dir)
     {
         this.box.style.width = '100%'
         this.box.style.display = 'flex'
@@ -164,7 +165,11 @@ module.exports = class Manager
             File.readDir(this.dir, (files) =>
             {
                 this.files = files
-                this.nextImageFile()
+                for (let file of this.files)
+                {
+                    this.nextImageFile(file)
+                    this.imagesComplete()
+                }
             })
         }
     }

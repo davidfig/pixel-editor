@@ -61,6 +61,11 @@ function getTempFilename(callback)
     callback(filename)
 }
 
+function readJSON(filename, callback)
+{
+    return jsonfile.readFile(filename, (err, file) => callback(file))
+}
+
 function writeJSON(filename, json)
 {
     jsonfile.writeFileSync(filename, json)
@@ -83,6 +88,7 @@ module.exports = {
     readState,
     writeState,
     getTempFilename,
+    readJSON,
     writeJSON,
     exportFileDialog,
     writeFile: fs.writeFileSync,

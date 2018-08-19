@@ -2,8 +2,8 @@ module.exports = {
 
     NAME: 'pixel-editor',
 
-    DEBUG: false,
-    NO_LOAD: false,
+    DEBUG: true,
+    NO_LOAD: true,
     TEST_CLEAN_OPENING: false,
     FPS: false,
 

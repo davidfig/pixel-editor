@@ -63,7 +63,7 @@ module.exports = class Export
             }
             const width = Math.ceil(PixelEditor.width * this.saveScale)
             const height = Math.ceil(PixelEditor.height * this.saveScale)
-            const renderer = new PIXI.CanvasRenderer({ width, height, transparent: true })
+            const renderer = new PIXI.Renderer({ width, height, transparent: true })
             const sprite = sheet.get(PixelEditor.name + '-' + PixelEditor.current)
             sprite.scale.set(this.saveScale)
             sprite.anchor.set(0)

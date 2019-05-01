@@ -20,7 +20,18 @@ function afterLoad()
     const main = State.main
     if (main)
     {
-        _main = new electron.BrowserWindow({ icon: path.join(__dirname, 'assets', 'icon.png'), title: 'Pixel Editor', backgroundColor: BACKGROUND, width: Math.round(main.width), height: Math.round(main.height), x: Math.round(main.x), y: Math.round(main.y), })
+        _main = new electron.BrowserWindow({
+            icon: path.join(__dirname, 'assets', 'icon.png'),
+            title: 'Pixel Editor',
+            backgroundColor: BACKGROUND,
+            width: Math.round(main.width),
+            height: Math.round(main.height),
+            x: Math.round(main.x),
+            y: Math.round(main.y),
+            webPreferences: {
+                nodeIntegration: true
+            }
+        })
         if (main.maximize)
         {
             _main.maximize()
@@ -28,7 +39,14 @@ function afterLoad()
     }
     else
     {
-        _main = new electron.BrowserWindow({ icon: path.join(__dirname, 'assets', 'icon.png'), title: 'Pixel Editor', backgroundColor: BACKGROUND })
+        _main = new electron.BrowserWindow({
+            icon: path.join(__dirname, 'assets', 'icon.png'),
+            title: 'Pixel Editor',
+            backgroundColor: BACKGROUND,
+            webPreferences: {
+                nodeIntegration: true
+            }
+        })
         _main.maximize()
     }
     _main.setMenu(null)

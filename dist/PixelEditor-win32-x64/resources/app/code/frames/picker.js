@@ -29,7 +29,7 @@ module.exports = class Picker
         this.content = this.win.content
         this.content.style.margin = '0.5em'
         this.content.style.color = '#eeeeee'
-        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
+        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
         this.content.appendChild(this.renderer.view)
@@ -58,7 +58,7 @@ module.exports = class Picker
         this.rendererResize()
         this.renderer.render(this.stage)
 
-        PIXI.ticker.shared.add(() =>
+        PIXI.Ticker.shared.add(() =>
         {
             if (this.dirty)
             {

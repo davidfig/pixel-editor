@@ -12,7 +12,10 @@ function load(callback)
     createTransparentImage()
     _sheet = new RenderSheet()
     _sheet.add('transparency', draw, measure, SIZE)
-    _sheet.render(callback)
+    _sheet.render(() =>
+    {
+        _sheet.debug()
+    })
 }
 
 function createTransparentImage()

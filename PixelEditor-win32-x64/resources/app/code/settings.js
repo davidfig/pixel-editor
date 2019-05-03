@@ -2,8 +2,9 @@ module.exports = {
 
     DEBUG: false,
     NO_LOAD: false,
+    TEST_CLEAN_OPENING: false,
 
-    SAVE_INTERVAL: 1000,
+    SAVE_INTERVAL: 500,
 
     // YY_RENDERSHEET: '../../components/rendersheet/',
     YY_RENDERSHEET: 'yy-rendersheet',

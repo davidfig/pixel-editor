@@ -28,7 +28,7 @@ module.exports = class Picker
         this.ui = ui
         this.content = this.win.content
         this.content.style.margin = '0.5em'
-
+        this.content.style.color = '#eeeeee'
         this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
@@ -167,7 +167,7 @@ module.exports = class Picker
     {
         c.beginPath()
         c.lineWidth = LINE_WIDTH * 2
-        c.strokeStyle = 'black'
+        c.strokeStyle = '#eeeeee'
         c.rect(LINE_WIDTH, LINE_WIDTH, BAR_WIDTH - RADIUS / 2, BAR_HEIGHT + LINE_WIDTH * 2)
         c.stroke()
     }
@@ -216,6 +216,8 @@ module.exports = class Picker
             this.hueCursor.x = x
             const h = (x / size) * 359
             const original = new TinyColor(State.color).toHsl()
+            original.s = (original.s < 0.1) ? 0.1 : original.s
+            original.l = (original.l < 0.1) ? 0.1 : original.l
             const color = new TinyColor({ h, s: original.s, l: original.l }).toHex()
             State.color = color + State.color.substr(6)
         }
@@ -453,26 +455,8 @@ module.exports = class Picker
         this.words.l.object.innerText = this.fixed(value.l)
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
-
         this.content.style.overflow = 'hidden'
         this.win.on('resize', () =>
         {
@@ -493,8 +477,8 @@ module.exports = class Picker
                 this.quickSetup()
             })
         })
-        this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
-        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
+        this.win.on('resize-end', () => State.set())
+        this.win.on('move-end', () => State.set())
         State.on('foreground', () => this.dirty = true)
         State.on('background', () => this.dirty = true)
         State.on('isForeground', () => this.dirty = true)

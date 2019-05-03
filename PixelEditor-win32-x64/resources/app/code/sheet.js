@@ -3,7 +3,7 @@ const Settings = require('./settings')
 const RenderSheet = require(Settings.YY_RENDERSHEET)
 const Color = require('yy-color')
 
-const COLOR = 0x888888
+const COLOR = 0x999999
 const SIZE = 100
 
 let _sheet, _transparent
@@ -39,7 +39,7 @@ function convert(color)
 function draw(c, size)
 {
     const half = size / 2
-    const light = convert(Color.blend(0.5, 0xffffff, COLOR))
+    const light = convert(Color.blend(0.75, 0xffffff, COLOR))
     c.fillStyle = '#' + light
     c.fillRect(0, 0, half, half)
     c.fillRect(half, half, half, half)

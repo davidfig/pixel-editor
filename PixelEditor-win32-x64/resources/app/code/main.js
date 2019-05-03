@@ -8,7 +8,7 @@ const WM = require(Settings.WINDOW_MANAGER)
 const Toolbar = require('./toolbar')
 const Palette = require('./palette')
 const Picker = require('./picker')
-const Coords = require('./coords')
+const Info = require('./info')
 const Sheet = require('./sheet')
 const Draw = require('./draw')
 const State = require('./state')
@@ -17,6 +17,8 @@ const Menu = require('./menu')
 const Show = require('./show')
 const Animation = require('./animation')
 const Export = require('./export')
+const Position = require('./position')
+const Manager = require('./manager')
 
 let ui, loading = 1, windows = {}
 
@@ -28,36 +30,73 @@ function afterLoad()
         return
     }
 
-    Menu()
-
     if (!Settings.NO_LOAD && State.lastFile)
     {
         PixelEditor.load(State.lastFile)
     }
 
     create()
+    Menu()
 }
 
 function create()
 {
     ui = new WM({
-        backgroundColorWindow: '#cccccc',
+        backgroundColorTitlebarActive: '#555555',
+        backgroundColorTitlebarInactive: '#444444',
+        backgroundColorWindow: '#333333',
         maximizable: false,
-        titlebarHeight: '20px',
-        borderRadius: '0 0 4px 4px',
+        titlebarHeight: '1.25em',
+        borderRadius: 'none',
+        shadow: 'none',
         snap: { }
     })
+
     windows.draw = new Draw(ui.overlay, ui)
-
     windows.show = new Show(ui)
-
     windows.toolbar = new Toolbar(ui)
     windows.palette = new Palette(ui)
     windows.picker = new Picker(ui)
-    windows.coords = new Coords(ui)
+    windows.info = new Info(ui)
     windows.animation = new Animation(ui)
+    windows.position = new Position(ui, windows.draw)
+    windows.manager = new Manager(ui)
+
+    reposition()
 
     document.body.addEventListener('keydown', keydown)
+}
+
+function reposition()
+{
+    State.position(ui)
+    windows.show.resize()
+    windows.palette.resize()
+}
+
+function resetWindows()
+{
+    State.positionDefault()
+    State.save()
+    reposition()
+}
+
+function getHidden(name)
+{
+    return windows[name].win.closed
+}
+
+function toggleHidden(name)
+{
+    if (windows[name].win.closed)
+    {
+        windows[name].win.open()
+    }
+    else
+    {
+        windows[name].win.close()
+    }
+    State.set()
 }
 
 function keydown(e)
@@ -66,6 +105,11 @@ function keydown(e)
 
     // reload on ctrl-r key (should be disabled when not debugging)
     if (e.ctrlKey && code === 82) window.location.reload()
+
+    if (e.ctrlKey && e.shiftKey && code === 73)
+    {
+        remote.getCurrentWindow().toggleDevTools()
+    }
 
     this.shift = e.shiftKey
     if (e.ctrlKey && code >= 48 && code <= 57)
@@ -122,13 +166,11 @@ function keydown(e)
                 flipVertical()
                 break
         }
-        console.log(e)
     }
     for (let window in windows)
     {
         windows[window].keydown(e)
     }
-    // console.log(code)
 }
 
 function save(filename)
@@ -176,6 +218,8 @@ function newFile()
     State.current = 0
     State.cursorX = State.cursorY = 0
     State.cursorSizeX = State.cursorSizeY = 1
+    windows.position.pressed(1)
+    windows.position.pressed(3)
 }
 
 function saveFile()
@@ -234,7 +278,11 @@ module.exports = {
     duplicate,
     rotate,
     flipHorizontal,
-    flipVertical
+    flipVertical,
+    windows,
+    getHidden,
+    toggleHidden,
+    resetWindows
 }
 
 Sheet.load(afterLoad)

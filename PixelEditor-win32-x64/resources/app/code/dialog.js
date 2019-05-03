@@ -13,7 +13,7 @@ module.exports = class Dialog
 
         this.callback = callback
         this.win = win.wm.createWindow({ title, parent: win, resizable: false, maximizable: false, minimizable: false, minHeight: 0 })
-
+        this.win.content.style.color = '#eeeeee'
         const div = html({ parent: this.win.content, styles: { display: 'flex', justifyContent: 'center', margin: '1em' } })
         if (type === 'string')
         {

@@ -3,6 +3,10 @@ const path = require('path')
 const jsonfile = require('jsonfile')
 const Events = require('eventemitter3')
 
+const Settings = require('./settings')
+
+const SPACING = 5
+
 class State extends Events
 {
     constructor()
@@ -10,16 +14,12 @@ class State extends Events
         super()
         const app = electron.remote ? electron.remote.app : electron.app
         this.filename = path.join(app.getPath('userData'), 'state.json')
-        this.load()
-        this.state.lastFiles = this.state.lastFiles || []
-        this.state.windows = this.state.windows || {}
-        this.state.relative = this.state.relative || 'top-left'
-    }
-
-    load()
-    {
         try
         {
+            if (Settings.TEST_CLEAN_OPENING)
+            {
+                throw 'testing clean opening'
+            }
             this.state = jsonfile.readFileSync(this.filename)
             if (typeof this.state.foreground !== 'string')
             {
@@ -29,15 +29,42 @@ class State extends Events
             {
                 this.state.background = '00000000'
             }
-            for (let name in this.state.windows)
+            if (!this.state.manager)
             {
-                if (this.state.windows[name].y < 0) this.state.windows[name].y = 0
+                this.state.manager = { zoom: 4, images: true, alphabetical: true }
             }
         }
         catch (err)
         {
-            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 0, isForeground: 0, background: null, lastFiles: [], windows: {} }
+            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
         }
+        this.state.lastFiles = this.state.lastFiles || []
+        this.state.relative = this.state.relative || 'top-left'
+    }
+
+    positionDefault()
+    {
+        this.state.windows = [
+            { x: SPACING, y: window.innerHeight - SPACING - 200, width: 200, height: 200 }, // show
+            { x: SPACING, y: SPACING }, // toolbar
+            { x: window.innerWidth - SPACING - 200, y: SPACING * 2 + 300, width: 200, height: 150 }, // palette
+            { x: window.innerWidth - SPACING - 200, y: SPACING, width: 200, height: 300 }, // picker
+            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING - 205 }, // info
+            { x: window.innerWidth - SPACING * 2 - 235 - 200, y: SPACING, width: 230, height: 226 }, // animation (230, 226)
+            { x: window.innerWidth - SPACING - 200, y: window.innerHeight - SPACING * 2 - 205 - 60 }, // position (195, 60)
+            { x: SPACING * 2 + 45, y: SPACING, width: 194, height: 250, closed: true }
+        ]
+    }
+
+    position(wm)
+    {
+        if (!this.state.windows)
+        {
+            this.positionDefault()
+        }
+        wm.load(this.state.windows)
+        this.wm = wm
+        window.setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
     mainResize(object)
@@ -75,9 +102,9 @@ class State extends Events
         window.on('move', this.mainMove.bind(this))
     }
 
-    set(name, x, y, width, height)
+    set()
     {
-        this.state.windows[name] = { x, y, width, height }
+        this.state.windows = this.wm.save()
         this.save()
     }
 
@@ -89,17 +116,6 @@ class State extends Events
     setHidden(name, hidden)
     {
         this.state.windows[name].hidden = hidden
-        this.save()
-    }
-
-    getHidden(name)
-    {
-        return this.state.windows[name].hidden
-    }
-
-    toggleHidden(name)
-    {
-        this.state.windows[name].hidden = !this.state.windows[name].hidden
         this.save()
     }
 
@@ -124,33 +140,6 @@ class State extends Events
             this.state.isForeground = value
             this.save()
             this.emit('isForeground')
-        }
-    }
-
-    get openCircle()
-    {
-        return this.state.openCircle
-    }
-    set openCircle(value)
-    {
-        if (this.state.openCircle !== value)
-        {
-            this.state.openCircle = value
-            this.save()
-            this.emit('open-circle')
-        }
-    }
-    get openEllipse()
-    {
-        return this.state.openEllipse
-    }
-    set openEllipse(value)
-    {
-        if (this.state.openEllipse !== value)
-        {
-            this.state.openEllipse = value
-            this.save()
-            this.emit('open-ellipse')
         }
     }
 
@@ -282,7 +271,7 @@ class State extends Events
 
     save()
     {
-        jsonfile.writeFileSync(this.filename, this.state)
+        this.dirty = true
     }
 
     get lastFile()
@@ -316,6 +305,20 @@ class State extends Events
     set lastFiles(value)
     {
         this.state.lastFiles = value
+    }
+
+    get manager()
+    {
+        return this.state.manager
+    }
+
+    update()
+    {
+        if (this.dirty)
+        {
+            jsonfile.writeFileSync(this.filename, this.state)
+            this.dirty = false
+        }
     }
 }
 

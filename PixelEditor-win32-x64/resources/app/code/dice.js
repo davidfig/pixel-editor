@@ -1,4 +1,5 @@
 const PIXI = require('pixi.js')
+const Tooltip = require('yy-tooltip')
 
 const State = require('./state')
 
@@ -15,6 +16,7 @@ module.exports = class Dice extends PIXI.Container
         parent.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
+        new Tooltip(this.renderer.view, 'anchor of sprite')
         this.dice = []
         for (let i = 0; i < 9; i++)
         {

@@ -1,5 +1,7 @@
 /* Copyright (c) 2018 YOPEY YOPEY LLC */
 
+const Tooltip = require('yy-tooltip')
+
 const html = require('./html')
 
 module.exports = function button(parent, data, styles, title)
@@ -9,7 +11,14 @@ module.exports = function button(parent, data, styles, title)
     const button = html({ parent, type: 'button', styles: { position: 'relative' } })
     if (title)
     {
-        button.setAttribute('title', title)
+        if (Array.isArray(title))
+        {
+            new Tooltip(button, '<div>' + title[0] + '</div><div>key: ' + title[1] + '</div>')
+        }
+        else
+        {
+            new Tooltip(button, title)
+        }
     }
     const image = new Image()
     image.src = 'data:image/png;base64,' + data[2]
@@ -22,6 +31,7 @@ module.exports = function button(parent, data, styles, title)
     image.style.top = '50%'
     image.style.left = '50%'
     image.style.transform = 'translate(-50%, -50%)'
+    image.style.pointerEvents = 'none'
     button.image = image
     button.appendChild(image)
     if (styles)

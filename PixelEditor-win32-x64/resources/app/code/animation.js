@@ -21,12 +21,11 @@ module.exports = class Animation extends PIXI.Container
     constructor(wm)
     {
         super()
-
         this.current = 0
         this.time = 150
-
         this.win = wm.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
         this.content = this.win.content
+        this.content.style.color = '#eeeeee'
         this.content.style.margin = '0.25em'
         this.content.style.height = '100%'
         this.content.style.display = 'flex'
@@ -37,7 +36,7 @@ module.exports = class Animation extends PIXI.Container
         const canvas = html({ parent: this.content, styles: { width: '100%' } })
         canvas.appendChild(this.renderer.view)
         this.createButtons()
-        this.stateSetup()
+        this.stateSetup('animation')
         this.draw()
         PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
         this.win.open()
@@ -47,30 +46,31 @@ module.exports = class Animation extends PIXI.Container
     {
         const div = html({ parent: this.content, styles: { width: '100%' } })
         const buttons = html({ parent: div, styles: { margin: '1em auto 0.25em', textAlign: 'center' } })
-        this.play = button(buttons, BUTTONS.imageData[0], null, 'play animation')
+        const style = { opacity: 0.6 }
+        this.play = button(buttons, BUTTONS.imageData[0], style, 'play animation')
         clicked(this.play, () => this.change())
 
-        const newButton = button(buttons, BUTTONS.imageData[4], null, 'new animation')
+        const newButton = button(buttons, BUTTONS.imageData[4], style, 'new animation')
         clicked(newButton, () => this.createAnimation())
-        this.renameButton = button(buttons, BUTTONS.imageData[5], null, 'rename animation')
+        this.renameButton = button(buttons, BUTTONS.imageData[5], style, 'rename animation')
         clicked(this.renameButton, () => this.renameAnimation())
-        this.copyButton = button(buttons, BUTTONS.imageData[3], null, 'duplicate animation')
+        this.copyButton = button(buttons, BUTTONS.imageData[3], style, 'duplicate animation')
         clicked(this.copyButton, () => this.duplicateAnimation())
-        this.deleteButton = button(buttons, BUTTONS.imageData[2], null, 'delete animation')
+        this.deleteButton = button(buttons, BUTTONS.imageData[2], style, 'delete animation')
         clicked(this.deleteButton, () => this.removeAnimation())
 
         const stack = html({parent: div, styles: { display: 'flex', alignItems: 'flex-end' }})
-        this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1' } })
-        this.animationTime = html({ parent: stack, type: 'input', value: this.time, styles: { margin: '0.25em', width: '2em', textAlign: 'right' } })
+        this.animationName = html({ parent: stack, type: 'select', styles: { margin: '0.25em', flex: '1', background: '#eeeeee' } })
+        this.animationTime = html({ parent: stack, type: 'input', value: this.time, styles: { margin: '0.25em', width: '2em', textAlign: 'right', background: '#eeeeee' } })
         this.animationTime.addEventListener('change', () => this.changeTime())
         this.captureKey(this.animationTime)
         html({parent: stack, html: 'ms', styles: { paddingBottom: '0.25em'}})
         this.showNames()
         this.animationName.addEventListener('change', () => this.showText())
 
-        this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none' } })
+        this.animationText = html({ parent: this.content, type: 'textarea', styles: { flex: 2, margin: '0.25em', resize: 'none', background: '#eeeeee' } })
         this.animationText.addEventListener('change', () => this.changeText())
-        this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'red' }})
+        this.animationError = html({ parent: this.content, styles: { width: 'calc(100% - 1em)', margin: '0.25em', color: 'rgb(255,50,50)' }})
         this.captureKey(this.animationText)
         this.showText()
     }
@@ -132,7 +132,7 @@ module.exports = class Animation extends PIXI.Container
     disable(button, disable)
     {
         button.disabled = disable
-        button.style.opacity = disable ? 0.25 : 1
+        button.style.opacity = disable ? 0.25 : 0.6
     }
 
     draw()
@@ -284,6 +284,13 @@ module.exports = class Animation extends PIXI.Container
 
     stateSetup()
     {
+        this.win.on('resize', () =>
+        {
+            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+            this.draw()
+        })
+        this.win.on('resize-end', () => State.set())
+        this.win.on('move-end', () => State.set())
         PixelEditor.on('changed', () => this.draw())
         State.on('last-file', () =>
         {
@@ -299,7 +306,7 @@ module.exports = class Animation extends PIXI.Container
         if (this.win._resizing)
         {
             this.draw()
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+            State.set()
         }
     }
 
@@ -307,7 +314,7 @@ module.exports = class Animation extends PIXI.Container
     {
         if (this.win._moving)
         {
-            State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height)
+            State.set()
         }
     }
 

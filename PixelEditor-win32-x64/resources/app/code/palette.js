@@ -24,7 +24,7 @@ module.exports = class Palette extends PIXI.Container
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({ width: MIN_WIDTH, height: MIN_HEIGHT })
         this.win.open()
 
         this.content = this.win.content
@@ -235,37 +235,22 @@ module.exports = class Palette extends PIXI.Container
             })
     }
 
-    stateSetup(name)
+    stateSetup()
     {
-        this.name = name
-        const place = State.get(this.name)
-        if (exists(place))
-        {
-            this.win.move(place.x, place.y)
-            this.win.width = place.width && place.width > MIN_WIDTH ? place.width : MIN_WIDTH
-            this.win.height = place.height && place.height > MIN_HEIGHT ? place.height : MIN_HEIGHT
-        }
-        else
-        {
-            this.win.width = MIN_WIDTH
-            this.win.height = MIN_HEIGHT
-        }
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        if (State.getHidden(this.name))
-        {
-            this.win.close()
-        }
-        this.win.on('resize', () =>
-        {
-            this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-            this.draw()
-        })
+        this.resize()
+        this.win.on('resize', () => this.resize())
         this.win.on('resize-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y, this.win.width, this.win.height))
         State.on('foreground', this.draw, this)
         State.on('background', this.draw, this)
         State.on('isForeground', this.draw, this)
         PixelEditor.on('changed', this.draw, this)
+    }
+
+    resize()
+    {
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
+        this.draw()
     }
 
     keydown(e)

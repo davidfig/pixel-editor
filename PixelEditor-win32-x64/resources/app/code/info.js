@@ -1,11 +1,12 @@
 const EasyEdit = require('easyedit')
-const exists = require('exists')
+const Tooltip = require('yy-tooltip')
 
 const State = require('./state')
 const Dice = require('./dice')
 const PixelEditor = require('./pixel-editor')
+const locale = require('./locale')
 
-module.exports = class Coords
+module.exports = class Info
 {
     constructor(ui)
     {
@@ -13,6 +14,7 @@ module.exports = class Coords
         this.win.open()
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'
+        this.content.style.color = '#eeeeee'
         this.name()
         this.frameNumber()
         this.frameSize()
@@ -21,14 +23,17 @@ module.exports = class Coords
         this.cursorSize()
         this.zoom()
         this.changed()
-        // this.win.height = this.win.winTitlebar.offsetHeight + this.content.scrollHeight + 8
-        this.stateSetup('coords')
+        this.stateSetup()
     }
 
-    editText(parent, label, text, styles)
+    editText(parent, label, text, styles, tooltip)
     {
         styles = styles || []
         const container = document.createElement('div')
+        if (tooltip)
+        {
+            new Tooltip(container, Array.isArray(tooltip) ? '<div>' + tooltip[0] + '</div><div>' + locale.get('shortcut') + tooltip[1] + '</div>' : tooltip)
+        }
         parent.appendChild(container)
         for (let style in styles)
         {
@@ -42,7 +47,7 @@ module.exports = class Coords
         }
         const span = document.createElement('span')
         container.appendChild(span)
-        span.style.borderBottom = 'dotted 1px black'
+        span.style.borderBottom = 'dotted 1px #eeeeee'
         span.innerHTML = text
         return new EasyEdit(span)
     }
@@ -58,12 +63,12 @@ module.exports = class Coords
 
     name()
     {
-        this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' })
+        this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('nameOfSprite'))
     }
 
     frameNumber()
     {
-        this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' })
+        this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('frameNumber'))
         this.frameNumberEdit.on('success', (value) =>
         {
             const number = parseInt(value)
@@ -77,7 +82,7 @@ module.exports = class Coords
     frameSize()
     {
         const stack = this.stack(this.content)
-        this.frameWidthEdit = this.editText(stack, 'w: ', 15)
+        this.frameWidthEdit = this.editText(stack, 'w: ', 15, null, locale.get('frameWidth'))
         this.frameWidthEdit.on('success', (value) =>
         {
             const width = parseInt(value)
@@ -98,7 +103,7 @@ module.exports = class Coords
             PixelEditor.adjustWidth(width, relative)
         })
 
-        this.frameHeightEdit = this.editText(stack, 'h: ', 15)
+        this.frameHeightEdit = this.editText(stack, 'h: ', 15, null, locale.get('frameHeight'))
         this.frameHeightEdit.on('success', (value) =>
         {
             const height = parseInt(value)
@@ -123,14 +128,14 @@ module.exports = class Coords
     cursorPosition()
     {
         const stack = this.stack(this.content)
-        this.cursorXEdit = this.editText(stack, 'x: ', 0)
+        this.cursorXEdit = this.editText(stack, 'x: ', 0, null, ['x position of cursor', 'left/right arrow'])
         this.cursorXEdit.on('success', (value) =>
         {
             const position = parseInt(value)
             const split = State.relative.split('-')
             State.cursorX = split[1] === 'right' ? PixelEditor.width - position - 1 : split[1] === 'center' ? position + PixelEditor.width / 2 : position
         })
-        this.cursorYEdit = this.editText(stack, 'y: ', 0)
+        this.cursorYEdit = this.editText(stack, 'y: ', 0, null, ['y position of cursor', 'up/down arrow'])
         this.cursorYEdit.on('success', (value) =>
         {
             const position = parseInt(value)
@@ -142,15 +147,15 @@ module.exports = class Coords
     cursorSize()
     {
         const stack = this.stack(this.content)
-        this.cursorSizeXEdit = this.editText(stack, 'w: ', 0)
+        this.cursorSizeXEdit = this.editText(stack, 'w: ', 0, null, ['width of cursor', 'shift-left/right arrow'])
         this.cursorSizeXEdit.on('success', (value) => State.cursorSizeX = parseInt(value))
-        this.cursorSizeYEdit = this.editText(stack, 'h: ', 0)
+        this.cursorSizeYEdit = this.editText(stack, 'h: ', 0, null, ['height of cursor', 'shift-up/down arrow'])
         this.cursorSizeYEdit.on('success', (value) => State.cursorSizeY = parseInt(value))
     }
 
     zoom()
     {
-        this.zoomEdit = this.editText(this.content, 'zoom: ', PixelEditor.zoom, { 'text-align': 'center'})
+        this.zoomEdit = this.editText(this.content, 'zoom: ', PixelEditor.zoom, { 'text-align': 'center'}, 'scale of sprite')
         this.zoomEdit.on('success', (value) => PixelEditor.zoom = parseInt(value))
     }
 
@@ -168,11 +173,12 @@ module.exports = class Coords
         this.cursorYEdit.object.innerText = y
         this.cursorSizeXEdit.object.innerText = State.cursorSizeX
         this.cursorSizeYEdit.object.innerText = State.cursorSizeY
+        this.zoomEdit.object.innerText = PixelEditor.zoom
     }
 
     stateSetup()
     {
-        this.win.on('move-end', () => State.set(this.name, this.win.x, this.win.y))
+        this.win.on('move-end', () => State.set())
         State.on('cursorX', this.changed, this)
         State.on('cursorY', this.changed, this)
         State.on('cursorSizeX', this.changed, this)

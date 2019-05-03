@@ -3,9 +3,10 @@ module.exports = {
     NAME: 'pixel-editor',
 
     DEBUG: true,
-    NO_LOAD: true,
+    NO_LOAD: false,
     TEST_CLEAN_OPENING: false,
     FPS: false,
+    RESET: false,
 
     SAVE_INTERVAL: 500,
     CURSOR_COLOR: 0xff0000,

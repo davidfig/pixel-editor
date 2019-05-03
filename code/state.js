@@ -17,6 +17,10 @@ class State extends Events
         File.readState((value) =>
         {
             this.state = value
+            if (Settings.RESET)
+            {
+                this.state = null
+            }
             if (!this.state || Settings.TEST_CLEAN_OPENING)
             {
                 this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }

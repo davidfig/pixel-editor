@@ -14,7 +14,7 @@ function load(callback)
     _sheet.add('transparency', draw, measure, SIZE)
     _sheet.render(() =>
     {
-        _sheet.debug()
+        callback()
     })
 }
 

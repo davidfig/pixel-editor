@@ -295,7 +295,7 @@ module.exports = class Dice extends PIXI.Container
     constructor(parent)
     {
         super()
-        this.renderer = new PIXI.Renderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
+        this.renderer = new PIXI.CanvasRenderer({ width: DICE, height: DICE, backgroundColor: 0xeeeeee })
         parent.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
@@ -403,7 +403,7 @@ module.exports = class Draw extends PIXI.Container
         this.body = body
         this.ui = ui
         this.main = main
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
@@ -433,7 +433,7 @@ module.exports = class Draw extends PIXI.Container
 
         this.redraw()
         this.setupViewport()
-        PIXI.Ticker.shared.add(() => this.update())
+        PIXI.ticker.shared.add(() => this.update())
     }
 
     resize()
@@ -787,7 +787,7 @@ module.exports = class Export
             }
             const width = Math.ceil(PixelEditor.width * this.saveScale)
             const height = Math.ceil(PixelEditor.height * this.saveScale)
-            const renderer = new PIXI.Renderer({ width, height, transparent: true })
+            const renderer = new PIXI.CanvasRenderer({ width, height, transparent: true })
             const sprite = sheet.get(PixelEditor.name + '-' + PixelEditor.current)
             sprite.scale.set(this.saveScale)
             sprite.anchor.set(0)
@@ -908,7 +908,7 @@ module.exports = class Animation extends PIXI.Container
         this.content.style.height = '100%'
         this.content.style.display = 'flex'
         this.content.style.flexDirection = 'column'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
         const canvas = html({ parent: this.content, styles: { width: '100%' } })
@@ -916,7 +916,7 @@ module.exports = class Animation extends PIXI.Container
         this.createButtons()
         this.stateSetup('animation')
         this.draw()
-        PIXI.Ticker.shared.add(() => this.update(PIXI.Ticker.shared.elapsedMS))
+        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
         this.win.open()
     }
 
@@ -1213,7 +1213,7 @@ module.exports = class Frames extends PIXI.Container
         this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
         this.content = this.win.content
-        this.renderer = new PIXI.Renderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.CanvasRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
@@ -1924,7 +1924,7 @@ module.exports = class Palette extends PIXI.Container
 
         this.content = this.win.content
         this.content.style.margin = '0 0.25em'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
@@ -2104,7 +2104,7 @@ module.exports = class Palette extends PIXI.Container
             const texture = PixelSheet.textures[PixelEditor.name + '-' + i].texture
             if (texture.baseTexture.hasLoaded)
             {
-                const canvas = texture.baseTexture.resource.source
+                const canvas = texture.baseTexture.source
                 const frame = texture.frame
                 const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
                 for (let i = 0; i < data.length; i += 4)
@@ -2218,7 +2218,7 @@ module.exports = class Picker
         this.content = this.win.content
         this.content.style.margin = '0.5em'
         this.content.style.color = '#eeeeee'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
+        this.renderer = new PIXI.CanvasRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
         this.content.appendChild(this.renderer.view)
@@ -2247,7 +2247,7 @@ module.exports = class Picker
         this.rendererResize()
         this.renderer.render(this.stage)
 
-        PIXI.Ticker.shared.add(() =>
+        PIXI.ticker.shared.add(() =>
         {
             if (this.dirty)
             {
@@ -2428,7 +2428,7 @@ module.exports = class Picker
     {
         const size = this.size()
         this.alpha = this.stage.addChild(new PIXI.Container())
-        this.alphaTransparent = this.alpha.addChild(new PIXI.TilingSprite(sheet.getTexture('transparency')))
+        this.alphaTransparent = this.alpha.addChild(new PIXI.extras.TilingSprite(sheet.getTexture('transparency')))
         this.alphaTransparent.tileScale.set(0.1)
         this.alphaTransparent.width = size
         this.alphaTransparent.height = BAR_HEIGHT
@@ -3932,7 +3932,7 @@ class PixelEditor extends Pixel
                 this.undoSave()
             }
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.resource.source
+            const canvas = texture.baseTexture.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const hex = parseInt(value, 16)
@@ -3965,7 +3965,7 @@ class PixelEditor extends Pixel
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.resource.source
+            const canvas = texture.baseTexture.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const data = c.getImageData(frame.x + x, frame.y + y, 1, 1).data
@@ -6170,13 +6170,13 @@ exports.interleave3 = function(x, y, z) {
   y  = (y | (y<<4))  & 3272356035;
   y  = (y | (y<<2))  & 1227133513;
   x |= (y << 1);
-
+  
   z &= 0x3FF;
   z  = (z | (z<<16)) & 4278190335;
   z  = (z | (z<<8))  & 251719695;
   z  = (z | (z<<4))  & 3272356035;
   z  = (z | (z<<2))  & 1227133513;
-
+  
   return x | (z << 2);
 }
 
@@ -13553,26 +13553,26 @@ var substr = 'ab'.substr(-1) === 'b'
 	Copyright © 2001 Robert Penner
 	All rights reserved.
 
-	Redistribution and use in source and binary forms, with or without modification,
+	Redistribution and use in source and binary forms, with or without modification, 
 	are permitted provided that the following conditions are met:
 
-	Redistributions of source code must retain the above copyright notice, this list of
+	Redistributions of source code must retain the above copyright notice, this list of 
 	conditions and the following disclaimer.
-	Redistributions in binary form must reproduce the above copyright notice, this list
-	of conditions and the following disclaimer in the documentation and/or other materials
+	Redistributions in binary form must reproduce the above copyright notice, this list 
+	of conditions and the following disclaimer in the documentation and/or other materials 
 	provided with the distribution.
 
-	Neither the name of the author nor the names of contributors may be used to endorse
+	Neither the name of the author nor the names of contributors may be used to endorse 
 	or promote products derived from this software without specific prior written permission.
 
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
 	EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
 	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
 	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
 	AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
 	OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -14038,8 +14038,8 @@ var Ease = function (_Events) {
     /**
      * Main class for creating eases
      * @param {object} [options]
-     * @param {boolean} [options.noTicker] don't add the update function to PIXI.Ticker
-     * @param {PIXI.Ticker} [options.ticker=PIXI.Ticker.shared] use this PIXI.Ticker for the list
+     * @param {boolean} [options.noTicker] don't add the update function to PIXI.ticker
+     * @param {PIXI.ticker} [options.ticker=PIXI.ticker.shared] use this PIXI.ticker for the list
      * @extends eventemitter
      * @fire done
      * @fire each
@@ -14052,7 +14052,7 @@ var Ease = function (_Events) {
         var _this = _possibleConstructorReturn(this, (Ease.__proto__ || Object.getPrototypeOf(Ease)).call(this));
 
         if (!options.noTicker) {
-            var ticker = options.ticker || PIXI.Ticker.shared;
+            var ticker = options.ticker || PIXI.ticker.shared;
             ticker.add(function () {
                 return _this.update(ticker.elapsedMS);
             });
@@ -14170,7 +14170,7 @@ var Ease = function (_Events) {
 
         /**
          * update frame
-         * this is automatically added to PIXI.Ticker unless options.noTicker is set
+         * this is automatically added to PIXI.ticker unless options.noTicker is set
          * if using options.noTicker, this should be called manually
          * @param {number} elasped time in MS since last update
          */
@@ -15715,7 +15715,7 @@ var Shader = function(gl, vertexSrc, fragmentSrc, precision, attributeLocations)
 };
 /**
  * Uses this shader
- *
+ * 
  * @return {PIXI.glCore.GLShader} Returns itself.
  */
 Shader.prototype.bind = function()
@@ -16358,7 +16358,7 @@ VertexArrayObject.prototype.getSize = function()
  */
 var createContext = function(canvas, options)
 {
-    var gl = canvas.getContext('webgl', options) ||
+    var gl = canvas.getContext('webgl', options) || 
          canvas.getContext('experimental-webgl', options);
 
     if (!gl)
@@ -16545,36 +16545,36 @@ module.exports = compileProgram;
  * @param type {String} Type of value
  * @param size {Number}
  */
-var defaultValue = function(type, size)
+var defaultValue = function(type, size) 
 {
     switch (type)
     {
         case 'float':
             return 0;
 
-        case 'vec2':
+        case 'vec2': 
             return new Float32Array(2 * size);
 
         case 'vec3':
             return new Float32Array(3 * size);
 
-        case 'vec4':
+        case 'vec4':     
             return new Float32Array(4 * size);
-
+            
         case 'int':
         case 'sampler2D':
             return 0;
 
-        case 'ivec2':
+        case 'ivec2':   
             return new Int32Array(2 * size);
 
         case 'ivec3':
             return new Int32Array(3 * size);
 
-        case 'ivec4':
+        case 'ivec4': 
             return new Int32Array(4 * size);
 
-        case 'bool':
+        case 'bool':     
             return false;
 
         case 'bvec2':
@@ -16591,7 +16591,7 @@ var defaultValue = function(type, size)
             return new Float32Array([1, 0,
                                      0, 1]);
 
-        case 'mat3':
+        case 'mat3': 
             return new Float32Array([1, 0, 0,
                                      0, 1, 0,
                                      0, 0, 1]);
@@ -16608,7 +16608,7 @@ var booleanArray = function(size)
 {
     var array = new Array(size);
 
-    for (var i = 0; i < array.length; i++)
+    for (var i = 0; i < array.length; i++) 
     {
         array[i] = false;
     }
@@ -16839,8 +16839,8 @@ module.exports = {
  * @param type {String}
  * @return {Number}
  */
-var mapSize = function(type)
-{
+var mapSize = function(type) 
+{ 
     return GLSL_TO_SIZE[type];
 };
 
@@ -16873,15 +16873,15 @@ module.exports = mapSize;
 },{}],92:[function(require,module,exports){
 
 
-var mapType = function(gl, type)
+var mapType = function(gl, type) 
 {
-    if(!GL_TABLE)
+    if(!GL_TABLE) 
     {
         var typeNames = Object.keys(GL_TO_GLSL_TYPES);
 
         GL_TABLE = {};
 
-        for(var i = 0; i < typeNames.length; ++i)
+        for(var i = 0; i < typeNames.length; ++i) 
         {
             var tn = typeNames[i];
             GL_TABLE[ gl[tn] ] = GL_TO_GLSL_TYPES[tn];
@@ -16903,17 +16903,17 @@ var GL_TO_GLSL_TYPES = {
   'INT_VEC2':    'ivec2',
   'INT_VEC3':    'ivec3',
   'INT_VEC4':    'ivec4',
-
+  
   'BOOL':        'bool',
   'BOOL_VEC2':   'bvec2',
   'BOOL_VEC3':   'bvec3',
   'BOOL_VEC4':   'bvec4',
-
+  
   'FLOAT_MAT2':  'mat2',
   'FLOAT_MAT3':  'mat3',
   'FLOAT_MAT4':  'mat4',
-
-  'SAMPLER_2D':  'sampler2D'
+  
+  'SAMPLER_2D':  'sampler2D'  
 };
 
 module.exports = mapType;
@@ -18479,7 +18479,7 @@ var Viewport = function (_PIXI$Container) {
      * @param {number} [options.worldHeight=this.height]
      * @param {number} [options.threshold = 5] number of pixels to move to trigger an input event (e.g., drag, pinch)
      * @param {(PIXI.Rectangle|PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.RoundedRectangle)} [options.forceHitArea] change the default hitArea from world size to a new value
-     * @param {PIXI.Ticker.Ticker} [options.ticker=PIXI.Ticker.shared] use this PIXI.Ticker for updates
+     * @param {PIXI.ticker.Ticker} [options.ticker=PIXI.ticker.shared] use this PIXI.ticker for updates
      * @param {PIXI.InteractionManager} [options.interaction=null] InteractionManager, used to calculate pointer postion relative to
      * @param {HTMLElement} [options.divWheel=document.body] div to attach the wheel event
      * @fires clicked
@@ -18534,7 +18534,7 @@ var Viewport = function (_PIXI$Container) {
          */
         _this.touches = [];
 
-        _this.ticker = options.ticker || PIXI.Ticker.shared;
+        _this.ticker = options.ticker || PIXI.ticker.shared;
         _this.ticker.add(function () {
             return _this.update();
         });
@@ -19956,7 +19956,7 @@ var DIV_HOOK_ZINDEX = 2;
 
 var AccessibilityManager = function () {
     /**
-     * @param {PIXI.Renderer|PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.CanvasRenderer|PIXI.WebGLRenderer} renderer - A reference to the current renderer
      */
     function AccessibilityManager(renderer) {
         _classCallCheck(this, AccessibilityManager);
@@ -20550,7 +20550,7 @@ var Application = function () {
      *  If you experience unexplained flickering try setting this to true. **webgl only**
      * @param {string} [options.powerPreference] - Parameter passed to webgl context, set to "high-performance"
      *  for devices with dual graphics card **webgl only**
-     * @param {boolean} [options.sharedTicker=false] - `true` to use PIXI.Ticker.shared, `false` to create new ticker.
+     * @param {boolean} [options.sharedTicker=false] - `true` to use PIXI.ticker.shared, `false` to create new ticker.
      * @param {boolean} [options.sharedLoader=false] - `true` to use PIXI.loaders.shared, `false` to create new Loader.
      */
     function Application(options, arg2, arg3, arg4, arg5) {
@@ -20580,7 +20580,7 @@ var Application = function () {
 
         /**
          * WebGL renderer if available, otherwise CanvasRenderer
-         * @member {PIXI.Renderer|PIXI.Renderer}
+         * @member {PIXI.WebGLRenderer|PIXI.CanvasRenderer}
          */
         this.renderer = (0, _autoDetectRenderer.autoDetectRenderer)(options);
 
@@ -20592,15 +20592,15 @@ var Application = function () {
 
         /**
          * Internal reference to the ticker
-         * @member {PIXI.Ticker.Ticker}
+         * @member {PIXI.ticker.Ticker}
          * @private
          */
         this._ticker = null;
 
         /**
          * Ticker for doing render updates.
-         * @member {PIXI.Ticker.Ticker}
-         * @default PIXI.Ticker.shared
+         * @member {PIXI.ticker.Ticker}
+         * @default PIXI.ticker.shared
          */
         this.ticker = options.sharedTicker ? _ticker.shared : new _ticker.Ticker();
 
@@ -20822,7 +20822,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  *  If you experience unexplained flickering try setting this to true. **webgl only**
  * @param {string} [options.powerPreference] - Parameter passed to webgl context, set to "high-performance"
  *  for devices with dual graphics card **webgl only**
- * @return {PIXI.Renderer|PIXI.Renderer} Returns WebGL renderer if available, otherwise CanvasRenderer
+ * @return {PIXI.WebGLRenderer|PIXI.CanvasRenderer} Returns WebGL renderer if available, otherwise CanvasRenderer
  */
 function autoDetectRenderer(options, arg1, arg2, arg3) {
     // Backward-compatible support for noWebGL option
@@ -21160,7 +21160,7 @@ var TEXT_GRADIENT = exports.TEXT_GRADIENT = {
 
 /**
  * Represents the update priorities used by internal PIXI classes when registered with
- * the {@link PIXI.Ticker.Ticker} object. Higher priority items are updated first and lower
+ * the {@link PIXI.ticker.Ticker} object. Higher priority items are updated first and lower
  * priority items, such as render, should go later.
  *
  * @static
@@ -21170,7 +21170,7 @@ var TEXT_GRADIENT = exports.TEXT_GRADIENT = {
  * @type {object}
  * @property {number} INTERACTION=50 Highest priority, used for {@link PIXI.interaction.InteractionManager}
  * @property {number} HIGH=25 High priority updating, {@link PIXI.VideoBaseTexture} and {@link PIXI.extras.AnimatedSprite}
- * @property {number} NORMAL=0 Default priority for ticker events, see {@link PIXI.Ticker.Ticker#add}.
+ * @property {number} NORMAL=0 Default priority for ticker events, see {@link PIXI.ticker.Ticker#add}.
  * @property {number} LOW=-25 Low priority used for {@link PIXI.Application} rendering.
  * @property {number} UTILITY=-50 Lowest priority used for {@link PIXI.prepare.BasePrepare} utility.
  */
@@ -21923,7 +21923,7 @@ var Container = function (_DisplayObject) {
     /**
      * Renders the object using the WebGL renderer
      *
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
     ;
 
@@ -21950,7 +21950,7 @@ var Container = function (_DisplayObject) {
      * Render the object using the WebGL renderer and advanced features.
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -22006,7 +22006,7 @@ var Container = function (_DisplayObject) {
      * To be overridden by the subclasses.
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -22019,7 +22019,7 @@ var Container = function (_DisplayObject) {
      * To be overridden by the subclass
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.CanvasRenderer} renderer - The renderer
      */
     ;
 
@@ -22031,7 +22031,7 @@ var Container = function (_DisplayObject) {
     /**
      * Renders the object using the Canvas renderer
      *
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.CanvasRenderer} renderer - The renderer
      */
     ;
 
@@ -22492,7 +22492,7 @@ var DisplayObject = function (_EventEmitter) {
     /**
      * Renders the object using the WebGL renderer
      *
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -22504,7 +22504,7 @@ var DisplayObject = function (_EventEmitter) {
     /**
      * Renders the object using the Canvas renderer
      *
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.CanvasRenderer} renderer - The renderer
      */
     ;
 
@@ -22784,7 +22784,7 @@ var DisplayObject = function (_EventEmitter) {
          * PIXI.Graphics or a PIXI.Sprite object. This allows for much faster masking in canvas as it
          * utilises shape clipping. To remove a mask, set this property to null.
          *
-         * @todo For the moment, PIXI.Renderer doesn't support PIXI.Sprite as mask.
+         * @todo For the moment, PIXI.CanvasRenderer doesn't support PIXI.Sprite as mask.
          *
          * @member {PIXI.Graphics|PIXI.Sprite}
          */
@@ -24106,7 +24106,7 @@ var Graphics = function (_Container) {
      * Renders the object using the WebGL renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -24130,7 +24130,7 @@ var Graphics = function (_Container) {
      * Renders a sprite rectangle.
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -24177,7 +24177,7 @@ var Graphics = function (_Container) {
      * Renders the object using the Canvas renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.CanvasRenderer} renderer - The renderer
      */
 
 
@@ -24692,7 +24692,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var CanvasGraphicsRenderer = function () {
     /**
-     * @param {PIXI.Renderer} renderer - The current PIXI renderer.
+     * @param {PIXI.CanvasRenderer} renderer - The current PIXI renderer.
      */
     function CanvasGraphicsRenderer(renderer) {
         _classCallCheck(this, CanvasGraphicsRenderer);
@@ -25035,7 +25035,7 @@ var GraphicsRenderer = function (_ObjectRenderer) {
     _inherits(GraphicsRenderer, _ObjectRenderer);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this object renderer works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this object renderer works for.
      */
     function GraphicsRenderer(renderer) {
         _classCallCheck(this, GraphicsRenderer);
@@ -28309,8 +28309,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var tempMatrix = new _math.Matrix();
 
 /**
- * The SystemRenderer is the base for a PixiJS Renderer. It is extended by the {@link PIXI.Renderer}
- * and {@link PIXI.Renderer} which can be used for rendering a PixiJS scene.
+ * The SystemRenderer is the base for a PixiJS Renderer. It is extended by the {@link PIXI.CanvasRenderer}
+ * and {@link PIXI.WebGLRenderer} which can be used for rendering a PixiJS scene.
  *
  * @abstract
  * @class
@@ -28372,8 +28372,8 @@ var SystemRenderer = function (_EventEmitter) {
      * The type of the renderer.
      *
      * @member {number}
-     * @default PIXI.Renderer_TYPE.UNKNOWN
-     * @see PIXI.Renderer_TYPE
+     * @default PIXI.RENDERER_TYPE.UNKNOWN
+     * @see PIXI.RENDERER_TYPE
      */
     _this.type = _const.RENDERER_TYPE.UNKNOWN;
 
@@ -28769,13 +28769,13 @@ var CanvasRenderer = function (_SystemRenderer) {
         /**
          * Fired after rendering finishes.
          *
-         * @event PIXI.Renderer#postrender
+         * @event PIXI.CanvasRenderer#postrender
          */
 
         /**
          * Fired before rendering starts.
          *
-         * @event PIXI.Renderer#prerender
+         * @event PIXI.CanvasRenderer#prerender
          */
         return _this;
     }
@@ -28979,7 +28979,7 @@ var CanvasRenderer = function (_SystemRenderer) {
  * Collection of installed plugins. These are included by default in PIXI, but can be excluded
  * by creating a custom build. Consult the README for more information about creating custom
  * builds and excluding plugins.
- * @name PIXI.Renderer#plugins
+ * @name PIXI.CanvasRenderer#plugins
  * @type {object}
  * @readonly
  * @property {PIXI.accessibility.AccessibilityManager} accessibility Support tabbing interactive elements.
@@ -28991,7 +28991,7 @@ var CanvasRenderer = function (_SystemRenderer) {
 /**
  * Adds a plugin to the renderer.
  *
- * @method PIXI.Renderer#registerPlugin
+ * @method PIXI.CanvasRenderer#registerPlugin
  * @param {string} pluginName - The name of the plugin.
  * @param {Function} ctor - The constructor function or class for the plugin.
  */
@@ -29016,7 +29016,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var CanvasMaskManager = function () {
     /**
-     * @param {PIXI.Renderer} renderer - The canvas renderer.
+     * @param {PIXI.CanvasRenderer} renderer - The canvas renderer.
      */
     function CanvasMaskManager(renderer) {
         _classCallCheck(this, CanvasMaskManager);
@@ -29144,7 +29144,7 @@ var CanvasMaskManager = function () {
     /**
      * Restores the current drawing context to the state it was before the mask was applied.
      *
-     * @param {PIXI.Renderer} renderer - The renderer context to use.
+     * @param {PIXI.CanvasRenderer} renderer - The renderer context to use.
      */
 
 
@@ -29449,7 +29449,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var TextureGarbageCollector = function () {
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this manager works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this manager works for.
      */
     function TextureGarbageCollector(renderer) {
         _classCallCheck(this, TextureGarbageCollector);
@@ -29572,7 +29572,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var TextureManager = function () {
     /**
-     * @param {PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.WebGLRenderer} renderer - A reference to the current renderer
      */
     function TextureManager(renderer) {
         _classCallCheck(this, TextureManager);
@@ -29580,7 +29580,7 @@ var TextureManager = function () {
         /**
          * A reference to the current renderer
          *
-         * @member {PIXI.Renderer}
+         * @member {PIXI.WebGLRenderer}
          */
         this.renderer = renderer;
 
@@ -29930,7 +29930,7 @@ var WebGLRenderer = function (_SystemRenderer) {
          * The type of this renderer as a standardised const
          *
          * @member {number}
-         * @see PIXI.Renderer_TYPE
+         * @see PIXI.RENDERER_TYPE
          */
         _this.type = _const.RENDERER_TYPE.WEBGL;
 
@@ -30058,19 +30058,19 @@ var WebGLRenderer = function (_SystemRenderer) {
         /**
          * Fired after rendering finishes.
          *
-         * @event PIXI.Renderer#postrender
+         * @event PIXI.WebGLRenderer#postrender
          */
 
         /**
          * Fired before rendering starts.
          *
-         * @event PIXI.Renderer#prerender
+         * @event PIXI.WebGLRenderer#prerender
          */
 
         /**
          * Fired when the WebGL context is set.
          *
-         * @event PIXI.Renderer#context
+         * @event PIXI.WebGLRenderer#context
          * @param {WebGLRenderingContext} gl - WebGL context.
          */
         return _this;
@@ -30282,7 +30282,7 @@ var WebGLRenderer = function (_SystemRenderer) {
      *
      * @param {PIXI.RenderTexture} renderTexture - The render texture to clear
      * @param {number} [clearColor] - The colour
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30302,7 +30302,7 @@ var WebGLRenderer = function (_SystemRenderer) {
      *
      * @param {PIXI.RenderTexture} renderTexture - The render texture to render
      * @param {PIXI.Transform} transform - The transform to be applied to the render texture
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30335,7 +30335,7 @@ var WebGLRenderer = function (_SystemRenderer) {
      * Changes the current render target to the one given in parameter
      *
      * @param {PIXI.RenderTarget} renderTarget - the new render target
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30359,7 +30359,7 @@ var WebGLRenderer = function (_SystemRenderer) {
      *
      * @param {PIXI.Shader} shader - the new shader
      * @param {boolean} [autoProject=true] - Whether automatically set the projection matrix
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30436,7 +30436,7 @@ var WebGLRenderer = function (_SystemRenderer) {
     * unbinds the texture ...
     *
     * @param {PIXI.Texture} texture - the texture to unbind
-    * @return {PIXI.Renderer} Returns itself.
+    * @return {PIXI.WebGLRenderer} Returns itself.
     */
 
 
@@ -30472,7 +30472,7 @@ var WebGLRenderer = function (_SystemRenderer) {
      * Changes the current Vao to the one given in parameter
      *
      * @param {PIXI.VertexArrayObject} vao - the new Vao
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30496,7 +30496,7 @@ var WebGLRenderer = function (_SystemRenderer) {
     /**
      * Resets the WebGL state so you can render things however you fancy!
      *
-     * @return {PIXI.Renderer} Returns itself.
+     * @return {PIXI.WebGLRenderer} Returns itself.
      */
 
 
@@ -30598,7 +30598,7 @@ var WebGLRenderer = function (_SystemRenderer) {
  * Collection of installed plugins. These are included by default in PIXI, but can be excluded
  * by creating a custom build. Consult the README for more information about creating custom
  * builds and excluding plugins.
- * @name PIXI.Renderer#plugins
+ * @name PIXI.WebGLRenderer#plugins
  * @type {object}
  * @readonly
  * @property {PIXI.accessibility.AccessibilityManager} accessibility Support tabbing interactive elements.
@@ -30610,7 +30610,7 @@ var WebGLRenderer = function (_SystemRenderer) {
 /**
  * Adds a plugin to the renderer.
  *
- * @method PIXI.Renderer#registerPlugin
+ * @method PIXI.WebGLRenderer#registerPlugin
  * @param {string} pluginName - The name of the plugin.
  * @param {Function} ctor - The constructor function or class for the plugin.
  */
@@ -31376,7 +31376,7 @@ var FilterManager = function (_WebGLManager) {
     _inherits(FilterManager, _WebGLManager);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this manager works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this manager works for.
      */
     function FilterManager(renderer) {
         _classCallCheck(this, FilterManager);
@@ -31974,7 +31974,7 @@ var MaskManager = function (_WebGLManager) {
     _inherits(MaskManager, _WebGLManager);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this manager works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this manager works for.
      */
     function MaskManager(renderer) {
         _classCallCheck(this, MaskManager);
@@ -32180,7 +32180,7 @@ var StencilManager = function (_WebGLManager) {
     _inherits(StencilManager, _WebGLManager);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this manager works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this manager works for.
      */
     function StencilManager(renderer) {
         _classCallCheck(this, StencilManager);
@@ -32320,7 +32320,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var WebGLManager = function () {
   /**
-   * @param {PIXI.Renderer} renderer - The renderer this manager works for.
+   * @param {PIXI.WebGLRenderer} renderer - The renderer this manager works for.
    */
   function WebGLManager(renderer) {
     _classCallCheck(this, WebGLManager);
@@ -32328,7 +32328,7 @@ var WebGLManager = function () {
     /**
      * The renderer this manager works for.
      *
-     * @member {PIXI.Renderer}
+     * @member {PIXI.WebGLRenderer}
      */
     this.renderer = renderer;
 
@@ -33227,8 +33227,8 @@ exports.default = {
   RETINA_PREFIX: /@([0-9\.]+)x/,
 
   /**
-   * The default render options if none are supplied to {@link PIXI.Renderer}
-   * or {@link PIXI.Renderer}.
+   * The default render options if none are supplied to {@link PIXI.WebGLRenderer}
+   * or {@link PIXI.CanvasRenderer}.
    *
    * @static
    * @constant
@@ -33687,7 +33687,7 @@ var Sprite = function (_Container) {
     * Renders the object using the WebGL renderer
     *
     * @private
-    * @param {PIXI.Renderer} renderer - The webgl renderer to use.
+    * @param {PIXI.WebGLRenderer} renderer - The webgl renderer to use.
     */
 
 
@@ -33702,7 +33702,7 @@ var Sprite = function (_Container) {
     * Renders the object using the Canvas renderer
     *
     * @private
-    * @param {PIXI.Renderer} renderer - The renderer
+    * @param {PIXI.CanvasRenderer} renderer - The renderer
     */
 
 
@@ -34033,7 +34033,7 @@ var canvasRenderWorldTransform = new _math.Matrix();
 
 var CanvasSpriteRenderer = function () {
     /**
-     * @param {PIXI.Renderer} renderer -The renderer sprite this batch works for.
+     * @param {PIXI.WebGLRenderer} renderer -The renderer sprite this batch works for.
      */
     function CanvasSpriteRenderer(renderer) {
         _classCallCheck(this, CanvasSpriteRenderer);
@@ -34059,7 +34059,7 @@ var CanvasSpriteRenderer = function () {
         var dx = 0;
         var dy = 0;
 
-        if (texture.orig.width <= 0 || texture.orig.height <= 0 || !texture.baseTexture.resource.source) {
+        if (texture.orig.width <= 0 || texture.orig.height <= 0 || !texture.baseTexture.source) {
             return;
         }
 
@@ -34118,7 +34118,7 @@ var CanvasSpriteRenderer = function () {
 
                 renderer.context.drawImage(sprite.tintedTexture, 0, 0, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
             } else {
-                renderer.context.drawImage(texture.baseTexture.resource.source, texture._frame.x * resolution, texture._frame.y * resolution, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
+                renderer.context.drawImage(texture.baseTexture.source, texture._frame.x * resolution, texture._frame.y * resolution, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
             }
         }
     };
@@ -34240,11 +34240,11 @@ var CanvasTinter = {
 
         context.globalCompositeOperation = 'multiply';
 
-        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
 
         context.globalCompositeOperation = 'destination-atop';
 
-        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
         context.restore();
     },
 
@@ -34275,7 +34275,7 @@ var CanvasTinter = {
         context.fillRect(0, 0, crop.width, crop.height);
 
         context.globalCompositeOperation = 'destination-atop';
-        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
 
         // context.globalCompositeOperation = 'copy';
         context.restore();
@@ -34305,7 +34305,7 @@ var CanvasTinter = {
 
         context.save();
         context.globalCompositeOperation = 'copy';
-        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
         context.restore();
 
         var rgbValues = (0, _utils.hex2rgb)(color);
@@ -34512,7 +34512,7 @@ var SpriteRenderer = function (_ObjectRenderer) {
     _inherits(SpriteRenderer, _ObjectRenderer);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this sprite batch works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this sprite batch works for.
      */
     function SpriteRenderer(renderer) {
         _classCallCheck(this, SpriteRenderer);
@@ -35419,7 +35419,7 @@ var Text = function (_Sprite) {
     /**
      * Renders the object using the WebGL renderer
      *
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -35438,7 +35438,7 @@ var Text = function (_Sprite) {
      * Renders the object using the Canvas renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.CanvasRenderer} renderer - The renderer
      */
 
 
@@ -37749,7 +37749,7 @@ var BaseTexture = function (_EventEmitter) {
             baseTexture.imageUrl = imageUrl;
 
             if (sourceScale) {
-                baseTexture.resource.sourceScale = sourceScale;
+                baseTexture.sourceScale = sourceScale;
             }
 
             // if there is an @2x at the end of the url we are going to assume its a highres image
@@ -37817,7 +37817,7 @@ var BaseTexture = function (_EventEmitter) {
                 baseTexture.imageUrl = imageUrl;
 
                 if (sourceScale) {
-                    baseTexture.resource.sourceScale = sourceScale;
+                    baseTexture.sourceScale = sourceScale;
                 }
 
                 // if there is an @2x at the end of the url we are going to assume its a highres image
@@ -38224,7 +38224,7 @@ var Spritesheet = function () {
     Spritesheet.prototype._processFrames = function _processFrames(initialFrameIndex) {
         var frameIndex = initialFrameIndex;
         var maxFrames = Spritesheet.BATCH_SIZE;
-        var sourceScale = this.baseTexture.resource.sourceScale;
+        var sourceScale = this.baseTexture.sourceScale;
 
         while (frameIndex - initialFrameIndex < maxFrames && frameIndex < this._frameKeys.length) {
             var i = this._frameKeys[frameIndex];
@@ -38906,7 +38906,7 @@ var Texture = function (_EventEmitter) {
                 throw new Error('Texture Error: frame does not fit inside the base Texture dimensions: ' + (errorX + ' ' + relationship + ' ' + errorY));
             }
 
-            // this.valid = width && height && this.baseTexture.resource.source && this.baseTexture.hasLoaded;
+            // this.valid = width && height && this.baseTexture.source && this.baseTexture.hasLoaded;
             this.valid = width && height && this.baseTexture.hasLoaded;
 
             if (!this.trim && !this.rotate) {
@@ -39039,7 +39039,7 @@ var tempMat = new _Matrix2.default();
  *
  * @see PIXI.Texture
  * @see PIXI.mesh.Mesh
- * @see PIXI.TilingSprite
+ * @see PIXI.extras.TilingSprite
  * @class
  * @memberof PIXI
  */
@@ -39655,7 +39655,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * e.g. When the ticker is started and the emitter has listeners.
  *
  * @class
- * @memberof PIXI.Ticker
+ * @memberof PIXI.ticker
  */
 var Ticker = function () {
     /**
@@ -39688,7 +39688,7 @@ var Ticker = function () {
 
         /**
          * Whether or not this ticker should invoke the method
-         * {@link PIXI.Ticker.Ticker#start} automatically
+         * {@link PIXI.ticker.Ticker#start} automatically
          * when a listener is added.
          *
          * @member {boolean}
@@ -39698,8 +39698,8 @@ var Ticker = function () {
 
         /**
          * Scalar time value from last frame to this frame.
-         * This value is capped by setting {@link PIXI.Ticker.Ticker#minFPS}
-         * and is scaled with {@link PIXI.Ticker.Ticker#speed}.
+         * This value is capped by setting {@link PIXI.ticker.Ticker#minFPS}
+         * and is scaled with {@link PIXI.ticker.Ticker#speed}.
          * **Note:** The cap may be exceeded by scaling.
          *
          * @member {number}
@@ -39709,7 +39709,7 @@ var Ticker = function () {
 
         /**
          * Time elapsed in milliseconds from last frame to this frame.
-         * Opposed to what the scalar {@link PIXI.Ticker.Ticker#deltaTime}
+         * Opposed to what the scalar {@link PIXI.ticker.Ticker#deltaTime}
          * is based, this value is neither capped nor scaled.
          * If the platform supports DOMHighResTimeStamp,
          * this value will have a precision of 1 µs.
@@ -39721,7 +39721,7 @@ var Ticker = function () {
         this.elapsedMS = 1 / _settings2.default.TARGET_FPMS;
 
         /**
-         * The last time {@link PIXI.Ticker.Ticker#update} was invoked.
+         * The last time {@link PIXI.ticker.Ticker#update} was invoked.
          * This value is also reset internally outside of invoking
          * update, but only when a new animation frame is requested.
          * If the platform supports DOMHighResTimeStamp,
@@ -39733,7 +39733,7 @@ var Ticker = function () {
         this.lastTime = -1;
 
         /**
-         * Factor of current {@link PIXI.Ticker.Ticker#deltaTime}.
+         * Factor of current {@link PIXI.ticker.Ticker#deltaTime}.
          * @example
          * // Scales ticker.deltaTime to what would be
          * // the equivalent of approximately 120 FPS
@@ -39746,10 +39746,10 @@ var Ticker = function () {
 
         /**
          * Whether or not this ticker has been started.
-         * `true` if {@link PIXI.Ticker.Ticker#start} has been called.
-         * `false` if {@link PIXI.Ticker.Ticker#stop} has been called.
+         * `true` if {@link PIXI.ticker.Ticker#start} has been called.
+         * `false` if {@link PIXI.ticker.Ticker#stop} has been called.
          * While `false`, this value may change to `true` in the
-         * event of {@link PIXI.Ticker.Ticker#autoStart} being `true`
+         * event of {@link PIXI.ticker.Ticker#autoStart} being `true`
          * and a listener is added.
          *
          * @member {boolean}
@@ -39840,7 +39840,7 @@ var Ticker = function () {
      * @param {Function} fn - The listener function to be added for updates
      * @param {Function} [context] - The listener context
      * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
-     * @returns {PIXI.Ticker.Ticker} This instance of a ticker
+     * @returns {PIXI.ticker.Ticker} This instance of a ticker
      */
 
 
@@ -39856,7 +39856,7 @@ var Ticker = function () {
      * @param {Function} fn - The listener function to be added for one update
      * @param {Function} [context] - The listener context
      * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
-     * @returns {PIXI.Ticker.Ticker} This instance of a ticker
+     * @returns {PIXI.ticker.Ticker} This instance of a ticker
      */
 
 
@@ -39873,7 +39873,7 @@ var Ticker = function () {
      *
      * @private
      * @param {TickerListener} listener - Current listener being added.
-     * @returns {PIXI.Ticker.Ticker} This instance of a ticker
+     * @returns {PIXI.ticker.Ticker} This instance of a ticker
      */
 
 
@@ -39913,7 +39913,7 @@ var Ticker = function () {
      *
      * @param {Function} fn - The listener function to be removed
      * @param {Function} [context] - The listener context to be removed
-     * @returns {PIXI.Ticker.Ticker} This instance of a ticker
+     * @returns {PIXI.ticker.Ticker} This instance of a ticker
      */
 
 
@@ -39985,10 +39985,10 @@ var Ticker = function () {
 
     /**
      * Triggers an update. An update entails setting the
-     * current {@link PIXI.Ticker.Ticker#elapsedMS},
-     * the current {@link PIXI.Ticker.Ticker#deltaTime},
+     * current {@link PIXI.ticker.Ticker#elapsedMS},
+     * the current {@link PIXI.ticker.Ticker#deltaTime},
      * invoking all listeners with current deltaTime,
-     * and then finally setting {@link PIXI.Ticker.Ticker#lastTime}
+     * and then finally setting {@link PIXI.ticker.Ticker#lastTime}
      * with the value of currentTime that was provided.
      * This method will be called automatically by animation
      * frame callbacks if the ticker instance has been started
@@ -40054,8 +40054,8 @@ var Ticker = function () {
      * The frames per second at which this ticker is running.
      * The default is approximately 60 in most modern browsers.
      * **Note:** This does not factor in the value of
-     * {@link PIXI.Ticker.Ticker#speed}, which is specific
-     * to scaling {@link PIXI.Ticker.Ticker#deltaTime}.
+     * {@link PIXI.ticker.Ticker#speed}, which is specific
+     * to scaling {@link PIXI.ticker.Ticker#deltaTime}.
      *
      * @member {number}
      * @readonly
@@ -40070,9 +40070,9 @@ var Ticker = function () {
 
         /**
          * Manages the maximum amount of milliseconds allowed to
-         * elapse between invoking {@link PIXI.Ticker.Ticker#update}.
-         * This value is used to cap {@link PIXI.Ticker.Ticker#deltaTime},
-         * but does not effect the measured value of {@link PIXI.Ticker.Ticker#FPS}.
+         * elapse between invoking {@link PIXI.ticker.Ticker#update}.
+         * This value is used to cap {@link PIXI.ticker.Ticker#deltaTime},
+         * but does not effect the measured value of {@link PIXI.ticker.Ticker#FPS}.
          * When setting this property it is clamped to a value between
          * `0` and `PIXI.settings.TARGET_FPMS * 1000`.
          *
@@ -40111,7 +40111,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @private
  * @class
- * @memberof PIXI.Ticker
+ * @memberof PIXI.ticker
  */
 var TickerListener = function () {
     /**
@@ -40288,14 +40288,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * The shared ticker instance used by {@link PIXI.extras.AnimatedSprite}.
  * and by {@link PIXI.interaction.InteractionManager}.
- * The property {@link PIXI.Ticker.Ticker#autoStart} is set to `true`
+ * The property {@link PIXI.ticker.Ticker#autoStart} is set to `true`
  * for this instance. Please follow the examples for usage, including
  * how to opt-out of auto-starting the shared ticker.
  *
  * @example
- * let ticker = PIXI.Ticker.shared;
+ * let ticker = PIXI.ticker.shared;
  * // Set this to prevent starting this ticker when listeners are added.
- * // By default this is true only for the PIXI.Ticker.shared instance.
+ * // By default this is true only for the PIXI.ticker.shared instance.
  * ticker.autoStart = false;
  * // FYI, call this to ensure the ticker is stopped. It should be stopped
  * // if you have not attempted to render anything yet.
@@ -40324,8 +40324,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * }
  * animate(performance.now());
  *
- * @type {PIXI.Ticker.Ticker}
- * @memberof PIXI.Ticker
+ * @type {PIXI.ticker.Ticker}
+ * @memberof PIXI.ticker
  */
 var shared = new _Ticker2.default();
 
@@ -40342,13 +40342,13 @@ shared.destroy = function () {
  * This ticker is used for rendering, {@link PIXI.extras.AnimatedSprite AnimatedSprite},
  * {@link PIXI.interaction.InteractionManager InteractionManager} and many other time-based PIXI systems.
  * @example
- * const ticker = new PIXI.Ticker.Ticker();
+ * const ticker = new PIXI.ticker.Ticker();
  * ticker.stop();
  * ticker.add((deltaTime) => {
  *   // do something every frame
  * });
  * ticker.start();
- * @namespace PIXI.Ticker
+ * @namespace PIXI.ticker
  */
 exports.shared = shared;
 exports.Ticker = _Ticker2.default;
@@ -41397,14 +41397,14 @@ function deprecation(core) {
          * @private
          * @name TilingSprite
          * @memberof PIXI
-         * @see PIXI.TilingSprite
+         * @see PIXI.extras.TilingSprite
          * @deprecated since version 3.0.0
          */
         TilingSprite: {
             get: function get() {
-                warn('The TilingSprite class has been moved to TilingSprite, ' + 'please use TilingSprite from now on.');
+                warn('The TilingSprite class has been moved to extras.TilingSprite, ' + 'please use extras.TilingSprite from now on.');
 
-                return TilingSprite;
+                return extras.TilingSprite;
             }
         },
 
@@ -42390,7 +42390,7 @@ var TEMP_RECT = new core.Rectangle();
 
 var CanvasExtract = function () {
     /**
-     * @param {PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.CanvasRenderer} renderer - A reference to the current renderer
      */
     function CanvasExtract(renderer) {
         _classCallCheck(this, CanvasExtract);
@@ -42400,7 +42400,7 @@ var CanvasExtract = function () {
          * Collection of methods for extracting data (image, pixels, etc.) from a display object or render texture
          *
          * @member {PIXI.extract.CanvasExtract} extract
-         * @memberof PIXI.Renderer#
+         * @memberof PIXI.CanvasRenderer#
          * @see PIXI.extract.CanvasExtract
          */
         renderer.extract = this;
@@ -42596,7 +42596,7 @@ var BYTES_PER_PIXEL = 4;
 
 var WebGLExtract = function () {
     /**
-     * @param {PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.WebGLRenderer} renderer - A reference to the current renderer
      */
     function WebGLExtract(renderer) {
         _classCallCheck(this, WebGLExtract);
@@ -42606,7 +42606,7 @@ var WebGLExtract = function () {
          * Collection of methods for extracting data (image, pixels, etc.) from a display object or render texture
          *
          * @member {PIXI.extract.WebGLExtract} extract
-         * @memberof PIXI.Renderer#
+         * @memberof PIXI.WebGLRenderer#
          * @see PIXI.extract.WebGLExtract
          */
         renderer.extract = this;
@@ -42856,7 +42856,7 @@ var AnimatedSprite = function (_core$Sprite) {
     /**
      * @param {PIXI.Texture[]|PIXI.extras.AnimatedSprite~FrameObject[]} textures - an array of {@link PIXI.Texture} or frame
      *  objects that make up the animation
-     * @param {boolean} [autoUpdate=true] - Whether to use PIXI.Ticker.shared to auto update animation time.
+     * @param {boolean} [autoUpdate=true] - Whether to use PIXI.ticker.shared to auto update animation time.
      */
     function AnimatedSprite(textures, autoUpdate) {
         _classCallCheck(this, AnimatedSprite);
@@ -42876,7 +42876,7 @@ var AnimatedSprite = function (_core$Sprite) {
         _this.textures = textures;
 
         /**
-         * `true` uses PIXI.Ticker.shared to auto update animation time.
+         * `true` uses PIXI.ticker.shared to auto update animation time.
          * @type {boolean}
          * @default true
          * @private
@@ -43936,7 +43936,7 @@ var TilingSprite = function (_core$Sprite) {
      * Renders the object using the WebGL renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The renderer
+     * @param {PIXI.WebGLRenderer} renderer - The renderer
      */
 
 
@@ -43959,7 +43959,7 @@ var TilingSprite = function (_core$Sprite) {
      * Renders the object using the Canvas renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - a reference to the canvas renderer
+     * @param {PIXI.CanvasRenderer} renderer - a reference to the canvas renderer
      */
 
 
@@ -43989,7 +43989,7 @@ var TilingSprite = function (_core$Sprite) {
                 this.tintedTexture = _CanvasTinter2.default.getTintedTexture(this, this.tint);
                 tempCanvas.context.drawImage(this.tintedTexture, 0, 0);
             } else {
-                tempCanvas.context.drawImage(baseTexture.resource.source, -texture._frame.x * baseTextureResolution, -texture._frame.y * baseTextureResolution);
+                tempCanvas.context.drawImage(baseTexture.source, -texture._frame.x * baseTextureResolution, -texture._frame.y * baseTextureResolution);
             }
             this.cachedTint = this.tint;
             this._canvasPattern = tempCanvas.context.createPattern(tempCanvas.canvas, 'repeat');
@@ -44136,7 +44136,7 @@ var TilingSprite = function (_core$Sprite) {
      * @param {string} frameId - The frame Id of the texture in the cache
      * @param {number} width - the width of the tiling sprite
      * @param {number} height - the height of the tiling sprite
-     * @return {PIXI.TilingSprite} A new TilingSprite using a texture from the texture cache matching the frameId
+     * @return {PIXI.extras.TilingSprite} A new TilingSprite using a texture from the texture cache matching the frameId
      */
 
 
@@ -44161,7 +44161,7 @@ var TilingSprite = function (_core$Sprite) {
      * @param {boolean} [crossorigin] - if you want to specify the cross-origin parameter
      * @param {number} [scaleMode=PIXI.settings.SCALE_MODE] - if you want to specify the scale mode,
      *  see {@link PIXI.SCALE_MODES} for possible values
-     * @return {PIXI.TilingSprite} A new TilingSprite using a texture from the texture cache matching the image id
+     * @return {PIXI.extras.TilingSprite} A new TilingSprite using a texture from the texture cache matching the image id
      */
 
 
@@ -44389,7 +44389,7 @@ Object.defineProperties(DisplayObject.prototype, {
  *
  * @private
  * @memberof PIXI.DisplayObject#
- * @param {PIXI.Renderer} renderer - the WebGL renderer
+ * @param {PIXI.WebGLRenderer} renderer - the WebGL renderer
  */
 DisplayObject.prototype._renderCachedWebGL = function _renderCachedWebGL(renderer) {
     if (!this.visible || this.worldAlpha <= 0 || !this.renderable) {
@@ -44408,7 +44408,7 @@ DisplayObject.prototype._renderCachedWebGL = function _renderCachedWebGL(rendere
  *
  * @private
  * @memberof PIXI.DisplayObject#
- * @param {PIXI.Renderer} renderer - the WebGL renderer
+ * @param {PIXI.WebGLRenderer} renderer - the WebGL renderer
  */
 DisplayObject.prototype._initCachedDisplayObject = function _initCachedDisplayObject(renderer) {
     if (this._cacheData && this._cacheData.sprite) {
@@ -44513,7 +44513,7 @@ DisplayObject.prototype._initCachedDisplayObject = function _initCachedDisplayOb
  *
  * @private
  * @memberof PIXI.DisplayObject#
- * @param {PIXI.Renderer} renderer - the WebGL renderer
+ * @param {PIXI.WebGLRenderer} renderer - the WebGL renderer
  */
 DisplayObject.prototype._renderCachedCanvas = function _renderCachedCanvas(renderer) {
     if (!this.visible || this.worldAlpha <= 0 || !this.renderable) {
@@ -44533,7 +44533,7 @@ DisplayObject.prototype._renderCachedCanvas = function _renderCachedCanvas(rende
  *
  * @private
  * @memberof PIXI.DisplayObject#
- * @param {PIXI.Renderer} renderer - the WebGL renderer
+ * @param {PIXI.WebGLRenderer} renderer - the WebGL renderer
  */
 DisplayObject.prototype._initCachedDisplayObjectCanvas = function _initCachedDisplayObjectCanvas(renderer) {
     if (this._cacheData && this._cacheData.sprite) {
@@ -44845,7 +44845,7 @@ var TilingSpriteRenderer = function (_core$ObjectRenderer) {
 
     /**
      *
-     * @param {PIXI.TilingSprite} ts tilingSprite to be rendered
+     * @param {PIXI.extras.TilingSprite} ts tilingSprite to be rendered
      */
 
 
@@ -47012,7 +47012,7 @@ var InteractionManager = function (_EventEmitter) {
     _inherits(InteractionManager, _EventEmitter);
 
     /**
-     * @param {PIXI.Renderer|PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.CanvasRenderer|PIXI.WebGLRenderer} renderer - A reference to the current renderer
      * @param {object} [options] - The options for the manager.
      * @param {boolean} [options.autoPreventDefault=true] - Should the manager automatically prevent default browser actions.
      * @param {number} [options.interactionFrequency=10] - Frequency increases the interaction events will be checked.
@@ -47779,7 +47779,7 @@ var InteractionManager = function (_EventEmitter) {
 
     /**
      * Updates the state of interactive objects.
-     * Invoked by a throttled ticker update from {@link PIXI.Ticker.shared}.
+     * Invoked by a throttled ticker update from {@link PIXI.ticker.shared}.
      *
      * @param {number} deltaTime - time delta since last tick
      */
@@ -47871,7 +47871,7 @@ var InteractionManager = function (_EventEmitter) {
     /**
      * Dispatches an event on the display object that was interacted with
      *
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the display object in question
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - the display object in question
      * @param {string} eventString - the name of the event (e.g, mousedown)
      * @param {object} eventData - the event data object
      * @private
@@ -47926,7 +47926,7 @@ var InteractionManager = function (_EventEmitter) {
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - event containing the point that
      *  is tested for collision
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the displayObject
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - the displayObject
      *  that will be hit test (recursively crawls its children)
      * @param {Function} [func] - the function that will be called on each interactive object. The
      *  interactionEvent, displayObject and hit will be passed to the function
@@ -48112,7 +48112,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48207,7 +48207,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
      */
 
 
@@ -48246,7 +48246,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48366,7 +48366,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48434,7 +48434,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -49713,7 +49713,7 @@ var Mesh = function (_core$Container) {
    * Renders the object using the WebGL renderer
    *
    * @private
-   * @param {PIXI.Renderer} renderer - a reference to the WebGL renderer
+   * @param {PIXI.WebGLRenderer} renderer - a reference to the WebGL renderer
    */
 
 
@@ -49727,7 +49727,7 @@ var Mesh = function (_core$Container) {
    * Renders the object using the Canvas renderer
    *
    * @private
-   * @param {PIXI.Renderer} renderer - The canvas renderer.
+   * @param {PIXI.CanvasRenderer} renderer - The canvas renderer.
    */
 
 
@@ -50066,7 +50066,7 @@ var NineSlicePlane = function (_Plane) {
      * Renders the object using the Canvas renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The canvas renderer to render with.
+     * @param {PIXI.CanvasRenderer} renderer - The canvas renderer to render with.
      */
 
 
@@ -50697,7 +50697,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var MeshSpriteRenderer = function () {
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this downport works for
+     * @param {PIXI.CanvasRenderer} renderer - The renderer this downport works for
      */
     function MeshSpriteRenderer(renderer) {
         _classCallCheck(this, MeshSpriteRenderer);
@@ -51392,7 +51392,7 @@ var ParticleContainer = function (_core$Container) {
      * Renders the container using the WebGL renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The webgl renderer
+     * @param {PIXI.WebGLRenderer} renderer - The webgl renderer
      */
     ParticleContainer.prototype.renderWebGL = function renderWebGL(renderer) {
         var _this2 = this;
@@ -51435,7 +51435,7 @@ var ParticleContainer = function (_core$Container) {
      * Renders the object using the Canvas renderer
      *
      * @private
-     * @param {PIXI.Renderer} renderer - The canvas renderer
+     * @param {PIXI.CanvasRenderer} renderer - The canvas renderer
      */
 
 
@@ -51508,7 +51508,7 @@ var ParticleContainer = function (_core$Container) {
 
             var resolution = child._texture.baseTexture.resolution;
 
-            context.drawImage(child._texture.baseTexture.resource.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * renderer.resolution, positionY * renderer.resolution, finalWidth * renderer.resolution, finalHeight * renderer.resolution);
+            context.drawImage(child._texture.baseTexture.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * renderer.resolution, positionY * renderer.resolution, finalWidth * renderer.resolution, finalHeight * renderer.resolution);
         }
     };
 
@@ -51882,7 +51882,7 @@ var ParticleRenderer = function (_core$ObjectRenderer) {
     _inherits(ParticleRenderer, _core$ObjectRenderer);
 
     /**
-     * @param {PIXI.Renderer} renderer - The renderer this sprite batch works for.
+     * @param {PIXI.WebGLRenderer} renderer - The renderer this sprite batch works for.
      */
     function ParticleRenderer(renderer) {
         _classCallCheck(this, ParticleRenderer);
@@ -52583,7 +52583,7 @@ var BasePrepare = function () {
         /**
          * The only real difference between CanvasPrepare and WebGLPrepare is what they pass
          * to upload hooks. That different parameter is stored here.
-         * @type {PIXI.prepare.CanvasPrepare|PIXI.Renderer}
+         * @type {PIXI.prepare.CanvasPrepare|PIXI.WebGLRenderer}
          * @protected
          */
         this.uploadHookHelper = null;
@@ -52906,7 +52906,7 @@ function findTexture(item, queue) {
  * Built-in hook to draw PIXI.Text to its texture.
  *
  * @private
- * @param {PIXI.Renderer|PIXI.CanvasPrepare} helper - Not used by this upload handler
+ * @param {PIXI.WebGLRenderer|PIXI.CanvasPrepare} helper - Not used by this upload handler
  * @param {PIXI.DisplayObject} item - Item to check
  * @return {boolean} If item was uploaded.
  */
@@ -52925,7 +52925,7 @@ function drawText(helper, item) {
  * Built-in hook to calculate a text style for a PIXI.Text object.
  *
  * @private
- * @param {PIXI.Renderer|PIXI.CanvasPrepare} helper - Not used by this upload handler
+ * @param {PIXI.WebGLRenderer|PIXI.CanvasPrepare} helper - Not used by this upload handler
  * @param {PIXI.DisplayObject} item - Item to check
  * @return {boolean} If item was uploaded.
  */
@@ -53034,7 +53034,7 @@ var CanvasPrepare = function (_BasePrepare) {
     _inherits(CanvasPrepare, _BasePrepare);
 
     /**
-     * @param {PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.CanvasRenderer} renderer - A reference to the current renderer
      */
     function CanvasPrepare(renderer) {
         _classCallCheck(this, CanvasPrepare);
@@ -53316,7 +53316,7 @@ var WebGLPrepare = function (_BasePrepare) {
     _inherits(WebGLPrepare, _BasePrepare);
 
     /**
-     * @param {PIXI.Renderer} renderer - A reference to the current renderer
+     * @param {PIXI.WebGLRenderer} renderer - A reference to the current renderer
      */
     function WebGLPrepare(renderer) {
         _classCallCheck(this, WebGLPrepare);
@@ -53338,7 +53338,7 @@ var WebGLPrepare = function (_BasePrepare) {
  * Built-in hook to upload PIXI.Texture objects to the GPU.
  *
  * @private
- * @param {PIXI.Renderer} renderer - instance of the webgl renderer
+ * @param {PIXI.WebGLRenderer} renderer - instance of the webgl renderer
  * @param {PIXI.DisplayObject} item - Item to check
  * @return {boolean} If item was uploaded.
  */
@@ -53364,7 +53364,7 @@ function uploadBaseTextures(renderer, item) {
  * Built-in hook to upload PIXI.Graphics to the GPU.
  *
  * @private
- * @param {PIXI.Renderer} renderer - instance of the webgl renderer
+ * @param {PIXI.WebGLRenderer} renderer - instance of the webgl renderer
  * @param {PIXI.DisplayObject} item - Item to check
  * @return {boolean} If item was uploaded.
  */
@@ -56921,10 +56921,10 @@ module.exports = sr;
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE

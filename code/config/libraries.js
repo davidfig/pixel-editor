@@ -1,7 +1,7 @@
 module.exports = {
 
-    RenderSheet: require('../../../../components/rendersheet/src/rendersheet'),
-    // RenderSheet: require('yy-rendersheet'),
+    // RenderSheet: require('../../../../components/rendersheet/src/rendersheet'),
+    RenderSheet: require('yy-rendersheet'),
 
     // YY_PIXEL: '../../../components/pixel/',
     Pixel: require('yy-pixel').Pixel,

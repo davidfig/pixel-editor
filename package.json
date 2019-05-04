@@ -31,7 +31,7 @@
     "path": "^0.12.7",
     "pixi-ease": "^1.1.2",
     "pixi-viewport": "^3.23.2",
-    "pixi.js": "^5.0.0",
+    "pixi.js": "4.8.7",
     "point-in-triangle": "^1.0.1",
     "simple-window-manager": "^1.1.0",
     "tinycolor2": "^1.4.1",

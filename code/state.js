@@ -12,45 +12,42 @@ class State extends Events
         super()
     }
 
-    load(callback)
+    async load()
     {
-        File.readState((value) =>
+        const value = await File.readState()
+        this.state = value
+        if (Settings.RESET)
         {
-            this.state = value
-            if (Settings.RESET)
-            {
-                this.state = null
-            }
-            if (!this.state || Settings.TEST_CLEAN_OPENING)
-            {
-                this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
-            }
-            if (typeof this.state.foreground !== 'string')
-            {
-                this.state.foreground = 'ffffffff'
-            }
-            if (typeof this.state.background !== 'string')
-            {
-                this.state.background = '00000000'
-            }
-            if (!this.state.manager)
-            {
-                this.state.manager = { zoom: 4, images: true, alphabetical: true }
-            }
-            if (this.state.tool === 'sample')
-            {
-                this.state.tool = 'select'
-            }
-            if (!this.state.views)
-            {
-                this.state.views = []
-                this.state.view = 0
-            }
-            this.state.lastFiles = this.state.lastFiles || []
-            this.state.relative = this.state.relative || 'top-left'
-            this.state.keys = this.state.keys || DEFAULT_KEYS
-            callback()
-        })
+            this.state = null
+        }
+        if (!this.state || Settings.TEST_CLEAN_OPENING)
+        {
+            this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
+        }
+        if (typeof this.state.foreground !== 'string')
+        {
+            this.state.foreground = 'ffffffff'
+        }
+        if (typeof this.state.background !== 'string')
+        {
+            this.state.background = '00000000'
+        }
+        if (!this.state.manager)
+        {
+            this.state.manager = { zoom: 4, images: true, alphabetical: true }
+        }
+        if (this.state.tool === 'sample')
+        {
+            this.state.tool = 'select'
+        }
+        if (!this.state.views)
+        {
+            this.state.views = []
+            this.state.view = 0
+        }
+        this.state.lastFiles = this.state.lastFiles || []
+        this.state.relative = this.state.relative || 'top-left'
+        this.state.keys = this.state.keys || DEFAULT_KEYS
     }
 
     resetKeys()

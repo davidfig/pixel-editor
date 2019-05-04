@@ -10,13 +10,9 @@ let _main
 
 const BACKGROUND = '#000000'
 
-function init()
+async function init()
 {
-    State.load(afterLoad)
-}
-
-function afterLoad()
-{
+    await State.load()
     const main = State.main
     if (main)
     {

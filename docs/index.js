@@ -2104,7 +2104,7 @@ module.exports = class Palette extends PIXI.Container
             const texture = PixelSheet.textures[PixelEditor.name + '-' + i].texture
             if (texture.baseTexture.hasLoaded)
             {
-                const canvas = texture.baseTexture.source
+                const canvas = texture.baseTexture.resource.source
                 const frame = texture.frame
                 const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
                 for (let i = 0; i < data.length; i += 4)
@@ -2428,7 +2428,7 @@ module.exports = class Picker
     {
         const size = this.size()
         this.alpha = this.stage.addChild(new PIXI.Container())
-        this.alphaTransparent = this.alpha.addChild(new PIXI.extras.TilingSprite(sheet.getTexture('transparency')))
+        this.alphaTransparent = this.alpha.addChild(new PIXI.TilingSprite(sheet.getTexture('transparency')))
         this.alphaTransparent.tileScale.set(0.1)
         this.alphaTransparent.width = size
         this.alphaTransparent.height = BAR_HEIGHT
@@ -3932,7 +3932,7 @@ class PixelEditor extends Pixel
                 this.undoSave()
             }
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const hex = parseInt(value, 16)
@@ -3965,7 +3965,7 @@ class PixelEditor extends Pixel
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const data = c.getImageData(frame.x + x, frame.y + y, 1, 1).data
@@ -34059,7 +34059,7 @@ var CanvasSpriteRenderer = function () {
         var dx = 0;
         var dy = 0;
 
-        if (texture.orig.width <= 0 || texture.orig.height <= 0 || !texture.baseTexture.source) {
+        if (texture.orig.width <= 0 || texture.orig.height <= 0 || !texture.baseTexture.resource.source) {
             return;
         }
 
@@ -34118,7 +34118,7 @@ var CanvasSpriteRenderer = function () {
 
                 renderer.context.drawImage(sprite.tintedTexture, 0, 0, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
             } else {
-                renderer.context.drawImage(texture.baseTexture.source, texture._frame.x * resolution, texture._frame.y * resolution, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
+                renderer.context.drawImage(texture.baseTexture.resource.source, texture._frame.x * resolution, texture._frame.y * resolution, width * resolution, height * resolution, dx * renderer.resolution, dy * renderer.resolution, width * renderer.resolution, height * renderer.resolution);
             }
         }
     };
@@ -34240,11 +34240,11 @@ var CanvasTinter = {
 
         context.globalCompositeOperation = 'multiply';
 
-        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
 
         context.globalCompositeOperation = 'destination-atop';
 
-        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
         context.restore();
     },
 
@@ -34275,7 +34275,7 @@ var CanvasTinter = {
         context.fillRect(0, 0, crop.width, crop.height);
 
         context.globalCompositeOperation = 'destination-atop';
-        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
 
         // context.globalCompositeOperation = 'copy';
         context.restore();
@@ -34305,7 +34305,7 @@ var CanvasTinter = {
 
         context.save();
         context.globalCompositeOperation = 'copy';
-        context.drawImage(texture.baseTexture.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
+        context.drawImage(texture.baseTexture.resource.source, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
         context.restore();
 
         var rgbValues = (0, _utils.hex2rgb)(color);
@@ -37749,7 +37749,7 @@ var BaseTexture = function (_EventEmitter) {
             baseTexture.imageUrl = imageUrl;
 
             if (sourceScale) {
-                baseTexture.sourceScale = sourceScale;
+                baseTexture.resource.sourceScale = sourceScale;
             }
 
             // if there is an @2x at the end of the url we are going to assume its a highres image
@@ -37817,7 +37817,7 @@ var BaseTexture = function (_EventEmitter) {
                 baseTexture.imageUrl = imageUrl;
 
                 if (sourceScale) {
-                    baseTexture.sourceScale = sourceScale;
+                    baseTexture.resource.sourceScale = sourceScale;
                 }
 
                 // if there is an @2x at the end of the url we are going to assume its a highres image
@@ -38224,7 +38224,7 @@ var Spritesheet = function () {
     Spritesheet.prototype._processFrames = function _processFrames(initialFrameIndex) {
         var frameIndex = initialFrameIndex;
         var maxFrames = Spritesheet.BATCH_SIZE;
-        var sourceScale = this.baseTexture.sourceScale;
+        var sourceScale = this.baseTexture.resource.sourceScale;
 
         while (frameIndex - initialFrameIndex < maxFrames && frameIndex < this._frameKeys.length) {
             var i = this._frameKeys[frameIndex];
@@ -38906,7 +38906,7 @@ var Texture = function (_EventEmitter) {
                 throw new Error('Texture Error: frame does not fit inside the base Texture dimensions: ' + (errorX + ' ' + relationship + ' ' + errorY));
             }
 
-            // this.valid = width && height && this.baseTexture.source && this.baseTexture.hasLoaded;
+            // this.valid = width && height && this.baseTexture.resource.source && this.baseTexture.hasLoaded;
             this.valid = width && height && this.baseTexture.hasLoaded;
 
             if (!this.trim && !this.rotate) {
@@ -39039,7 +39039,7 @@ var tempMat = new _Matrix2.default();
  *
  * @see PIXI.Texture
  * @see PIXI.mesh.Mesh
- * @see PIXI.extras.TilingSprite
+ * @see PIXI.TilingSprite
  * @class
  * @memberof PIXI
  */
@@ -41397,14 +41397,14 @@ function deprecation(core) {
          * @private
          * @name TilingSprite
          * @memberof PIXI
-         * @see PIXI.extras.TilingSprite
+         * @see PIXI.TilingSprite
          * @deprecated since version 3.0.0
          */
         TilingSprite: {
             get: function get() {
-                warn('The TilingSprite class has been moved to extras.TilingSprite, ' + 'please use extras.TilingSprite from now on.');
+                warn('The TilingSprite class has been moved to TilingSprite, ' + 'please use TilingSprite from now on.');
 
-                return extras.TilingSprite;
+                return TilingSprite;
             }
         },
 
@@ -43989,7 +43989,7 @@ var TilingSprite = function (_core$Sprite) {
                 this.tintedTexture = _CanvasTinter2.default.getTintedTexture(this, this.tint);
                 tempCanvas.context.drawImage(this.tintedTexture, 0, 0);
             } else {
-                tempCanvas.context.drawImage(baseTexture.source, -texture._frame.x * baseTextureResolution, -texture._frame.y * baseTextureResolution);
+                tempCanvas.context.drawImage(baseTexture.resource.source, -texture._frame.x * baseTextureResolution, -texture._frame.y * baseTextureResolution);
             }
             this.cachedTint = this.tint;
             this._canvasPattern = tempCanvas.context.createPattern(tempCanvas.canvas, 'repeat');
@@ -44136,7 +44136,7 @@ var TilingSprite = function (_core$Sprite) {
      * @param {string} frameId - The frame Id of the texture in the cache
      * @param {number} width - the width of the tiling sprite
      * @param {number} height - the height of the tiling sprite
-     * @return {PIXI.extras.TilingSprite} A new TilingSprite using a texture from the texture cache matching the frameId
+     * @return {PIXI.TilingSprite} A new TilingSprite using a texture from the texture cache matching the frameId
      */
 
 
@@ -44161,7 +44161,7 @@ var TilingSprite = function (_core$Sprite) {
      * @param {boolean} [crossorigin] - if you want to specify the cross-origin parameter
      * @param {number} [scaleMode=PIXI.settings.SCALE_MODE] - if you want to specify the scale mode,
      *  see {@link PIXI.SCALE_MODES} for possible values
-     * @return {PIXI.extras.TilingSprite} A new TilingSprite using a texture from the texture cache matching the image id
+     * @return {PIXI.TilingSprite} A new TilingSprite using a texture from the texture cache matching the image id
      */
 
 
@@ -44845,7 +44845,7 @@ var TilingSpriteRenderer = function (_core$ObjectRenderer) {
 
     /**
      *
-     * @param {PIXI.extras.TilingSprite} ts tilingSprite to be rendered
+     * @param {PIXI.TilingSprite} ts tilingSprite to be rendered
      */
 
 
@@ -47871,7 +47871,7 @@ var InteractionManager = function (_EventEmitter) {
     /**
      * Dispatches an event on the display object that was interacted with
      *
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - the display object in question
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the display object in question
      * @param {string} eventString - the name of the event (e.g, mousedown)
      * @param {object} eventData - the event data object
      * @private
@@ -47926,7 +47926,7 @@ var InteractionManager = function (_EventEmitter) {
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - event containing the point that
      *  is tested for collision
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - the displayObject
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the displayObject
      *  that will be hit test (recursively crawls its children)
      * @param {Function} [func] - the function that will be called on each interactive object. The
      *  interactionEvent, displayObject and hit will be passed to the function
@@ -48112,7 +48112,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48207,7 +48207,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
      */
 
 
@@ -48246,7 +48246,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48366,7 +48366,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -48434,7 +48434,7 @@ var InteractionManager = function (_EventEmitter) {
      *
      * @private
      * @param {PIXI.interaction.InteractionEvent} interactionEvent - The interaction event wrapping the DOM event
-     * @param {PIXI.Container|PIXI.Sprite|PIXI.extras.TilingSprite} displayObject - The display object that was tested
+     * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - The display object that was tested
      * @param {boolean} hit - the result of the hit test on the display object
      */
 
@@ -51508,7 +51508,7 @@ var ParticleContainer = function (_core$Container) {
 
             var resolution = child._texture.baseTexture.resolution;
 
-            context.drawImage(child._texture.baseTexture.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * renderer.resolution, positionY * renderer.resolution, finalWidth * renderer.resolution, finalHeight * renderer.resolution);
+            context.drawImage(child._texture.baseTexture.resource.source, frame.x * resolution, frame.y * resolution, frame.width * resolution, frame.height * resolution, positionX * renderer.resolution, positionY * renderer.resolution, finalWidth * renderer.resolution, finalHeight * renderer.resolution);
         }
     };
 

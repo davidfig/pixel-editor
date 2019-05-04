@@ -29,7 +29,7 @@ module.exports = class Picker
         this.content = this.win.content
         this.content.style.margin = '0.5em'
         this.content.style.color = '#eeeeee'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
         this.content.appendChild(this.renderer.view)
@@ -58,7 +58,7 @@ module.exports = class Picker
         this.rendererResize()
         this.renderer.render(this.stage)
 
-        PIXI.Ticker.shared.add(() =>
+        PIXI.ticker.shared.add(() =>
         {
             if (this.dirty)
             {
@@ -239,7 +239,7 @@ module.exports = class Picker
     {
         const size = this.size()
         this.alpha = this.stage.addChild(new PIXI.Container())
-        this.alphaTransparent = this.alpha.addChild(new PIXI.extras.TilingSprite(sheet.getTexture('transparency')))
+        this.alphaTransparent = this.alpha.addChild(new PIXI.TilingSprite(sheet.getTexture('transparency')))
         this.alphaTransparent.tileScale.set(0.1)
         this.alphaTransparent.width = size
         this.alphaTransparent.height = BAR_HEIGHT

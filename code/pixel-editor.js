@@ -24,24 +24,20 @@ class PixelEditor extends Pixel
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
     }
 
-    create(filename)
+    async create(filename)
     {
         if (!filename)
         {
             this.imageData = [[DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]]
             this.animations = { 'idle': [[0, 0]] }
-            File.getTempFilename((filename) =>
-            {
-                this.filename = filename
-                this.name = path.basename(this.filename, '.json')
-                this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
-                Pixel.addFrame(0, this.getData(), sheet)
-                sheet.render(() =>
-                {
-                    this.dirty = true
-                })
-                setInterval(() => this.update(), Settings.SAVE_INTERVAL)
-            })
+            const filename = await File.getTempFilename()
+            this.filename = filename
+            this.name = path.basename(this.filename, '.json')
+            this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
+            Pixel.addData(this.getData(), sheet)
+            await sheet.asyncRender()
+            this.dirty = true
+            setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
         else
         {
@@ -49,12 +45,11 @@ class PixelEditor extends Pixel
             this.name = this.name || path.basename(filename, '.json')
             try
             {
-                this.load(filename)
+                await this.afterLoad(await this.load(filename))
             }
             catch (e)
             {
-                this.create()
-                return
+                await this.create()
             }
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
@@ -266,7 +261,7 @@ class PixelEditor extends Pixel
                 this.undoSave()
             }
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const hex = parseInt(value, 16)
@@ -299,7 +294,7 @@ class PixelEditor extends Pixel
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const data = c.getImageData(frame.x + x, frame.y + y, 1, 1).data
@@ -521,14 +516,12 @@ class PixelEditor extends Pixel
         }
     }
 
-    saveAndRender()
+    async saveAndRender()
     {
         Pixel.addFrame(this.current, this.getData(), sheet)
-        sheet.render(() =>
-        {
-            this.dirty = true
-            this.emit('changed')
-        })
+        await sheet.asyncRender()
+        this.dirty = true
+        this.emit('changed')
     }
 
     get undo()
@@ -599,65 +592,61 @@ class PixelEditor extends Pixel
         }
     }
 
-    afterLoad(load)
+    async afterLoad(load)
     {
-        if (!load || !load.imageData.length || !load.animations || load.imageData[0].length !== 3)
-        {
-            return
-        }
         this.imageData = load.imageData
         this.animations = load.animations
         this.name = load.name
-        this.render(true)
-        sheet.render(() => this.emit('changed'))
-        File.readJSON(this.filename.replace('.json', '.editor.json'), (editor) =>
+        Pixel.add(this.getData(), sheet)
+        await sheet.asyncRender()
+        this.emit('changed')
+        const editor = await File.readJSON(this.filename.replace('.json', '.editor.json'))
+        if (editor)
         {
-            if (editor)
+            this.editor = editor
+            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
+            for (let frame of this.editor.imageData)
             {
-                this.editor = editor
-                this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
-                for (let frame of this.editor.imageData)
+                if (frame.undo.length > UNDO_SIZE)
                 {
-                    if (frame.undo.length > UNDO_SIZE)
+                    while (frame.undo.length > UNDO_SIZE)
                     {
-                        while (frame.undo.length > UNDO_SIZE)
-                        {
-                            frame.undo.shift()
-                        }
+                        frame.undo.shift()
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            this.editor = {}
+            this.editor.imageData = []
+            for (let i = 0; i < this.imageData.length; i++)
             {
-                this.editor = {}
-                this.editor.imageData = []
-                for (let i = 0; i < this.imageData.length; i++)
-                {
-                    this.editor.imageData.push({ undo: [], redo: [] })
-                }
-                this.editor.current = 0
-                this.editor.zoom = 10
-                this.dirty = true
+                this.editor.imageData.push({ undo: [], redo: [] })
             }
-        })
+            this.editor.current = 0
+            this.editor.zoom = 10
+            this.dirty = true
+        }
     }
 
-    load(filename)
+    async load(filename)
     {
         this.filename = filename = filename || this.filename
-        File.readJSON(filename, (load) => this.afterLoad(load))
+        return await File.readJSON(filename)
     }
 
-    save(filename)
+    async save(filename)
     {
         const changed = exists(filename) && this.filename !== filename
         this.filename = filename || this.filename
-        File.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
-        File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
+        await File.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
+        await File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         if (changed)
         {
             Pixel.add(this.getData(), sheet)
-            sheet.render(() => this.emit('changed'))
+            await sheet.asyncRender()
+            this.emit('changed')
         }
     }
 

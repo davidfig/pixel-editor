@@ -25,26 +25,20 @@ const Position = require('./frames/position')
 const Manager = require('./frames/manager')
 const Keyboard = require('./frames/preferences/keyboard')
 
-let wm, loading = 2, windows = {}, fps
+let wm, windows = {}, fps
 
 const Main = {
 
-    afterLoad: function()
+    afterLoad: async function()
     {
-        loading--
-        if (loading)
-        {
-            return
-        }
         if (Settings.FPS)
         {
             Main.fpsSetup()
         }
-        PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile)
+        await PixelEditor.create(Settings.NO_LOAD ? null : State.lastFile)
         Main.create()
         Menu.create()
         Keys.setup(Main)
-
     },
 
     fpsSetup: function ()
@@ -199,9 +193,10 @@ const Main = {
 
 module.exports = Main
 
-window.onload = () =>
+window.onload = async () =>
 {
     document.body.style.opacity = 0
-    State.load(Main.afterLoad)
-    Sheet.load(Main.afterLoad)
+    await State.load()
+    await Sheet.load()
+    Main.afterLoad()
 }

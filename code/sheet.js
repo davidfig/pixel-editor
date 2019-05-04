@@ -7,15 +7,12 @@ const SIZE = 100
 
 let _sheet, _transparent
 
-function load(callback)
+async function load()
 {
     createTransparentImage()
     _sheet = new RenderSheet()
     _sheet.add('transparency', draw, measure, SIZE)
-    _sheet.render(() =>
-    {
-        callback()
-    })
+    await _sheet.asyncRender()
 }
 
 function createTransparentImage()

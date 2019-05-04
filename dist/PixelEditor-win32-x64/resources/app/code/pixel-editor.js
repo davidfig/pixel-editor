@@ -266,7 +266,7 @@ class PixelEditor extends Pixel
                 this.undoSave()
             }
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const hex = parseInt(value, 16)
@@ -299,7 +299,7 @@ class PixelEditor extends Pixel
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const texture = sheet.textures[this.name + '-' + this.current].texture
-            const canvas = texture.baseTexture.source
+            const canvas = texture.baseTexture.resource.source
             const c = canvas.getContext('2d')
             const frame = texture.frame
             const data = c.getImageData(frame.x + x, frame.y + y, 1, 1).data

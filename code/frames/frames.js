@@ -1,7 +1,6 @@
 const PIXI = require('pixi.js')
 
 const libraries = require('../config/libraries')
-const Pixel = libraries.Pixel
 
 const Settings = require('../settings')
 const sheet = require('../pixel-sheet')
@@ -23,7 +22,7 @@ module.exports = class Frames extends PIXI.Container
         this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
         this.content = this.win.content
-        this.renderer = new PIXI.Renderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
@@ -33,34 +32,6 @@ module.exports = class Frames extends PIXI.Container
         this.stateSetup()
         this.redraw()
     }
-
-    // measure()
-    // {
-    //     let scale = MAX_SCALE, x, y, largest
-    //     const windowWidth = this.win.width
-    //     const windowHeight = this.win.height - this.win.winTitlebar.offsetHeight
-    //     const data = PixelEditor.imageData
-    //     do
-    //     {
-    //         largest = 0, x = SPACING, y = SPACING
-    //         for (let i = 0; i < data.length; i++)
-    //         {
-    //             const width = data[i][0] * scale
-    //             const height = data[i][1] * scale
-    //             if (x + width + SPACING > windowWidth)
-    //             {
-    //                 x = SPACING
-    //                 y += largest + SPACING
-    //                 largest = 0
-    //             }
-    //             x += width + SPACING
-    //             largest = height > largest ? height : largest
-    //         }
-    //         scale += SCALE_DECREASE
-    //     }
-    //     while (scale > 0.1 && y + largest + SPACING > windowHeight)
-    //     this.scaler = scale
-    // }
 
     redraw()
     {
@@ -72,11 +43,11 @@ module.exports = class Frames extends PIXI.Container
         let x = SPACING, y = SPACING, largest = 0
         for (let i = 0; i < data.length; i++)
         {
-            const pixel = this.pixels.addChild(new Pixel(PixelEditor, sheet))
+            const pixel = this.pixels.addChild(sheet.get(`${PixelEditor.name}-${i}`))
             const width = data[i][0] * scale
             const height = data[i][1] * scale
             pixel.scale.set(scale)
-            pixel.frame(i)
+            // pixel.frame(i)
             pixel.current = i
             if (x + width + SPACING > this.win.width)
             {

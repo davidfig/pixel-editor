@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 
 const Misc = require('../config/misc')
 const Tooltip = require('../config/libraries').Tooltip
-const File = require('../config/file')
+const file = require('../config/file')
 
 const PixelEditor = require('../pixel-editor')
 const locale = require('../locale')
@@ -37,7 +37,7 @@ module.exports = class Manager
         {
             clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
             {
-                File.openDirDialog((dir) =>
+                file.openDirDialog((dir) =>
                 {
                     if (dir && dir.length >= 1)
                     {
@@ -111,7 +111,7 @@ module.exports = class Manager
                 if (data && data.imageData)
                 {
                     const image = new Image()
-                    image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                    image.sort = State.manager.alphabetical ? data.name : (file.fileDate(filename) || this.index++)
                     image.src = 'data:image/png;base64,' + data.imageData[0][2]
                     image.width = data.imageData[0][0]
                     image.height = data.imageData[0][1]
@@ -162,19 +162,17 @@ module.exports = class Manager
         this.dir = dir || path.dirname(PixelEditor.filename)
         if (this.dir)
         {
-            File.readDir(this.dir, (files) =>
+            const files = await file.readDir(this.dir)
+            this.files = files
+            for (let file of this.files)
             {
-                this.files = files
-                for (let file of this.files)
-                {
-                    this.nextImageFile(file)
-                    this.imagesComplete()
-                }
-            })
+                this.nextImageFile(file)
+                this.imagesComplete()
+            }
         }
     }
 
-    nextNameFile()
+    async nextNameFile()
     {
         if (this.files.length)
         {
@@ -182,28 +180,26 @@ module.exports = class Manager
             const filename = path.join(this.dir, file)
             if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
             {
-                File.readJSON(filename, (data) =>
+                const data = await file.readJSON(filename)
+                if (data.imageData)
                 {
-                    if (data.imageData)
+                    const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
+                    entry.sort = State.manager.alphabetical ? data.name : (file.fileDate(filename) || this.index++)
+                    clicked(entry, () => { PixelEditor.load(filename) })
+                    entry.addEventListener('mouseenter', () =>
                     {
-                        const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                        entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
-                        clicked(entry, () => { PixelEditor.load(filename) })
-                        entry.addEventListener('mouseenter', () =>
-                        {
-                            entry.style.backgroundColor = '#aaaaaa'
-                            entry.style.color = 'black'
-                        })
-                        entry.addEventListener('mouseleave', () =>
-                        {
-                            entry.style.backgroundColor = 'transparent'
-                            entry.style.color = ''
-                        })
-                        new Tooltip(entry, filename)
-                        this.entries.push(entry)
-                    }
-                    this.nextNameFile()
-                })
+                        entry.style.backgroundColor = '#aaaaaa'
+                        entry.style.color = 'black'
+                    })
+                    entry.addEventListener('mouseleave', () =>
+                    {
+                        entry.style.backgroundColor = 'transparent'
+                        entry.style.color = ''
+                    })
+                    new Tooltip(entry, filename)
+                    this.entries.push(entry)
+                }
+                this.nextNameFile()
             }
             else
             {
@@ -225,7 +221,7 @@ module.exports = class Manager
         }
     }
 
-    drawNames(dir)
+    async drawNames(dir)
     {
         this.box.style.display = 'block'
         this.box.style.padding = '0.5em'
@@ -234,11 +230,9 @@ module.exports = class Manager
         {
             this.index = 0
             this.entries = []
-            File.readDir(this.dir, (files) =>
-            {
-                this.files = files
-                this.nextNameFile()
-            })
+            const files = await file.readDir(this.dir)
+            this.files = files
+            this.nextNameFile()
         }
     }
 

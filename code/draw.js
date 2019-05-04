@@ -29,7 +29,7 @@ module.exports = class Draw extends PIXI.Container
         this.body = body
         this.ui = ui
         this.main = main
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
         body.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
@@ -59,7 +59,7 @@ module.exports = class Draw extends PIXI.Container
 
         this.redraw()
         this.setupViewport()
-        PIXI.Ticker.shared.add(() => this.update())
+        PIXI.ticker.shared.add(() => this.update())
     }
 
     resize()
@@ -140,7 +140,8 @@ module.exports = class Draw extends PIXI.Container
         this.sprite.scale.set(Settings.ZOOM)
         this.transparency()
         this.frame()
-        this.cursorDraw()
+        this.cursorBlock.clear()
+        this.tool.cursor()
         this.setHitArea()
         this.renderer.render(this)
     }

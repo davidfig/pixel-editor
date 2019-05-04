@@ -29,7 +29,7 @@ module.exports = class Palette extends PIXI.Container
 
         this.content = this.win.content
         this.content.style.margin = '0 0.25em'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
@@ -209,7 +209,7 @@ module.exports = class Palette extends PIXI.Container
             const texture = PixelSheet.textures[PixelEditor.name + '-' + i].texture
             if (texture.baseTexture.hasLoaded)
             {
-                const canvas = texture.baseTexture.source
+                const canvas = texture.baseTexture.resource.source
                 const frame = texture.frame
                 const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
                 for (let i = 0; i < data.length; i += 4)

@@ -1,8 +1,7 @@
 const electron = require('electron')
 const remote = electron.remote
 const path = require('path')
-const jsonfile = require('jsonfile')
-const fs = require('fs')
+const fs = require('fs-extra')
 
 function saveFileDialog(defaultPath, callback)
 {
@@ -28,28 +27,28 @@ function openDirDialog(callback)
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] }, callback)
 }
 
-function readState(callback)
+async function readState()
 {
     const app = electron.remote ? electron.remote.app : electron.app
     const filename = path.join(app.getPath('userData'), 'state.json')
     try
     {
-        callback(jsonfile.readFileSync(filename))
+        return await fs.readJson(filename)
     }
     catch (err)
     {
-        callback()
+        return null
     }
 }
 
-function writeState(data)
+async function writeState(data)
 {
     const app = electron.remote ? electron.remote.app : electron.app
     const filename = path.join(app.getPath('userData'), 'state.json')
-    jsonfile.writeFileSync(filename, data)
+    await fs.outputJson(filename, data, { overwrite: true })
 }
 
-function getTempFilename(callback)
+async function getTempFilename()
 {
     let filename, i = 0
     do
@@ -57,28 +56,28 @@ function getTempFilename(callback)
         i++
         filename = path.join(remote.app.getPath('temp'), 'pixel-' + i + '.json')
     }
-    while (fs.existsSync(filename))
-    callback(filename)
+    while (await fs.exists(filename))
+    return filename
 }
 
-function readJSON(filename, callback)
+async function readJSON(filename)
 {
-    return jsonfile.readFile(filename, (err, file) => callback(file))
+    return await fs.readJSON(filename)
 }
 
-function writeJSON(filename, json)
+async function writeJSON(filename, json)
 {
-    jsonfile.writeFileSync(filename, json)
+    await fs.outputJson(filename, json, { overwrite: true })
 }
 
-function fileDate(filename)
+async function fileDate(filename)
 {
-    return fs.statSync(filename).mtimeMs
+    return (await fs.stat(filename)).mtimeMs
 }
 
-function readDir(dir, callback)
+async function readDir(dir)
 {
-    callback(fs.readdirSync(dir))
+    return await fs.readdir(dir)
 }
 
 module.exports = {

@@ -31,7 +31,7 @@ module.exports = class Animation extends PIXI.Container
         this.content.style.height = '100%'
         this.content.style.display = 'flex'
         this.content.style.flexDirection = 'column'
-        this.renderer = new PIXI.WebGLRenderer({ resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true })
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
         const canvas = html({ parent: this.content, styles: { width: '100%' } })
@@ -39,7 +39,7 @@ module.exports = class Animation extends PIXI.Container
         this.createButtons()
         this.stateSetup('animation')
         this.draw()
-        PIXI.ticker.shared.add(() => this.update(PIXI.ticker.shared.elapsedMS))
+        PIXI.Ticker.shared.add(() => this.update(PIXI.Ticker.shared.elapsedMS))
         this.win.open()
     }
 

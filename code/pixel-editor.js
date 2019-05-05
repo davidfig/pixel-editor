@@ -34,9 +34,7 @@ class PixelEditor extends Pixel
             this.filename = filename
             this.name = path.basename(this.filename, '.json')
             this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
-            Pixel.addData(this.getData(), sheet)
-            await sheet.asyncRender()
-            this.dirty = true
+            await this.saveAndRender()
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
         else
@@ -45,11 +43,11 @@ class PixelEditor extends Pixel
             this.name = this.name || path.basename(filename, '.json')
             try
             {
-                await this.afterLoad(await this.load(filename))
+                await this.load(filename)
             }
             catch (e)
             {
-                await this.create()
+                return await this.create()
             }
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
@@ -274,8 +272,9 @@ class PixelEditor extends Pixel
             imageData.data[index + 2] = rgb.b
             imageData.data[index + 3] = alpha
             c.putImageData(imageData, frame.x, frame.y)
-            texture.baseTexture.update()
             this.imageData[this.current][2] = this.canvasURL(canvas, frame)
+            texture.baseTexture.update()
+            this.dirty = true
         }
         if (!noUndo)
         {
@@ -290,7 +289,6 @@ class PixelEditor extends Pixel
             const hex = n.toString(16)
             return hex.length === 2 ? hex : '0' + hex
         }
-
         if (x >= 0 && y >= 0 && x < this.width && y < this.height)
         {
             const texture = sheet.textures[this.name + '-' + this.current].texture
@@ -518,10 +516,8 @@ class PixelEditor extends Pixel
 
     async saveAndRender()
     {
-        Pixel.addFrame(this.current, this.getData(), sheet)
-        await sheet.asyncRender()
+        await this.addToSheet()
         this.dirty = true
-        this.emit('changed')
     }
 
     get undo()
@@ -592,14 +588,22 @@ class PixelEditor extends Pixel
         }
     }
 
-    async afterLoad(load)
+    async addToSheet()
     {
+        sheet.clear()
+        super.addToSheet(true)
+        await sheet.asyncRender()
+        this.emit('changed')
+    }
+
+    async load(filename)
+    {
+        this.filename = filename = filename || this.filename
+        const load = await File.readJSON(filename)
         this.imageData = load.imageData
         this.animations = load.animations
         this.name = load.name
-        Pixel.add(this.getData(), sheet)
-        await sheet.asyncRender()
-        this.emit('changed')
+        await this.addToSheet()
         const editor = await File.readJSON(this.filename.replace('.json', '.editor.json'))
         if (editor)
         {
@@ -630,12 +634,6 @@ class PixelEditor extends Pixel
         }
     }
 
-    async load(filename)
-    {
-        this.filename = filename = filename || this.filename
-        return await File.readJSON(filename)
-    }
-
     async save(filename)
     {
         const changed = exists(filename) && this.filename !== filename
@@ -644,9 +642,7 @@ class PixelEditor extends Pixel
         await File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         if (changed)
         {
-            Pixel.add(this.getData(), sheet)
-            await sheet.asyncRender()
-            this.emit('changed')
+            this.addToSheet()
         }
     }
 

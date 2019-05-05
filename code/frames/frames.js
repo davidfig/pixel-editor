@@ -1,7 +1,5 @@
 const PIXI = require('pixi.js')
 
-const libraries = require('../config/libraries')
-
 const Settings = require('../settings')
 const sheet = require('../pixel-sheet')
 const PixelEditor = require('../pixel-editor')
@@ -22,15 +20,16 @@ module.exports = class Frames extends PIXI.Container
         this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
         this.win.open()
         this.content = this.win.content
-        this.renderer = new PIXI.WebGLRenderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.Renderer({ width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
         this.renderer.view.style.width = '100%'
         this.renderer.view.style.height = '100%'
         this.pixels = this.addChild(new PIXI.Container())
-        this.stateSetup()
         this.redraw()
+        this.stateSetup()
+        window.addEventListener('resize', () => this.redraw())
     }
 
     redraw()
@@ -44,10 +43,10 @@ module.exports = class Frames extends PIXI.Container
         for (let i = 0; i < data.length; i++)
         {
             const pixel = this.pixels.addChild(sheet.get(`${PixelEditor.name}-${i}`))
+            pixel.anchor.set(0)
             const width = data[i][0] * scale
             const height = data[i][1] * scale
             pixel.scale.set(scale)
-            // pixel.frame(i)
             pixel.current = i
             if (x + width + SPACING > this.win.width)
             {
@@ -207,16 +206,9 @@ module.exports = class Frames extends PIXI.Container
         }
     }
 
-    resize()
-    {
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        this.redraw()
-    }
-
     stateSetup()
     {
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
-        this.win.on('resize', () => this.resize())
+        this.win.on('resize', () => this.redraw())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.currentChange())
         State.on('last-file', () => this.redraw())

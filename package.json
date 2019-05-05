@@ -31,7 +31,7 @@
     "path": "^0.12.7",
     "pixi-ease": "^1.1.2",
     "pixi-viewport": "^3.23.2",
-    "pixi.js": "4.8.7",
+    "pixi.js": "5.0.0",
     "point-in-triangle": "^1.0.1",
     "simple-window-manager": "^1.1.0",
     "tinycolor2": "^1.4.1",
@@ -39,9 +39,9 @@
     "yy-fps": "^1.0.0",
     "yy-loop": "^0.4.1",
     "yy-menu": "^1.6.2",
-    "yy-pixel": "^2.3.1",
+    "yy-pixel": "^2.4.0",
     "yy-random": "^1.7.2",
-    "yy-rendersheet": "^5.0.2",
+    "yy-rendersheet": "^5.0.3",
     "yy-tooltip": "^1.2.1"
   }
 }

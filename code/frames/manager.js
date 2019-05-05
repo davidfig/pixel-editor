@@ -1,10 +1,8 @@
 const path = require('path')
 const clicked = require('clicked')
-const fs = require('fs-extra')
 
-const Misc = require('../config/misc')
 const Tooltip = require('../config/libraries').Tooltip
-const file = require('../config/file')
+const File = require('../config/file')
 
 const PixelEditor = require('../pixel-editor')
 const locale = require('../locale')
@@ -33,19 +31,16 @@ module.exports = class Manager
 
     setupToolbar()
     {
-        if (Misc.isElectron)
+        clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
         {
-            clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
+            File.openDirDialog((dir) =>
             {
-                file.openDirDialog((dir) =>
+                if (dir && dir.length >= 1)
                 {
-                    if (dir && dir.length >= 1)
-                    {
-                        this.populateBox(dir[0])
-                    }
-                })
+                    this.populateBox(dir[0])
+                }
             })
-        }
+        })
         clicked(button(this.toolbar, ICONS.imageData[1], { opacity: 0.6 }, locale.get('increaseZoom')), () =>
         {
             State.manager.zoom++
@@ -106,44 +101,42 @@ module.exports = class Manager
         if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
         {
             const filename = path.join(this.dir, file)
-            const data = JSON.parse(await fs.readFile(filename))
+            const data = await File.readJSON(filename)
+            if (data && data.imageData)
             {
-                if (data && data.imageData)
+                const image = new Image()
+                image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                image.src = 'data:image/png;base64,' + data.imageData[0][2]
+                image.width = data.imageData[0][0]
+                image.height = data.imageData[0][1]
+                image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
+                image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
+                image.style.margin = '0.25em'
+                image.style.imageRendering = 'pixelated'
+                image.addEventListener('mouseenter', () =>
                 {
-                    const image = new Image()
-                    image.sort = State.manager.alphabetical ? data.name : (file.fileDate(filename) || this.index++)
-                    image.src = 'data:image/png;base64,' + data.imageData[0][2]
-                    image.width = data.imageData[0][0]
-                    image.height = data.imageData[0][1]
-                    image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
-                    image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
-                    image.style.margin = '0.25em'
-                    image.style.imageRendering = 'pixelated'
-                    image.addEventListener('mouseenter', () =>
+                    image.style.backgroundColor = '#aaaaaa'
+                })
+                image.addEventListener('mouseleave', () =>
+                {
+                    image.style.backgroundColor = 'transparent'
+                })
+                clicked(image, () =>
+                {
+                    PixelEditor.load(filename)
+                    State.lastFile = filename
+                    State.current = 0
+                    if (State.cursorX >= PixelEditor.width)
                     {
-                        image.style.backgroundColor = '#aaaaaa'
-                    })
-                    image.addEventListener('mouseleave', () =>
+                        State.cursorX = 0
+                    }
+                    if (State.cursorY >= PixelEditor.height)
                     {
-                        image.style.backgroundColor = 'transparent'
-                    })
-                    clicked(image, () =>
-                    {
-                        PixelEditor.load(filename)
-                        State.lastFile = filename
-                        State.current = 0
-                        if (State.cursorX >= PixelEditor.width)
-                        {
-                            State.cursorX = 0
-                        }
-                        if (State.cursorY >= PixelEditor.height)
-                        {
-                            State.cursorY = 0
-                        }
-                    })
-                    new Tooltip(image, data.name)
-                    this.images.push(image)
-                }
+                        State.cursorY = 0
+                    }
+                })
+                new Tooltip(image, `${data.name} (${file})`)
+                this.images.push(image)
             }
         }
     }
@@ -162,13 +155,13 @@ module.exports = class Manager
         this.dir = dir || path.dirname(PixelEditor.filename)
         if (this.dir)
         {
-            const files = await file.readDir(this.dir)
+            const files = await File.readDir(this.dir)
             this.files = files
             for (let file of this.files)
             {
-                this.nextImageFile(file)
-                this.imagesComplete()
+                await this.nextImageFile(file)
             }
+            this.imagesComplete()
         }
     }
 
@@ -180,11 +173,11 @@ module.exports = class Manager
             const filename = path.join(this.dir, file)
             if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
             {
-                const data = await file.readJSON(filename)
+                const data = await File.readJSON(filename)
                 if (data.imageData)
                 {
-                    const entry = html({ html: data.name, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                    entry.sort = State.manager.alphabetical ? data.name : (file.fileDate(filename) || this.index++)
+                    const entry = html({ html: `${data.name} (${file})`, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
+                    entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
                     clicked(entry, () => { PixelEditor.load(filename) })
                     entry.addEventListener('mouseenter', () =>
                     {
@@ -230,7 +223,7 @@ module.exports = class Manager
         {
             this.index = 0
             this.entries = []
-            const files = await file.readDir(this.dir)
+            const files = await File.readDir(this.dir)
             this.files = files
             this.nextNameFile()
         }

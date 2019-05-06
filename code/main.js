@@ -154,9 +154,9 @@ const Main = {
         }
     },
 
-    newFile: function()
+    newFile: async function()
     {
-        PixelEditor.create()
+        await PixelEditor.create()
         State.lastFile = PixelEditor.filename
         State.current = 0
         State.cursorX = State.cursorY = 0

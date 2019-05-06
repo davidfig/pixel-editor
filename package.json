@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron code/electron.js --disable-gpu",
-    "build": "yarn run electron-ready-win && electron-packager ./ PixelEditor --out=dist --platform=win32 --arch=x64 --overwrite --electron-version=2.0.1 --icon=icon.ico",
+    "build": "yarn run electron-ready-win && electron-packager ./ PixelEditor --out=dist --platform=win32 --arch=x64 --overwrite --electron-version=5.0.0 --icon=icon.ico",
     "icon": "electron-icon-maker -i assets/icon.png -o assets",
     "test": "yarn run web-ready && yarn run budo",
     "budo": "budo code/main.js:index.js --dir html --live",

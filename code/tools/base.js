@@ -100,7 +100,6 @@ module.exports = class Base
                 PixelEditor.set(block.x, block.y, block.color, true)
             }
         }
-        this.change()
     }
 
     clear()

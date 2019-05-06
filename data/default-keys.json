@@ -23,7 +23,7 @@
     "CircleTool": "c",
     "EllipseTool": "e",
     "LineTool": "l",
-    "CropTool": "w",
+    "CropTool": "z",
 
     "NextView": "Tab",
     "PreviousView": "shift+tab",
@@ -38,7 +38,7 @@
     "ManagerWindow": "m",
     "KeyboardWindow": "ctrl+k",
 
-    "ResetWindows": "",
+    "ResetWindows": "ctrl+p",
 
     "AddFrame": "CommandOrControl+F",
     "DeleteFrame": "CommandOrControl+Backspace",

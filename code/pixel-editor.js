@@ -110,17 +110,14 @@ class PixelEditor extends Pixel
         }
     }
 
-    duplicate()
+    async duplicate()
     {
         const frame = this.imageData[this.current]
         this.imageData.push([frame[0], frame[1], frame[2].slice(0)])
         this.editor.imageData.push({ undo: [], redo: [] })
         Pixel.addFrame(this.imageData.length - 1, this.getData(), sheet)
-        sheet.render(() =>
-        {
-            this.dirty = true
-            this.emit('changed')
-        })
+        await this.saveAndRender()
+        this.current = this.imageData.length - 1
     }
 
     remove(index)
@@ -160,7 +157,7 @@ class PixelEditor extends Pixel
         return height
     }
 
-    move(index, newIndex)
+    async move(index, newIndex)
     {
         if (index < this.imageData.length)
         {
@@ -172,7 +169,7 @@ class PixelEditor extends Pixel
             }
             this.imageData.splice(newIndex, 0, frame)
             this.editor.imageData.splice(newIndex, 0, editor)
-            sheet.render(() => this.dirty = true)
+            this.saveAndRender()
         }
     }
 
@@ -604,7 +601,12 @@ class PixelEditor extends Pixel
         this.animations = load.animations
         this.name = load.name
         await this.addToSheet()
-        const editor = await File.readJSON(this.filename.replace('.json', '.editor.json'))
+        let editor
+        try
+        {
+            editor = await File.readJSON(this.filename.replace('.json', '.editor.json'))
+        }
+        catch (e) { }
         if (editor)
         {
             this.editor = editor

@@ -207,18 +207,15 @@ module.exports = class Palette extends PIXI.Container
         for (let i = 0; i < PixelEditor.imageData.length; i++)
         {
             const texture = PixelSheet.textures[PixelEditor.name + '-' + i].texture
-            if (texture.baseTexture.hasLoaded)
+            const canvas = texture.baseTexture.resource.source
+            const frame = texture.frame
+            const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
+            for (let i = 0; i < data.length; i += 4)
             {
-                const canvas = texture.baseTexture.resource.source
-                const frame = texture.frame
-                const data = canvas.getContext('2d').getImageData(frame.x, frame.y, frame.width, frame.height).data
-                for (let i = 0; i < data.length; i += 4)
+                const color = hex(data[i]) + hex(data[i + 1]) + hex(data[i + 2]) + hex(data[i + 3])
+                if (color !== '00000000' && color !== 'ffffffff' && color !== '000000ff' && !this.findColor(color))
                 {
-                    const color = hex(data[i]) + hex(data[i + 1]) + hex(data[i + 2]) + hex(data[i + 3])
-                    if (color !== '00000000' && color !== 'ffffffff' && color !== '000000ff' && !this.findColor(color))
-                    {
-                        this.colors[0].push(color)
-                    }
+                    this.colors[0].push(color)
                 }
             }
         }

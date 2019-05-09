@@ -611,6 +611,7 @@ class PixelEditor extends Pixel
         {
             this.editor = editor
             this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
+            this.editor.current = exists(this.editor.current) && this.editor.current < this.imageData.length ? this.editor.current : 0
             for (let frame of this.editor.imageData)
             {
                 if (frame.undo.length > UNDO_SIZE)

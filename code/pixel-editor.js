@@ -303,7 +303,7 @@ class PixelEditor extends Pixel
 
     get current()
     {
-        return this.editor.current
+        return this.editor.current < this.imageData.length ? this.editor.current : 0
     }
     set current(value)
     {
@@ -600,7 +600,6 @@ class PixelEditor extends Pixel
         this.imageData = load.imageData
         this.animations = load.animations
         this.name = load.name
-        await this.addToSheet()
         let editor
         try
         {
@@ -635,6 +634,7 @@ class PixelEditor extends Pixel
             this.editor.zoom = 10
             this.dirty = true
         }
+        await this.addToSheet()
     }
 
     async save(filename)

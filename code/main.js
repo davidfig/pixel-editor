@@ -131,7 +131,7 @@ const Main = {
         }
     },
 
-    load: function(list)
+    load: async function(list)
     {
         if (list && list.length)
         {
@@ -140,7 +140,7 @@ const Main = {
             {
                 filename = filename.replace('.editor.', '')
             }
-            PixelEditor.load(filename)
+            await PixelEditor.load(filename)
             State.lastFile = filename
             State.current = 0
             if (State.cursorX >= PixelEditor.width)

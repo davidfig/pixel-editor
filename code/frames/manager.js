@@ -121,9 +121,9 @@ module.exports = class Manager
                 {
                     image.style.backgroundColor = 'transparent'
                 })
-                clicked(image, () =>
+                clicked(image, async () =>
                 {
-                    PixelEditor.load(filename)
+                    await PixelEditor.load(filename)
                     State.lastFile = filename
                     State.current = 0
                     if (State.cursorX >= PixelEditor.width)
@@ -178,7 +178,7 @@ module.exports = class Manager
                 {
                     const entry = html({ html: `${data.name} (${file})`, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
                     entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
-                    clicked(entry, () => { PixelEditor.load(filename) })
+                    clicked(entry, () => PixelEditor.load(filename))
                     entry.addEventListener('mouseenter', () =>
                     {
                         entry.style.backgroundColor = '#aaaaaa'

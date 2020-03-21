@@ -7,7 +7,7 @@ module.exports = {
     Pixel: require('yy-pixel').Pixel,
 
     // VIEWPORT: '../../../components/pixi-viewport',
-    Viewport: require('pixi-viewport'),
+    Viewport: require('pixi-viewport').Viewport,
 
     // WM: require('../../../components/window-manager/src/window-manager'),
     WM: require('simple-window-manager'),

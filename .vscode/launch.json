@@ -2,13 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Main Process",
+            "name": "Pixel Editor",
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "electron",
-            "program": "${workspaceRoot}/main.js",
-            "preLaunchTask": "electron-ready"
+            "runtimeExecutable": "${workspaceRoot}/node_modules/electron/dist/electron.exe",
+            "program": "${workspaceRoot}/code/index.js",
+            "args": [
+                "--disable-gpu-async-worker-context"
+            ]
         }
     ]
 }

@@ -3,28 +3,32 @@ const remote = electron.remote
 const path = require('path')
 const fs = require('fs-extra')
 
-function saveFileDialog(defaultPath, callback)
+async function saveFileDialog(defaultPath, callback)
 {
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath }, callback)
+    const results = await remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'Save PIXEL file', defaultPath })
+    callback(results.filePaths)
 }
 
-function exportFileDialog(defaultPath, callback)
+async function exportFileDialog(defaultPath, callback)
 {
-    remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
+    const results = await remote.dialog.showSaveDialog(remote.getCurrentWindow(), {
         title: 'Export PNG file',
         defaultPath,
         filters: [{ name: 'PNG', extensions: ['png'] }]
-    }, callback)
+    })
+    callback(results.filePaths)
 }
 
-function openFileDialog(defaultPath, callback)
+async function openFileDialog(defaultPath, callback)
 {
-    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath, filters: [{ name: 'JSON', extensions: ['json'] }] }, callback)
+    const files = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Load PIXEL file', defaultPath, filters: [{ name: 'JSON', extensions: ['json'] }] })
+    callback(files.filePaths)
 }
 
-function openDirDialog(callback)
+async function openDirDialog(callback)
 {
-    remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] }, callback)
+    const dir = await remote.dialog.showOpenDialog(remote.getCurrentWindow(), { properties: ['openDirectory'] })
+    callback(dir.filePaths)
 }
 
 async function readState()

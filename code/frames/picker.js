@@ -2,7 +2,7 @@ const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const RenderSheet = require('yy-rendersheet')
 const EasyEdit = require('easyedit')
-const clicked = require('clicked')
+const clicked = require('clicked').clicked
 
 const State = require('../state.js')
 const sheet = require('../sheet')

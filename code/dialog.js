@@ -1,4 +1,4 @@
-const clicked = require('clicked')
+const clicked = require('clicked').clicked
 
 const html = require('./html')
 

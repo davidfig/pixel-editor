@@ -1,5 +1,5 @@
 const PIXI = require('pixi.js')
-const clicked = require('clicked')
+const clicked = require('clicked').clicked
 
 const libraries = require('../config/libraries')
 const Pixel = libraries.Pixel

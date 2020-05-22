@@ -1,5 +1,5 @@
 const path = require('path')
-const clicked = require('clicked')
+const clicked = require('clicked').clicked
 
 const Tooltip = require('../config/libraries').Tooltip
 const File = require('../config/file')

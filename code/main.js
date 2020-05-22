@@ -54,16 +54,15 @@ const Main = {
 
     create: function()
     {
-        wm = new WM({
-            backgroundColorTitlebarActive: '#555555',
-            backgroundColorTitlebarInactive: '#444444',
-            backgroundColorWindow: '#333333',
-            foregroundColorTitle: '#666666',
+        wm = new WM.WindowManager({}, {
+            backgroundTitlebarActive: '#555555',
+            backgroundTitlebarInactive: '#444444',
+            backgroundWindow: '#333333',
+            foregroundTitle: '#666666',
             maximizable: false,
             titlebarHeight: '1.25em',
             borderRadius: 'none',
-            shadow: 'none',
-            snap: {}
+            shadow: 'none'
         })
 
         windows.draw = new Draw(wm.overlay, wm)
@@ -101,7 +100,6 @@ const Main = {
         }
         Views.init(wm, Main)
         State.start()
-        setTimeout(() => document.body.style.opacity = 1, 500)
     },
 
     toggleHidden: function(name)
@@ -195,7 +193,6 @@ module.exports = Main
 
 window.onload = async () =>
 {
-    document.body.style.opacity = 0
     await State.load()
     await Sheet.load()
     Main.afterLoad()

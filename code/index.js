@@ -19,7 +19,8 @@ async function init()
     {
         _main = new electron.BrowserWindow({
             webPreferences: {
-                nodeIntegration: true
+                nodeIntegration: true,
+                enableRemoteModule: true
             },
             icon: path.join(__dirname, 'assets', 'icon.png'),
             title: 'Pixel Editor',
@@ -38,9 +39,10 @@ async function init()
     {
         _main = new electron.BrowserWindow({
             webPreferences: {
-                nodeIntegration: true
+                nodeIntegration: true,
+                enableRemoteModule: true
             },
-            icon: path.join(__dirname, 'assets', 'icon.png'),
+            icon: path.join('assets', 'icon.png'),
             title: 'Pixel Editor',
             backgroundColor: BACKGROUND
         })

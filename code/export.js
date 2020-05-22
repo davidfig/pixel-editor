@@ -1,5 +1,5 @@
 const PIXI = require('pixi.js')
-const clicked = require('clicked')
+const clicked = require('clicked').clicked
 const path = require('path')
 
 const File = require('./config/file')

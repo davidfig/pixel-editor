@@ -1,6 +1,6 @@
 {
   "name": "pixel-editor",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "A pixel editor/animator built in Electron",
   "main": "code/index.js",
   "scripts": {
@@ -21,17 +21,12 @@
   "license": "MIT",
   "devDependencies": {
     "budo": "^11.6.3",
-    "electron-compile": "^6.4.4",
-    "electron-forge": "^5.2.4",
-    "electron-prebuilt-compile": "4.0.0",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron": "^9.0.0"
   },
   "dependencies": {
     "calc-fontsize": "^1.1.0",
     "clicked": "^2.0.0",
     "easyedit": "^1.5.0",
-    "electron": "^8.1.1",
-    "electron-packager": "^14.0.1",
     "eventemitter3": "^4.0.0",
     "exists": "^1.0.1",
     "fontfaceobserver": "^2.0.9",
@@ -39,7 +34,7 @@
     "localforage": "^1.7.2",
     "path": "^0.12.7",
     "pixi-ease": "^1.1.2",
-    "pixi-viewport": "^4.0.0-beta.3",
+    "pixi-viewport": "^4.11.1",
     "pixi.js": "5.1.2",
     "point-in-triangle": "^1.0.1",
     "simple-window-manager": "^1.1.0",

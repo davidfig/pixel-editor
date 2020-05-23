@@ -19,9 +19,10 @@ async function init()
     {
         _main = new electron.BrowserWindow({
             webPreferences: {
-                nodeIntegration: true
+                nodeIntegration: true,
+                enableRemoteModule: true
             },
-            icon: path.join(__dirname, 'assets', 'icon.png'),
+            icon: path.join('assets', 'icon.png'),
             title: 'Pixel Editor',
             backgroundColor: BACKGROUND,
             width: Math.round(main.width),
@@ -36,15 +37,24 @@ async function init()
     }
     else
     {
-        _main = new electron.BrowserWindow({
-            webPreferences: {
-                nodeIntegration: true
-            },
-            icon: path.join(__dirname, 'assets', 'icon.png'),
-            title: 'Pixel Editor',
-            backgroundColor: BACKGROUND
-        })
-        _main.maximize()
+        try
+        {
+            _main = new electron.BrowserWindow({
+                webPreferences: {
+                    nodeIntegration: true,
+                    enableRemoteModule: true
+                },
+                icon: path.join('assets', 'icon.png'),
+                title: 'Pixel Editor',
+                backgroundColor: BACKGROUND
+            })
+            _main.maximize()
+        }
+        catch(e)
+        {
+            console.error(e)
+            debugger
+        }
     }
     _main.setMenu(null)
     _main.loadURL(url.format({ pathname: path.join(__dirname, '..', 'html', 'electron.html'), protocol: 'file:', slashes: true }))

@@ -5,7 +5,7 @@
   "main": "code/index.js",
   "scripts": {
     "start": "electron-forge start",
-    "package": "electron-forge package --platform win32 --arch x64",
+    "package": "electron-packager . pixel-editor --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --overwrite",
     "make": "electron-forge make",
     "icon": "electron-icon-maker -i assets/icon.png -o assets",
     "test": "yarn web-ready && yarn budo",
@@ -21,7 +21,8 @@
   "license": "MIT",
   "devDependencies": {
     "budo": "^11.6.3",
-    "electron": "^9.0.0"
+    "electron": "^9.0.0",
+    "electron-packager": "^14.2.1"
   },
   "dependencies": {
     "calc-fontsize": "^1.1.0",
@@ -32,7 +33,6 @@
     "fontfaceobserver": "^2.0.9",
     "fs-extra": "^8.1.0",
     "localforage": "^1.7.2",
-    "path": "^0.12.7",
     "pixi-ease": "^1.1.2",
     "pixi-viewport": "^4.11.1",
     "pixi.js": "5.1.2",
@@ -47,38 +47,5 @@
     "yy-random": "^1.7.2",
     "yy-rendersheet": "^5.0.4",
     "yy-tooltip": "^1.5.0"
-  },
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
-        "packageManager": "yarn",
-        "icon": "icon.ico"
-      },
-      "electronWinstallerConfig": {
-        "name": "pixel-editor"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "pixel-editor"
-      }
-    }
   }
 }

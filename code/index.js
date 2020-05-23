@@ -1,5 +1,4 @@
-const electron = require('electron')
-const app = electron.app
+const { app, BrowserWindow } = require('electron')
 const url = require('url')
 const path = require('path')
 
@@ -17,12 +16,11 @@ async function init()
     const main = State.main
     if (main)
     {
-        _main = new electron.BrowserWindow({
+        _main = new BrowserWindow({
             webPreferences: {
                 nodeIntegration: true,
                 enableRemoteModule: true
             },
-            icon: path.join('assets', 'icon.png'),
             title: 'Pixel Editor',
             backgroundColor: BACKGROUND,
             width: Math.round(main.width),
@@ -39,12 +37,11 @@ async function init()
     {
         try
         {
-            _main = new electron.BrowserWindow({
+            _main = new BrowserWindow({
                 webPreferences: {
                     nodeIntegration: true,
                     enableRemoteModule: true
                 },
-                icon: path.join('assets', 'icon.png'),
                 title: 'Pixel Editor',
                 backgroundColor: BACKGROUND
             })

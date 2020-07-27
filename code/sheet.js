@@ -1,18 +1,18 @@
-const libraries = require('./config/libraries')
-const RenderSheet = libraries.RenderSheet
-const Color = require('yy-color')
+import RenderSheet from 'yy-rendersheet'
+import Color from 'yy-color'
 
 const COLOR = 0x999999
 const SIZE = 100
 
-let _sheet, _transparent
+let _transparent
 
-async function load()
+export const sheet = new RenderSheet()
+
+export async function createSheet()
 {
     createTransparentImage()
-    _sheet = new RenderSheet()
-    _sheet.add('transparency', draw, measure, SIZE)
-    await _sheet.asyncRender()
+    sheet.add('transparency', draw, measure, SIZE)
+    await sheet.asyncRender()
 }
 
 function createTransparentImage()
@@ -23,6 +23,11 @@ function createTransparentImage()
     const context = canvas.getContext('2d')
     draw(context, size)
     _transparent = 'url("' + canvas.toDataURL() + '")'
+}
+
+export function getTransparent()
+{
+    return _transparent
 }
 
 function convert(color)
@@ -50,35 +55,4 @@ function draw(c, size)
 function measure()
 {
     return { width: SIZE, height: SIZE }
-}
-
-function get(name)
-{
-    return _sheet.get(name)
-}
-
-function getTexture(name)
-{
-    return _sheet.getTexture(name)
-}
-
-function render(callback)
-{
-    _sheet.once('render', callback)
-    _sheet.render()
-}
-
-module.exports = {
-    load,
-    get,
-    getTexture,
-    render,
-    get transparent()
-    {
-        return _transparent
-    },
-    get sheet()
-    {
-        return _sheet
-    }
 }

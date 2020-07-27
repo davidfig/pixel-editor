@@ -1,14 +1,12 @@
+import enUs from '../data/text/en-us.json'
+
 const LANGUAGES = {
-    'en-us': require('../data/text/en-us.json')
+    'en-us': enUs
 }
 
 const language = 'en-us'
 
-function get(string)
+export function get(string)
 {
     return LANGUAGES[language][string]
-}
-
-module.exports = {
-    get
 }

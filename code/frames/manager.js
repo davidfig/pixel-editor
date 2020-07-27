@@ -1,25 +1,30 @@
-const path = require('path')
-const clicked = require('clicked')
+import { clicked }  from 'clicked'
+import Tooltip from 'yy-tooltip'
+import * as file from '../file'
 
-const Tooltip = require('../config/libraries').Tooltip
-const File = require('../config/file')
+import PixelEditor from '../pixel-editor'
+import * as locale from '../locale'
+import { state } from '../state'
+import { html } from '../html'
+import { button } from '../button'
 
-const PixelEditor = require('../pixel-editor')
-const locale = require('../locale')
-const State = require('../state')
-const html = require('../html')
-const button = require('../button')
-
-const ICONS = require('../../images/manager.json')
+import ICONS from '../../images/manager.json'
 
 const MIN_WIDTH = '165px'
 
-module.exports = class Manager
+export class Manager
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ title: locale.get('ManagerTitle'), x: 10, y: 10, minWidth: MIN_WIDTH, resizable: true, minimizable: false })
+        this.win = ui.createWindow({
+            id: 'manager',
+            title: locale.get('ManagerTitle'),
+            x: 10, y: 10,
+            minWidth: MIN_WIDTH,
+            resizable: true,
+        })
         this.win.open()
+        this.win.content.addEventListener('wheel', e => e.stopPropagation())
         this.content = this.win.content
         this.content.style.color = '#eeeeee'
         this.toolbar = html({ parent: this.content, styles: { textAlign: 'center' } })
@@ -31,43 +36,33 @@ module.exports = class Manager
 
     setupToolbar()
     {
-        clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6 }, locale.get('openFolder')), () =>
-        {
-            File.openDirDialog((dir) =>
-            {
-                if (dir && dir.length >= 1)
-                {
-                    this.populateBox(dir[0])
-                }
-            })
-        })
         clicked(button(this.toolbar, ICONS.imageData[1], { opacity: 0.6 }, locale.get('increaseZoom')), () =>
         {
-            State.manager.zoom++
-            State.save()
+            state.manager.zoom++
+            state.save()
             this.populateBox()
         })
         clicked(button(this.toolbar, ICONS.imageData[2], { opacity: 0.6 }, locale.get('decreaseZoom')), () =>
         {
-            State.manager.zoom--
-            State.manager.zoom = State.manager.zoom < 1 ? 1 : State.manager.zoom
-            State.save()
+            state.manager.zoom--
+            state.manager.zoom = state.manager.zoom < 1 ? 1 : state.manager.zoom
+            state.save()
             this.populateBox()
         })
-        const images = button(this.toolbar, ICONS.imageData[0], { opacity: State.manager.images ? 0.6 : 0.4 }, locale.get('toggleImages'))
+        const images = button(this.toolbar, ICONS.imageData[0], { opacity: state.manager.images ? 0.6 : 0.4 }, locale.get('toggleImages'))
         clicked(images, () => {
-            State.manager.images = !State.manager.images
-            State.save()
+            state.manager.images = !state.manager.images
+            state.save()
             this.populateBox()
-            images.style.opacity = State.manager.images ? 0.6 : 0.4
+            images.style.opacity = state.manager.images ? 0.6 : 0.4
         })
-        const alphabetical = button(this.toolbar, ICONS.imageData[3], { opacity: State.manager.alphabetical ? 0.6 : 0.4 }, locale.get('toggleSort'))
+        const alphabetical = button(this.toolbar, ICONS.imageData[3], { opacity: state.manager.alphabetical ? 0.6 : 0.4 }, locale.get('toggleSort'))
         clicked(alphabetical, () =>
         {
-            State.manager.alphabetical = !State.manager.alphabetical
-            State.save()
+            state.manager.alphabetical = !state.manager.alphabetical
+            state.save()
             this.populateBox()
-            alphabetical.style.opacity = State.manager.alphabetical ? 0.6 : 0.4
+            alphabetical.style.opacity = state.manager.alphabetical ? 0.6 : 0.4
         })
     }
 
@@ -77,7 +72,7 @@ module.exports = class Manager
         {
             this.box.removeChild(this.box.firstChild)
         }
-        if (State.manager.images)
+        if (state.manager.images)
         {
             this.drawImages(dir)
         }
@@ -96,21 +91,20 @@ module.exports = class Manager
         }
     }
 
-    async nextImageFile(file)
+    async nextImageFile(filename)
     {
-        if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+        if (filename.indexOf('.json') !== -1 && filename.indexOf('.editor.') === -1)
         {
-            const filename = path.join(this.dir, file)
-            const data = await File.readJSON(filename)
+            const data = await file.readJSON(filename)
             if (data && data.imageData)
             {
                 const image = new Image()
-                image.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                image.sort = state.manager.alphabetical ? data.name : (await file.date(filename) || this.index++)
                 image.src = 'data:image/png;base64,' + data.imageData[0][2]
                 image.width = data.imageData[0][0]
                 image.height = data.imageData[0][1]
-                image.style.width = data.imageData[0][0] * State.manager.zoom + 'px'
-                image.style.height = data.imageData[0][1] * State.manager.zoom + 'px'
+                image.style.width = data.imageData[0][0] * state.manager.zoom + 'px'
+                image.style.height = data.imageData[0][1] * state.manager.zoom + 'px'
                 image.style.margin = '0.25em'
                 image.style.imageRendering = 'pixelated'
                 image.addEventListener('mouseenter', () =>
@@ -124,18 +118,18 @@ module.exports = class Manager
                 clicked(image, async () =>
                 {
                     await PixelEditor.load(filename)
-                    State.lastFile = filename
-                    State.current = 0
-                    if (State.cursorX >= PixelEditor.width)
+                    state.lastFile = filename
+                    state.current = 0
+                    if (state.cursorX >= PixelEditor.width)
                     {
-                        State.cursorX = 0
+                        state.cursorX = 0
                     }
-                    if (State.cursorY >= PixelEditor.height)
+                    if (state.cursorY >= PixelEditor.height)
                     {
-                        State.cursorY = 0
+                        state.cursorY = 0
                     }
                 })
-                new Tooltip(image, `${data.name} (${file})`)
+                new Tooltip(image, `${data.name} (${filename})`)
                 this.images.push(image)
             }
         }
@@ -152,32 +146,26 @@ module.exports = class Manager
 
         this.index = 0
         this.images = []
-        this.dir = dir || path.dirname(PixelEditor.filename)
-        if (this.dir)
+        this.files = await file.dir()
+        for (const filename of this.files)
         {
-            const files = await File.readDir(this.dir)
-            this.files = files
-            for (let file of this.files)
-            {
-                await this.nextImageFile(file)
-            }
-            this.imagesComplete()
+            await this.nextImageFile(filename)
         }
+        this.imagesComplete()
     }
 
     async nextNameFile()
     {
         if (this.files.length)
         {
-            const file = this.files.pop()
-            const filename = path.join(this.dir, file)
-            if (file.indexOf('.json') !== -1 && file.indexOf('.editor.') === -1)
+            const filename = this.files.pop()
+            if (filename.indexOf('.json') !== -1 && filename.indexOf('.editor.') === -1)
             {
-                const data = await File.readJSON(filename)
+                const data = await file.readJSON(filename)
                 if (data.imageData)
                 {
-                    const entry = html({ html: `${data.name} (${file})`, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
-                    entry.sort = State.manager.alphabetical ? data.name : (File.fileDate(filename) || this.index++)
+                    const entry = html({ html: `${data.name} (${filename})`, styles: { marginBottom: '0.25em', width: 'calc(100% - 0.25em)' } })
+                    entry.sort = state.manager.alphabetical ? data.name : (await file.date(filename) || this.index++)
                     clicked(entry, () => PixelEditor.load(filename))
                     entry.addEventListener('mouseenter', () =>
                     {
@@ -218,19 +206,14 @@ module.exports = class Manager
     {
         this.box.style.display = 'block'
         this.box.style.padding = '0.5em'
-        this.dir = dir || path.dirname(PixelEditor.filename)
-        if (this.dir)
-        {
-            this.index = 0
-            this.entries = []
-            const files = await File.readDir(this.dir)
-            this.files = files
-            this.nextNameFile()
-        }
+        this.index = 0
+        this.entries = []
+        this.files = await file.dir()
+        this.nextNameFile()
     }
 
     stateSetup()
     {
-        State.on('last-file', () => this.populateBox())
+        state.on('last-file', () => this.populateBox())
     }
 }

@@ -1,15 +1,14 @@
-const PIXI = require('pixi.js')
-const TinyColor = require('tinycolor2')
-const exists = require('exists')
-const FontSize = require('calc-fontsize')
-const Color = require('yy-color')
+import * as PIXI from 'pixi.js'
+import TinyColor from 'tinycolor2'
+import FontSize from 'calc-fontsize'
+import Color from 'yy-color'
 
-const Settings = require('../settings')
-const PixelEditor = require('../pixel-editor')
-const State = require('../state')
-const Sheet = require('../sheet')
-const PixelSheet = require('../pixel-sheet')
-const locale = require('../locale')
+import { BORDER } from '../settings'
+import PixelEditor from '../pixel-editor'
+import { state } from '../state'
+import { sheet } from '../sheet'
+import { sheet as PixelSheet } from '../pixel-sheet'
+import * as locale from '../locale'
 
 const COLORS_PER_LINE = 10
 
@@ -19,12 +18,16 @@ const WIDTH = 10
 const SPACING = 5
 const SELECTED = 3
 
-module.exports = class Palette extends PIXI.Container
+export class Palette extends PIXI.Container
 {
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ title: locale.get('PaletteTitle'), width: MIN_WIDTH, height: MIN_HEIGHT })
+        this.win = ui.createWindow({
+            id: 'palette',
+            title: locale.get('PaletteTitle'),
+            width: MIN_WIDTH, height: MIN_HEIGHT
+        })
         this.win.open()
 
         this.content = this.win.content
@@ -73,31 +76,31 @@ module.exports = class Palette extends PIXI.Container
 
         const width = (this.win.width / WIDTH)
         const fontSize = FontSize('8', { width, height: width * 0.85 }) || 1
-        let yStart = Settings.BORDER
+        let yStart = BORDER
 
-        const behindForeground = this.main.addChild(Sheet.get('transparency'))
+        const behindForeground = this.main.addChild(sheet.get('transparency'))
         behindForeground.anchor.set(0)
         this.foregroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.foregroundColor.interactive = true
-        this.foregroundColor.on('pointertap', () => State.isForeground = true)
+        this.foregroundColor.on('pointertap', () => state.isForeground = true)
         behindForeground.width = behindForeground.height = this.foregroundColor.width = this.foregroundColor.height = width * 2 - SPACING
         behindForeground.y = this.foregroundColor.y = yStart
-        this.foregroundColor.tint = parseInt(State.foreground.substr(0, 6), 16)
-        this.foregroundColor.alpha = parseInt(State.foreground.substr(6), 16) / 255
+        this.foregroundColor.tint = parseInt(state.foreground.substr(0, 6), 16)
+        this.foregroundColor.alpha = parseInt(state.foreground.substr(6), 16) / 255
 
-        const behindBackground = this.main.addChild(Sheet.get('transparency'))
+        const behindBackground = this.main.addChild(sheet.get('transparency'))
         behindBackground.anchor.set(0)
         this.backgroundColor = this.main.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.backgroundColor.interactive = true
-        this.backgroundColor.on('pointertap', () => State.isForeground = false)
+        this.backgroundColor.on('pointertap', () => state.isForeground = false)
         behindBackground.width = behindBackground.height = this.backgroundColor.width = this.backgroundColor.height = width * 2 - SPACING
         this.backgroundColor.position.set(width * 2, yStart)
         behindBackground.position = this.backgroundColor.position
-        this.backgroundColor.tint = parseInt(State.background.substr(0, 6), 16)
-        this.backgroundColor.alpha = parseInt(State.background.substr(6), 16) / 255
+        this.backgroundColor.tint = parseInt(state.background.substr(0, 6), 16)
+        this.backgroundColor.alpha = parseInt(state.background.substr(6), 16) / 255
 
-        const choose = State.isForeground ? this.foregroundColor : this.backgroundColor
-        this.selected.beginFill((State.color === '000000ff' || State.color.substr(6) === '00') ? 0xffffff : 0)
+        const choose = state.isForeground ? this.foregroundColor : this.backgroundColor
+        this.selected.beginFill((state.color === '000000ff' || state.color.substr(6) === '00') ? 0xffffff : 0)
             .drawRect(choose.x + choose.width / 2 - width / 3 / 2, choose.y + choose.height / 2 - width / 3 / 2, width / 3, width / 3)
             .endFill()
 
@@ -105,12 +108,12 @@ module.exports = class Palette extends PIXI.Container
         for (let i = 0; i < colors.length; i++)
         {
             const color = colors[i]
-            const block = this.blocks.addChild(new PIXI.Sprite(color === null ? Sheet.getTexture('transparency') : PIXI.Texture.WHITE))
+            const block = this.blocks.addChild(new PIXI.Sprite(color === null ? sheet.getTexture('transparency') : PIXI.Texture.WHITE))
             block.width = block.height = width * 1.25 - SPACING
-            block.position.set(width * 5 + i * (width * 1.25) + Settings.BORDER, width / 3 + yStart)
+            block.position.set(width * 5 + i * (width * 1.25) + BORDER, width / 3 + yStart)
             block.color = color
             block.interactive = true
-            block.on('pointertap', () => State.color = block.color)
+            block.on('pointertap', () => state.color = block.color)
             if (color !== '00000000')
             {
                 block.texture = PIXI.Texture.WHITE
@@ -118,10 +121,10 @@ module.exports = class Palette extends PIXI.Container
             }
             else
             {
-                block.texture = Sheet.getTexture('transparency')
+                block.texture = sheet.getTexture('transparency')
                 block.isTransparent = true
             }
-            if (color === State.color)
+            if (color === state.color)
             {
                 this.selected.lineStyle(SELECTED, color === '000000ff' ? 0xffffff : 0)
                     .drawRect(block.x - SELECTED / 2, block.y - SELECTED / 2, block.width + SELECTED, block.height + SELECTED)
@@ -138,18 +141,18 @@ module.exports = class Palette extends PIXI.Container
         {
             for (let i = 0; i < line.length; i++)
             {
-                const behind = this.blocks.addChild(Sheet.get('transparency'))
+                const behind = this.blocks.addChild(sheet.get('transparency'))
                 behind.anchor.set(0)
                 behind.color = line[i]
                 const block = this.blocks.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
                 block.interactive = true
-                block.on('pointertap', () => State.color = behind.color)
+                block.on('pointertap', () => state.color = behind.color)
                 behind.width = behind.height = block.width = block.height = width - SPACING
                 block.position.set(SPACING / 2 + x * width, y * width + yStart)
                 behind.position = block.position
                 block.tint = parseInt(line[i].substr(0, 6), 16)
                 block.alpha = parseInt(line[i].substr(6), 16) / 0xff
-                if (line[i] === State.color)
+                if (line[i] === state.color)
                 {
                     this.selected.lineStyle(SELECTED, 0)
                         .drawRect(block.x - SELECTED / 2, block.y - SELECTED / 2, block.width + SELECTED, block.height + SELECTED)
@@ -235,9 +238,9 @@ module.exports = class Palette extends PIXI.Container
     {
         this.resize()
         this.win.on('resize', () => this.resize())
-        State.on('foreground', this.draw, this)
-        State.on('background', this.draw, this)
-        State.on('isForeground', this.draw, this)
+        state.on('foreground', this.draw, this)
+        state.on('background', this.draw, this)
+        state.on('isForeground', this.draw, this)
         PixelEditor.on('changed', this.draw, this)
     }
 
@@ -249,7 +252,7 @@ module.exports = class Palette extends PIXI.Container
 
     switchForeground()
     {
-        State.isForeground = !State.isForeground
+        state.isForeground = !state.isForeground
     }
 
     switchStandardColor(i)
@@ -257,13 +260,13 @@ module.exports = class Palette extends PIXI.Container
         switch (i)
         {
             case 1:
-                State.color = '000000ff'
+                state.color = '000000ff'
                 break
             case 2:
-                State.color = 'ffffffff'
+                state.color = 'ffffffff'
                 break
             case 3:
-                State.color = '00000000'
+                state.color = '00000000'
                 break
         }
     }
@@ -273,16 +276,16 @@ module.exports = class Palette extends PIXI.Container
         switch (digit)
         {
             case 3: case 4: case 5: case 6: case 7: case 8: case 9:
-                if (exists(this.colors[0][digit - 3]))
+                if (typeof this.colors[0][digit - 3] !== 'undefined')
                 {
-                    State.color = this.colors[0][digit - 3]
+                    state.color = this.colors[0][digit - 3]
                 }
                 break
 
             case 0:
-                if (exists(this.colors[0][10 - 4]))
+                if (typeof this.colors[0][10 - 4] !== 'undefined')
                 {
-                    State.color = this.colors[0][10 - 4]
+                    state.color = this.colors[0][10 - 4]
                 }
                 break
         }

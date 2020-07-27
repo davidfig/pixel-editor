@@ -1,9 +1,9 @@
-const Base = require('./base')
-const State = require('../state')
-const Settings = require('../settings')
-const PixelEditor = require('../pixel-editor')
+import { Base } from './base'
+import { state } from '../state'
+import { CURSOR_COLOR, ZOOM } from '../settings'
+import PixelEditor from '../pixel-editor'
 
-module.exports = class Line extends Base
+export class Fill extends Base
 {
     constructor(draw)
     {
@@ -12,10 +12,10 @@ module.exports = class Line extends Base
 
     cursor()
     {
-        const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        const color = state.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(state.foreground.substr(0, 6), 16)
+        this.draw.cursorBlock.position.set(state.cursorX * ZOOM, state.cursorY * ZOOM)
         this.draw.cursorBlock.lineStyle(10, color)
-        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM, Settings.ZOOM)
+        this.draw.cursorBlock.drawRect(0, 0, ZOOM, ZOOM)
     }
 
     erase()
@@ -25,9 +25,9 @@ module.exports = class Line extends Base
 
     floodFill(x, y, check)
     {
-        if (check !== State.color && PixelEditor.get(x, y) === check)
+        if (check !== state.color && PixelEditor.get(x, y) === check)
         {
-            PixelEditor.set(x, y, State.color, true)
+            PixelEditor.set(x, y, state.color, true)
             if (y > 0)
             {
                 this.floodFill(x, y - 1, check)
@@ -50,7 +50,7 @@ module.exports = class Line extends Base
     space()
     {
         PixelEditor.undoSave()
-        this.floodFill(State.cursorX, State.cursorY, PixelEditor.get(State.cursorX, State.cursorY))
+        this.floodFill(state.cursorX, state.cursorY, PixelEditor.get(state.cursorX, state.cursorY))
         this.draw.change()
     }
 }

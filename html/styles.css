@@ -6,6 +6,8 @@
 body {
     margin: 0;
     padding: 0;
+    width: 100vw;
+    height: 100vh;
     user-select: none;
     font-family: consolas;
     min-height: 100vh;

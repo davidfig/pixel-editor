@@ -1,30 +1,34 @@
-const PIXI = require('pixi.js')
-const clicked = require('clicked')
+import * as PIXI from 'pixi.js'
+import { clicked } from 'clicked'
+import { Pixel } from 'yy-pixel'
 
-const libraries = require('../config/libraries')
-const Pixel = libraries.Pixel
+import { html } from '../html'
+import { button } from '../button'
+import { state } from '../state'
+import PixelEditor from '../pixel-editor'
+import { sheet } from '../pixel-sheet'
+import { Dialog } from '../dialog'
+import * as locale from '../locale'
 
-const html = require('../html')
-const button = require('../button')
-const State = require('../state')
-const PixelEditor = require('../pixel-editor')
-const sheet = require('../pixel-sheet')
-const Dialog = require('../dialog')
-const locale = require('../locale')
+import BUTTONS from '../../images/animation.json'
 
 const MIN_WIDTH = 230
 const MIN_HEIGHT = 200
 
-const BUTTONS = require('../../images/animation.json')
-
-module.exports = class Animation extends PIXI.Container
+export class Animation extends PIXI.Container
 {
     constructor(wm)
     {
         super()
         this.current = 0
         this.time = 150
-        this.win = wm.createWindow({ title: locale.get('AnimationTitle'), height: MIN_HEIGHT, width: MIN_WIDTH, minWidth: '230px' })
+        this.win = wm.createWindow({
+            id: 'animation',
+            title: locale.get('AnimationTitle'),
+            height: MIN_HEIGHT,
+            width: MIN_WIDTH,
+            minWidth: '230px',
+        })
         this.content = this.win.content
         this.content.style.color = '#eeeeee'
         this.content.style.margin = '0.25em'
@@ -149,7 +153,7 @@ module.exports = class Animation extends PIXI.Container
         this.pixel = this.addChild(new Pixel(PixelEditor.getData(), sheet, this.time))
         this.pixel.scale.set(PixelEditor.zoom)
         this.pixel.frame(0)
-        const split = State.relative.split('-')
+        const split = state.relative.split('-')
         this.pixel.anchor.x = split[1] === 'left' ? 0 : split[1] === 'right' ? 1 : 0.5
         this.pixel.anchor.y = split[0] === 'top' ? 0 : split[0] === 'bottom' ? 1 : 0.5
         this.pixel.position.set(PixelEditor.largestWidth * PixelEditor.zoom * this.pixel.anchor.x, PixelEditor.largestHeight * PixelEditor.zoom * this.pixel.anchor.y)
@@ -294,13 +298,13 @@ module.exports = class Animation extends PIXI.Container
             this.draw()
         })
         PixelEditor.on('changed', () => this.draw())
-        State.on('last-file', () =>
+        state.on('last-file', () =>
         {
             this.draw()
             this.showNames()
             this.showText()
         })
-        State.on('relative', this.draw, this)
+        state.on('relative', this.draw, this)
     }
 
     resized()

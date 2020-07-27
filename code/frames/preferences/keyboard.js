@@ -1,23 +1,27 @@
-const clicked = require('clicked')
+import { clicked } from 'clicked'
 
-const Accelerator = require('../../config/localAccelerator')
-const locale = require('../../locale')
-const html = require('../../html')
-const KeyBinding = require('./keybinding')
-const State = require('../../state')
-const Menu = require('../../menu')
-const Dialog = require('../../dialog')
+import { localAccelerator } from 'yy-menu'
 
-module.exports = class Keys
+import * as locale from '../../locale'
+import { html } from '../../html'
+import { KeyBinding } from './keybinding'
+import { state } from '../../state'
+import { Menu } from '../../menu'
+import { Dialog } from '../../dialog'
+
+export class Keyboard
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ title: locale.get('KeyboardTitle') })
+        this.win = ui.createWindow({
+            id: 'keyboard',
+            title: locale.get('KeyboardTitle')
+        })
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'
         this.content.style.color = '#eeeeee'
+        this.content.style.maxHeight = '100%'
         this.setup()
-        this.win.open()
         this.win.center()
     }
 
@@ -29,11 +33,11 @@ module.exports = class Keys
         const body = html({ parent: table, type: 'tbody' })
         let other = true
         this.keysList = []
-        for (let key in State.keys)
+        for (let key in state.keys)
         {
             const tr = html({ parent: body, type: 'tr', styles: { cursor: 'pointer', backgroundColor: (other ? 'rgba(255, 255, 255, 0.15)' : '') } })
             html({ parent: tr, type: 'td', html: locale.get(key) })
-            const accelerator = html({ parent: tr, type: 'td', html: Accelerator.prettifyKey(State.keys[key]) })
+            const accelerator = html({ parent: tr, type: 'td', html: localAccelerator.prettifyKey(state.keys[key]) })
             tr.addEventListener('mouseenter', () => this.mouseenter(tr))
             tr.addEventListener('mouseleave', () => this.mouseleave(tr))
             clicked(tr, () =>
@@ -56,10 +60,10 @@ module.exports = class Keys
     {
         if (result)
         {
-            State.resetKeys()
+            state.resetKeys()
             for (let key of this.keysList)
             {
-                key.accelerator.innerHTML = Accelerator.prettifyKey(State.keys[key.key])
+                key.accelerator.innerHTML = localAccelerator.prettifyKey(state.keys[key.key])
             }
         }
     }
@@ -69,15 +73,15 @@ module.exports = class Keys
         if (change)
         {
             accelerator.innerHTML = change
-            State.keys[key] = change
-            State.save()
+            state.keys[key] = change
+            state.save()
             Menu.create()
         }
         else if (change === false)
         {
             accelerator.innerHTML = ''
-            State.keys[key] = ''
-            State.save()
+            state.keys[key] = ''
+            state.save()
             Menu.create()
         }
     }

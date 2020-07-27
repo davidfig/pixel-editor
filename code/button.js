@@ -1,10 +1,8 @@
-/* Copyright (c) 2018 YOPEY YOPEY LLC */
+import Tooltip from 'yy-tooltip'
 
-const Tooltip = require('./config/libraries').Tooltip
+import { html } from './html'
 
-const html = require('./html')
-
-module.exports = function button(parent, data, styles, title)
+export function button(parent, data, styles, title)
 {
     const scale = 2
 
@@ -13,7 +11,7 @@ module.exports = function button(parent, data, styles, title)
     {
         if (Array.isArray(title))
         {
-            new Tooltip(button, '<div>' + title[0] + '</div><div>key: ' + title[1] + '</div>')
+            new Tooltip(button, `<div>${title[0]}</div><div>key: ${title[1]}</div>`)
         }
         else
         {
@@ -21,7 +19,7 @@ module.exports = function button(parent, data, styles, title)
         }
     }
     const image = new Image()
-    image.src = 'data:image/png;base64,' + data[2]
+    image.src = `data:image/png;base64,${data[2]}`
     image.width = data[0] * scale
     button.style.width = image.width * 1.5 + 'px'
     image.height = data[1] * scale

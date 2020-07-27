@@ -1,36 +1,31 @@
-const PIXI = require('pixi.js')
+import * as PIXI from 'pixi.js'
+import { Viewport } from 'pixi-viewport'
 
-const libraries = require('./config/libraries')
-const Viewport = libraries.Viewport
+import { ZOOM } from './settings'
+import { sheet } from './sheet'
+import { state } from './state'
+import PixelEditor from './pixel-editor'
+import { sheet as pixelSheet } from './pixel-sheet'
+import { Position } from './frames/position'
 
-const Settings = require('./settings')
-const Sheet = require('./sheet')
-const State = require('./state')
-const PixelEditor = require('./pixel-editor')
-const pixelSheet = require('./pixel-sheet')
-const Position = require('./frames/position')
-
-const Circle = require('./tools/circle')
-const Ellipse = require('./tools/ellipse')
-const Line = require('./tools/line')
-const Paint = require('./tools/paint')
-const Select = require('./tools/select')
-const Fill = require('./tools/fill')
-const Crop = require('./tools/crop')
+import { Circle } from './tools/circle'
+import { Ellipse } from './tools/ellipse'
+import { Line } from './tools/line'
+import { Paint } from './tools/paint'
+import { Select } from './tools/select'
+import { Fill } from './tools/fill'
+import { Crop } from './tools/crop'
 
 const BORDER = 1
 const THRESHOLD = 5
 
-module.exports = class Draw extends PIXI.Container
+export class Draw extends PIXI.Container
 {
-    constructor(body, ui, main)
+    constructor(ui)
     {
         super()
-        this.body = body
-        this.ui = ui
-        this.main = main
         this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, autoResize: true })
-        body.appendChild(this.renderer.view)
+        ui.wallpaper.appendChild(this.renderer.view)
 
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
@@ -38,7 +33,11 @@ module.exports = class Draw extends PIXI.Container
         this.renderer.view.style.height = '100%'
         this.resize()
 
-        this.vp = this.addChild(new Viewport({ screenWidth: window.innerWidth, screenHeight: window.innerHeight, divWheel: this.body }))
+        this.vp = this.addChild(new Viewport({
+            screenWidth: window.innerWidth,
+            screenHeight: window.innerHeight,
+            divWheel: this.body,
+            interaction: this.renderer.plugins.interaction }))
         this.blocks = this.vp.addChild(new PIXI.Container())
         this.sprite = this.vp.addChild(new PIXI.Sprite())
         this.grid = this.vp.addChild(new PIXI.Graphics())
@@ -55,7 +54,7 @@ module.exports = class Draw extends PIXI.Container
             select: new Select(this),
             crop: new Crop(this)
         }
-        this.tool = this.tools[State.tool]
+        this.tool = this.tools[state.tool]
 
         this.redraw()
         this.setupViewport()
@@ -102,8 +101,8 @@ module.exports = class Draw extends PIXI.Container
         }
 
         const point = this.vp.toWorld(x, y)
-        State.cursorX = clamp(Math.floor(point.x / Settings.ZOOM), 0, PixelEditor.width - 1)
-        State.cursorY = clamp(Math.floor(point.y / Settings.ZOOM), 0, PixelEditor.height - 1)
+        state.cursorX = clamp(Math.floor(point.x / ZOOM), 0, PixelEditor.width - 1)
+        state.cursorY = clamp(Math.floor(point.y / ZOOM), 0, PixelEditor.height - 1)
     }
 
     update()
@@ -134,10 +133,10 @@ module.exports = class Draw extends PIXI.Container
 
     redraw()
     {
-        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
+        state.cursorSizeX = (state.cursorSizeX > PixelEditor.width) ? PixelEditor.width : state.cursorSizeX
+        state.cursorSizeY = (state.cursorSizeY > PixelEditor.height) ? PixelEditor.height : state.cursorSizeY
         this.sprite.texture = pixelSheet.getTexture(PixelEditor.name + '-' + PixelEditor.current)
-        this.sprite.scale.set(Settings.ZOOM)
+        this.sprite.scale.set(ZOOM)
         this.transparency()
         this.frame()
         this.cursorBlock.clear()
@@ -175,9 +174,9 @@ module.exports = class Draw extends PIXI.Container
         {
             for (let x = 0; x < PixelEditor.width; x++)
             {
-                const block = this.blocks.addChild(new PIXI.Sprite(Sheet.getTexture('transparency')))
-                block.width = block.height = Settings.ZOOM
-                block.position.set(x * Settings.ZOOM, y * Settings.ZOOM)
+                const block = this.blocks.addChild(new PIXI.Sprite(sheet.getTexture('transparency')))
+                block.width = block.height = ZOOM
+                block.position.set(x * ZOOM, y * ZOOM)
             }
         }
     }
@@ -188,14 +187,14 @@ module.exports = class Draw extends PIXI.Container
         this.grid.lineStyle(BORDER, 0x888888)
         for (let y = 0; y <= PixelEditor.height; y++)
         {
-            this.grid.moveTo(0, y * Settings.ZOOM)
-            this.grid.lineTo(PixelEditor.width * Settings.ZOOM, y * Settings.ZOOM)
+            this.grid.moveTo(0, y * ZOOM)
+            this.grid.lineTo(PixelEditor.width * ZOOM, y * ZOOM)
         }
 
         for (let x = 0; x <= PixelEditor.width; x++)
         {
-            this.grid.moveTo(x * Settings.ZOOM, 0)
-            this.grid.lineTo(x * Settings.ZOOM, PixelEditor.height * Settings.ZOOM)
+            this.grid.moveTo(x * ZOOM, 0)
+            this.grid.lineTo(x * ZOOM, PixelEditor.height * ZOOM)
         }
     }
 
@@ -235,11 +234,11 @@ module.exports = class Draw extends PIXI.Container
 
     selectAll()
     {
-        State.tool = 'select'
-        State.cursorX = 0
-        State.cursorY = 0
-        State.cursorSizeX = PixelEditor.width
-        State.cursorSizeY = PixelEditor.height
+        state.tool = 'select'
+        state.cursorX = 0
+        state.cursorY = 0
+        state.cursorSizeX = PixelEditor.width
+        state.cursorSizeY = PixelEditor.height
     }
 
     pressSpace()
@@ -249,7 +248,7 @@ module.exports = class Draw extends PIXI.Container
 
     toolChange()
     {
-        this.tool = this.tools[State.tool]
+        this.tool = this.tools[state.tool]
         this.tool.activate()
         this.cursorDraw()
     }
@@ -263,34 +262,34 @@ module.exports = class Draw extends PIXI.Container
     copy(clear)
     {
         PixelEditor.undoSave()
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        if (state.cursorSizeX === 1 && state.cursorSizeY === 1)
         {
-            this.clipboard = { width: 1, height: 1, data: PixelEditor.get(State.cursorX, State.cursorY) }
+            this.clipboard = { width: 1, height: 1, data: PixelEditor.get(state.cursorX, state.cursorY) }
             if (clear)
             {
-                PixelEditor.set(State.cursorX, State.cursorY, '00000000', true)
+                PixelEditor.set(state.cursorX, state.cursorY, '00000000', true)
             }
         }
         else
         {
-            let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
-            if (State.cursorSizeX < 0)
+            let xStart = state.cursorX, yStart = state.cursorY, xTo, yTo
+            if (state.cursorSizeX < 0)
             {
-                xStart += State.cursorSizeX
-                xTo = xStart + Math.abs(State.cursorSizeX)
+                xStart += state.cursorSizeX
+                xTo = xStart + Math.abs(state.cursorSizeX)
             }
             else
             {
-                xTo = xStart + State.cursorSizeX
+                xTo = xStart + state.cursorSizeX
             }
-            if (State.cursorSizeY < 0)
+            if (state.cursorSizeY < 0)
             {
-                yStart += State.cursorSizeY
-                yTo = yStart + Math.abs(State.cursorSizeY) - 1
+                yStart += state.cursorSizeY
+                yTo = yStart + Math.abs(state.cursorSizeY) - 1
             }
             else
             {
-                yTo = yStart + State.cursorSizeY
+                yTo = yStart + state.cursorSizeY
             }
             this.clipboard = { width: xTo - xStart, height: yTo - yStart, data: [] }
             for (let y = yStart; y < yTo; y++)
@@ -324,7 +323,7 @@ module.exports = class Draw extends PIXI.Container
             {
                 for (let x = 0; x < this.clipboard.width; x++)
                 {
-                    PixelEditor.set(x + State.cursorX, y + State.cursorY, this.clipboard.data[i++], true)
+                    PixelEditor.set(x + state.cursorX, y + state.cursorY, this.clipboard.data[i++], true)
                 }
             }
             this.change()
@@ -335,14 +334,14 @@ module.exports = class Draw extends PIXI.Container
     {
         this.name = name
         const states = ['foreground', 'isForeground', 'cursorX', 'cursorY', 'cursorSizeX', 'cursorSizeY']
-        for (let state of states)
+        for (const key of states)
         {
-            State.on(state, () => this.redraw())
+            state.on(key, () => this.redraw())
         }
-        State.on('tool', () => this.toolChange())
+        state.on('tool', () => this.toolChange())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.redraw())
-        State.on('last-file', () => this.redraw())
-        State.on('background', () => this.toolChange())
+        state.on('last-file', () => this.redraw())
+        state.on('background', () => this.toolChange())
     }
 }

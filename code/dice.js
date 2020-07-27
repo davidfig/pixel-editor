@@ -1,13 +1,13 @@
-const PIXI = require('pixi.js')
-const Tooltip = require('./config/libraries').Tooltip
+import * as PIXI from 'pixi.js'
+import Tooltip from 'yy-tooltip'
 
-const State = require('./state')
+import { state } from './state'
 
 const DICE = 50
 const DICE_COLOR = [0x888888, 0xaa0000]
 const SIZE = 10
 
-module.exports = class Dice extends PIXI.Container
+export class Dice extends PIXI.Container
 {
     constructor(parent)
     {
@@ -25,7 +25,7 @@ module.exports = class Dice extends PIXI.Container
             dice.width = dice.height = SIZE
             this.dice.push(dice)
         }
-        State.on('relative', this.draw, this)
+        state.on('relative', this.draw, this)
         this.draw()
         this.interactive = true
         this.on('pointerdown', (e) => this.down(e))
@@ -49,7 +49,7 @@ module.exports = class Dice extends PIXI.Container
         {
             dice.tint = DICE_COLOR[0]
         }
-        switch (State.relative)
+        switch (state.relative)
         {
             case 'top-left': this.dice[0].tint = DICE_COLOR[1]; break
             case 'top-center': this.dice[1].tint = DICE_COLOR[1]; break
@@ -73,15 +73,15 @@ module.exports = class Dice extends PIXI.Container
             {
                 switch (i)
                 {
-                    case 0: State.relative = 'top-left'; break
-                    case 1: State.relative = 'top-center'; break
-                    case 2: State.relative = 'top-right'; break
-                    case 3: State.relative = 'center-left'; break
-                    case 4: State.relative = 'center-center'; break
-                    case 5: State.relative = 'center-right'; break
-                    case 6: State.relative = 'bottom-left'; break
-                    case 7: State.relative = 'bottom-center'; break
-                    case 8: State.relative = 'bottom-right'; break
+                    case 0: state.relative = 'top-left'; break
+                    case 1: state.relative = 'top-center'; break
+                    case 2: state.relative = 'top-right'; break
+                    case 3: state.relative = 'center-left'; break
+                    case 4: state.relative = 'center-center'; break
+                    case 5: state.relative = 'center-right'; break
+                    case 6: state.relative = 'bottom-left'; break
+                    case 7: state.relative = 'bottom-center'; break
+                    case 8: state.relative = 'bottom-right'; break
                 }
                 this.draw()
             }

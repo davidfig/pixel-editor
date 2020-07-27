@@ -1,9 +1,9 @@
-const Base = require('./base')
-const State = require('../state')
-const Settings = require('../settings')
-const PixelEditor = require('../pixel-editor')
+import { Base } from './base'
+import { state } from '../state'
+import { ZOOM, BORDER } from '../settings'
+import PixelEditor from '../pixel-editor'
 
-module.exports = class Line extends Base
+export class Line extends Base
 {
     constructor(draw)
     {
@@ -12,15 +12,15 @@ module.exports = class Line extends Base
 
     cursor()
     {
-        const color = State.color
+        const color = state.color
         const c = parseInt(color.substr(0, 6), 16)
         const a = parseInt(color.substr(6), 16) / 255
         this.draw.cursorBlock.position.set(0)
         if (this.draw.line)
         {
             this.stamp = []
-            let x0 = State.cursorX
-            let y0 = State.cursorY
+            let x0 = state.cursorX
+            let y0 = state.cursorY
             let x1 = this.draw.line.x
             let y1 = this.draw.line.y
 
@@ -33,7 +33,7 @@ module.exports = class Line extends Base
             while (true)
             {
                 this.draw.cursorBlock.beginFill(c, a)
-                    .drawRect(x0 * Settings.ZOOM - Settings.BORDER, y0 * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
+                    .drawRect(x0 * ZOOM - BORDER, y0 * ZOOM - BORDER, ZOOM + BORDER * 2, ZOOM + BORDER * 2)
                     .endFill()
                 this.stamp.push({ x: x0, y: y0 })
                 if (x0 == x1 && y0 == y1)
@@ -56,9 +56,9 @@ module.exports = class Line extends Base
         else
         {
             this.draw.cursorBlock.beginFill(c, a)
-                .drawRect(State.cursorX * Settings.ZOOM - Settings.BORDER, State.cursorY * Settings.ZOOM - Settings.BORDER, Settings.ZOOM + Settings.BORDER * 2, Settings.ZOOM + Settings.BORDER * 2)
+                .drawRect(state.cursorX * ZOOM - BORDER, state.cursorY * ZOOM - BORDER, ZOOM + BORDER * 2, ZOOM + BORDER * 2)
                 .endFill()
-            this.stamp = [{ x: State.cursorX, y: State.cursorY, color }]
+            this.stamp = [{ x: state.cursorX, y: state.cursorY, color }]
         }
     }
 
@@ -66,7 +66,7 @@ module.exports = class Line extends Base
     {
         if (!this.draw.line)
         {
-            this.draw.line = { x: State.cursorX, y: State.cursorY }
+            this.draw.line = { x: state.cursorX, y: state.cursorY }
         }
         this.draw.line.x += x
         this.draw.line.y += y

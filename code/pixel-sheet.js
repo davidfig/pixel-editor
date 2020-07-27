@@ -1,4 +1,3 @@
-const libraries = require('./config/libraries')
-const RenderSheet = libraries.RenderSheet
+import RenderSheet from 'yy-rendersheet'
 
-module.exports = new RenderSheet({ scaleMode: true })
+export const sheet = new RenderSheet({ scaleMode: true })

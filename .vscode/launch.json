@@ -6,10 +6,11 @@
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-            "program": "${workspaceRoot}/code/index.js",
+            "program": "${workspaceRoot}/launcher/index.js",
             "args": [
-                "--disable-gpu-async-worker-context"
+                "images",
+                "--error",
+                "--log"
             ]
         }
     ]

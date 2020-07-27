@@ -1,13 +1,9 @@
-const path = require('path')
+import * as Settings from './settings'
+import { Pixel } from 'yy-pixel'
+import Color from 'yy-color'
+import * as file from './file'
 
-const Settings = require('./settings')
-const libraries = require('./config/libraries')
-const Pixel = libraries.Pixel
-const File = require('./config/file')
-const exists = require('exists')
-const Color = require('yy-color')
-
-const sheet = require('./pixel-sheet')
+import { sheet } from './pixel-sheet'
 
 const DEFAULT = [15, 15]
 const UNDO_SIZE = 50
@@ -26,13 +22,14 @@ class PixelEditor extends Pixel
 
     async create(filename)
     {
+        const removeExt = name => name.substr(0, name.lastIndexOf('.'))
         if (!filename)
         {
             this.imageData = [[DEFAULT[0], DEFAULT[1], this.blank(DEFAULT[0], DEFAULT[1])]]
             this.animations = { 'idle': [[0, 0]] }
-            const filename = await File.getTempFilename()
+            const filename = await file.getTempFilename()
             this.filename = filename
-            this.name = path.basename(this.filename, '.json')
+            this.name = removeExt(this.filename)
             this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
             await this.saveAndRender()
             setInterval(() => this.update(), Settings.SAVE_INTERVAL)
@@ -40,7 +37,7 @@ class PixelEditor extends Pixel
         else
         {
             this.filename = filename
-            this.name = this.name || path.basename(filename, '.json')
+            this.name = this.name || removeExt(this.filename)
             try
             {
                 await this.load(filename)
@@ -596,21 +593,24 @@ class PixelEditor extends Pixel
     async load(filename)
     {
         this.filename = filename = filename || this.filename
-        const load = await File.readJSON(filename)
+        const load = await file.readJSON(filename)
         this.imageData = load.imageData
         this.animations = load.animations
         this.name = load.name
         let editor
-        try
+        if (this.filename)
         {
-            editor = await File.readJSON(this.filename.replace('.json', '.editor.json'))
+            try
+            {
+                editor = await file.readJSON(this.filename.replace('.json', '.editor.json'))
+            }
+            catch (e) { }
         }
-        catch (e) { }
         if (editor)
         {
             this.editor = editor
-            this.editor.zoom = exists(this.editor.zoom) ? this.editor.zoom : DEFAULT_ZOOM
-            this.editor.current = exists(this.editor.current) && this.editor.current < this.imageData.length ? this.editor.current : 0
+            this.editor.zoom = typeof this.editor.zoom !== 'undefined' ? this.editor.zoom : DEFAULT_ZOOM
+            this.editor.current = typeof this.editor.current !== 'undefined' && this.editor.current < this.imageData.length ? this.editor.current : 0
             for (let frame of this.editor.imageData)
             {
                 if (frame.undo.length > UNDO_SIZE)
@@ -639,10 +639,10 @@ class PixelEditor extends Pixel
 
     async save(filename)
     {
-        const changed = exists(filename) && this.filename !== filename
+        const changed = typeof filename !== 'undefined' && this.filename !== filename
         this.filename = filename || this.filename
-        await File.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
-        await File.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
+        await file.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
+        await file.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         if (changed)
         {
             this.addToSheet()
@@ -688,4 +688,4 @@ class PixelEditor extends Pixel
     }
 }
 
-module.exports = new PixelEditor()
+export default new PixelEditor()

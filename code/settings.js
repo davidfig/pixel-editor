@@ -1,17 +1,14 @@
-module.exports = {
+export const NAME = 'pixel-editor'
 
-    NAME: 'pixel-editor',
+export const DEBUG = true
+export const NO_LOAD = false
+export const TEST_CLEAN_OPENING = false
+export const FPS = false
+export const RESET = false
 
-    DEBUG: false,
-    NO_LOAD: false,
-    TEST_CLEAN_OPENING: false,
-    FPS: false,
-    RESET: false,
+export const SAVE_INTERVAL = 500
+export const CURSOR_COLOR = 0xff0000
+export const DOTTED = 10
 
-    SAVE_INTERVAL: 500,
-    CURSOR_COLOR: 0xff0000,
-    DOTTED: 10,
-
-    BORDER: 5,
-    ZOOM: 50 // size of box in draw window
-}
+export const BORDER = 5
+export const ZOOM = 50 // size of box in draw window

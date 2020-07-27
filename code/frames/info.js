@@ -1,16 +1,22 @@
-const EasyEdit = require('easyedit')
-const Tooltip = require('../config/libraries').Tooltip
+import EasyEdit from 'easyedit'
+import Tooltip from 'yy-tooltip'
 
-const State = require('../state')
-const Dice = require('../dice')
-const PixelEditor = require('../pixel-editor')
-const locale = require('../locale')
+import { state } from '../state'
+import { Dice } from '../dice'
+import PixelEditor from '../pixel-editor'
+import * as locale from '../locale'
 
-module.exports = class Info
+export class Info
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ title: locale.get('InfoTitle'), x: 10, y: 10, width: 220, resizable: false })
+        this.win = ui.createWindow({
+            id: 'info',
+            title: locale.get('InfoTitle'),
+            x: 10, y: 10,
+            width: 220,
+            resizable: false
+        })
         this.win.open()
         this.content = this.win.content
         this.content.style.padding = '0em 1em 0.5em'
@@ -87,7 +93,7 @@ module.exports = class Info
         {
             const width = parseInt(value)
             let relative
-            const split = State.relative.split('-')
+            const split = state.relative.split('-')
             if (split[1] === 'center')
             {
                 relative = 'center'
@@ -108,7 +114,7 @@ module.exports = class Info
         {
             const height = parseInt(value)
             let relative
-            const split = State.relative.split('-')
+            const split = state.relative.split('-')
             if (split[0] === 'center')
             {
                 relative = 'center'
@@ -132,15 +138,15 @@ module.exports = class Info
         this.cursorXEdit.on('success', (value) =>
         {
             const position = parseInt(value)
-            const split = State.relative.split('-')
-            State.cursorX = split[1] === 'right' ? PixelEditor.width - position - 1 : split[1] === 'center' ? position + PixelEditor.width / 2 : position
+            const split = state.relative.split('-')
+            state.cursorX = split[1] === 'right' ? PixelEditor.width - position - 1 : split[1] === 'center' ? position + PixelEditor.width / 2 : position
         })
         this.cursorYEdit = this.editText(stack, 'y: ', 0, null, ['y position of cursor', 'up/down arrow'])
         this.cursorYEdit.on('success', (value) =>
         {
             const position = parseInt(value)
-            const split = State.relative.split('-')
-            State.cursorY = split[0] === 'bottom' ? PixelEditor.height - position - 1 : split[0] === 'center' ? position + PixelEditor.height / 2 : position
+            const split = state.relative.split('-')
+            state.cursorY = split[0] === 'bottom' ? PixelEditor.height - position - 1 : split[0] === 'center' ? position + PixelEditor.height / 2 : position
         })
     }
 
@@ -148,9 +154,9 @@ module.exports = class Info
     {
         const stack = this.stack(this.content)
         this.cursorSizeXEdit = this.editText(stack, 'w: ', 0, null, ['width of cursor', 'shift-left/right arrow'])
-        this.cursorSizeXEdit.on('success', (value) => State.cursorSizeX = parseInt(value))
+        this.cursorSizeXEdit.on('success', (value) => state.cursorSizeX = parseInt(value))
         this.cursorSizeYEdit = this.editText(stack, 'h: ', 0, null, ['height of cursor', 'shift-up/down arrow'])
-        this.cursorSizeYEdit.on('success', (value) => State.cursorSizeY = parseInt(value))
+        this.cursorSizeYEdit.on('success', (value) => state.cursorSizeY = parseInt(value))
     }
 
     zoom()
@@ -166,24 +172,24 @@ module.exports = class Info
         this.frameWidthEdit.object.innerText = PixelEditor.width
         this.frameHeightEdit.object.innerText = PixelEditor.height
         let x, y
-        const split = State.relative.split('-')
-        x = split[1] === 'left' ? State.cursorX : split[0] === 'right' ? PixelEditor.width - State.cursorX : State.cursorX - PixelEditor.width / 2
-        y = split[0] === 'top' ? State.cursorY : split[0] === 'bottom' ? State.cursorY - PixelEditor.height + 1 : State.cursorY - PixelEditor.height / 2
+        const split = state.relative.split('-')
+        x = split[1] === 'left' ? state.cursorX : split[0] === 'right' ? PixelEditor.width - state.cursorX : state.cursorX - PixelEditor.width / 2
+        y = split[0] === 'top' ? state.cursorY : split[0] === 'bottom' ? state.cursorY - PixelEditor.height + 1 : state.cursorY - PixelEditor.height / 2
         this.cursorXEdit.object.innerText = x
         this.cursorYEdit.object.innerText = y
-        this.cursorSizeXEdit.object.innerText = State.cursorSizeX
-        this.cursorSizeYEdit.object.innerText = State.cursorSizeY
+        this.cursorSizeXEdit.object.innerText = state.cursorSizeX
+        this.cursorSizeYEdit.object.innerText = state.cursorSizeY
         this.zoomEdit.object.innerText = PixelEditor.zoom
     }
 
     stateSetup()
     {
-        State.on('cursorX', this.changed, this)
-        State.on('cursorY', this.changed, this)
-        State.on('cursorSizeX', this.changed, this)
-        State.on('cursorSizeY', this.changed, this)
-        State.on('last-file', this.changed, this)
-        State.on('relative', this.changed, this)
+        state.on('cursorX', this.changed, this)
+        state.on('cursorY', this.changed, this)
+        state.on('cursorSizeX', this.changed, this)
+        state.on('cursorSizeY', this.changed, this)
+        state.on('last-file', this.changed, this)
+        state.on('relative', this.changed, this)
         PixelEditor.on('current', this.changed, this)
         PixelEditor.on('changed', this.changed, this)
     }

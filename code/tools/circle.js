@@ -1,8 +1,8 @@
-const Base = require('./base')
-const State = require('../state')
-const Settings = require('../settings')
+import { Base } from './base'
+import { state } from '../state'
+import { ZOOM } from '../settings'
 
-module.exports = class Circle extends Base
+export class Circle extends Base
 {
     constructor(draw)
     {
@@ -13,12 +13,12 @@ module.exports = class Circle extends Base
     {
         this.draw.cursorBlock.lineStyle(0)
         this.draw.cursorBlock.position.set(0, 0)
-        let x0 = State.cursorX
-        let y0 = State.cursorY
-        const foreground = State.foreground
-        const background = State.background
+        let x0 = state.cursorX
+        let y0 = state.cursorY
+        const foreground = state.foreground
+        const background = state.background
         const blocks = {}
-        if (State.cursorSizeX === 3)
+        if (state.cursorSizeX === 3)
         {
             blocks[x0 + ',' + (y0 - 1)] = foreground
             blocks[x0 + ',' + y0] = background
@@ -28,13 +28,13 @@ module.exports = class Circle extends Base
         }
         else
         {
-            const even = State.cursorSizeX % 2 === 0 ? 1 : 0
-            let x = Math.ceil(State.cursorSizeX / 2) - 1
+            const even = state.cursorSizeX % 2 === 0 ? 1 : 0
+            let x = Math.ceil(state.cursorSizeX / 2) - 1
             let y = 0
             let decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
 
             // draw inside
-            if (parseInt(State.background.substr(6), 16) !== 0)
+            if (parseInt(state.background.substr(6), 16) !== 0)
             {
                 while (x >= y)
                 {
@@ -66,9 +66,9 @@ module.exports = class Circle extends Base
             }
 
             // draw outside
-            if (parseInt(State.foreground.substr(6), 16) !== 0)
+            if (parseInt(state.foreground.substr(6), 16) !== 0)
             {
-                x = Math.ceil(State.cursorSizeX / 2) - 1
+                x = Math.ceil(state.cursorSizeX / 2) - 1
                 y = 0
                 decisionOver2 = 1 - x   // Decision criterion divided by 2 evaluated at x=r, y=0
                 while (x >= y)
@@ -94,7 +94,7 @@ module.exports = class Circle extends Base
                 }
             }
         }
-        if (State.cursorSizeX === 4)
+        if (state.cursorSizeX === 4)
         {
             blocks[(x0 - 2) + ',' + (y0 - 1)] = false
             blocks[(x0 + 1) + ',' + (y0 - 1)] = false
@@ -113,7 +113,7 @@ module.exports = class Circle extends Base
                     const data = blocks[block]
                     const color = parseInt(data.substr(0, 6), 16)
                     const alpha = parseInt(data.substr(6), 16) / 255
-                    this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * Settings.ZOOM, parseInt(pos[1]) * Settings.ZOOM, Settings.ZOOM, Settings.ZOOM).endFill()
+                    this.draw.cursorBlock.beginFill(color, alpha).drawRect(parseInt(pos[0]) * ZOOM, parseInt(pos[1]) * ZOOM, ZOOM, ZOOM).endFill()
                     this.stamp.push({ x: parseInt(pos[0]), y: parseInt([pos[1]]), color: data })
                 }
             }
@@ -122,9 +122,9 @@ module.exports = class Circle extends Base
 
     activate()
     {
-        if (State.cursorSizeX === 1)
+        if (state.cursorSizeX === 1)
         {
-            State.cursorSizeX = 3
+            state.cursorSizeX = 3
         }
     }
 

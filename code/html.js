@@ -1,4 +1,4 @@
-module.exports = function (options)
+export function html(options)
 {
     options = options || {}
     const object = document.createElement(options.type || 'div')

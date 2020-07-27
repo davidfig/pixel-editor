@@ -1,7 +1,7 @@
-const PixelEditor = require('../pixel-editor')
-const State = require('../state')
+import PixelEditor from '../pixel-editor'
+import { state } from '../state'
 
-module.exports = class Base
+export class Base
 {
     constructor(draw)
     {
@@ -17,22 +17,22 @@ module.exports = class Base
 
     move(x, y)
     {
-        if (State.cursorSizeX < 0)
+        if (state.cursorSizeX < 0)
         {
-            State.cursorX += State.cursorSizeX
-            State.cursorSizeX = -State.cursorSizeX
+            state.cursorX += state.cursorSizeX
+            state.cursorSizeX = -state.cursorSizeX
         }
-        if (State.cursorSizeY < 0)
+        if (state.cursorSizeY < 0)
         {
-            State.cursorY += State.cursorSizeY
-            State.cursorSizeY = -State.cursorSizeY
+            state.cursorY += state.cursorSizeY
+            state.cursorSizeY = -state.cursorSizeY
         }
-        State.cursorX += x
-        State.cursorY += y
-        State.cursorX = State.cursorX < 0 ? PixelEditor.width - 1 : State.cursorX
-        State.cursorY = State.cursorY < 0 ? PixelEditor.height - 1 : State.cursorY
-        State.cursorX = State.cursorX === PixelEditor.width ? 0 : State.cursorX
-        State.cursorY = State.cursorY === PixelEditor.height ? 0 : State.cursorY
+        state.cursorX += x
+        state.cursorY += y
+        state.cursorX = state.cursorX < 0 ? PixelEditor.width - 1 : state.cursorX
+        state.cursorY = state.cursorY < 0 ? PixelEditor.height - 1 : state.cursorY
+        state.cursorX = state.cursorX === PixelEditor.width ? 0 : state.cursorX
+        state.cursorY = state.cursorY === PixelEditor.height ? 0 : state.cursorY
     }
 
     cursor() { }
@@ -41,27 +41,27 @@ module.exports = class Base
 
     moveShift(x, y)
     {
-        State.cursorSizeX += x
-        State.cursorSizeX = (State.cursorSizeX > PixelEditor.width) ? PixelEditor.width : State.cursorSizeX
-        State.cursorSizeX = (State.cursorSizeX < -PixelEditor.width) ? -PixelEditor.width : State.cursorSizeX
-        if ((State.tool === 'circle' || State.tool === 'ellipse') && State.cursorSizeX < 1)
+        state.cursorSizeX += x
+        state.cursorSizeX = (state.cursorSizeX > PixelEditor.width) ? PixelEditor.width : state.cursorSizeX
+        state.cursorSizeX = (state.cursorSizeX < -PixelEditor.width) ? -PixelEditor.width : state.cursorSizeX
+        if ((state.tool === 'circle' || state.tool === 'ellipse') && state.cursorSizeX < 1)
         {
-            State.cursorSizeX = 1
+            state.cursorSizeX = 1
         }
-        if (State.tool === 'ellipse' && State.cursorSizeY < 1)
+        if (state.tool === 'ellipse' && state.cursorSizeY < 1)
         {
-            State.cursorSizeY = 1
+            state.cursorSizeY = 1
         }
-        if (State.cursorSizeX === 0)
+        if (state.cursorSizeX === 0)
         {
-            State.cursorSizeX = (x < 0) ? -1 : 1
+            state.cursorSizeX = (x < 0) ? -1 : 1
         }
-        State.cursorSizeY += y
-        State.cursorSizeY = (State.cursorSizeY > PixelEditor.height) ? PixelEditor.height : State.cursorSizeY
-        State.cursorSizeY = (State.cursorSizeY < -PixelEditor.height) ? -PixelEditor.height : State.cursorSizeY
-        if (State.cursorSizeY === 0)
+        state.cursorSizeY += y
+        state.cursorSizeY = (state.cursorSizeY > PixelEditor.height) ? PixelEditor.height : state.cursorSizeY
+        state.cursorSizeY = (state.cursorSizeY < -PixelEditor.height) ? -PixelEditor.height : state.cursorSizeY
+        if (state.cursorSizeY === 0)
         {
-            State.cursorSizeY = (y < 0) ? -1 : 1
+            state.cursorSizeY = (y < 0) ? -1 : 1
         }
     }
 
@@ -78,9 +78,9 @@ module.exports = class Base
 
     eraseBox()
     {
-        for (let y = State.cursorY; y < State.cursorY + State.cursorSizeY; y++)
+        for (let y = state.cursorY; y < state.cursorY + state.cursorSizeY; y++)
         {
-            for (let x = State.cursorX; x < State.cursorX + State.cursorSizeX; x++)
+            for (let x = state.cursorX; x < state.cursorX + state.cursorSizeX; x++)
             {
                 if (x >= 0 && x < PixelEditor.width && y >= 0 && y < PixelEditor.height)
                 {
@@ -104,23 +104,23 @@ module.exports = class Base
 
     clear()
     {
-        if (State.cursorSizeX < 0)
+        if (state.cursorSizeX < 0)
         {
-            State.cursorX += State.cursorSizeX
+            state.cursorX += state.cursorSizeX
         }
-        if (State.cursorSizeY < 0)
+        if (state.cursorSizeY < 0)
         {
-            State.cursorY += State.cursorSizeY
+            state.cursorY += state.cursorSizeY
         }
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        if (state.cursorSizeX === 1 && state.cursorSizeY === 1)
         {
-            State.cursorX = 0
-            State.cursorY = 0
+            state.cursorX = 0
+            state.cursorY = 0
         }
         else
         {
-            State.cursorSizeX = 1
-            State.cursorSizeY = 1
+            state.cursorSizeX = 1
+            state.cursorSizeY = 1
         }
     }
 }

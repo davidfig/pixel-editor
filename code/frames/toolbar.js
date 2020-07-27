@@ -1,23 +1,27 @@
-const clicked = require('clicked')
+import { clicked } from 'clicked'
 
-const State = require('../state')
-const button = require('../button')
+import { state }  from '../state'
+import { button } from '../button'
 
-const ICONS = require('../../images/editor.json')
+import ICONS from '../../images/editor.json'
 
 const BUTTONS = 7
 const TIPS = [['select mode', 'v'], ['draw mode', 'b'], ['fill mode', 'f'], ['circle mode', 'c'], ['ellipse mode', 'e'], ['line mode', 'l'], ['crop mode', 'm']]
 
 const OPACITY_UNSELECTED = 0.6
 
-module.exports = class Toolbar
+export class Toolbar
 {
     constructor(ui)
     {
-        this.ui = ui
         this.buttons = []
 
-        this.win = this.ui.createWindow({ minimizable: false, resizable: false, minWidth: 0 })
+        this.win = ui.createWindow({
+            id: 'toolbar',
+            closeable: false,
+            resizable: false,
+            minWidth: 0
+        })
         this.win.winTitlebar.childNodes[0].style.padding = 0
 
         for (let i = 0; i < BUTTONS; i++)
@@ -41,13 +45,13 @@ module.exports = class Toolbar
         this.selected = this.buttons[index]
         switch (index)
         {
-            case 0: State.tool = 'select'; break
-            case 1: State.tool = 'paint' ; break
-            case 2: State.tool = 'fill'; break
-            case 3: State.tool = 'circle'; break
-            case 4: State.tool = 'ellipse'; break
-            case 5: State.tool = 'line'; break
-            case 6: State.tool = 'crop'; break
+            case 0: state.tool = 'select'; break
+            case 1: state.tool = 'paint' ; break
+            case 2: state.tool = 'fill'; break
+            case 3: state.tool = 'circle'; break
+            case 4: state.tool = 'ellipse'; break
+            case 5: state.tool = 'line'; break
+            case 6: state.tool = 'crop'; break
         }
     }
 
@@ -58,25 +62,25 @@ module.exports = class Toolbar
             switch (e.keyCode)
             {
                 case 66:
-                    State.tool = 'paint'
+                    state.tool = 'paint'
                     break
                 case 86:
-                    State.tool = 'select'
+                    state.tool = 'select'
                     break
                 case 67:
-                    State.tool = 'circle'
+                    state.tool = 'circle'
                     break
                 case 76:
-                    State.tool = 'line'
+                    state.tool = 'line'
                     break
                 case 70:
-                    State.tool = 'fill'
+                    state.tool = 'fill'
                     break
                 case 69:
-                    State.tool = 'ellipse'
+                    state.tool = 'ellipse'
                     break
                 case 82:
-                    State.tool = 'crop'
+                    state.tool = 'crop'
                     break
             }
         }
@@ -85,7 +89,7 @@ module.exports = class Toolbar
     changed()
     {
         let index
-        switch (State.tool)
+        switch (state.tool)
         {
             case 'paint': index = 1; break
             case 'fill': index = 2; break
@@ -106,6 +110,6 @@ module.exports = class Toolbar
 
     stateSetup()
     {
-        State.on('tool', this.changed, this)
+        state.on('tool', this.changed, this)
     }
 }

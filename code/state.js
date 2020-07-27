@@ -1,26 +1,27 @@
-const Events = require('eventemitter3')
+import EventEmitter from 'eventemitter3'
 
-const File = require('./config/file')
-const Settings = require('./settings')
+import * as file from './file'
+import { RESET, TEST_CLEAN_OPENING, SAVE_INTERVAL } from './settings'
 
-const DEFAULT_KEYS = require('../data/default-keys.json')
+import DEFAULT_KEYS from '../data/default-keys.json'
 
-class State extends Events
+class State extends EventEmitter
 {
-    constructor()
-    {
-        super()
-    }
-
     async load()
     {
-        const value = await File.readState()
-        this.state = value
-        if (Settings.RESET)
+        if (RESET)
         {
             this.state = null
         }
-        if (!this.state || Settings.TEST_CLEAN_OPENING)
+        else
+        {
+            this.state = await file.readState()
+            if (this.state && this.state.error)
+            {
+                this.state = null
+            }
+        }
+        if (!this.state || TEST_CLEAN_OPENING)
         {
             this.state = { tool: 'paint', cursorX: 0, cursorY: 0, cursorSizeX: 1, cursorSizeY: 1, foreground: 'ffffffff', isForeground: true, background: '00000000', lastFiles: [], manager: { zoom: 4, images: true, alphabetical: true } }
         }
@@ -58,7 +59,7 @@ class State extends Events
 
     start()
     {
-        window.setInterval(() => this.update(), Settings.SAVE_INTERVAL)
+        window.setInterval(() => this.update(), SAVE_INTERVAL)
     }
 
     mainResize(object)
@@ -335,10 +336,10 @@ class State extends Events
     {
         if (this.dirty)
         {
-            File.writeState(this.state)
+            file.writeState(this.state)
             this.dirty = false
         }
     }
 }
 
-module.exports = new State()
+export const state = new State()

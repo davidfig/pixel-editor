@@ -1,12 +1,12 @@
-const PIXI = require('pixi.js')
-const TinyColor = require('tinycolor2')
-const RenderSheet = require('yy-rendersheet')
-const EasyEdit = require('easyedit')
-const clicked = require('clicked')
+import * as PIXI from 'pixi.js'
+import TinyColor from 'tinycolor2'
+import RenderSheet from 'yy-rendersheet'
+import EasyEdit from 'easyedit'
+import { clicked } from 'clicked'
 
-const State = require('../state.js')
-const sheet = require('../sheet')
-const locale = require('../locale')
+import { state } from '../state'
+import { sheet } from '../sheet'
+import * as locale from '../locale'
 
 const MIN_WIDTH = 200
 const MIN_HEIGHT = 300
@@ -19,11 +19,15 @@ const SPACING = 8
 const WORD_SPACING = '0.4em'
 const QUICK_COUNT = 7
 
-module.exports = class Picker
+export class Picker
 {
     constructor(ui)
     {
-        this.win = ui.createWindow({ title: locale.get('PickerTitle'), height: MIN_HEIGHT, width: MIN_WIDTH })
+        this.win = ui.createWindow({
+            id: 'picker',
+            title: locale.get('PickerTitle'),
+            height: MIN_HEIGHT, width: MIN_WIDTH
+        })
         this.win.open()
         this.ui = ui
         this.content = this.win.content
@@ -87,14 +91,14 @@ module.exports = class Picker
         this.picker.on('pointerupoutside', () => this.isPickerDown = false)
         this.pickerCursor = this.picker.addChild(this.sheet.get('pickerCursor'))
         const size = this.size()
-        const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+        const color = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
         this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
     }
 
     drawPicker(c)
     {
         c.beginPath()
-        const color = '#' + State.color.substr(0, 6)
+        const color = '#' + state.color.substr(0, 6)
         const translate = new TinyColor(color).toHsl()
         const show = new TinyColor({ h: translate.h, s: 1, l: 0.5 })
         const size = this.size()
@@ -152,9 +156,9 @@ module.exports = class Picker
             this.pickerCursor.position.set(x, y)
             const s = x / size
             const l = 1 - y / size
-            const hue = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+            const hue = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
             let color = new TinyColor({ h: hue.h, s, l }).toHex()
-            State.color = this.hexify(color) + State.color.substr(6)
+            state.color = this.hexify(color) + state.color.substr(6)
         }
     }
 
@@ -200,7 +204,7 @@ module.exports = class Picker
         this.hue.on('pointerup', () => this.isHueDown = false)
         this.hue.on('pointerupoutside', () => this.isHueDown = false)
         this.hueCursor = this.hue.addChild(this.sheet.get('bar'))
-        const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+        const color = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
         const x = color.h / 359 * this.size()
         this.hueCursor.position.set(x, BAR_HEIGHT / 2)
     }
@@ -215,11 +219,11 @@ module.exports = class Picker
             x = x < 0 ? 0 : x > size ? size : x
             this.hueCursor.x = x
             const h = (x / size) * 359
-            const original = new TinyColor(State.color).toHsl()
+            const original = new TinyColor(state.color).toHsl()
             original.s = (original.s < 0.1) ? 0.1 : original.s
             original.l = (original.l < 0.1) ? 0.1 : original.l
             const color = new TinyColor({ h, s: original.s, l: original.l }).toHex()
-            State.color = color + State.color.substr(6)
+            state.color = color + state.color.substr(6)
         }
     }
 
@@ -227,7 +231,7 @@ module.exports = class Picker
     {
         c.beginPath()
         c.clearRect(0, 0, this.size(), BAR_HEIGHT)
-        const rgb = new TinyColor('#' + State.color.substr(0, 6)).toRgb()
+        const rgb = new TinyColor('#' + state.color.substr(0, 6)).toRgb()
         let gradient = c.createLinearGradient(0, 0, this.size(), 0)
         gradient.addColorStop(0, 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',0)')
         gradient.addColorStop(1, 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')')
@@ -253,7 +257,7 @@ module.exports = class Picker
         this.alpha.on('pointerup', () => this.isAlphaDown = false)
         this.alpha.on('pointerupoutside', () => this.isAlphaDown = false)
         this.alphaCursor = this.alpha.addChild(this.sheet.get('bar'))
-        const x = size * parseInt(State.color.substr(6), 16) / 255
+        const x = size * parseInt(state.color.substr(6), 16) / 255
         this.alphaCursor.position.set(x, BAR_HEIGHT / 2)
     }
 
@@ -269,7 +273,7 @@ module.exports = class Picker
             let alpha = Math.floor((x / size) * 255)
             alpha = (alpha > 255 ? 255 : alpha).toString(16)
             alpha = alpha.length === 1 ? '0' + alpha : alpha
-            State.color = State.color.substr(0, 6) + alpha
+            state.color = state.color.substr(0, 6) + alpha
         }
     }
 
@@ -304,8 +308,8 @@ module.exports = class Picker
             return new EasyEdit(span)
         }
 
-        const c = new TinyColor(State.color.substr(0, 6))
-        const a = parseInt(State.color.substr(6), 16) / 255
+        const c = new TinyColor(state.color.substr(0, 6))
+        const a = parseInt(state.color.substr(6), 16) / 255
 
         this.words = {}
         this.container = document.createElement('div')
@@ -344,8 +348,8 @@ module.exports = class Picker
 
     wordsEvents()
     {
-        const color = new TinyColor('#' + State.color.substr(0, 6))
-        const alpha = State.color.substr(6)
+        const color = new TinyColor('#' + state.color.substr(0, 6))
+        const alpha = state.color.substr(6)
         this.words.r.on('success', (value) =>
         {
             const v = parseInt(value)
@@ -354,7 +358,7 @@ module.exports = class Picker
                 this.words.r.object.innerText = color.toRgb().r
                 return
             }
-            State.color = this.hexify(v.toString(16)) + State.color.substr(2)
+            state.color = this.hexify(v.toString(16)) + state.color.substr(2)
         })
         this.words.g.on('success', (value) =>
         {
@@ -364,7 +368,7 @@ module.exports = class Picker
                 this.words.g.object.innerText = color.toRgb().g
                 return
             }
-            State.color = State.color.substr(0, 2) + this.hexify(v.toString(16)) + State.color.substr(4)
+            state.color = state.color.substr(0, 2) + this.hexify(v.toString(16)) + state.color.substr(4)
         })
         this.words.b.on('success', (value) =>
         {
@@ -374,7 +378,7 @@ module.exports = class Picker
                 this.words.b.object.innerText = color.toRgb().b
                 return
             }
-            State.color = State.color.substr(0, 4) + this.hexify(v.toString(16)) + State.color.substr(6)
+            state.color = state.color.substr(0, 4) + this.hexify(v.toString(16)) + state.color.substr(6)
         })
         this.words.alpha.on('success', (value) =>
         {
@@ -384,17 +388,17 @@ module.exports = class Picker
                 this.words.alpha.object.innerText = parseInt(alpha, 16) / 255
                 return
             }
-            State.color = State.color.substr(0, 6) + this.hexify(Math.floor(v * 255).toString(16))
+            state.color = state.color.substr(0, 6) + this.hexify(Math.floor(v * 255).toString(16))
         })
         this.words.hex.on('success', (value) =>
         {
             const v = parseInt(value, 16)
             if (isNaN(v) || v < 0 || v > 0xffffff)
             {
-                this.words.hex.object.innerText = State.color(0, 6)
+                this.words.hex.object.innerText = state.color(0, 6)
                 return
             }
-            State.color = value + State.color.substr(6)
+            state.color = value + state.color.substr(6)
         })
         this.words.h.on('success', (value) =>
         {
@@ -406,7 +410,7 @@ module.exports = class Picker
             }
             const hsl = color.toHsl()
             hsl.h = v
-            State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
+            state.color = new TinyColor(hsl).toHex() + state.color.substr(6)
         })
         this.words.s.on('success', (value) =>
         {
@@ -418,7 +422,7 @@ module.exports = class Picker
             }
             const hsl = color.toHsl()
             hsl.s = v
-            State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
+            state.color = new TinyColor(hsl).toHex() + state.color.substr(6)
         })
         this.words.l.on('success', (value) =>
         {
@@ -430,14 +434,14 @@ module.exports = class Picker
             }
             const hsl = color.toHsl()
             hsl.l = v
-            State.color = new TinyColor(hsl).toHex() + State.color.substr(6)
+            state.color = new TinyColor(hsl).toHex() + state.color.substr(6)
         })
     }
 
     wordsUpdate()
     {
-        const c = new TinyColor(State.color.substr(0, 6))
-        const a = parseInt(State.color.substr(6), 16) / 255
+        const c = new TinyColor(state.color.substr(0, 6))
+        const a = parseInt(state.color.substr(6), 16) / 255
 
         let value = c.toRgb()
         this.words.r.object.innerText = value.r
@@ -463,7 +467,7 @@ module.exports = class Picker
             this.sheet.render(() =>
             {
                 const size = this.size()
-                const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+                const color = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
                 this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
 
                 this.hue.y = this.picker.y + this.picker.height + SPACING
@@ -471,15 +475,15 @@ module.exports = class Picker
 
                 this.alphaTransparent.width = size
                 this.alpha.y = this.hue.y + this.hue.height + SPACING
-                this.alphaCursor.x = size * parseInt(State.color.substr(6), 16) / 255
+                this.alphaCursor.x = size * parseInt(state.color.substr(6), 16) / 255
 
                 this.rendererResize()
                 this.quickSetup()
             })
         })
-        State.on('foreground', () => this.dirty = true)
-        State.on('background', () => this.dirty = true)
-        State.on('isForeground', () => this.dirty = true)
+        state.on('foreground', () => this.dirty = true)
+        state.on('background', () => this.dirty = true)
+        state.on('isForeground', () => this.dirty = true)
     }
 
     change()
@@ -488,14 +492,14 @@ module.exports = class Picker
         this.sheet.changeDraw('alpha', (c) => this.drawAlpha(c))
 
         const size = this.size()
-        const color = new TinyColor('#' + State.color.substr(0, 6)).toHsl()
+        const color = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
         this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
 
         this.hueCursor.x = color.h / 359 * this.size()
 
         this.alphaTransparent.width = size
         this.alpha.y = this.hue.y + this.hue.height + SPACING
-        this.alphaCursor.x = size * parseInt(State.color.substr(6), 16) / 255
+        this.alphaCursor.x = size * parseInt(state.color.substr(6), 16) / 255
 
         this.wordsUpdate()
         this.quickSetup()
@@ -527,7 +531,7 @@ module.exports = class Picker
             {
                 span.style.backgroundColor = entry.color
             }
-            clicked(span, () => State.color = entry.result)
+            clicked(span, () => state.color = entry.result)
         }
         return div
     }
@@ -537,7 +541,7 @@ module.exports = class Picker
         const size = this.size() / QUICK_COUNT
         this.quickSize = size * 0.9
         const alphas = [], saturations = [], lightnesses = [], hues = []
-        const color = '#' + State.color.substr(0, 6)
+        const color = '#' + state.color.substr(0, 6)
         const hsl = new TinyColor(color).toHsl()
         const rgb = new TinyColor(color).toRgb()
         const count = QUICK_COUNT - 1
@@ -547,13 +551,13 @@ module.exports = class Picker
             const percent = i / count
             const alpha = alphaSet[i]
             const alphaColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + alpha + ')'
-            alphas.push({ alpha: true, color: alphaColor, result: State.color.substr(0, 6) + this.hexify((alpha * 255).toString(16)) })
+            alphas.push({ alpha: true, color: alphaColor, result: state.color.substr(0, 6) + this.hexify((alpha * 255).toString(16)) })
             const saturation = new TinyColor({ h: hsl.h, s: i / count, l: hsl.l })
-            saturations.push({ color: saturation.toHexString(), result: saturation.toHex() + State.color.substr(6)  })
+            saturations.push({ color: saturation.toHexString(), result: saturation.toHex() + state.color.substr(6)  })
             const lightness = new TinyColor({ h: hsl.h, s: hsl.s, l: i / count })
-            lightnesses.push({ color: lightness.toHexString(), result: lightness.toHex() + State.color.substr(6) })
+            lightnesses.push({ color: lightness.toHexString(), result: lightness.toHex() + state.color.substr(6) })
             const hue = new TinyColor({ h: (hsl.h + ((359 - 359 / QUICK_COUNT) * percent)) % 359, s: hsl.s, l: hsl.l })
-            hues.push({ color: hue.toHexString(), result: hue.toHex() + State.color.substr(6) })
+            hues.push({ color: hue.toHexString(), result: hue.toHex() + state.color.substr(6) })
         }
 
         if (this.quick)

@@ -1,8 +1,7 @@
-const clicked = require('clicked')
+import { clicked } from 'clicked'
+import { html } from './html'
 
-const html = require('./html')
-
-module.exports = class Dialog
+export class Dialog
 {
     constructor(win, title, type, label, callback, options)
     {

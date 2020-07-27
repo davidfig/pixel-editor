@@ -1,9 +1,9 @@
-const clicked = require('clicked')
+import { clicked } from 'clicked'
 
-const Accelerator = require('../../config/localAccelerator')
-const locale = require('../../locale')
-const html = require('../../html')
-const State = require('../../state')
+import { localAccelerator } from 'yy-menu'
+import * as locale from '../../locale'
+import { html } from '../../html'
+import { state } from '../../state'
 
 module.exports = class KeyBinding
 {
@@ -20,7 +20,7 @@ module.exports = class KeyBinding
         content.style.color = 'white'
 
         html({ parent: content, html: locale.get('DialogKeyBinding'), styles: { marginBottom: '1em', textAlign: 'center' } })
-        this.current = html({ parent: content, html: Accelerator.prettifyKey(State.keys[key]), styles: { background: 'rgba(255,255,255,0.15', textAlign: 'center', border: '1px solid white', marginBottom: '1em'} })
+        this.current = html({ parent: content, html: localAccelerator.prettifyKey(state.keys[key]), styles: { background: 'rgba(255,255,255,0.15', textAlign: 'center', border: '1px solid white', marginBottom: '1em'} })
         const buttons = html({ parent: content, styles: { display: 'flex', justifyContent: 'space-between' } })
         const setKey = html({ parent: buttons, type: 'button', html: locale.get('SetKey'), styles: { margin: '0 0.5em' } })
         clicked(setKey, () => this.set())
@@ -71,7 +71,7 @@ module.exports = class KeyBinding
         translate = translate.replace('digit', '')
         translate = translate.replace('key', '')
         keyCode += translate
-        this.current.innerHTML = Accelerator.prettifyKey(keyCode)
+        this.current.innerHTML = localAccelerator.prettifyKey(keyCode)
     }
 
     set()

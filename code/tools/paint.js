@@ -1,9 +1,9 @@
-const Base = require('./base')
-const State = require('../state')
-const Settings = require('../settings')
-const PixelEditor = require('../pixel-editor')
+import { Base } from './base'
+import { state } from '../state'
+import { CURSOR_COLOR, ZOOM } from '../settings'
+import PixelEditor from '../pixel-editor'
 
-module.exports = class Line extends Base
+export class Paint extends Base
 {
     constructor(draw)
     {
@@ -13,12 +13,12 @@ module.exports = class Line extends Base
 
     cursor()
     {
-        const color = State.foreground.substr(6) === '00' ? Settings.CURSOR_COLOR : parseInt(State.foreground.substr(0, 6), 16)
-        this.draw.cursorBlock.position.set(State.cursorX * Settings.ZOOM, State.cursorY * Settings.ZOOM)
+        const color = state.foreground.substr(6) === '00' ? CURSOR_COLOR : parseInt(state.foreground.substr(0, 6), 16)
+        this.draw.cursorBlock.position.set(state.cursorX * ZOOM, state.cursorY * ZOOM)
         this.draw.cursorBlock.lineStyle(5, color)
-        const x = State.cursorSizeX + State.cursorX >= PixelEditor.width ? PixelEditor.width - State.cursorX : State.cursorSizeX
-        const y = State.cursorSizeY + State.cursorY >= PixelEditor.height ? PixelEditor.height - State.cursorY : State.cursorSizeY
-        this.draw.cursorBlock.drawRect(0, 0, Settings.ZOOM * x, Settings.ZOOM * y)
+        const x = state.cursorSizeX + state.cursorX >= PixelEditor.width ? PixelEditor.width - state.cursorX : state.cursorSizeX
+        const y = state.cursorSizeY + state.cursorY >= PixelEditor.height ? PixelEditor.height - state.cursorY : state.cursorSizeY
+        this.draw.cursorBlock.drawRect(0, 0, ZOOM * x, ZOOM * y)
     }
 
     erase()
@@ -45,39 +45,39 @@ module.exports = class Line extends Base
 
     space()
     {
-        if (this.spacing && State.cursorX === this.spacing.x && State.cursorY === this.spacing.y)
+        if (this.spacing && state.cursorX === this.spacing.x && state.cursorY === this.spacing.y)
         {
             return
         }
-        if (State.cursorSizeX === 1 && State.cursorSizeY === 1)
+        if (state.cursorSizeX === 1 && state.cursorSizeY === 1)
         {
             PixelEditor.undoSave()
-            const current = PixelEditor.get(State.cursorX, State.cursorY)
-            const color = (current !== State.foreground) ? State.foreground : State.background
-            PixelEditor.set(State.cursorX, State.cursorY, color, true)
+            const current = PixelEditor.get(state.cursorX, state.cursorY)
+            const color = (current !== state.foreground) ? state.foreground : state.background
+            PixelEditor.set(state.cursorX, state.cursorY, color, true)
         }
         else
         {
             PixelEditor.undoSave()
-            const color = State.foreground
-            let xStart = State.cursorX, yStart = State.cursorY, xTo, yTo
-            if (State.cursorSizeX < 0)
+            const color = state.foreground
+            let xStart = state.cursorX, yStart = state.cursorY, xTo, yTo
+            if (state.cursorSizeX < 0)
             {
-                xStart += State.cursorSizeX
-                xTo = xStart + Math.abs(State.cursorSizeX)
+                xStart += state.cursorSizeX
+                xTo = xStart + Math.abs(state.cursorSizeX)
             }
             else
             {
-                xTo = xStart + State.cursorSizeX
+                xTo = xStart + state.cursorSizeX
             }
-            if (State.cursorSizeY < 0)
+            if (state.cursorSizeY < 0)
             {
-                yStart += State.cursorSizeY
-                yTo = yStart + Math.abs(State.cursorSizeY) - 1
+                yStart += state.cursorSizeY
+                yTo = yStart + Math.abs(state.cursorSizeY) - 1
             }
             else
             {
-                yTo = yStart + State.cursorSizeY
+                yTo = yStart + state.cursorSizeY
             }
             for (let y = yStart; y < yTo; y++)
             {
@@ -88,6 +88,6 @@ module.exports = class Line extends Base
             }
         }
         this.draw.change()
-        this.spacing = { x: State.cursorX, y: State.cursorY }
+        this.spacing = { x: state.cursorX, y: state.cursorY }
     }
 }

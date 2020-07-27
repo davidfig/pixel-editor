@@ -1,10 +1,10 @@
-const PIXI = require('pixi.js')
+import * as PIXI from 'pixi.js'
 
-const Settings = require('../settings')
-const sheet = require('../pixel-sheet')
-const PixelEditor = require('../pixel-editor')
-const State = require('../state')
-const locale = require('../locale')
+import { BORDER } from '../settings'
+import { sheet } from '../pixel-sheet'
+import PixelEditor from '../pixel-editor'
+import { state } from '../state'
+import * as locale from '../locale'
 
 const MIN_WIDTH = 100
 const MIN_HEIGHT = 100
@@ -12,12 +12,17 @@ const SPACING = 5
 
 const COLOR_SELECTED = 0x888888
 
-module.exports = class Frames extends PIXI.Container
+export class Frames extends PIXI.Container
 {
     constructor(ui)
     {
         super()
-        this.win = ui.createWindow({ title: locale.get('FramesTitle'), minWidth: MIN_WIDTH + 'px', minHeight: MIN_HEIGHT + 'px' })
+        this.win = ui.createWindow({
+            id: 'frames',
+            title: locale.get('FramesTitle'),
+            minWidth: MIN_WIDTH + 'px',
+            minHeight: MIN_HEIGHT + 'px'
+        })
         this.win.open()
         this.content = this.win.content
         this.renderer = new PIXI.Renderer({ autoResize: true, width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
@@ -79,9 +84,9 @@ module.exports = class Frames extends PIXI.Container
     currentChange()
     {
         const target = this.pixels.children[1 + PixelEditor.current * 2]
-        this.selector.position.set(target.x - Settings.BORDER / 2, target.y - Settings.BORDER / 2)
-        this.selector.width = target.width + Settings.BORDER
-        this.selector.height = target.height + Settings.BORDER
+        this.selector.position.set(target.x - BORDER / 2, target.y - BORDER / 2)
+        this.selector.width = target.width + BORDER
+        this.selector.height = target.height + BORDER
         this.renderer.view.style.height = this.height + 'px'
         this.renderer.resize(this.win.width, this.height)
         this.renderer.render(this)
@@ -211,6 +216,6 @@ module.exports = class Frames extends PIXI.Container
         this.win.on('resize', () => this.redraw())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.currentChange())
-        State.on('last-file', () => this.redraw())
+        state.on('last-file', () => this.redraw())
     }
 }

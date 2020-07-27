@@ -1,23 +1,29 @@
-const clicked = require('clicked')
+import { clicked } from 'clicked'
 
-const Settings = require('../settings')
-const button = require('../button')
-const PixelEditor = require('../pixel-editor')
-const locale = require('../locale')
+import { ZOOM } from '../settings'
+import { button } from '../button'
+import PixelEditor from '../pixel-editor'
+import * as locale from '../locale'
 
-const ICONS = require('../../images/position.json')
+import ICONS from '../../images/position.json'
 
 const BUTTONS = 5
 const TIPS = ['25% of screen size', '50% of screen size', '75% of screen size', 'center in viewport', 'top-left in viewport']
 
-module.exports = class Position
+export class Position
 {
     constructor(ui, draw)
     {
         this.ui = ui
         this.draw = draw
         this.buttons = []
-        this.win = this.ui.createWindow({ title: locale.get('PositionTitle'), minimizable: false, resizable: false, minHeight: 0, minWidth: 0 })
+        this.win = this.ui.createWindow({
+            id: 'position',
+            title: locale.get('PositionTitle'),
+            closeable: false,
+            resizable: false,
+            minHeight: 0, minWidth: 0,
+        })
         this.win.content.style.display = 'flex'
         for (let i = 0; i < BUTTONS; i++)
         {
@@ -56,8 +62,8 @@ module.exports = class Position
         const vp = draw.vp
         const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
         let center
-        const width = PixelEditor.width * Settings.ZOOM
-        const height = PixelEditor.height * Settings.ZOOM
+        const width = PixelEditor.width * ZOOM
+        const height = PixelEditor.height * ZOOM
         center = vp.center
         if (landscape)
         {
@@ -76,8 +82,8 @@ module.exports = class Position
         const vp = draw.vp
         const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
         let center
-        const width = PixelEditor.width * Settings.ZOOM
-        const height = PixelEditor.height * Settings.ZOOM
+        const width = PixelEditor.width * ZOOM
+        const height = PixelEditor.height * ZOOM
         center = vp.center
         if (landscape)
         {
@@ -96,8 +102,8 @@ module.exports = class Position
         const vp = draw.vp
         const landscape = draw.width / window.innerWidth > draw.height / window.innerHeight
         let center
-        const width = PixelEditor.width * Settings.ZOOM
-        const height = PixelEditor.height * Settings.ZOOM
+        const width = PixelEditor.width * ZOOM
+        const height = PixelEditor.height * ZOOM
         center = vp.center
         if (landscape)
         {

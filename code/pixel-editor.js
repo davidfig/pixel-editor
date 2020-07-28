@@ -18,6 +18,7 @@ class PixelEditor extends Pixel
         this.sheet = sheet
         this.tempCanvas = document.createElement('canvas')
         this.tempCanvas.c = this.tempCanvas.getContext('2d')
+        setInterval(() => this.update(), Settings.SAVE_INTERVAL)
     }
 
     async create(filename)
@@ -31,8 +32,7 @@ class PixelEditor extends Pixel
             this.filename = filename
             this.name = removeExt(this.filename)
             this.editor = { zoom: DEFAULT_ZOOM, current: 0, imageData: [{ undo: [], redo: [] }] }
-            await this.saveAndRender()
-            setInterval(() => this.update(), Settings.SAVE_INTERVAL)
+            await this.addToSheet()
         }
         else
         {
@@ -46,7 +46,6 @@ class PixelEditor extends Pixel
             {
                 return await this.create()
             }
-            setInterval(() => this.update(), Settings.SAVE_INTERVAL)
         }
     }
 
@@ -640,7 +639,11 @@ class PixelEditor extends Pixel
     async save(filename)
     {
         const changed = typeof filename !== 'undefined' && this.filename !== filename
-        this.filename = filename || this.filename
+        if (changed)
+        {
+            this.filename = filename
+            this.name = this.filename.replace('.json', '')
+        }
         await file.writeJSON(this.filename, { name: this.name, imageData: this.imageData, animations: this.animations })
         await file.writeJSON(this.filename.replace('.json', '.editor.json'), this.editor)
         if (changed)

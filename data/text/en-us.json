@@ -62,7 +62,7 @@
     "toggleSort": "Toggle Sorting (Alphabetical or Modify Date)",
     "increaseZoom": "Increase Zoom",
     "decreaseZoom": "Decrease Zoom",
-    "openFolder": "Open Folder",
+    "deleteFile": "Delete File",
 
     "AddFrame": "Add Frame",
     "DeleteFrame": "Delete Frame",

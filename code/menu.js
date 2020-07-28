@@ -1,4 +1,4 @@
-import { Menu, MenuItem, setApplicationMenu } from 'simple-window-manager'
+import { Menu, MenuItem } from 'simple-window-manager'
 import { state } from './state'
 import PixelEditor from './pixel-editor'
 import * as views from './views'
@@ -19,15 +19,13 @@ export function createMenu()
     view()
     frame()
 
-    setApplicationMenu(_menu)
+    Menu.setApplicationMenu(_menu)
 }
 
 function file()
 {
     const submenu = new Menu()
     submenu.append(new MenuItem({ label: locale.get('menuNew'), accelerator: state.keys.New, click: () => main.newFile() } ))
-    submenu.append(new MenuItem({ label: locale.get('menuSaveAs'), accelerator: state.keys.Save, click: () => main.saveFile() }))
-    submenu.append(new MenuItem({ label: locale.get('menuOpen'), accelerator: state.keys.Open, click: () => main.openFile() }))
     submenu.append(new MenuItem({ label: locale.get('menuExport'), accelerator: state.keys.Export, click: () => main.exportFile() }))
     if (state.lastFiles.length)
     {

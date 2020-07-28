@@ -7,7 +7,8 @@ import { createSheet } from './sheet'
 import { Draw } from './draw'
 import { state } from './state'
 import PixelEditor from './pixel-editor'
-import { createMenu, menuHeight } from './menu'
+import { createMenu } from './menu'
+import * as file from './file'
 // import Export from './export'
 // import Keys from './keys'
 
@@ -51,7 +52,7 @@ class Main
         views.init()
         createMenu()
         this.wm = new WindowManager({ snap: true }, {
-            backgroundTitlebarActive: '#666666',
+            backgroundTitlebarActive: '#555555',
             backgroundTitlebarInactive: '#444444',
             backgroundWindow: '#333333',
             foregroundTitle: '#888888',
@@ -104,6 +105,47 @@ class Main
         }
     }
 
+    async newFile()
+    {
+        await PixelEditor.create()
+        state.lastFile = PixelEditor.filename
+        state.current = 0
+        state.cursorX = state.cursorY = 0
+        state.cursorSizeX = state.cursorSizeY = 1
+        this.windows.position.pressed(1)
+        this.windows.position.pressed(3)
+    }
+
+    async loadFirstFile()
+    {
+        const dir = await file.dir()
+        if (dir.length)
+        {
+            const filename = dir[0].replace('.editor.', '.')
+            await PixelEditor.load(filename)
+            state.lastFile = filename
+            state.current = 0
+            if (state.cursorX >= PixelEditor.width)
+            {
+                state.cursorX = 0
+            }
+            if (state.cursorY >= PixelEditor.height)
+            {
+                state.cursorY = 0
+            }
+        }
+        else
+        {
+            this.newFile()
+        }
+    }
+
+    async reloadFile(filename)
+    {
+        await PixelEditor.load(filename)
+        state.lastFile = filename
+    }
+
 //     save: function(filename)
 //     {
 //         if (filename)
@@ -140,17 +182,6 @@ class Main
 //                 State.cursorY = 0
 //             }
 //         }
-//     },
-
-//     newFile: async function()
-//     {
-//         await PixelEditor.create()
-//         State.lastFile = PixelEditor.filename
-//         State.current = 0
-//         State.cursorX = State.cursorY = 0
-//         State.cursorSizeX = State.cursorSizeY = 1
-//         windows.position.pressed(1)
-//         windows.position.pressed(3)
 //     },
 
 //     saveFile: function()

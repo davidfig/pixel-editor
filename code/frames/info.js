@@ -5,6 +5,9 @@ import { state } from '../state'
 import { Dice } from '../dice'
 import PixelEditor from '../pixel-editor'
 import * as locale from '../locale'
+import * as file from '../file'
+import { main } from '../index'
+import { saveJson } from 'local-files/localFiles'
 
 export class Info
 {
@@ -70,6 +73,21 @@ export class Info
     name()
     {
         this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('nameOfSprite'))
+        this.nameEdit.on('success', async value => {
+            if (!await file.exists(`${value}.json`))
+            {
+                const filename = `${value}.json`
+                const old = state.lastFile
+                await PixelEditor.save(filename)
+                await file.unlink(old, filename)
+                await file.unlink(old.replace('.', '.editor.'))
+                state.lastFile = filename
+            }
+            else
+            {
+                this.nameEdit.object.innerText = PixelEditor.name
+            }
+        })
     }
 
     frameNumber()

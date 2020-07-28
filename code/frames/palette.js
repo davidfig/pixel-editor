@@ -45,8 +45,6 @@ export class Palette extends PIXI.Container
         this.selected = this.addChild(new PIXI.Graphics())
         this.palettes()
         this.stateSetup('palette')
-
-        this.draw()
     }
 
     palettes()
@@ -63,6 +61,7 @@ export class Palette extends PIXI.Container
 
     draw()
     {
+        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         this.selected.clear()
         this.updateColors()
         this.drawBlocks()
@@ -236,18 +235,13 @@ export class Palette extends PIXI.Container
 
     stateSetup()
     {
-        this.resize()
-        this.win.on('resize', () => this.resize())
-        state.on('foreground', this.draw, this)
-        state.on('background', this.draw, this)
-        state.on('isForeground', this.draw, this)
-        PixelEditor.on('changed', this.draw, this)
-    }
-
-    resize()
-    {
-        this.renderer.resize(this.content.offsetWidth, this.content.offsetHeight)
         this.draw()
+        this.win.on('resize', () => this.draw())
+        this.win.on('loaded', () => this.draw())
+        state.on('foreground', () => this.draw())
+        state.on('background', () => this.draw())
+        state.on('isForeground', () => this.draw())
+        PixelEditor.on('changed', () => this.draw())
     }
 
     switchForeground()

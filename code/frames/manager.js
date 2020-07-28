@@ -1,12 +1,14 @@
 import { clicked }  from 'clicked'
 import Tooltip from 'yy-tooltip'
-import * as file from '../file'
 
+import * as file from '../file'
 import PixelEditor from '../pixel-editor'
 import * as locale from '../locale'
 import { state } from '../state'
 import { html } from '../html'
 import { button } from '../button'
+import { Dialog } from '../dialog'
+import { main } from '../index'
 
 import ICONS from '../../images/manager.json'
 
@@ -63,6 +65,13 @@ export class Manager
             state.save()
             this.populateBox()
             alphabetical.style.opacity = state.manager.alphabetical ? 0.6 : 0.4
+        })
+        clicked(button(this.toolbar, ICONS.imageData[4], { opacity: 0.6}, locale.get('deleteFile')), () =>
+        {
+            new Dialog(this.win, 'Delete File', 'confirmation', `Are you sure you want to delete the current file ${state.lastFile}?`, async () => {
+                await file.unlink(state.lastFile)
+                main.loadFirstFile()
+            })
         })
     }
 

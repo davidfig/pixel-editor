@@ -1,7 +1,7 @@
 {
-  "name": "pixel-editor",
+  "name": "yy-pixel-editor",
   "version": "0.9.0",
-  "description": "A pixel editor/animator",
+  "description": "A pixel editor/animator for development purposes",
   "main": "launcher/index.js",
   "scripts": {
     "start": "node launcher images --error --log",

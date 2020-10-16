@@ -20,6 +20,7 @@ import { Frames } from './frames/frames'
 import { Animation } from './frames/animation'
 import { Position } from './frames/position'
 import { Manager }  from './frames/manager'
+import { Outline } from './frames/outline'
 import { Keyboard } from './frames/preferences/keyboard'
 import { setupKeys } from './keys'
 
@@ -81,6 +82,7 @@ class Main
         this.windows.position = new Position(this.wm, this.windows.draw)
         this.windows.manager = new Manager(this.wm)
         this.windows.keyboard = new Keyboard(this.wm)
+        this.windows.outline = new Outline(this.wm)
         for (const name in this.windows)
         {
             const win = this.windows[name].win

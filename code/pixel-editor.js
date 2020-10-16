@@ -596,6 +596,7 @@ class PixelEditor extends Pixel
         this.imageData = load.imageData
         this.animations = load.animations
         this.name = load.name
+        document.title = `Pixel Editor - ${this.name}`
         let editor
         if (this.filename)
         {

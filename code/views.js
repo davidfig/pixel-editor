@@ -47,7 +47,8 @@ function positionDefault(closed)
         animation: { x: window.innerWidth - space * 2 - 235 - 200, y: top + space, width: 230, height: 226, closed: true, order: 5 },
         position: { x: window.innerWidth - space - 200, y: window.innerHeight - space * 2 - 205 - 60, order: 6, closed },
         manager: { x: space * 2 + 45, y: top + space, width: 194, height: 250, closed: true, order: 7 },
-        keyboard: { x: window.innerWidth / 2 - 300, y: window.innerHeight / 2 - 200, width: 600, height: 400, closed: true, order: 8 }
+        keyboard: { x: window.innerWidth / 2 - 300, y: window.innerHeight / 2 - 200, width: 600, height: 400, closed: true, order: 8 },
+        outline: { x: 0, y: 0, closed: true, order: 9 },
     }
 }
 

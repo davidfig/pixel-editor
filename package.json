@@ -5,6 +5,9 @@
   "main": "launcher/index.js",
   "scripts": {
     "start": "node launcher images --error --log",
+    "little-guy": "node launcher /mnt/c/Users/dsfig/programming/little-guy/images",
+    "multispace": "node launcher /mnt/c/Users/dsfig/programming/multispace/html/images",
+    "yy": "node launcher  ../yopeyopey.com/marketing/pixels",
     "kill": "kill $(lsof -t -i:9010)"
   },
   "repository": "https://github.com/davidfig/pixel-editor",
@@ -14,6 +17,8 @@
   "dependencies": {
     "calc-fontsize": "^1.1.0",
     "clicked": "^4.0.2",
+    "concaveman": "^1.2.0",
+    "convex-hull": "^1.0.3",
     "easyedit": "^1.5.0",
     "eventemitter3": "^4.0.0",
     "fontfaceobserver": "^2.0.9",
@@ -26,7 +31,8 @@
     "pixi-viewport": "^4.12.2",
     "pixi.js": "^5.3.1",
     "point-in-triangle": "^1.0.1",
-    "simple-window-manager": "../components/window-manager/",
+    "simple-window-manager": "^2.1.1",
+    "simplify-geometry": "^0.0.2",
     "tinycolor2": "^1.4.1",
     "yy-color": "^1.1.1",
     "yy-fps": "^1.1.0",

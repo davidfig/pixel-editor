@@ -84,7 +84,7 @@ function view()
 
     _panes = {}
     const panes = new Menu()
-    const normal = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager']
+    const normal = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager', 'outline']
     for (let i = 0; i < normal.length; i++)
     {
         paneCreate(normal[i], i)

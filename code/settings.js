@@ -1,6 +1,6 @@
 export const NAME = 'pixel-editor'
 
-export const DEBUG = true
+export const DEBUG = false
 export const NO_LOAD = false
 export const TEST_CLEAN_OPENING = false
 export const FPS = false

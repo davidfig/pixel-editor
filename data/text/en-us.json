@@ -7,7 +7,6 @@
     "menuPreferences": "&Preferences",
     "menuKeyboard": "&Keyboard Preferences",
     "menuExit": "E&xit",
-
     "menuEdit": "&Edit",
     "menuUndo": "&Undo",
     "menuRedo": "&Redo",
@@ -29,7 +28,6 @@
     "menuEllipseTool": "&Ellipse",
     "menuLineTool": "&Line",
     "menuCropTool": "&Crop",
-
     "menuView": "&View",
     "menuNextView": "&Next View",
     "menuPreviousView": "&Previous View",
@@ -43,6 +41,7 @@
     "menuPosition": "Positio&n",
     "menuManager": "&Manager",
     "menuDuplicate": "&Duplicate",
+    "menuOutline": "Outline",
     "menuDelete": "D&elete",
     "menuNewFrame": "&New",
     "menuNextFrame": "Ne&xt Frame",
@@ -52,7 +51,6 @@
     "menuFlipHorizontal": "Flip &Horizontal",
     "menuFlipVertical": "Flip &Vertical",
     "menuResetPanes": "Reset Windows Layout",
-
     "nameOfSprite": "Name of Sprites",
     "frameNumber": "Frame number",
     "shortcut": "key: ",
@@ -63,7 +61,6 @@
     "increaseZoom": "Increase Zoom",
     "decreaseZoom": "Decrease Zoom",
     "deleteFile": "Delete File",
-
     "AddFrame": "Add Frame",
     "DeleteFrame": "Delete Frame",
     "NewFrame": "New Frame",
@@ -110,16 +107,15 @@
     "ManagerWindow": "Toggle Manager Window",
     "KeyboardWindow": "Keyboard Preferences",
     "ResetWindows": "Reset Current Windows Position and Size",
-
     "AnimationTitle": "Animations",
     "FramesTitle": "Frames",
     "InfoTitle": "Pixel Info",
+    "OutlineTitle": "Polygon Outline",
     "ManagerTitle": "File Manager",
     "PaletteTitle": "Color Palette",
     "PickerTitle": "Color Picker",
     "PositionTitle": "Frame Position",
     "KeyboardTitle": "Key Binding Preferences",
-
     "Command": "Command",
     "Keybinding": "Key Binding",
     "DialogKeyBinding": "Press key combination",

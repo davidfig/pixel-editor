@@ -54,7 +54,12 @@ function positionDefault(closed)
 
 export function getClosed(name)
 {
-    return state.views[state.view][name].closed
+    const view = state.views[state.view][name]
+    if (view) {
+        return view.closed
+    } else {
+        return false
+    }
 }
 
 export function toggleClosed(name)

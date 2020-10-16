@@ -1,8 +1,6 @@
 import PixelEditor from '../pixel-editor'
 import * as locale from '../locale'
-import hull from '../hull'
 import concaveman from '../concaveman'
-import simplify from 'simplify-geometry'
 
 export class Outline
 {
@@ -93,14 +91,16 @@ export class Outline
 
     outline() {
         const points = []
+        const adjX = PixelEditor.width / 2
+        const adjY = PixelEditor.height / 2
         for (let y = 0; y < PixelEditor.height; y++) {
             for (let x = 0 ; x < PixelEditor.width; x++) {
                 if (this.isPixel(x, y)) {
                     points.push(
-                        [x, y],
-                        [x + 1, y],
-                        [x + 1, y + 1],
-                        [x, y + 1])
+                        [x - adjX, y - adjY],
+                        [x - adjX + 1, y - adjY],
+                        [x - adjX + 1, y  - adjY + 1],
+                        [x - adjX, y  - adjY + 1])
                 }
             }
         }

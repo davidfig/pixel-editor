@@ -9,10 +9,8 @@ const html = require('./html')
 const State = require('./state')
 const PixelEditor = require('./pixel-editor')
 
-module.exports = class Export
-{
-    constructor(wm)
-    {
+module.exports = class Export {
+    constructor(wm) {
         this.win = wm.createWindow({ title: 'Export Frame to PNG', modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0, titleCenter: true })
 
         let div = html({ parent: this.win.content, styles: { textAlign: 'center', margin: '1em 0.5em 0.5em' } })
@@ -48,22 +46,18 @@ module.exports = class Export
         this.saveScale = PixelEditor.zoom
     }
 
-    OK()
-    {
+    OK() {
         File.exportFileDialog(State.lastPath, this.exportFile.bind(this))
     }
 
-    exportFile(name)
-    {
-        if (name)
-        {
-            if (path.extname(name) !== '.png')
-            {
+    exportFile(name) {
+        if (name) {
+            if (path.extname(name) !== '.png') {
                 name += '.png'
             }
             const width = Math.ceil(PixelEditor.width * this.saveScale)
             const height = Math.ceil(PixelEditor.height * this.saveScale)
-            const renderer = new PIXI.Renderer({ width, height, transparent: true })
+            const renderer = new PIXI.Renderer({ width, height, backgroundAlpha: 0 })
             const sprite = sheet.get(PixelEditor.name + '-' + PixelEditor.current)
             sprite.scale.set(this.saveScale)
             sprite.anchor.set(0)
@@ -74,17 +68,13 @@ module.exports = class Export
         this.win.close()
     }
 
-    cancel()
-    {
+    cancel() {
         this.win.close()
     }
 
-    captureKey(div)
-    {
-        div.addEventListener('keydown', (e) =>
-        {
-            if (e.code === 'Enter')
-            {
+    captureKey(div) {
+        div.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
                 this.OK()
             }
             e.stopPropagation()
@@ -92,59 +82,47 @@ module.exports = class Export
         div.addEventListener('keyup', (e) => e.stopPropagation())
     }
 
-    changeWidth()
-    {
+    changeWidth() {
         const scale = parseInt(this.width.value) / PixelEditor.width
-        if (!isNaN(scale))
-        {
+        if (!isNaN(scale)) {
             this.saveScale = scale
             this.scale.value = this.fix(scale)
             this.height.value = this.fix(PixelEditor.height * scale)
         }
-        else
-        {
+        else {
             this.width.value = ''
         }
     }
 
-    changeHeight()
-    {
+    changeHeight() {
         const scale = parseInt(this.height.value) / PixelEditor.height
-        if (!isNaN(scale))
-        {
+        if (!isNaN(scale)) {
             this.saveScale = scale
             this.scale.value = this.fix(scale)
             this.width.value = this.fix(PixelEditor.width * scale)
         }
-        else
-        {
+        else {
             this.height.value = ''
         }
     }
 
-    changeScale()
-    {
+    changeScale() {
         const scale = parseFloat(this.scale.value)
-        if (!isNaN(scale))
-        {
+        if (!isNaN(scale)) {
             this.saveScale = scale
             this.height.value = this.fix(PixelEditor.height * scale)
             this.width.value = this.fix(PixelEditor.width * scale)
         }
-        else
-        {
+        else {
             this.scale.value = ''
         }
     }
 
-    fix(n)
-    {
-        if (n === Math.round(n))
-        {
+    fix(n) {
+        if (n === Math.round(n)) {
             return n
         }
-        else
-        {
+        else {
             return n.toFixed(2)
         }
     }

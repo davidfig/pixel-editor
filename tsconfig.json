@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "."
+  },
+  "files": [
+    "code/*.ts",
+    "bundle/*.ts"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    "dist"
+  ]
+}

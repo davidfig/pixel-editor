@@ -1,10 +1,8 @@
 import { clicked } from 'clicked'
 import { html } from './html'
 
-export class Dialog
-{
-    constructor(win, title, type, label, callback, options)
-    {
+export class Dialog {
+    constructor(win, title, type, label, callback, options) {
         options = options || {}
         options.ok = options.ok || 'OK'
         options.cancel = options.cancel || 'Cancel'
@@ -14,18 +12,15 @@ export class Dialog
         this.win = win.wm.createWindow({ title, parent: win, modal: true, resizable: false, maximizable: false, minimizable: false, minHeight: 0 })
         this.win.content.style.color = '#eeeeee'
         const div = html({ parent: this.win.content, styles: { display: 'flex', justifyContent: 'center', margin: '1em' } })
-        if (type === 'string')
-        {
-            html({ parent: div, type: 'label', html: 'title', html: label })
+        if (type === 'string') {
+            html({ parent: div, type: 'label', html: label })
             this.input = html({ parent: div, type: 'input' })
-            if (options.original)
-            {
+            if (options.original) {
                 this.input.value = options.original
             }
             this.captureKey(this.input)
         }
-        else if (type === 'confirmation')
-        {
+        else if (type === 'confirmation') {
             html({ parent: div, html: label })
         }
         this.type = type
@@ -38,21 +33,17 @@ export class Dialog
 
         this.win.open()
         this.win.center(win)
-        if (this.input)
-        {
+        if (this.input) {
             this.input.focus()
-            if (options.original)
-            {
+            if (options.original) {
                 this.input.select()
             }
         }
     }
 
-    OK()
-    {
+    OK() {
         this.win.close()
-        switch (this.type)
-        {
+        switch (this.type) {
             case 'string':
                 this.callback(this.input.value)
                 break
@@ -63,18 +54,14 @@ export class Dialog
         }
     }
 
-    cancel()
-    {
+    cancel() {
         this.win.close()
         this.callback()
     }
 
-    captureKey(div)
-    {
-        div.addEventListener('keydown', (e) =>
-        {
-            if (e.code === 'Enter')
-            {
+    captureKey(div) {
+        div.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
                 this.OK()
             }
             e.stopPropagation()

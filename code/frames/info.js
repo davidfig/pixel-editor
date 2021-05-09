@@ -6,13 +6,11 @@ import { Dice } from '../dice'
 import PixelEditor from '../pixel-editor'
 import * as locale from '../locale'
 import * as file from '../file'
-import { main } from '../index'
-import { saveJson } from 'local-files/localFiles'
+// import { main } from '../index'
+// import { saveJson } from 'local-files'
 
-export class Info
-{
-    constructor(ui)
-    {
+export class Info {
+    constructor(ui) {
         this.win = ui.createWindow({
             id: 'info',
             title: locale.get('InfoTitle'),
@@ -35,21 +33,17 @@ export class Info
         this.stateSetup()
     }
 
-    editText(parent, label, text, styles, tooltip)
-    {
+    editText(parent, label, text, styles, tooltip) {
         styles = styles || []
         const container = document.createElement('div')
-        if (tooltip)
-        {
+        if (tooltip) {
             new Tooltip(container, Array.isArray(tooltip) ? '<div>' + tooltip[0] + '</div><div>' + locale.get('shortcut') + tooltip[1] + '</div>' : tooltip)
         }
         parent.appendChild(container)
-        for (let style in styles)
-        {
+        for (let style in styles) {
             container.style[style] = styles[style]
         }
-        if (label)
-        {
+        if (label) {
             const title = document.createElement('span')
             title.innerText = label
             container.appendChild(title)
@@ -61,8 +55,7 @@ export class Info
         return new EasyEdit(span)
     }
 
-    stack(parent)
-    {
+    stack(parent) {
         const stack = document.createElement('div')
         parent.appendChild(stack)
         stack.style.display = 'flex'
@@ -70,12 +63,10 @@ export class Info
         return stack
     }
 
-    name()
-    {
+    name() {
         this.nameEdit = this.editText(this.content, null, 'untitled', { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('nameOfSprite'))
         this.nameEdit.on('success', async value => {
-            if (!await file.exists(`${value}.json`))
-            {
+            if (!await file.exists(`${value}.json`)) {
                 const filename = `${value}.json`
                 const old = state.lastFile
                 await PixelEditor.save(filename)
@@ -83,93 +74,76 @@ export class Info
                 await file.unlink(old.replace('.', '.editor.'))
                 state.lastFile = filename
             }
-            else
-            {
+            else {
                 this.nameEdit.object.innerText = PixelEditor.name
             }
         })
     }
 
-    frameNumber()
-    {
+    frameNumber() {
         this.frameNumberEdit = this.editText(this.content, 'frame: ', 0, { 'textAlign': 'center', 'padding': '0.25em' }, locale.get('frameNumber'))
-        this.frameNumberEdit.on('success', (value) =>
-        {
+        this.frameNumberEdit.on('success', (value) => {
             const number = parseInt(value)
-            if (!isNaN(number) && number >= 0 && number < PixelEditor.imageData.length)
-            {
+            if (!isNaN(number) && number >= 0 && number < PixelEditor.imageData.length) {
                 PixelEditor.current = number
             }
         })
     }
 
-    frameSize()
-    {
+    frameSize() {
         const stack = this.stack(this.content)
         this.frameWidthEdit = this.editText(stack, 'w: ', 15, null, locale.get('frameWidth'))
-        this.frameWidthEdit.on('success', (value) =>
-        {
+        this.frameWidthEdit.on('success', (value) => {
             const width = parseInt(value)
             let relative
             const split = state.relative.split('-')
-            if (split[1] === 'center')
-            {
+            if (split[1] === 'center') {
                 relative = 'center'
             }
-            else if (split[1] === 'right')
-            {
+            else if (split[1] === 'right') {
                 relative = 'right'
             }
-            else
-            {
+            else {
                 relative = 'left'
             }
             PixelEditor.adjustWidth(width, relative)
         })
 
         this.frameHeightEdit = this.editText(stack, 'h: ', 15, null, locale.get('frameHeight'))
-        this.frameHeightEdit.on('success', (value) =>
-        {
+        this.frameHeightEdit.on('success', (value) => {
             const height = parseInt(value)
             let relative
             const split = state.relative.split('-')
-            if (split[0] === 'center')
-            {
+            if (split[0] === 'center') {
                 relative = 'center'
             }
-            else if (split[0] === 'bottom')
-            {
+            else if (split[0] === 'bottom') {
                 relative = 'bottom'
             }
-            else
-            {
+            else {
                 relative = 'top'
             }
             PixelEditor.adjustHeight(height, relative)
         })
     }
 
-    cursorPosition()
-    {
+    cursorPosition() {
         const stack = this.stack(this.content)
         this.cursorXEdit = this.editText(stack, 'x: ', 0, null, ['x position of cursor', 'left/right arrow'])
-        this.cursorXEdit.on('success', (value) =>
-        {
+        this.cursorXEdit.on('success', (value) => {
             const position = parseInt(value)
             const split = state.relative.split('-')
             state.cursorX = split[1] === 'right' ? PixelEditor.width - position - 1 : split[1] === 'center' ? position + PixelEditor.width / 2 : position
         })
         this.cursorYEdit = this.editText(stack, 'y: ', 0, null, ['y position of cursor', 'up/down arrow'])
-        this.cursorYEdit.on('success', (value) =>
-        {
+        this.cursorYEdit.on('success', (value) => {
             const position = parseInt(value)
             const split = state.relative.split('-')
             state.cursorY = split[0] === 'bottom' ? PixelEditor.height - position - 1 : split[0] === 'center' ? position + PixelEditor.height / 2 : position
         })
     }
 
-    cursorSize()
-    {
+    cursorSize() {
         const stack = this.stack(this.content)
         this.cursorSizeXEdit = this.editText(stack, 'w: ', 0, null, ['width of cursor', 'shift-left/right arrow'])
         this.cursorSizeXEdit.on('success', (value) => state.cursorSizeX = parseInt(value))
@@ -177,14 +151,12 @@ export class Info
         this.cursorSizeYEdit.on('success', (value) => state.cursorSizeY = parseInt(value))
     }
 
-    zoom()
-    {
-        this.zoomEdit = this.editText(this.content, 'zoom: ', PixelEditor.zoom, { 'text-align': 'center'}, 'scale of sprite')
+    zoom() {
+        this.zoomEdit = this.editText(this.content, 'zoom: ', PixelEditor.zoom, { 'text-align': 'center' }, 'scale of sprite')
         this.zoomEdit.on('success', (value) => PixelEditor.zoom = parseInt(value))
     }
 
-    changed()
-    {
+    changed() {
         this.nameEdit.object.innerText = PixelEditor.name
         this.frameNumberEdit.object.innerText = PixelEditor.current
         this.frameWidthEdit.object.innerText = PixelEditor.width
@@ -200,8 +172,7 @@ export class Info
         this.zoomEdit.object.innerText = PixelEditor.zoom
     }
 
-    stateSetup()
-    {
+    stateSetup() {
         state.on('cursorX', this.changed, this)
         state.on('cursorY', this.changed, this)
         state.on('cursorSizeX', this.changed, this)

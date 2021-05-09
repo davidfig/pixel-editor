@@ -19,10 +19,8 @@ const SPACING = 8
 const WORD_SPACING = '0.4em'
 const QUICK_COUNT = 7
 
-export class Picker
-{
-    constructor(ui)
-    {
+export class Picker {
+    constructor(ui) {
         this.win = ui.createWindow({
             id: 'picker',
             title: locale.get('PickerTitle'),
@@ -33,7 +31,7 @@ export class Picker
         this.content = this.win.content
         this.content.style.margin = '0.5em'
         this.content.style.color = '#eeeeee'
-        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, transparent: true, preserveDrawingBuffer: true })
+        this.renderer = new PIXI.Renderer({ resolution: window.devicePixelRatio, backgroundAlpha: 0, preserveDrawingBuffer: true })
 
         this.stateSetup('picker')
         this.content.appendChild(this.renderer.view)
@@ -46,15 +44,14 @@ export class Picker
         this.sheet = new RenderSheet()
         this.sheet.add('picker', (c) => this.drawPicker(c), () => { return { width: this.size(), height: this.size() } })
         this.sheet.add('pickerCursor', (c) => this.drawPickerCursor(c), () => { return { width: RADIUS * 2 + LINE_WIDTH / 2, height: RADIUS * 2 + LINE_WIDTH / 2 } })
-        this.sheet.add('bar', (c) => this.drawBar(c), () => { return { width: BAR_WIDTH, height: BAR_HEIGHT + LINE_WIDTH * 4 }})
+        this.sheet.add('bar', (c) => this.drawBar(c), () => { return { width: BAR_WIDTH, height: BAR_HEIGHT + LINE_WIDTH * 4 } })
         this.sheet.add('hue', (c) => this.drawHue(c), () => { return { width: this.size(), height: 1 } })
         this.sheet.add('alpha', (c) => this.drawAlpha(c), () => { return { width: this.size(), height: BAR_HEIGHT } })
         // this.sheet.show = true
         this.sheet.render(() => this.afterRender())
     }
 
-    afterRender()
-    {
+    afterRender() {
         this.setupPicker()
         this.setupHue()
         this.setupAlpha()
@@ -62,10 +59,8 @@ export class Picker
         this.rendererResize()
         this.renderer.render(this.stage)
 
-        PIXI.Ticker.shared.add(() =>
-        {
-            if (this.dirty)
-            {
+        PIXI.Ticker.shared.add(() => {
+            if (this.dirty) {
                 this.change()
                 this.renderer.render(this.stage)
                 this.dirty = false
@@ -73,13 +68,11 @@ export class Picker
         })
     }
 
-    size()
-    {
+    size() {
         return this.content.offsetWidth - RADIUS * 2
     }
 
-    setupPicker()
-    {
+    setupPicker() {
         this.picker = this.stage.addChild(new PIXI.Container())
         this.picker.position.set(RADIUS)
         const gradient = this.picker.addChild(this.sheet.get('picker'))
@@ -95,8 +88,7 @@ export class Picker
         this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
     }
 
-    drawPicker(c)
-    {
+    drawPicker(c) {
         c.beginPath()
         const color = '#' + state.color.substr(0, 6)
         const translate = new TinyColor(color).toHsl()
@@ -118,8 +110,7 @@ export class Picker
         c.fillRect(0, 0, size, size)
     }
 
-    drawPickerCursor(c)
-    {
+    drawPickerCursor(c) {
         c.beginPath()
         c.lineWidth = LINE_WIDTH / 2
         const middle = RADIUS + LINE_WIDTH / 4
@@ -131,22 +122,17 @@ export class Picker
         c.stroke()
     }
 
-    hexify(a)
-    {
-        if (a.length < 2)
-        {
+    hexify(a) {
+        if (a.length < 2) {
             return '0' + a
         }
-        else
-        {
+        else {
             return a
         }
     }
 
-    pickerMove(e)
-    {
-        if (this.isPickerDown)
-        {
+    pickerMove(e) {
+        if (this.isPickerDown) {
             const size = this.size()
             const local = this.picker.toLocal(e.data.global)
             let x = local.x
@@ -162,13 +148,11 @@ export class Picker
         }
     }
 
-    pickerUp()
-    {
+    pickerUp() {
         this.isPickerDown = false
     }
 
-    drawBar(c)
-    {
+    drawBar(c) {
         c.beginPath()
         c.lineWidth = LINE_WIDTH * 2
         c.strokeStyle = '#eeeeee'
@@ -176,8 +160,7 @@ export class Picker
         c.stroke()
     }
 
-    drawHue(c)
-    {
+    drawHue(c) {
         c.beginPath()
         let gradient = c.createLinearGradient(0, 0, this.size(), 0)
         gradient.addColorStop(0, '#f00')
@@ -191,8 +174,7 @@ export class Picker
         c.fillRect(0, 0, this.size(), 1)
     }
 
-    setupHue()
-    {
+    setupHue() {
         this.hue = this.stage.addChild(new PIXI.Container())
         this.hue.position.set(RADIUS, this.picker.y + this.picker.height + SPACING)
         const hue = this.hue.addChild(this.sheet.get('hue'))
@@ -209,10 +191,8 @@ export class Picker
         this.hueCursor.position.set(x, BAR_HEIGHT / 2)
     }
 
-    hueMove(e)
-    {
-        if (this.isHueDown)
-        {
+    hueMove(e) {
+        if (this.isHueDown) {
             const size = this.size()
             const local = this.hue.toLocal(e.data.global)
             let x = local.x
@@ -227,8 +207,7 @@ export class Picker
         }
     }
 
-    drawAlpha(c)
-    {
+    drawAlpha(c) {
         c.beginPath()
         c.clearRect(0, 0, this.size(), BAR_HEIGHT)
         const rgb = new TinyColor('#' + state.color.substr(0, 6)).toRgb()
@@ -239,8 +218,7 @@ export class Picker
         c.fillRect(0, 0, this.size(), BAR_HEIGHT)
     }
 
-    setupAlpha()
-    {
+    setupAlpha() {
         const size = this.size()
         this.alpha = this.stage.addChild(new PIXI.Container())
         this.alphaTransparent = this.alpha.addChild(new PIXI.TilingSprite(sheet.getTexture('transparency')))
@@ -261,10 +239,8 @@ export class Picker
         this.alphaCursor.position.set(x, BAR_HEIGHT / 2)
     }
 
-    alphaMove(e)
-    {
-        if (this.isAlphaDown)
-        {
+    alphaMove(e) {
+        if (this.isAlphaDown) {
             const size = this.content.offsetWidth - RADIUS * 2
             const local = this.picker.toLocal(e.data.global)
             let x = local.x
@@ -277,26 +253,21 @@ export class Picker
         }
     }
 
-    fixed(a)
-    {
+    fixed(a) {
         return (('' + a).length < 4) ? a : a.toFixed(2)
     }
 
-    wordsSetup()
-    {
-        function letter(parent, label, original, special)
-        {
+    wordsSetup() {
+        function letter(parent, label, original, special) {
             const container = document.createElement('span')
             parent.appendChild(container)
             let span
-            if (label)
-            {
+            if (label) {
                 span = document.createElement('span')
                 container.appendChild(span)
                 span.innerText = label + ': '
             }
-            if (special)
-            {
+            if (special) {
                 span = document.createElement('span')
                 container.appendChild(span)
                 span.innerText = special
@@ -346,65 +317,52 @@ export class Picker
         this.wordsEvents()
     }
 
-    wordsEvents()
-    {
+    wordsEvents() {
         const color = new TinyColor('#' + state.color.substr(0, 6))
         const alpha = state.color.substr(6)
-        this.words.r.on('success', (value) =>
-        {
+        this.words.r.on('success', (value) => {
             const v = parseInt(value)
-            if (isNaN(value) || v < 0 || v > 255)
-            {
+            if (isNaN(value) || v < 0 || v > 255) {
                 this.words.r.object.innerText = color.toRgb().r
                 return
             }
             state.color = this.hexify(v.toString(16)) + state.color.substr(2)
         })
-        this.words.g.on('success', (value) =>
-        {
+        this.words.g.on('success', (value) => {
             const v = parseInt(value)
-            if (isNaN(value) || v < 0 || v > 255)
-            {
+            if (isNaN(value) || v < 0 || v > 255) {
                 this.words.g.object.innerText = color.toRgb().g
                 return
             }
             state.color = state.color.substr(0, 2) + this.hexify(v.toString(16)) + state.color.substr(4)
         })
-        this.words.b.on('success', (value) =>
-        {
+        this.words.b.on('success', (value) => {
             const v = parseInt(value)
-            if (isNaN(value) || v < 0 || v > 255)
-            {
+            if (isNaN(value) || v < 0 || v > 255) {
                 this.words.b.object.innerText = color.toRgb().b
                 return
             }
             state.color = state.color.substr(0, 4) + this.hexify(v.toString(16)) + state.color.substr(6)
         })
-        this.words.alpha.on('success', (value) =>
-        {
+        this.words.alpha.on('success', (value) => {
             const v = parseFloat(value)
-            if (isNaN(value) || v < 0 || v > 1)
-            {
+            if (isNaN(value) || v < 0 || v > 1) {
                 this.words.alpha.object.innerText = parseInt(alpha, 16) / 255
                 return
             }
             state.color = state.color.substr(0, 6) + this.hexify(Math.floor(v * 255).toString(16))
         })
-        this.words.hex.on('success', (value) =>
-        {
+        this.words.hex.on('success', (value) => {
             const v = parseInt(value, 16)
-            if (isNaN(v) || v < 0 || v > 0xffffff)
-            {
+            if (isNaN(v) || v < 0 || v > 0xffffff) {
                 this.words.hex.object.innerText = state.color(0, 6)
                 return
             }
             state.color = value + state.color.substr(6)
         })
-        this.words.h.on('success', (value) =>
-        {
+        this.words.h.on('success', (value) => {
             const v = parseInt(value)
-            if (isNaN(value) || v < 0 || v > 359)
-            {
+            if (isNaN(value) || v < 0 || v > 359) {
                 this.words.h.object.innerText = color.toHsl().h
                 return
             }
@@ -412,11 +370,9 @@ export class Picker
             hsl.h = v
             state.color = new TinyColor(hsl).toHex() + state.color.substr(6)
         })
-        this.words.s.on('success', (value) =>
-        {
+        this.words.s.on('success', (value) => {
             const v = parseFloat(value)
-            if (isNaN(value) || v < 0 || v > 1)
-            {
+            if (isNaN(value) || v < 0 || v > 1) {
                 this.words.s.object.innerText = color.toHsl().s
                 return
             }
@@ -424,11 +380,9 @@ export class Picker
             hsl.s = v
             state.color = new TinyColor(hsl).toHex() + state.color.substr(6)
         })
-        this.words.l.on('success', (value) =>
-        {
+        this.words.l.on('success', (value) => {
             const v = parseFloat(value)
-            if (isNaN(value) || v < 0 || v > 1)
-            {
+            if (isNaN(value) || v < 0 || v > 1) {
                 this.words.h.object.innerText = color.toHsl().l
                 return
             }
@@ -438,8 +392,7 @@ export class Picker
         })
     }
 
-    wordsUpdate()
-    {
+    wordsUpdate() {
         const c = new TinyColor(state.color.substr(0, 6))
         const a = parseInt(state.color.substr(6), 16) / 255
 
@@ -459,13 +412,10 @@ export class Picker
         this.words.l.object.innerText = this.fixed(value.l)
     }
 
-    stateSetup()
-    {
+    stateSetup() {
         this.content.style.overflow = 'hidden'
-        this.win.on('resize', () =>
-        {
-            this.sheet.render(() =>
-            {
+        this.win.on('resize', () => {
+            this.sheet.render(() => {
                 const size = this.size()
                 const color = new TinyColor('#' + state.color.substr(0, 6)).toHsl()
                 this.pickerCursor.position.set(size * color.s, size * (1 - color.l))
@@ -486,8 +436,7 @@ export class Picker
         state.on('isForeground', () => this.dirty = true)
     }
 
-    change()
-    {
+    change() {
         this.sheet.changeDraw('picker', (c) => this.drawPicker(c))
         this.sheet.changeDraw('alpha', (c) => this.drawAlpha(c))
 
@@ -505,20 +454,17 @@ export class Picker
         this.quickSetup()
     }
 
-    colorBar(entries)
-    {
+    colorBar(entries) {
         const div = document.createElement('div')
         this.quick.appendChild(div)
         div.style.display = 'flex'
         div.style.justifyContent = 'space-around'
 
-        for (let entry of entries)
-        {
+        for (let entry of entries) {
             const span = document.createElement('span')
             div.appendChild(span)
             span.style.width = span.style.height = this.quickSize + 'px'
-            if (entry.alpha)
-            {
+            if (entry.alpha) {
                 span.style.position = 'relative'
                 span.style.backgroundImage = sheet.transparent
                 const color = document.createElement('span')
@@ -527,8 +473,7 @@ export class Picker
                 color.style.width = color.style.height = this.quickSize + 'px'
                 color.style.backgroundColor = entry.color
             }
-            else
-            {
+            else {
                 span.style.backgroundColor = entry.color
             }
             clicked(span, () => state.color = entry.result)
@@ -536,8 +481,7 @@ export class Picker
         return div
     }
 
-    quickSetup()
-    {
+    quickSetup() {
         const size = this.size() / QUICK_COUNT
         this.quickSize = size * 0.9
         const alphas = [], saturations = [], lightnesses = [], hues = []
@@ -546,22 +490,20 @@ export class Picker
         const rgb = new TinyColor(color).toRgb()
         const count = QUICK_COUNT - 1
         const alphaSet = [0.1, 0.2, 0.25, 0.5, 0.75, 0.85, 1]
-        for (let i = 0; i < QUICK_COUNT; i++)
-        {
+        for (let i = 0; i < QUICK_COUNT; i++) {
             const percent = i / count
             const alpha = alphaSet[i]
             const alphaColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + alpha + ')'
             alphas.push({ alpha: true, color: alphaColor, result: state.color.substr(0, 6) + this.hexify((alpha * 255).toString(16)) })
             const saturation = new TinyColor({ h: hsl.h, s: i / count, l: hsl.l })
-            saturations.push({ color: saturation.toHexString(), result: saturation.toHex() + state.color.substr(6)  })
+            saturations.push({ color: saturation.toHexString(), result: saturation.toHex() + state.color.substr(6) })
             const lightness = new TinyColor({ h: hsl.h, s: hsl.s, l: i / count })
             lightnesses.push({ color: lightness.toHexString(), result: lightness.toHex() + state.color.substr(6) })
             const hue = new TinyColor({ h: (hsl.h + ((359 - 359 / QUICK_COUNT) * percent)) % 359, s: hsl.s, l: hsl.l })
             hues.push({ color: hue.toHexString(), result: hue.toHex() + state.color.substr(6) })
         }
 
-        if (this.quick)
-        {
+        if (this.quick) {
             this.content.removeChild(this.quick)
         }
         this.quick = document.createElement('div')
@@ -576,8 +518,7 @@ export class Picker
         this.quickHues.style.marginTop = '0.5em'
     }
 
-    rendererResize()
-    {
+    rendererResize() {
         this.renderer.view.width = this.content.offsetWidth
         this.renderer.view.style.width = this.content.offsetWidth + 'px'
         const height = this.alpha.y + this.alpha.height

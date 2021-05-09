@@ -1,7 +1,7 @@
 import { WindowManager } from 'simple-window-manager'
-import Fps from 'yy-fps'
+import { FPS } from 'yy-fps'
 
-import { FPS, NO_LOAD } from './settings'
+import { FPS as fpsSettings, NO_LOAD } from './settings'
 import * as views from './views'
 import { createSheet } from './sheet'
 import { Draw } from './draw'
@@ -13,23 +13,20 @@ import * as file from './file'
 // import Keys from './keys'
 
 import { Toolbar } from './frames/toolbar'
-import { Palette }  from './frames/palette'
-import { Picker }  from './frames/picker'
-import { Info }  from './frames/info'
+import { Palette } from './frames/palette'
+import { Picker } from './frames/picker'
+import { Info } from './frames/info'
 import { Frames } from './frames/frames'
 import { Animation } from './frames/animation'
 import { Position } from './frames/position'
-import { Manager }  from './frames/manager'
+import { Manager } from './frames/manager'
 import { Outline } from './frames/outline'
 import { Keyboard } from './frames/preferences/keyboard'
 import { setupKeys } from './keys'
 
-class Main
-{
-    async afterLoad()
-    {
-        if (FPS)
-        {
+class Main {
+    async afterLoad() {
+        if (fpsSettings) {
             this.fpsSetup()
         }
         await PixelEditor.create(NO_LOAD ? null : state.lastFile)
@@ -37,19 +34,16 @@ class Main
         setupKeys(this)
     }
 
-    fpsSetup()
-    {
-        function frame()
-        {
+    fpsSetup() {
+        function frame() {
             fps.frame()
             requestAnimationFrame(frame)
         }
-        const fps = new Fps()
+        const fps = new FPS()
         frame()
     }
 
-    create()
-    {
+    create() {
         views.init()
         createMenu()
         this.wm = new WindowManager({ snap: true }, {
@@ -69,8 +63,7 @@ class Main
         document.body.style.opacity = 1
     }
 
-    setupWindows()
-    {
+    setupWindows() {
         this.windows = {}
         this.windows.draw = new Draw(this.wm)
         this.windows.frames = new Frames(this.wm)
@@ -83,11 +76,9 @@ class Main
         this.windows.manager = new Manager(this.wm)
         this.windows.keyboard = new Keyboard(this.wm)
         this.windows.outline = new Outline(this.wm)
-        for (const name in this.windows)
-        {
+        for (const name in this.windows) {
             const win = this.windows[name].win
-            if (win)
-            {
+            if (win) {
                 win.on('resize-end', () => views.update())
                 win.on('move-end', () => views.update())
             }
@@ -95,20 +86,16 @@ class Main
         views.apply()
     }
 
-    toggleHidden(name)
-    {
-        if (this.windows[name].win.closed)
-        {
+    toggleHidden(name) {
+        if (this.windows[name].win.closed) {
             this.windows[name].win.open()
         }
-        else
-        {
+        else {
             this.windows[name].win.close()
         }
     }
 
-    async newFile()
-    {
+    async newFile() {
         await PixelEditor.create()
         state.lastFile = PixelEditor.filename
         state.current = 0
@@ -118,94 +105,87 @@ class Main
         this.windows.position.pressed(3)
     }
 
-    async loadFirstFile()
-    {
+    async loadFirstFile() {
         const dir = await file.dir()
-        if (dir.length)
-        {
+        if (dir.length) {
             const filename = dir[0].replace('.editor.', '.')
             await PixelEditor.load(filename)
             state.lastFile = filename
             state.current = 0
-            if (state.cursorX >= PixelEditor.width)
-            {
+            if (state.cursorX >= PixelEditor.width) {
                 state.cursorX = 0
             }
-            if (state.cursorY >= PixelEditor.height)
-            {
+            if (state.cursorY >= PixelEditor.height) {
                 state.cursorY = 0
             }
         }
-        else
-        {
+        else {
             this.newFile()
         }
     }
 
-    async reloadFile(filename)
-    {
+    async reloadFile(filename) {
         await PixelEditor.load(filename)
         state.lastFile = filename
     }
 
-//     save: function(filename)
-//     {
-//         if (filename)
-//         {
-//             State.lastPath = path.dirname(filename)
-//             if (path.extname(filename) !== '.json')
-//             {
-//                 filename += '.json'
-//             }
-//             State.lastFile = filename
-//             PixelEditor.name = path.basename(filename, path.extname(filename))
-//             PixelEditor.save(filename)
-//         }
-//     },
+    //     save: function(filename)
+    //     {
+    //         if (filename)
+    //         {
+    //             State.lastPath = path.dirname(filename)
+    //             if (path.extname(filename) !== '.json')
+    //             {
+    //                 filename += '.json'
+    //             }
+    //             State.lastFile = filename
+    //             PixelEditor.name = path.basename(filename, path.extname(filename))
+    //             PixelEditor.save(filename)
+    //         }
+    //     },
 
-//     load: async function(list)
-//     {
-//         if (list && list.length)
-//         {
-//             let filename = list[0]
-//             if (filename.indexOf('.editor.'))
-//             {
-//                 filename = filename.replace('.editor.', '')
-//             }
-//             await PixelEditor.load(filename)
-//             State.lastFile = filename
-//             State.current = 0
-//             if (State.cursorX >= PixelEditor.width)
-//             {
-//                 State.cursorX = 0
-//             }
-//             if (State.cursorY >= PixelEditor.height)
-//             {
-//                 State.cursorY = 0
-//             }
-//         }
-//     },
+    //     load: async function(list)
+    //     {
+    //         if (list && list.length)
+    //         {
+    //             let filename = list[0]
+    //             if (filename.indexOf('.editor.'))
+    //             {
+    //                 filename = filename.replace('.editor.', '')
+    //             }
+    //             await PixelEditor.load(filename)
+    //             State.lastFile = filename
+    //             State.current = 0
+    //             if (State.cursorX >= PixelEditor.width)
+    //             {
+    //                 State.cursorX = 0
+    //             }
+    //             if (State.cursorY >= PixelEditor.height)
+    //             {
+    //                 State.cursorY = 0
+    //             }
+    //         }
+    //     },
 
-//     saveFile: function()
-//     {
-//         File.saveFileDialog(State.lastPath, Main.save)
-//     },
+    //     saveFile: function()
+    //     {
+    //         File.saveFileDialog(State.lastPath, Main.save)
+    //     },
 
-//     openFile: function()
-//     {
-//         File.openFileDialog(State.lastPath, Main.load)
-//     },
+    //     openFile: function()
+    //     {
+    //         File.openFileDialog(State.lastPath, Main.load)
+    //     },
 
-//     exportFile: function()
-//     {
-//         new Export(wm)
-//     }
+    //     exportFile: function()
+    //     {
+    //         new Export(wm)
+    //     }
 }
 
 export const main = new Main()
 
-window.onload = async () =>
-{
+window.onload = async () => {
     document.body.style.opacity = 0
     await state.load()
     await createSheet()

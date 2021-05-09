@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from 'simple-window-manager'
+import { Menu, MenuItem } from 'yy-menu'
 import { state } from './state'
 import PixelEditor from './pixel-editor'
 import * as views from './views'
@@ -9,8 +9,7 @@ let _menu, _panes
 
 state.on('last-file', createMenu)
 
-export function createMenu()
-{
+export function createMenu() {
     _menu = new Menu({ styles: { position: 'unset', cursor: 'default' } })
 
     file()
@@ -22,25 +21,21 @@ export function createMenu()
     Menu.setApplicationMenu(_menu)
 }
 
-function file()
-{
+function file() {
     const submenu = new Menu()
-    submenu.append(new MenuItem({ label: locale.get('menuNew'), accelerator: state.keys.New, click: () => main.newFile() } ))
+    submenu.append(new MenuItem({ label: locale.get('menuNew'), accelerator: state.keys.New, click: () => main.newFile() }))
     submenu.append(new MenuItem({ label: locale.get('menuExport'), accelerator: state.keys.Export, click: () => main.exportFile() }))
-    if (state.lastFiles.length)
-    {
+    if (state.lastFiles.length) {
         submenu.append(new MenuItem({ type: 'separator' }))
 
-        for (let i = 1; i < state.lastFiles.length; i++)
-        {
+        for (let i = 1; i < state.lastFiles.length; i++) {
             submenu.append(new MenuItem({ label: `&${i}. ${state.lastFiles[i].replace('.json', '')}`, accelerator: `CommandOrControl+${i}`, click: () => main.load([state.lastFiles[i]]) }))
         }
     }
     _menu.append(new MenuItem({ label: locale.get('menuFile'), submenu }))
 }
 
-function edit()
-{
+function edit() {
     const submenu = new Menu()
     submenu.append(new MenuItem({ label: locale.get('menuUndo'), accelerator: state.keys.Undo, click: () => PixelEditor.undoOne() }))
     submenu.append(new MenuItem({ label: locale.get('menuRedo'), accelerator: state.keys.Redo, click: () => PixelEditor.redoOne() }))
@@ -53,8 +48,7 @@ function edit()
     _menu.append(new MenuItem({ label: locale.get('menuEdit'), submenu }))
 }
 
-function draw()
-{
+function draw() {
     const submenu = new Menu()
     submenu.append(new MenuItem({ label: locale.get('menuSpace'), accelerator: state.keys.Draw, click: () => main.windows.draw.pressSpace() }))
     submenu.append(new MenuItem({ label: locale.get('menuErase'), accelerator: state.keys.Erase, click: () => main.windows.draw.erase() }))
@@ -64,8 +58,7 @@ function draw()
 
     const tools = new Menu()
     const list = ['Select', 'Paint', 'Fill', 'Circle', 'Ellipse', 'Line', 'Crop']
-    for (let tool of list)
-    {
+    for (let tool of list) {
         tools.append(new MenuItem({ label: locale.get('menu' + tool + 'Tool'), accelerator: state.keys[tool + 'Tool'], click: () => state.tool = tool.toLowerCase() }))
     }
 
@@ -73,10 +66,8 @@ function draw()
     _menu.append(new MenuItem({ label: locale.get('menuDraw'), submenu }))
 }
 
-function view()
-{
-    function paneCreate(name)
-    {
+function view() {
+    function paneCreate(name) {
         let capitalize = name.substr(0, 1).toUpperCase() + name.substr(1)
         _panes[name] = new MenuItem({ label: locale.get('menu' + capitalize), type: 'checkbox', checked: !views.getClosed(name), click: () => views.toggleClosed(name), accelerator: state.keys[capitalize + 'Window'] })
         panes.append(_panes[name])
@@ -85,14 +76,12 @@ function view()
     _panes = {}
     const panes = new Menu()
     const normal = ['frames', 'toolbar', 'palette', 'picker', 'info', 'animation', 'position', 'manager', 'outline']
-    for (let i = 0; i < normal.length; i++)
-    {
+    for (let i = 0; i < normal.length; i++) {
         paneCreate(normal[i], i)
     }
     panes.append(new MenuItem({ type: 'separator' }))
     const preferences = ['keyboard']
-    for (let i = 0; i < preferences.length; i++)
-    {
+    for (let i = 0; i < preferences.length; i++) {
         paneCreate(preferences[i], i + normal.length)
     }
 
@@ -105,8 +94,7 @@ function view()
     _menu.append(new MenuItem({ label: locale.get('menuView'), submenu }))
 }
 
-function frame()
-{
+function frame() {
     const submenu = new Menu()
     submenu.append(new MenuItem({ label: locale.get('menuNewFrame'), accelerator: state.keys.NewFrame, click: () => PixelEditor.add() }))
     submenu.append(new MenuItem({ label: locale.get('menuDuplicate'), accelerator: state.keys.Duplicate, click: () => PixelEditor.duplicate() }))
@@ -123,21 +111,17 @@ function frame()
     _menu.append(new MenuItem({ label: locale.get('menuFrames'), submenu }))
 }
 
-export function toggleAll()
-{
+export function toggleAll() {
     let i = 0
-    for (let pane in _panes)
-    {
+    for (let pane in _panes) {
         _panes[pane].checked = !state.views[state.view][i++].closed
     }
 }
 
-export function toggle(name)
-{
+export function toggle(name) {
     _panes[name].checked = !_panes[name].checked
 }
 
-export function menuHeight()
-{
+export function menuHeight() {
     return _menu.div.offsetHeight
 }

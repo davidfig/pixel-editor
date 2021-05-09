@@ -5,10 +5,8 @@ import * as locale from '../../locale'
 import { html } from '../../html'
 import { state } from '../../state'
 
-module.exports = class KeyBinding
-{
-    constructor(win, key, callback)
-    {
+export class KeyBinding {
+    constructor(win, key, callback) {
         this.callback = callback
         this.win = win.wm.createWindow({ noSnap: true, title: locale.get(key), modal: true, resizable: false, closable: false, minimizable: false })
         this.win.win.tabIndex = -1
@@ -20,7 +18,7 @@ module.exports = class KeyBinding
         content.style.color = 'white'
 
         html({ parent: content, html: locale.get('DialogKeyBinding'), styles: { marginBottom: '1em', textAlign: 'center' } })
-        this.current = html({ parent: content, html: localAccelerator.prettifyKey(state.keys[key]), styles: { background: 'rgba(255,255,255,0.15', textAlign: 'center', border: '1px solid white', marginBottom: '1em'} })
+        this.current = html({ parent: content, html: localAccelerator.prettifyKey(state.keys[key]), styles: { background: 'rgba(255,255,255,0.15', textAlign: 'center', border: '1px solid white', marginBottom: '1em' } })
         const buttons = html({ parent: content, styles: { display: 'flex', justifyContent: 'space-between' } })
         const setKey = html({ parent: buttons, type: 'button', html: locale.get('SetKey'), styles: { margin: '0 0.5em' } })
         clicked(setKey, () => this.set())
@@ -33,38 +31,30 @@ module.exports = class KeyBinding
         this.win.win.addEventListener('blur', () => this.win.win.focus())
     }
 
-    keydown(e)
-    {
+    keydown(e) {
         e.preventDefault()
         e.stopPropagation()
         const disallowed = ['Alt', 'Shift', 'Ctrl', 'Meta', 'Control', 'Cmd', 'Command']
-        for (let check of disallowed)
-        {
-            if (e.code.indexOf(check) !== -1)
-            {
+        for (let check of disallowed) {
+            if (e.code.indexOf(check) !== -1) {
                 return
             }
         }
         const modifiers = []
-        if (e.altKey)
-        {
+        if (e.altKey) {
             modifiers.push('alt')
         }
-        if (e.ctrlKey)
-        {
+        if (e.ctrlKey) {
             modifiers.push('ctrl')
         }
-        if (e.metaKey)
-        {
+        if (e.metaKey) {
             modifiers.push('meta')
         }
-        if (e.shiftKey)
-        {
+        if (e.shiftKey) {
             modifiers.push('shift')
         }
         let keyCode = ''
-        for (let modifier of modifiers)
-        {
+        for (let modifier of modifiers) {
             keyCode += modifier + '+'
         }
         let translate = e.code.toLowerCase()
@@ -74,14 +64,12 @@ module.exports = class KeyBinding
         this.current.innerHTML = localAccelerator.prettifyKey(keyCode)
     }
 
-    set()
-    {
+    set() {
         this.win.close()
         this.callback(this.current.innerHTML)
     }
 
-    clear()
-    {
+    clear() {
         this.win.close()
         this.callback(false)
     }

@@ -12,10 +12,8 @@ const SPACING = 5
 
 const COLOR_SELECTED = 0x888888
 
-export class Frames extends PIXI.Container
-{
-    constructor(ui)
-    {
+export class Frames extends PIXI.Container {
+    constructor(ui) {
         super()
         this.win = ui.createWindow({
             id: 'frames',
@@ -25,7 +23,7 @@ export class Frames extends PIXI.Container
         })
         this.win.open()
         this.content = this.win.content
-        this.renderer = new PIXI.Renderer({ autoResize: true, width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, transparent: true })
+        this.renderer = new PIXI.Renderer({ autoResize: true, width: this.win.width, height: this.win.height, resolution: window.devicePixelRatio, backgroundAlpha: 0 })
         this.content.appendChild(this.renderer.view)
         this.renderer.view.style.display = 'block'
         this.renderer.view.style.margin = '0 auto'
@@ -37,24 +35,21 @@ export class Frames extends PIXI.Container
         window.addEventListener('resize', () => this.redraw())
     }
 
-    redraw()
-    {
+    redraw() {
         this.pixels.removeChildren()
         this.selector = this.pixels.addChild(new PIXI.Sprite(PIXI.Texture.WHITE))
         this.selector.tint = COLOR_SELECTED
         const data = PixelEditor.imageData
         const scale = PixelEditor.zoom
         let x = SPACING, y = SPACING, largest = 0
-        for (let i = 0; i < data.length; i++)
-        {
+        for (let i = 0; i < data.length; i++) {
             const pixel = this.pixels.addChild(sheet.get(`${PixelEditor.name}-${i}`))
             pixel.anchor.set(0)
             const width = data[i][0] * scale
             const height = data[i][1] * scale
             pixel.scale.set(scale)
             pixel.current = i
-            if (x + width + SPACING > this.win.width)
-            {
+            if (x + width + SPACING > this.win.width) {
                 x = SPACING
                 y += largest + SPACING
                 largest = 0
@@ -65,10 +60,8 @@ export class Frames extends PIXI.Container
             number.position.set(x + width - number.width, y)
             number.alpha = 0.25
             pixel.interactive = true
-            pixel.on('pointertap', () =>
-            {
-                if (PixelEditor.current !== pixel.current)
-                {
+            pixel.on('pointertap', () => {
+                if (PixelEditor.current !== pixel.current) {
                     PixelEditor.current = pixel.current
                     this.selector.position.set(pixel.x, pixel.y)
                     this.selector.width = pixel.width
@@ -81,8 +74,7 @@ export class Frames extends PIXI.Container
         this.currentChange()
     }
 
-    currentChange()
-    {
+    currentChange() {
         const target = this.pixels.children[1 + PixelEditor.current * 2]
         this.selector.position.set(target.x - BORDER / 2, target.y - BORDER / 2)
         this.selector.width = target.width + BORDER
@@ -90,21 +82,16 @@ export class Frames extends PIXI.Container
         this.renderer.view.style.height = this.height + 'px'
         this.renderer.resize(this.win.width, this.height)
         this.renderer.render(this)
-        if (this.selector.y < this.content.scrollTop || this.selector.y + this.selector.height > this.content.scrollTop + this.content.offsetHeight)
-        {
+        if (this.selector.y < this.content.scrollTop || this.selector.y + this.selector.height > this.content.scrollTop + this.content.offsetHeight) {
             this.content.scrollTop = this.selector.y
         }
     }
 
-    down(x, y)
-    {
+    down(x, y) {
         const point = this.toLocal({ x, y })
-        for (let button of this.buttons)
-        {
-            if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2)
-            {
-                if (PixelEditor.current !== button.current)
-                {
+        for (let button of this.buttons) {
+            if (point.x >= button.x1 && point.x <= button.x2 && point.y >= button.y1 && point.y <= button.y2) {
+                if (PixelEditor.current !== button.current) {
                     PixelEditor.current = button.current
                     this.selector.position.set(button.x, button.y)
                     this.selector.width = button.width
@@ -117,27 +104,21 @@ export class Frames extends PIXI.Container
         }
     }
 
-    move(x, y)
-    {
-        if (this.dragging)
-        {
-            const point = this.toLocal({x, y})
+    move(x, y) {
+        if (this.dragging) {
+            const point = this.toLocal({ x, y })
             const width = 10
             this.dragging.pixel.x = this.dragging.originalX + (point.x - this.dragging.x)
             this.dragging.pixel.y = this.dragging.originalY + (point.y - this.dragging.y)
             let found = false
-            for (let button of this.buttons)
-            {
-                if (point.x < (button.x1 + button.x2) / 2)
-                {
-                    if (button.current === this.dragging.current || button.current - 1 === this.dragging.current)
-                    {
+            for (let button of this.buttons) {
+                if (point.x < (button.x1 + button.x2) / 2) {
+                    if (button.current === this.dragging.current || button.current - 1 === this.dragging.current) {
                         this.selector.x = this.dragging.originalX
                         this.selector.width = this.dragging.pixel.width
                         this.dragging.drop = this.dragging.current
                     }
-                    else
-                    {
+                    else {
                         this.selector.x = button.x1 - width / 2
                         this.selector.width = width
                         this.dragging.drop = button.current
@@ -146,16 +127,13 @@ export class Frames extends PIXI.Container
                     break
                 }
             }
-            if (!found)
-            {
-                if (this.dragging.current === this.buttons.length - 1)
-                {
+            if (!found) {
+                if (this.dragging.current === this.buttons.length - 1) {
                     this.selector.x = this.dragging.originalX
                     this.selector.width = this.dragging.pixel.width
                     this.dragging.drop = this.dragging.current
                 }
-                else
-                {
+                else {
                     this.selector.x = this.buttons[this.buttons.length - 1].x2
                     this.selector.width = width
                     this.dragging.drop = this.buttons.length
@@ -165,10 +143,8 @@ export class Frames extends PIXI.Container
         }
     }
 
-    up()
-    {
-        if (this.dragging)
-        {
+    up() {
+        if (this.dragging) {
             // if (this.dragging.drop)
             // {
             //     if (this.dragging.drop !== this.dragging.current)
@@ -181,38 +157,29 @@ export class Frames extends PIXI.Container
         }
     }
 
-    keydown(e)
-    {
+    keydown(e) {
         const code = e.keyCode
-        if (e.ctrlKey)
-        {
-            if (code === 37)
-            {
-                if (PixelEditor.current === 0)
-                {
+        if (e.ctrlKey) {
+            if (code === 37) {
+                if (PixelEditor.current === 0) {
                     PixelEditor.current = PixelEditor.imageData.length - 1
                 }
-                else
-                {
+                else {
                     PixelEditor.current--
                 }
             }
-            else if (code === 39)
-            {
-                if (PixelEditor.current === PixelEditor.imageData.length - 1)
-                {
+            else if (code === 39) {
+                if (PixelEditor.current === PixelEditor.imageData.length - 1) {
                     PixelEditor.current = 0
                 }
-                else
-                {
+                else {
                     PixelEditor.current++
                 }
             }
         }
     }
 
-    stateSetup()
-    {
+    stateSetup() {
         this.win.on('resize', () => this.redraw())
         PixelEditor.on('changed', () => this.redraw())
         PixelEditor.on('current', () => this.currentChange())

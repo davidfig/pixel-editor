@@ -21,7 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "budo": "^11.6.3",
-    "electron": "^9.0.0",
+    "electron": "^11.5.0",
     "electron-packager": "^14.2.1"
   },
   "dependencies": {

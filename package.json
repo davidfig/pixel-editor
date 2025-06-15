@@ -5,7 +5,7 @@
   "main": "code/index.js",
   "scripts": {
     "start": "electron-forge start",
-    "package": "electron-packager . pixel-editor --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --overwrite",
+    "package": "electron-packager . pixel-editor --icon=assets/icons/win/icon.ico --overwrite",
     "make": "electron-forge make",
     "icon": "electron-icon-maker -i assets/icon.png -o assets",
     "test": "yarn web-ready && yarn budo",
@@ -21,10 +21,11 @@
   "license": "MIT",
   "devDependencies": {
     "budo": "^11.6.3",
-    "electron": "^9.0.0",
+    "electron": "^36.4.0",
     "electron-packager": "^14.2.1"
   },
   "dependencies": {
+    "@electron/packager": "github:electron/packager",
     "calc-fontsize": "^1.1.0",
     "clicked": "^2.0.0",
     "easyedit": "^1.5.0",

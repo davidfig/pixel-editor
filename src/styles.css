@@ -1,0 +1,358 @@
+:root {
+    --background: #222222;
+    --window: #333333;
+    --titlebar-active: #555555;
+    --titlebar-inactive: #444444;
+    --title: #999999;
+    --text: #eeeeee;
+    --accent: #aaaaaa;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+    font-family: consolas, ui-monospace, monospace;
+    background: var(--background);
+    color: var(--text);
+}
+
+button {
+    font: inherit;
+    color: inherit;
+}
+
+input, select, textarea {
+    font: inherit;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-bottom: 1px dotted var(--accent);
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+/* menu bar */
+.menubar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    background: #3a3a3a;
+    font-size: 0.85em;
+}
+.menubar > button {
+    background: none;
+    border: none;
+    padding: 0.3em 0.75em;
+    cursor: default;
+}
+.menubar > button:hover, .menubar > button.open {
+    background: var(--titlebar-active);
+}
+.menu {
+    position: absolute;
+    top: 100%;
+    min-width: 16em;
+    display: flex;
+    flex-direction: column;
+    background: #2c2c2c;
+    border: 1px solid #555555;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 0.25em 0;
+}
+.menu hr {
+    border: none;
+    border-top: 1px solid #555555;
+    margin: 0.25em 0;
+}
+.menu-item {
+    display: grid;
+    grid-template-columns: 1.5em 1fr auto;
+    gap: 0.5em;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0.3em 0.75em 0.3em 0.25em;
+}
+.menu-item:hover {
+    background: var(--titlebar-active);
+}
+.menu-item .shortcut {
+    color: var(--title);
+}
+
+/* panes */
+.pane {
+    color: var(--text);
+    font-size: 0.9em;
+}
+.pane .row, .pane .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.25em;
+    margin: 0.3em 0;
+}
+.pane .buttons.right {
+    justify-content: flex-end;
+}
+.field input {
+    text-align: right;
+}
+.center, .center input {
+    display: block;
+    text-align: center;
+}
+.pane {
+    box-sizing: border-box;
+    height: 100%;
+}
+.icon-button {
+    background: #dddddd;
+    border: 1px solid #999999;
+    border-radius: 2px;
+    padding: 4px;
+    margin: 1px;
+    opacity: 0.6;
+    line-height: 0;
+}
+.icon-button:hover, .icon-button.selected {
+    opacity: 1;
+}
+.icon-button:disabled {
+    opacity: 0.25;
+}
+.icon-button img {
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+.pane-info {
+    padding: 0.25em 1em 0.5em;
+}
+.anchor {
+    display: grid;
+    grid-template-columns: repeat(3, 12px);
+    gap: 8px;
+    justify-content: center;
+    width: fit-content;
+    margin: 0.5em auto;
+    padding: 8px;
+    background: #eeeeee;
+}
+.anchor button {
+    width: 12px;
+    height: 12px;
+    border: none;
+    padding: 0;
+    background: #888888;
+}
+.anchor button.selected {
+    background: #aa0000;
+}
+
+/* palette */
+.pane-palette {
+    padding: 0.25em;
+}
+.palette-top, .palette-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+    align-items: center;
+}
+.swatch {
+    position: relative;
+    border: 2px solid transparent;
+    padding: 0;
+}
+.swatch > span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.swatch.large { width: 36px; height: 36px; }
+.swatch.medium { width: 24px; height: 24px; margin-left: 4px; }
+.swatch.small { width: 18px; height: 18px; }
+.swatch.selected { border-color: #ffffff; outline: 1px solid black; }
+.swatch.active::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    margin: -4px;
+    background: white;
+    outline: 1px solid black;
+}
+.swatch-label {
+    font-size: 11px;
+}
+
+/* picker */
+.pane-picker {
+    padding: 0.5em;
+}
+.picker-square, .picker-bar {
+    display: block;
+    touch-action: none;
+}
+.picker-bar, .picker-bar-wrap {
+    margin-top: 8px;
+}
+.picker-bar-wrap .picker-bar {
+    margin-top: 0;
+}
+
+/* frames */
+.frames {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
+    align-content: flex-start;
+    overflow: auto;
+}
+.frame {
+    position: relative;
+    padding: 3px;
+    line-height: 0;
+    cursor: pointer;
+}
+.frame.selected {
+    background: #888888;
+}
+.frame.drop {
+    box-shadow: -4px 0 0 #eeeeee;
+}
+.frame-number {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    line-height: 1;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* animation */
+.animation {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25em;
+    box-sizing: border-box;
+    height: 100%;
+}
+.animation-view {
+    text-align: center;
+    line-height: 0;
+}
+.animation-view canvas {
+    image-rendering: pixelated;
+}
+.animation textarea {
+    flex: 1;
+    min-height: 3em;
+    resize: none;
+}
+.animation .error {
+    color: rgb(255, 80, 80);
+    min-height: 1em;
+}
+
+/* manager */
+.manager-list {
+    padding: 0.25em;
+}
+.manager-list.images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+.manager-item {
+    padding: 0.25em;
+    cursor: pointer;
+}
+.manager-item img {
+    image-rendering: pixelated;
+    display: block;
+}
+.manager-item:hover {
+    background: var(--accent);
+    color: black;
+}
+.manager-item.selected {
+    outline: 1px solid var(--text);
+}
+
+/* keyboard */
+table.keys {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+table.keys td, table.keys th {
+    padding: 0.2em 0.75em;
+    text-align: left;
+}
+table.keys tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.08);
+}
+table.keys tbody tr:hover {
+    background: white;
+    color: black;
+    cursor: pointer;
+}
+
+/* dialogs */
+dialog.modal {
+    background: var(--window);
+    color: var(--text);
+    border: 1px solid #555555;
+    padding: 1em 1.5em;
+    min-width: 18em;
+}
+dialog.modal::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+dialog.modal h2 {
+    margin: 0 0 0.75em;
+    font-size: 1em;
+    text-align: center;
+}
+dialog.modal .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    margin-top: 1em;
+}
+dialog.modal .buttons button, .pane .buttons button:not(.icon-button) {
+    background: #555555;
+    border: 1px solid #777777;
+    padding: 0.3em 1em;
+}
+.danger {
+    color: #ff8080;
+}
+dialog .field {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.4em 0;
+    gap: 1em;
+}
+.recorded {
+    text-align: center;
+    padding: 0.5em;
+    border: 1px solid var(--text);
+    background: rgba(255, 255, 255, 0.1);
+}

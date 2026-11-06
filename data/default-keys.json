@@ -4,14 +4,12 @@
     "Save": "CommandOrControl+S",
     "Export": "CommandOrControl+E",
     "Exit": "CommandOrControl+Q",
-
     "Undo": "CommandOrControl+Z",
     "Redo": "CommandOrControl+Shift+Z",
     "Copy": "CommandOrControl+C",
     "Cut": "CommandOrControl+X",
     "Paste": "CommandOrControl+V",
     "SelectAll": "CommandOrControl+A",
-
     "Draw": "space",
     "Dropper": "i",
     "Clear": "escape",
@@ -24,10 +22,8 @@
     "EllipseTool": "e",
     "LineTool": "l",
     "CropTool": "z",
-
     "NextView": "Tab",
     "PreviousView": "shift+tab",
-
     "ToolbarWindow": "",
     "InfoWindow": "",
     "AnimationWindow": "a",
@@ -37,9 +33,7 @@
     "PositionWindow": "",
     "ManagerWindow": "m",
     "KeyboardWindow": "ctrl+k",
-
     "ResetWindows": "ctrl+p",
-
     "AddFrame": "CommandOrControl+F",
     "DeleteFrame": "CommandOrControl+Backspace",
     "NewFrame": "CommandOrControl+F",
@@ -50,5 +44,15 @@
     "Clockwise": "CommandOrControl+period",
     "CounterClockwise": "CommandOrControl+comma",
     "FlipHorizontal": "CommandOrControl+H",
-    "FlipVertical": "CommandOrControl+B"
+    "FlipVertical": "CommandOrControl+B",
+    "Color1": "1",
+    "Color2": "2",
+    "Color3": "3",
+    "SpriteColor4": "4",
+    "SpriteColor5": "5",
+    "SpriteColor6": "6",
+    "SpriteColor7": "7",
+    "SpriteColor8": "8",
+    "SpriteColor9": "9",
+    "SpriteColor0": "0"
 }

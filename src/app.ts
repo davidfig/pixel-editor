@@ -162,16 +162,22 @@ export class App extends EventEmitter<AppEvents> {
         await saveSpriteFile(this.sprite)
     }
 
-    private async autosave(): Promise<void> {
-        if (this.state.dirty) {
-            this.state.dirty = false
-            await library.saveState(this.state.toJSON())
-        }
+    /**
+     * Starts every save before returning, without awaiting between them: setSprite() and pagehide
+     * don't wait for this, so an await here would save the next sprite instead of this one.
+     */
+    private autosave(): Promise<unknown> {
+        const saves: Promise<void>[] = []
         if (this.sprite.dirty || this.editorDirty) {
             this.sprite.dirty = false
             this.editorDirty = false
-            await library.saveSprite(this.spriteId, this.sprite, { current: this.sprite.current, zoom: this._zoom, viewport: this.draw.savedViewport })
+            saves.push(library.saveSprite(this.spriteId, this.sprite, { current: this.sprite.current, zoom: this._zoom, viewport: this.draw.savedViewport }))
         }
+        if (this.state.dirty) {
+            this.state.dirty = false
+            saves.push(library.saveState(this.state.toJSON()))
+        }
+        return Promise.all(saves)
     }
 
     // --- editing commands ---

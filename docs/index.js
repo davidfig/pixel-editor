@@ -163,7 +163,7 @@ module.exports = {
     readDir,
     fileDate
 }
-},{"../settings":27,"localforage":97}],3:[function(require,module,exports){
+},{"../settings":27,"localforage":98}],3:[function(require,module,exports){
 module.exports = {
 
     // RenderSheet: require('../../../../components/rendersheet/src/rendersheet'),
@@ -181,7 +181,7 @@ module.exports = {
     // Tooltip: require('../../../components/tooltip')
     Tooltip: require('yy-tooltip')
 }
-},{"pixi-viewport":103,"simple-window-manager":123,"yy-pixel":138,"yy-rendersheet":145,"yy-tooltip":148}],4:[function(require,module,exports){
+},{"pixi-viewport":104,"simple-window-manager":124,"yy-pixel":139,"yy-rendersheet":146,"yy-tooltip":148}],4:[function(require,module,exports){
 module.exports = require('./misc').Menu.LocalAccelerator
 },{"./misc":5}],5:[function(require,module,exports){
 // const Menu = require('../../../components/menu')
@@ -194,7 +194,7 @@ module.exports = {
     MenuItem,
     isElectron: false
 }
-},{"yy-menu":136}],6:[function(require,module,exports){
+},{"yy-menu":137}],6:[function(require,module,exports){
 const clicked = require('clicked')
 
 const html = require('./html')
@@ -371,7 +371,7 @@ module.exports = class Dice extends PIXI.Container
         }
     }
 }
-},{"./config/libraries":3,"./state":29,"pixi.js":104}],8:[function(require,module,exports){
+},{"./config/libraries":3,"./state":29,"pixi.js":105}],8:[function(require,module,exports){
 const PIXI = require('pixi.js')
 
 const libraries = require('./config/libraries')
@@ -721,7 +721,7 @@ module.exports = class Draw extends PIXI.Container
     }
 }
 
-},{"./config/libraries":3,"./frames/position":16,"./pixel-editor":25,"./pixel-sheet":26,"./settings":27,"./sheet":28,"./state":29,"./tools/circle":31,"./tools/crop":32,"./tools/ellipse":33,"./tools/fill":34,"./tools/line":35,"./tools/paint":36,"./tools/select":37,"pixi.js":104}],9:[function(require,module,exports){
+},{"./config/libraries":3,"./frames/position":16,"./pixel-editor":25,"./pixel-sheet":26,"./settings":27,"./sheet":28,"./state":29,"./tools/circle":31,"./tools/crop":32,"./tools/ellipse":33,"./tools/fill":34,"./tools/line":35,"./tools/paint":36,"./tools/select":37,"pixi.js":105}],9:[function(require,module,exports){
 (function (Buffer){
 const PIXI = require('pixi.js')
 const clicked = require('clicked')
@@ -875,7 +875,7 @@ module.exports = class Export
     }
 }
 }).call(this,require("buffer").Buffer)
-},{"./config/file":2,"./html":20,"./pixel-editor":25,"./pixel-sheet":26,"./state":29,"buffer":82,"clicked":84,"path":101,"pixi.js":104}],10:[function(require,module,exports){
+},{"./config/file":2,"./html":20,"./pixel-editor":25,"./pixel-sheet":26,"./state":29,"buffer":82,"clicked":84,"path":102,"pixi.js":105}],10:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const clicked = require('clicked')
 
@@ -1191,7 +1191,7 @@ module.exports = class Animation extends PIXI.Container
 
     keydown() { }
 }
-},{"../../images/animation.json":41,"../button":1,"../config/libraries":3,"../dialog":6,"../html":20,"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../state":29,"clicked":84,"pixi.js":104}],11:[function(require,module,exports){
+},{"../../images/animation.json":41,"../button":1,"../config/libraries":3,"../dialog":6,"../html":20,"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../state":29,"clicked":84,"pixi.js":105}],11:[function(require,module,exports){
 const PIXI = require('pixi.js')
 
 const Settings = require('../settings')
@@ -1408,7 +1408,7 @@ module.exports = class Frames extends PIXI.Container
         State.on('last-file', () => this.redraw())
     }
 }
-},{"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../state":29,"pixi.js":104}],12:[function(require,module,exports){
+},{"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../state":29,"pixi.js":105}],12:[function(require,module,exports){
 const EasyEdit = require('easyedit')
 const Tooltip = require('../config/libraries').Tooltip
 
@@ -1838,7 +1838,7 @@ module.exports = class Manager
         State.on('last-file', () => this.populateBox())
     }
 }
-},{"../../images/manager.json":43,"../button":1,"../config/file":2,"../config/libraries":3,"../html":20,"../locale":22,"../pixel-editor":25,"../state":29,"clicked":84,"path":101}],14:[function(require,module,exports){
+},{"../../images/manager.json":43,"../button":1,"../config/file":2,"../config/libraries":3,"../html":20,"../locale":22,"../pixel-editor":25,"../state":29,"clicked":84,"path":102}],14:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const exists = require('exists')
@@ -2129,7 +2129,7 @@ module.exports = class Palette extends PIXI.Container
         }
     }
 }
-},{"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../sheet":28,"../state":29,"calc-fontsize":83,"exists":94,"pixi.js":104,"tinycolor2":127,"yy-color":130}],15:[function(require,module,exports){
+},{"../locale":22,"../pixel-editor":25,"../pixel-sheet":26,"../settings":27,"../sheet":28,"../state":29,"calc-fontsize":83,"exists":94,"pixi.js":105,"tinycolor2":128,"yy-color":131}],15:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const TinyColor = require('tinycolor2')
 const RenderSheet = require('yy-rendersheet')
@@ -2715,7 +2715,7 @@ module.exports = class Picker
         this.dirty = true
     }
 }
-},{"../locale":22,"../sheet":28,"../state.js":29,"clicked":84,"easyedit":89,"pixi.js":104,"tinycolor2":127,"yy-rendersheet":145}],16:[function(require,module,exports){
+},{"../locale":22,"../sheet":28,"../state.js":29,"clicked":84,"easyedit":89,"pixi.js":105,"tinycolor2":128,"yy-rendersheet":146}],16:[function(require,module,exports){
 const clicked = require('clicked')
 
 const Settings = require('../settings')
@@ -3445,7 +3445,7 @@ window.onload = async () =>
     await Sheet.load()
     Main.afterLoad()
 }
-},{"./config/file":2,"./config/libraries":3,"./draw":8,"./export":9,"./frames/animation":10,"./frames/frames":11,"./frames/info":12,"./frames/manager":13,"./frames/palette":14,"./frames/picker":15,"./frames/position":16,"./frames/preferences/keyboard":18,"./frames/toolbar":19,"./keys":21,"./menu":24,"./pixel-editor":25,"./settings":27,"./sheet":28,"./state":29,"./views":38,"path":101,"yy-fps":132}],24:[function(require,module,exports){
+},{"./config/file":2,"./config/libraries":3,"./draw":8,"./export":9,"./frames/animation":10,"./frames/frames":11,"./frames/info":12,"./frames/manager":13,"./frames/palette":14,"./frames/picker":15,"./frames/position":16,"./frames/preferences/keyboard":18,"./frames/toolbar":19,"./keys":21,"./menu":24,"./pixel-editor":25,"./settings":27,"./sheet":28,"./state":29,"./views":38,"path":102,"yy-fps":133}],24:[function(require,module,exports){
 const Misc = require('./config/misc')
 const Menu = Misc.Menu
 const MenuItem = Misc.MenuItem
@@ -3609,7 +3609,7 @@ module.exports = {
     },
     height: () => { return _menu.div.offsetHeight }
 }
-},{"./config/misc":5,"./locale":22,"./main":23,"./pixel-editor":25,"./state":29,"./views":38,"path":101}],25:[function(require,module,exports){
+},{"./config/misc":5,"./locale":22,"./main":23,"./pixel-editor":25,"./state":29,"./views":38,"path":102}],25:[function(require,module,exports){
 const path = require('path')
 
 const Settings = require('./settings')
@@ -4301,7 +4301,7 @@ class PixelEditor extends Pixel
 }
 
 module.exports = new PixelEditor()
-},{"./config/file":2,"./config/libraries":3,"./pixel-sheet":26,"./settings":27,"exists":94,"path":101,"yy-color":130}],26:[function(require,module,exports){
+},{"./config/file":2,"./config/libraries":3,"./pixel-sheet":26,"./settings":27,"exists":94,"path":102,"yy-color":131}],26:[function(require,module,exports){
 const libraries = require('./config/libraries')
 const RenderSheet = libraries.RenderSheet
 
@@ -4409,7 +4409,7 @@ module.exports = {
         return _sheet
     }
 }
-},{"./config/libraries":3,"yy-color":130}],29:[function(require,module,exports){
+},{"./config/libraries":3,"yy-color":131}],29:[function(require,module,exports){
 const Events = require('eventemitter3')
 
 const File = require('./config/file')
@@ -5810,8 +5810,8 @@ module.exports={"name":"position","imageData":[[13,13,"iVBORw0KGgoAAAANSUhEUgAAA
 
 },{}],45:[function(require,module,exports){
 /*!
- * @pixi/accessibility - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/accessibility - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/accessibility is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -5887,6 +5887,36 @@ var accessibleTarget = {
      * @todo Needs docs.
      */
     _accessibleDiv: false,
+
+    /**
+     * Specify the type of div the accessible layer is. Screen readers treat the element differently
+     * depending on this type. Defaults to button.
+     *
+     * @member {string}
+     * @memberof PIXI.DisplayObject#
+     * @default 'button'
+     */
+    accessibleType: 'button',
+
+    /**
+     * Specify the pointer-events the accessible div will use
+     * Defaults to auto.
+     *
+     * @member {string}
+     * @memberof PIXI.DisplayObject#
+     * @default 'auto'
+     */
+    accessiblePointerEvents: 'auto',
+
+    /**
+     * Setting to false will prevent any children inside this container to
+     * be accessible. Defaults to true.
+     *
+     * @member {boolean}
+     * @memberof PIXI.DisplayObject#
+     * @default true
+     */
+    accessibleChildren: true,
 };
 
 // add some extra variables to the container..
@@ -6014,6 +6044,19 @@ var AccessibilityManager = function AccessibilityManager(renderer)
      */
     this.isMobileAccessibility = false;
 
+    /**
+     * count to throttle div updates on android devices
+     * @type number
+     * @private
+     */
+    this.androidUpdateCount = 0;
+
+    /**
+     * the frequency to update the div elements ()
+     * @private
+     */
+    this.androidUpdateFrequency = 500; // 2fps
+
     // let listen for tab.. once pressed we can fire up and show the accessibility layer
     window.addEventListener('keydown', this._onKeyDown, false);
 };
@@ -6036,7 +6079,7 @@ AccessibilityManager.prototype.createTouchHook = function createTouchHook ()
     hookDiv.style.left = DIV_HOOK_POS_Y + "px";
     hookDiv.style.zIndex = DIV_HOOK_ZINDEX;
     hookDiv.style.backgroundColor = '#FF0000';
-    hookDiv.title = 'HOOK DIV';
+    hookDiv.title = 'select to enable accessability for this content';
 
     hookDiv.addEventListener('focus', function () {
         this$1.isMobileAccessibility = true;
@@ -6123,7 +6166,7 @@ AccessibilityManager.prototype.deactivate = function deactivate ()
  */
 AccessibilityManager.prototype.updateAccessibleObjects = function updateAccessibleObjects (displayObject)
 {
-    if (!displayObject.visible)
+    if (!displayObject.visible || !displayObject.accessibleChildren)
     {
         return;
     }
@@ -6153,6 +6196,19 @@ AccessibilityManager.prototype.updateAccessibleObjects = function updateAccessib
  */
 AccessibilityManager.prototype.update = function update ()
 {
+    /* On Android default web browser, tab order seems to be calculated by position rather than tabIndex,
+    *  moving buttons can cause focus to flicker between two buttons making it hard/impossible to navigate,
+    *  so I am just running update every half a second, seems to fix it.
+    */
+    var now = performance.now();
+
+    if (utils.isMobile.android.device && now < this.androidUpdateCount)
+    {
+        return;
+    }
+
+    this.androidUpdateCount = now + this.androidUpdateFrequency;
+
     if (!this.renderer.renderingToScreen)
     {
         return;
@@ -6162,8 +6218,11 @@ AccessibilityManager.prototype.update = function update ()
     this.updateAccessibleObjects(this.renderer._lastObjectRendered);
 
     var rect = this.renderer.view.getBoundingClientRect();
-    var sx = rect.width / this.renderer.width;
-    var sy = rect.height / this.renderer.height;
+
+    var resolution = this.renderer.resolution;
+
+    var sx = (rect.width / this.renderer.width) * resolution;
+    var sy = (rect.height / this.renderer.height) * resolution;
 
     var div = this.div;
 
@@ -6186,11 +6245,6 @@ AccessibilityManager.prototype.update = function update ()
             child._accessibleDiv = null;
 
             i--;
-
-            if (this.children.length === 0)
-            {
-                this.deactivate();
-            }
         }
         else
         {
@@ -6230,11 +6284,30 @@ AccessibilityManager.prototype.update = function update ()
                     div.setAttribute('aria-label', child.accessibleHint);
                 }
             }
+
+            // the title or index may have changed, if so lets update it!
+            if (child.accessibleTitle !== div.title || child.tabIndex !== div.tabIndex)
+            {
+                div.title = child.accessibleTitle;
+                div.tabIndex = child.tabIndex;
+                if (this.debug) { this.updateDebugHTML(div); }
+            }
         }
     }
 
     // increment the render id..
     this.renderId++;
+};
+
+/**
+ * private function that will visually add the information to the
+ * accessability div
+ *
+ * @param {HTMLDivElement} div
+ */
+AccessibilityManager.prototype.updateDebugHTML = function updateDebugHTML (div)
+{
+    div.innerHTML = "type: " + (div.type) + "</br> title : " + (div.title) + "</br> tabIndex: " + (div.tabIndex);
 };
 
 /**
@@ -6285,7 +6358,7 @@ AccessibilityManager.prototype.addChild = function addChild (displayObject)
 
         div.style.width = DIV_TOUCH_SIZE + "px";
         div.style.height = DIV_TOUCH_SIZE + "px";
-        div.style.backgroundColor = this.debug ? 'rgba(255,0,0,0.5)' : 'transparent';
+        div.style.backgroundColor = this.debug ? 'rgba(255,255,255,0.5)' : 'transparent';
         div.style.position = 'absolute';
         div.style.zIndex = DIV_TOUCH_ZINDEX;
         div.style.borderStyle = 'none';
@@ -6317,6 +6390,11 @@ AccessibilityManager.prototype.addChild = function addChild (displayObject)
         div.addEventListener('focusout', this._onFocusOut.bind(this));
     }
 
+    // set pointer events
+    div.style.pointerEvents = displayObject.accessiblePointerEvents;
+    // set the type, this defaults to button!
+    div.type = displayObject.accessibleType;
+
     if (displayObject.accessibleTitle && displayObject.accessibleTitle !== null)
     {
         div.title = displayObject.accessibleTitle;
@@ -6333,7 +6411,7 @@ AccessibilityManager.prototype.addChild = function addChild (displayObject)
         div.setAttribute('aria-label', displayObject.accessibleHint);
     }
 
-    //
+    if (this.debug) { this.updateDebugHTML(div); }
 
     displayObject._accessibleActive = true;
     displayObject._accessibleDiv = div;
@@ -6461,8 +6539,8 @@ exports.accessibleTarget = accessibleTarget;
 
 },{"@pixi/display":49,"@pixi/utils":78}],46:[function(require,module,exports){
 /*!
- * @pixi/app - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/app - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/app is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -6696,8 +6774,8 @@ exports.Application = Application;
 
 },{"@pixi/core":48,"@pixi/display":49}],47:[function(require,module,exports){
 /*!
- * @pixi/constants - v5.1.0
- * Compiled Fri, 19 Jul 2019 21:54:36 UTC
+ * @pixi/constants - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/constants is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -6718,336 +6796,131 @@ Object.defineProperty(exports, '__esModule', { value: true });
  * @property {number} WEBGL - Version 1 of WebGL
  * @property {number} WEBGL2 - Version 2 of WebGL
  */
-var ENV = {
-    WEBGL_LEGACY: 0,
-    WEBGL: 1,
-    WEBGL2: 2,
-};
-
-/**
- * Constant to identify the Renderer Type.
- *
- * @static
- * @memberof PIXI
- * @name RENDERER_TYPE
- * @enum {number}
- * @property {number} UNKNOWN - Unknown render type.
- * @property {number} WEBGL - WebGL render type.
- * @property {number} CANVAS - Canvas render type.
- */
-var RENDERER_TYPE = {
-    UNKNOWN:    0,
-    WEBGL:      1,
-    CANVAS:     2,
-};
-
-/**
- * Various blend modes supported by PIXI.
- *
- * IMPORTANT - The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.
- * Anything else will silently act like NORMAL.
- *
- * @memberof PIXI
- * @name BLEND_MODES
- * @enum {number}
- * @property {number} NORMAL
- * @property {number} ADD
- * @property {number} MULTIPLY
- * @property {number} SCREEN
- * @property {number} OVERLAY
- * @property {number} DARKEN
- * @property {number} LIGHTEN
- * @property {number} COLOR_DODGE
- * @property {number} COLOR_BURN
- * @property {number} HARD_LIGHT
- * @property {number} SOFT_LIGHT
- * @property {number} DIFFERENCE
- * @property {number} EXCLUSION
- * @property {number} HUE
- * @property {number} SATURATION
- * @property {number} COLOR
- * @property {number} LUMINOSITY
- * @property {number} NORMAL_NPM
- * @property {number} ADD_NPM
- * @property {number} SCREEN_NPM
- * @property {number} NONE
- * @property {number} SRC_IN
- * @property {number} SRC_OUT
- * @property {number} SRC_ATOP
- * @property {number} DST_OVER
- * @property {number} DST_IN
- * @property {number} DST_OUT
- * @property {number} DST_ATOP
- * @property {number} SUBTRACT
- * @property {number} SRC_OVER
- * @property {number} ERASE
- */
-var BLEND_MODES = {
-    NORMAL:         0,
-    ADD:            1,
-    MULTIPLY:       2,
-    SCREEN:         3,
-    OVERLAY:        4,
-    DARKEN:         5,
-    LIGHTEN:        6,
-    COLOR_DODGE:    7,
-    COLOR_BURN:     8,
-    HARD_LIGHT:     9,
-    SOFT_LIGHT:     10,
-    DIFFERENCE:     11,
-    EXCLUSION:      12,
-    HUE:            13,
-    SATURATION:     14,
-    COLOR:          15,
-    LUMINOSITY:     16,
-    NORMAL_NPM:     17,
-    ADD_NPM:        18,
-    SCREEN_NPM:     19,
-    NONE:           20,
-
-    SRC_OVER:       0,
-    SRC_IN:         21,
-    SRC_OUT:        22,
-    SRC_ATOP:       23,
-    DST_OVER:       24,
-    DST_IN:         25,
-    DST_OUT:        26,
-    DST_ATOP:       27,
-    ERASE:          26,
-    SUBTRACT:       28,
-};
-
-/**
- * Various webgl draw modes. These can be used to specify which GL drawMode to use
- * under certain situations and renderers.
- *
- * @memberof PIXI
- * @static
- * @name DRAW_MODES
- * @enum {number}
- * @property {number} POINTS
- * @property {number} LINES
- * @property {number} LINE_LOOP
- * @property {number} LINE_STRIP
- * @property {number} TRIANGLES
- * @property {number} TRIANGLE_STRIP
- * @property {number} TRIANGLE_FAN
- */
-var DRAW_MODES = {
-    POINTS:         0,
-    LINES:          1,
-    LINE_LOOP:      2,
-    LINE_STRIP:     3,
-    TRIANGLES:      4,
-    TRIANGLE_STRIP: 5,
-    TRIANGLE_FAN:   6,
-};
-
-/**
- * Various GL texture/resources formats.
- *
- * @memberof PIXI
- * @static
- * @name FORMATS
- * @enum {number}
- * @property {number} RGBA=6408
- * @property {number} RGB=6407
- * @property {number} ALPHA=6406
- * @property {number} LUMINANCE=6409
- * @property {number} LUMINANCE_ALPHA=6410
- * @property {number} DEPTH_COMPONENT=6402
- * @property {number} DEPTH_STENCIL=34041
- */
-var FORMATS = {
-    RGBA:             6408,
-    RGB:              6407,
-    ALPHA:            6406,
-    LUMINANCE:        6409,
-    LUMINANCE_ALPHA:  6410,
-    DEPTH_COMPONENT:  6402,
-    DEPTH_STENCIL:    34041,
-};
-
-/**
- * Various GL target types.
- *
- * @memberof PIXI
- * @static
- * @name TARGETS
- * @enum {number}
- * @property {number} TEXTURE_2D=3553
- * @property {number} TEXTURE_CUBE_MAP=34067
- * @property {number} TEXTURE_2D_ARRAY=35866
- * @property {number} TEXTURE_CUBE_MAP_POSITIVE_X=34069
- * @property {number} TEXTURE_CUBE_MAP_NEGATIVE_X=34070
- * @property {number} TEXTURE_CUBE_MAP_POSITIVE_Y=34071
- * @property {number} TEXTURE_CUBE_MAP_NEGATIVE_Y=34072
- * @property {number} TEXTURE_CUBE_MAP_POSITIVE_Z=34073
- * @property {number} TEXTURE_CUBE_MAP_NEGATIVE_Z=34074
- */
-var TARGETS = {
-    TEXTURE_2D: 3553,
-    TEXTURE_CUBE_MAP: 34067,
-    TEXTURE_2D_ARRAY: 35866,
-    TEXTURE_CUBE_MAP_POSITIVE_X: 34069,
-    TEXTURE_CUBE_MAP_NEGATIVE_X: 34070,
-    TEXTURE_CUBE_MAP_POSITIVE_Y: 34071,
-    TEXTURE_CUBE_MAP_NEGATIVE_Y: 34072,
-    TEXTURE_CUBE_MAP_POSITIVE_Z: 34073,
-    TEXTURE_CUBE_MAP_NEGATIVE_Z: 34074,
-};
-
-/**
- * Various GL data format types.
- *
- * @memberof PIXI
- * @static
- * @name TYPES
- * @enum {number}
- * @property {number} UNSIGNED_BYTE=5121
- * @property {number} UNSIGNED_SHORT=5123
- * @property {number} UNSIGNED_SHORT_5_6_5=33635
- * @property {number} UNSIGNED_SHORT_4_4_4_4=32819
- * @property {number} UNSIGNED_SHORT_5_5_5_1=32820
- * @property {number} FLOAT=5126
- * @property {number} HALF_FLOAT=36193
- */
-var TYPES = {
-    UNSIGNED_BYTE: 5121,
-    UNSIGNED_SHORT: 5123,
-    UNSIGNED_SHORT_5_6_5: 33635,
-    UNSIGNED_SHORT_4_4_4_4: 32819,
-    UNSIGNED_SHORT_5_5_5_1: 32820,
-    FLOAT: 5126,
-    HALF_FLOAT: 36193,
-};
-
-/**
- * The scale modes that are supported by pixi.
- *
- * The {@link PIXI.settings.SCALE_MODE} scale mode affects the default scaling mode of future operations.
- * It can be re-assigned to either LINEAR or NEAREST, depending upon suitability.
- *
- * @memberof PIXI
- * @static
- * @name SCALE_MODES
- * @enum {number}
- * @property {number} LINEAR Smooth scaling
- * @property {number} NEAREST Pixelating scaling
- */
-var SCALE_MODES = {
-    LINEAR:     1,
-    NEAREST:    0,
-};
-
-/**
- * The wrap modes that are supported by pixi.
- *
- * The {@link PIXI.settings.WRAP_MODE} wrap mode affects the default wrapping mode of future operations.
- * It can be re-assigned to either CLAMP or REPEAT, depending upon suitability.
- * If the texture is non power of two then clamp will be used regardless as WebGL can
- * only use REPEAT if the texture is po2.
- *
- * This property only affects WebGL.
- *
- * @name WRAP_MODES
- * @memberof PIXI
- * @static
- * @enum {number}
- * @property {number} CLAMP - The textures uvs are clamped
- * @property {number} REPEAT - The texture uvs tile and repeat
- * @property {number} MIRRORED_REPEAT - The texture uvs tile and repeat with mirroring
- */
-var WRAP_MODES = {
-    CLAMP:           33071,
-    REPEAT:          10497,
-    MIRRORED_REPEAT: 33648,
-};
-
-/**
- * Mipmap filtering modes that are supported by pixi.
- *
- * The {@link PIXI.settings.MIPMAP_TEXTURES} affects default texture filtering.
- * Mipmaps are generated for a baseTexture if its `mipmap` field is `ON`,
- * or its `POW2` and texture dimensions are powers of 2.
- * Due to platform restriction, `ON` option will work like `POW2` for webgl-1.
- *
- * This property only affects WebGL.
- *
- * @name MIPMAP_MODES
- * @memberof PIXI
- * @static
- * @enum {number}
- * @property {number} OFF - No mipmaps
- * @property {number} POW2 - Generate mipmaps if texture dimensions are pow2
- * @property {number} ON - Always generate mipmaps
- */
-var MIPMAP_MODES = {
-    OFF: 0,
-    POW2: 1,
-    ON: 2,
-};
-
-/**
- * The gc modes that are supported by pixi.
- *
- * The {@link PIXI.settings.GC_MODE} Garbage Collection mode for PixiJS textures is AUTO
- * If set to GC_MODE, the renderer will occasionally check textures usage. If they are not
- * used for a specified period of time they will be removed from the GPU. They will of course
- * be uploaded again when they are required. This is a silent behind the scenes process that
- * should ensure that the GPU does not  get filled up.
- *
- * Handy for mobile devices!
- * This property only affects WebGL.
- *
- * @name GC_MODES
- * @enum {number}
- * @static
- * @memberof PIXI
- * @property {number} AUTO - Garbage collection will happen periodically automatically
- * @property {number} MANUAL - Garbage collection will need to be called manually
- */
-var GC_MODES = {
-    AUTO:           0,
-    MANUAL:         1,
-};
-
-/**
- * Constants that specify float precision in shaders.
- *
- * @name PRECISION
- * @memberof PIXI
- * @static
- * @enum {string}
- * @constant
- * @property {string} LOW='lowp'
- * @property {string} MEDIUM='mediump'
- * @property {string} HIGH='highp'
- */
-var PRECISION = {
-    LOW: 'lowp',
-    MEDIUM: 'mediump',
-    HIGH: 'highp',
-};
-
-exports.BLEND_MODES = BLEND_MODES;
-exports.DRAW_MODES = DRAW_MODES;
-exports.ENV = ENV;
-exports.FORMATS = FORMATS;
-exports.GC_MODES = GC_MODES;
-exports.MIPMAP_MODES = MIPMAP_MODES;
-exports.PRECISION = PRECISION;
-exports.RENDERER_TYPE = RENDERER_TYPE;
-exports.SCALE_MODES = SCALE_MODES;
-exports.TARGETS = TARGETS;
-exports.TYPES = TYPES;
-exports.WRAP_MODES = WRAP_MODES;
+(function (ENV) {
+    ENV[ENV["WEBGL_LEGACY"] = 0] = "WEBGL_LEGACY";
+    ENV[ENV["WEBGL"] = 1] = "WEBGL";
+    ENV[ENV["WEBGL2"] = 2] = "WEBGL2";
+})(exports.ENV || (exports.ENV = {}));
+(function (RENDERER_TYPE) {
+    RENDERER_TYPE[RENDERER_TYPE["UNKNOWN"] = 0] = "UNKNOWN";
+    RENDERER_TYPE[RENDERER_TYPE["WEBGL"] = 1] = "WEBGL";
+    RENDERER_TYPE[RENDERER_TYPE["CANVAS"] = 2] = "CANVAS";
+})(exports.RENDERER_TYPE || (exports.RENDERER_TYPE = {}));
+(function (BLEND_MODES) {
+    BLEND_MODES[BLEND_MODES["NORMAL"] = 0] = "NORMAL";
+    BLEND_MODES[BLEND_MODES["ADD"] = 1] = "ADD";
+    BLEND_MODES[BLEND_MODES["MULTIPLY"] = 2] = "MULTIPLY";
+    BLEND_MODES[BLEND_MODES["SCREEN"] = 3] = "SCREEN";
+    BLEND_MODES[BLEND_MODES["OVERLAY"] = 4] = "OVERLAY";
+    BLEND_MODES[BLEND_MODES["DARKEN"] = 5] = "DARKEN";
+    BLEND_MODES[BLEND_MODES["LIGHTEN"] = 6] = "LIGHTEN";
+    BLEND_MODES[BLEND_MODES["COLOR_DODGE"] = 7] = "COLOR_DODGE";
+    BLEND_MODES[BLEND_MODES["COLOR_BURN"] = 8] = "COLOR_BURN";
+    BLEND_MODES[BLEND_MODES["HARD_LIGHT"] = 9] = "HARD_LIGHT";
+    BLEND_MODES[BLEND_MODES["SOFT_LIGHT"] = 10] = "SOFT_LIGHT";
+    BLEND_MODES[BLEND_MODES["DIFFERENCE"] = 11] = "DIFFERENCE";
+    BLEND_MODES[BLEND_MODES["EXCLUSION"] = 12] = "EXCLUSION";
+    BLEND_MODES[BLEND_MODES["HUE"] = 13] = "HUE";
+    BLEND_MODES[BLEND_MODES["SATURATION"] = 14] = "SATURATION";
+    BLEND_MODES[BLEND_MODES["COLOR"] = 15] = "COLOR";
+    BLEND_MODES[BLEND_MODES["LUMINOSITY"] = 16] = "LUMINOSITY";
+    BLEND_MODES[BLEND_MODES["NORMAL_NPM"] = 17] = "NORMAL_NPM";
+    BLEND_MODES[BLEND_MODES["ADD_NPM"] = 18] = "ADD_NPM";
+    BLEND_MODES[BLEND_MODES["SCREEN_NPM"] = 19] = "SCREEN_NPM";
+    BLEND_MODES[BLEND_MODES["NONE"] = 20] = "NONE";
+    BLEND_MODES[BLEND_MODES["SRC_OVER"] = 0] = "SRC_OVER";
+    BLEND_MODES[BLEND_MODES["SRC_IN"] = 21] = "SRC_IN";
+    BLEND_MODES[BLEND_MODES["SRC_OUT"] = 22] = "SRC_OUT";
+    BLEND_MODES[BLEND_MODES["SRC_ATOP"] = 23] = "SRC_ATOP";
+    BLEND_MODES[BLEND_MODES["DST_OVER"] = 24] = "DST_OVER";
+    BLEND_MODES[BLEND_MODES["DST_IN"] = 25] = "DST_IN";
+    BLEND_MODES[BLEND_MODES["DST_OUT"] = 26] = "DST_OUT";
+    BLEND_MODES[BLEND_MODES["DST_ATOP"] = 27] = "DST_ATOP";
+    BLEND_MODES[BLEND_MODES["ERASE"] = 26] = "ERASE";
+    BLEND_MODES[BLEND_MODES["SUBTRACT"] = 28] = "SUBTRACT";
+    BLEND_MODES[BLEND_MODES["XOR"] = 29] = "XOR";
+})(exports.BLEND_MODES || (exports.BLEND_MODES = {}));
+(function (DRAW_MODES) {
+    DRAW_MODES[DRAW_MODES["POINTS"] = 0] = "POINTS";
+    DRAW_MODES[DRAW_MODES["LINES"] = 1] = "LINES";
+    DRAW_MODES[DRAW_MODES["LINE_LOOP"] = 2] = "LINE_LOOP";
+    DRAW_MODES[DRAW_MODES["LINE_STRIP"] = 3] = "LINE_STRIP";
+    DRAW_MODES[DRAW_MODES["TRIANGLES"] = 4] = "TRIANGLES";
+    DRAW_MODES[DRAW_MODES["TRIANGLE_STRIP"] = 5] = "TRIANGLE_STRIP";
+    DRAW_MODES[DRAW_MODES["TRIANGLE_FAN"] = 6] = "TRIANGLE_FAN";
+})(exports.DRAW_MODES || (exports.DRAW_MODES = {}));
+(function (FORMATS) {
+    FORMATS[FORMATS["RGBA"] = 6408] = "RGBA";
+    FORMATS[FORMATS["RGB"] = 6407] = "RGB";
+    FORMATS[FORMATS["ALPHA"] = 6406] = "ALPHA";
+    FORMATS[FORMATS["LUMINANCE"] = 6409] = "LUMINANCE";
+    FORMATS[FORMATS["LUMINANCE_ALPHA"] = 6410] = "LUMINANCE_ALPHA";
+    FORMATS[FORMATS["DEPTH_COMPONENT"] = 6402] = "DEPTH_COMPONENT";
+    FORMATS[FORMATS["DEPTH_STENCIL"] = 34041] = "DEPTH_STENCIL";
+})(exports.FORMATS || (exports.FORMATS = {}));
+(function (TARGETS) {
+    TARGETS[TARGETS["TEXTURE_2D"] = 3553] = "TEXTURE_2D";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP"] = 34067] = "TEXTURE_CUBE_MAP";
+    TARGETS[TARGETS["TEXTURE_2D_ARRAY"] = 35866] = "TEXTURE_2D_ARRAY";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_POSITIVE_X"] = 34069] = "TEXTURE_CUBE_MAP_POSITIVE_X";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_NEGATIVE_X"] = 34070] = "TEXTURE_CUBE_MAP_NEGATIVE_X";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_POSITIVE_Y"] = 34071] = "TEXTURE_CUBE_MAP_POSITIVE_Y";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_NEGATIVE_Y"] = 34072] = "TEXTURE_CUBE_MAP_NEGATIVE_Y";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_POSITIVE_Z"] = 34073] = "TEXTURE_CUBE_MAP_POSITIVE_Z";
+    TARGETS[TARGETS["TEXTURE_CUBE_MAP_NEGATIVE_Z"] = 34074] = "TEXTURE_CUBE_MAP_NEGATIVE_Z";
+})(exports.TARGETS || (exports.TARGETS = {}));
+(function (TYPES) {
+    TYPES[TYPES["UNSIGNED_BYTE"] = 5121] = "UNSIGNED_BYTE";
+    TYPES[TYPES["UNSIGNED_SHORT"] = 5123] = "UNSIGNED_SHORT";
+    TYPES[TYPES["UNSIGNED_SHORT_5_6_5"] = 33635] = "UNSIGNED_SHORT_5_6_5";
+    TYPES[TYPES["UNSIGNED_SHORT_4_4_4_4"] = 32819] = "UNSIGNED_SHORT_4_4_4_4";
+    TYPES[TYPES["UNSIGNED_SHORT_5_5_5_1"] = 32820] = "UNSIGNED_SHORT_5_5_5_1";
+    TYPES[TYPES["FLOAT"] = 5126] = "FLOAT";
+    TYPES[TYPES["HALF_FLOAT"] = 36193] = "HALF_FLOAT";
+})(exports.TYPES || (exports.TYPES = {}));
+(function (SCALE_MODES) {
+    SCALE_MODES[SCALE_MODES["NEAREST"] = 0] = "NEAREST";
+    SCALE_MODES[SCALE_MODES["LINEAR"] = 1] = "LINEAR";
+})(exports.SCALE_MODES || (exports.SCALE_MODES = {}));
+(function (WRAP_MODES) {
+    WRAP_MODES[WRAP_MODES["CLAMP"] = 33071] = "CLAMP";
+    WRAP_MODES[WRAP_MODES["REPEAT"] = 10497] = "REPEAT";
+    WRAP_MODES[WRAP_MODES["MIRRORED_REPEAT"] = 33648] = "MIRRORED_REPEAT";
+})(exports.WRAP_MODES || (exports.WRAP_MODES = {}));
+(function (MIPMAP_MODES) {
+    MIPMAP_MODES[MIPMAP_MODES["OFF"] = 0] = "OFF";
+    MIPMAP_MODES[MIPMAP_MODES["POW2"] = 1] = "POW2";
+    MIPMAP_MODES[MIPMAP_MODES["ON"] = 2] = "ON";
+})(exports.MIPMAP_MODES || (exports.MIPMAP_MODES = {}));
+(function (ALPHA_MODES) {
+    ALPHA_MODES[ALPHA_MODES["NPM"] = 0] = "NPM";
+    ALPHA_MODES[ALPHA_MODES["UNPACK"] = 1] = "UNPACK";
+    ALPHA_MODES[ALPHA_MODES["PMA"] = 2] = "PMA";
+    ALPHA_MODES[ALPHA_MODES["NO_PREMULTIPLIED_ALPHA"] = 0] = "NO_PREMULTIPLIED_ALPHA";
+    ALPHA_MODES[ALPHA_MODES["PREMULTIPLY_ON_UPLOAD"] = 1] = "PREMULTIPLY_ON_UPLOAD";
+    ALPHA_MODES[ALPHA_MODES["PREMULTIPLY_ALPHA"] = 2] = "PREMULTIPLY_ALPHA";
+})(exports.ALPHA_MODES || (exports.ALPHA_MODES = {}));
+(function (GC_MODES) {
+    GC_MODES[GC_MODES["AUTO"] = 0] = "AUTO";
+    GC_MODES[GC_MODES["MANUAL"] = 1] = "MANUAL";
+})(exports.GC_MODES || (exports.GC_MODES = {}));
+(function (PRECISION) {
+    PRECISION["LOW"] = "lowp";
+    PRECISION["MEDIUM"] = "mediump";
+    PRECISION["HIGH"] = "highp";
+})(exports.PRECISION || (exports.PRECISION = {}));
+(function (MASK_TYPES) {
+    MASK_TYPES[MASK_TYPES["NONE"] = 0] = "NONE";
+    MASK_TYPES[MASK_TYPES["SCISSOR"] = 1] = "SCISSOR";
+    MASK_TYPES[MASK_TYPES["STENCIL"] = 2] = "STENCIL";
+    MASK_TYPES[MASK_TYPES["SPRITE"] = 3] = "SPRITE";
+})(exports.MASK_TYPES || (exports.MASK_TYPES = {}));
 
 
 },{}],48:[function(require,module,exports){
 /*!
- * @pixi/core - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/core - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/core is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -7058,8 +6931,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var runner = require('@pixi/runner');
 var utils = require('@pixi/utils');
-var settings = require('@pixi/settings');
 var constants = require('@pixi/constants');
+var settings = require('@pixi/settings');
 var ticker = require('@pixi/ticker');
 var math = require('@pixi/math');
 var display = require('@pixi/display');
@@ -7169,6 +7042,8 @@ Resource.prototype.unbind = function unbind (baseTexture)
 
 /**
  * Trigger a resize event
+ * @param {number} width X dimension
+ * @param {number} height Y dimension
  */
 Resource.prototype.resize = function resize (width, height)
 {
@@ -7312,6 +7187,15 @@ var BaseImageResource = /*@__PURE__*/(function (Resource) {
          * @readonly
          */
         this.source = source;
+
+        /**
+         * If set to `true`, will force `texImage2D` over `texSubImage2D` for uploading.
+         * Certain types of media (e.g. video) using `texImage2D` is more performant.
+         * @member {boolean}
+         * @default false
+         * @private
+         */
+        this.noSubImage = false;
     }
 
     if ( Resource ) BaseImageResource.__proto__ = Resource;
@@ -7353,9 +7237,12 @@ var BaseImageResource = /*@__PURE__*/(function (Resource) {
 
         source = source || this.source;
 
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.premultiplyAlpha);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.alphaMode === constants.ALPHA_MODES.UNPACK);
 
-        if (baseTexture.target === gl.TEXTURE_2D && glTexture.width === width && glTexture.height === height)
+        if (!this.noSubImage
+            && baseTexture.target === gl.TEXTURE_2D
+            && glTexture.width === width
+            && glTexture.height === height)
         {
             gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, baseTexture.format, baseTexture.type, source);
         }
@@ -7465,12 +7352,20 @@ var ImageResource = /*@__PURE__*/(function (BaseImageResource) {
             ? options.createBitmap : settings.settings.CREATE_IMAGE_BITMAP) && !!window.createImageBitmap;
 
         /**
-         * Controls texture premultiplyAlpha field
+         * Controls texture alphaMode field
          * Copies from options
-         * @member {boolean|null}
+         * Default is `null`, copies option from baseTexture
+         *
+         * @member {PIXI.ALPHA_MODES|null}
          * @readonly
          */
-        this.premultiplyAlpha = options.premultiplyAlpha !== false;
+        this.alphaMode = typeof options.alphaMode === 'number' ? options.alphaMode : null;
+
+        if (options.premultiplyAlpha !== undefined)
+        {
+            // triggers deprecation
+            this.premultiplyAlpha = options.premultiplyAlpha;
+        }
 
         /**
          * The ImageBitmap element created for HTMLImageElement
@@ -7507,17 +7402,17 @@ var ImageResource = /*@__PURE__*/(function (BaseImageResource) {
     {
         var this$1 = this;
 
-        if (createBitmap !== undefined)
-        {
-            this.createBitmap = createBitmap;
-        }
-
         if (this._load)
         {
             return this._load;
         }
 
-        this._load = new Promise(function (resolve) {
+        if (createBitmap !== undefined)
+        {
+            this.createBitmap = createBitmap;
+        }
+
+        this._load = new Promise(function (resolve, reject) {
             this$1.url = this$1.source.src;
             var ref = this$1;
             var source = ref.source;
@@ -7550,7 +7445,11 @@ var ImageResource = /*@__PURE__*/(function (BaseImageResource) {
             else
             {
                 source.onload = completed;
-                source.onerror = function (event) { return this$1.onError.run(event); };
+                source.onerror = function (event) {
+                    // Avoids Promise freezing when resource broken
+                    reject(event);
+                    this$1.onError.emit(event);
+                };
             }
         });
 
@@ -7579,7 +7478,7 @@ var ImageResource = /*@__PURE__*/(function (BaseImageResource) {
         this._process = window.createImageBitmap(this.source,
             0, 0, this.source.width, this.source.height,
             {
-                premultiplyAlpha: this.premultiplyAlpha ? 'premultiply' : 'none',
+                premultiplyAlpha: this.premultiplyAlpha === constants.ALPHA_MODES.UNPACK ? 'premultiply' : 'none',
             })
             .then(function (bitmap) {
                 if (this$1.destroyed)
@@ -7606,7 +7505,12 @@ var ImageResource = /*@__PURE__*/(function (BaseImageResource) {
      */
     ImageResource.prototype.upload = function upload (renderer, baseTexture, glTexture)
     {
-        baseTexture.premultiplyAlpha = this.premultiplyAlpha;
+        if (typeof this.alphaMode === 'number')
+        {
+            // bitmap stores unpack premultiply flag, we dont have to notify texImage2D about it
+
+            baseTexture.alphaMode = this.alphaMode;
+        }
 
         if (!this.createBitmap)
         {
@@ -7818,7 +7722,7 @@ var BufferResource = /*@__PURE__*/(function (Resource) {
     {
         var gl = renderer.gl;
 
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.premultiplyAlpha);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.alphaMode === constants.ALPHA_MODES.UNPACK);
 
         if (glTexture.width === baseTexture.width && glTexture.height === baseTexture.height)
         {
@@ -7884,7 +7788,7 @@ var BufferResource = /*@__PURE__*/(function (Resource) {
 var defaultBufferOptions = {
     scaleMode: constants.SCALE_MODES.NEAREST,
     format: constants.FORMATS.RGBA,
-    premultiplyAlpha: false,
+    alphaMode: constants.ALPHA_MODES.NPM,
 };
 
 /**
@@ -7906,7 +7810,7 @@ var defaultBufferOptions = {
  * @param {PIXI.FORMATS} [options.format=PIXI.FORMATS.RGBA] - GL format type
  * @param {PIXI.TYPES} [options.type=PIXI.TYPES.UNSIGNED_BYTE] - GL data type
  * @param {PIXI.TARGETS} [options.target=PIXI.TARGETS.TEXTURE_2D] - GL texture target
- * @param {boolean} [options.premultiplyAlpha=true] - Pre multiply the image alpha
+ * @param {PIXI.ALPHA_MODES} [options.alphaMode=PIXI.ALPHA_MODES.UNPACK] - Pre multiply the image alpha
  * @param {number} [options.width=0] - Width of the texture
  * @param {number} [options.height=0] - Height of the texture
  * @param {number} [options.resolution] - Resolution of the base texture
@@ -7923,7 +7827,7 @@ var BaseTexture = /*@__PURE__*/(function (EventEmitter) {
 
         options = options || {};
 
-        var premultiplyAlpha = options.premultiplyAlpha;
+        var alphaMode = options.alphaMode;
         var mipmap = options.mipmap;
         var anisotropicLevel = options.anisotropicLevel;
         var scaleMode = options.scaleMode;
@@ -8022,12 +7926,18 @@ var BaseTexture = /*@__PURE__*/(function (EventEmitter) {
         this.target = target || constants.TARGETS.TEXTURE_2D;
 
         /**
-         * Set to true to enable pre-multiplied alpha
+         * How to treat premultiplied alpha, see {@link PIXI.ALPHA_MODES}.
          *
-         * @member {boolean}
-         * @default true
+         * @member {PIXI.ALPHA_MODES}
+         * @default PIXI.ALPHA_MODES.UNPACK
          */
-        this.premultiplyAlpha = premultiplyAlpha !== false;
+        this.alphaMode = alphaMode !== undefined ? alphaMode : constants.ALPHA_MODES.UNPACK;
+
+        if (options.premultiplyAlpha !== undefined)
+        {
+            // triggers deprecation
+            this.premultiplyAlpha = options.premultiplyAlpha;
+        }
 
         /**
          * Global unique identifier for this BaseTexture
@@ -8128,6 +8038,13 @@ var BaseTexture = /*@__PURE__*/(function (EventEmitter) {
          * @member {number}
          */
         this._batchEnabled = 0;
+
+        /**
+         * Location inside texture batch, used by multi-texture renderers
+         *
+         * @member {number}
+         */
+        this._batchLocation = 0;
 
         /**
          * Fired when a not-immediately-available source finishes loading.
@@ -8425,13 +8342,17 @@ var BaseTexture = /*@__PURE__*/(function (EventEmitter) {
      * @param {string|HTMLImageElement|HTMLCanvasElement|SVGElement|HTMLVideoElement} source - The
      *        source to create base texture from.
      * @param {object} [options] See {@link PIXI.BaseTexture}'s constructor for options.
+     * @param {boolean} [strict] Enforce strict-mode, see {@link PIXI.settings.STRICT_TEXTURE_CACHE}.
      * @returns {PIXI.BaseTexture} The new base texture.
      */
-    BaseTexture.from = function from (source, options)
+    BaseTexture.from = function from (source, options, strict)
     {
+        if ( strict === void 0 ) strict = settings.settings.STRICT_TEXTURE_CACHE;
+
+        var isFrame = typeof source === 'string';
         var cacheId = null;
 
-        if (typeof source === 'string')
+        if (isFrame)
         {
             cacheId = source;
         }
@@ -8446,6 +8367,12 @@ var BaseTexture = /*@__PURE__*/(function (EventEmitter) {
         }
 
         var baseTexture = utils.BaseTextureCache[cacheId];
+
+        // Strict-mode rejects invalid cacheIds
+        if (isFrame && strict && !baseTexture)
+        {
+            throw new Error(("The cacheId \"" + cacheId + "\" does not exist in BaseTextureCache."));
+        }
 
         if (!baseTexture)
         {
@@ -9064,11 +8991,21 @@ var SVGResource = /*@__PURE__*/(function (BaseImageResource) {
         tempImage.src = this.svg;
 
         tempImage.onerror = function (event) {
+            if (!this$1._resolve)
+            {
+                return;
+            }
+
             tempImage.onerror = null;
             this$1.onError.run(event);
         };
 
         tempImage.onload = function () {
+            if (!this$1._resolve)
+            {
+                return;
+            }
+
             var svgWidth = tempImage.width;
             var svgHeight = tempImage.height;
 
@@ -9230,8 +9167,26 @@ var VideoResource = /*@__PURE__*/(function (BaseImageResource) {
 
         BaseImageResource.call(this, source);
 
+        this.noSubImage = true;
+
+        /**
+         * `true` to use PIXI.Ticker.shared to auto update the base texture.
+         *
+         * @type {boolean}
+         * @default true
+         * @private
+         */
         this._autoUpdate = true;
-        this._isAutoUpdating = false;
+
+        /**
+         * `true` if the instance is currently connected to PIXI.Ticker.shared to auto update the base texture.
+         *
+         * @type {boolean}
+         * @default false
+         * @private
+         */
+        this._isConnectedToTicker = false;
+
         this._updateFPS = options.updateFPS || 0;
         this._msToNextUpdate = 0;
 
@@ -9399,10 +9354,10 @@ var VideoResource = /*@__PURE__*/(function (BaseImageResource) {
             this._onCanPlay();
         }
 
-        if (!this._isAutoUpdating && this.autoUpdate)
+        if (this.autoUpdate && !this._isConnectedToTicker)
         {
             ticker.Ticker.shared.add(this.update, this);
-            this._isAutoUpdating = true;
+            this._isConnectedToTicker = true;
         }
     };
 
@@ -9413,10 +9368,10 @@ var VideoResource = /*@__PURE__*/(function (BaseImageResource) {
      */
     VideoResource.prototype._onPlayStop = function _onPlayStop ()
     {
-        if (this._isAutoUpdating)
+        if (this._isConnectedToTicker)
         {
             ticker.Ticker.shared.remove(this.update, this);
-            this._isAutoUpdating = false;
+            this._isConnectedToTicker = false;
         }
     };
 
@@ -9460,7 +9415,7 @@ var VideoResource = /*@__PURE__*/(function (BaseImageResource) {
      */
     VideoResource.prototype.dispose = function dispose ()
     {
-        if (this._isAutoUpdating)
+        if (this._isConnectedToTicker)
         {
             ticker.Ticker.shared.remove(this.update, this);
         }
@@ -9491,15 +9446,15 @@ var VideoResource = /*@__PURE__*/(function (BaseImageResource) {
         {
             this._autoUpdate = value;
 
-            if (!this._autoUpdate && this._isAutoUpdating)
+            if (!this._autoUpdate && this._isConnectedToTicker)
             {
                 ticker.Ticker.shared.remove(this.update, this);
-                this._isAutoUpdating = false;
+                this._isConnectedToTicker = false;
             }
-            else if (this._autoUpdate && !this._isAutoUpdating)
+            else if (this._autoUpdate && !this._isConnectedToTicker && this._isSourcePlaying())
             {
                 ticker.Ticker.shared.add(this.update, this);
-                this._isAutoUpdating = true;
+                this._isConnectedToTicker = true;
             }
         }
     };
@@ -9645,7 +9600,7 @@ var DepthResource = /*@__PURE__*/(function (BufferResource) {
     {
         var gl = renderer.gl;
 
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.premultiplyAlpha);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, baseTexture.alphaMode === constants.ALPHA_MODES.UNPACK);
 
         if (glTexture.width === baseTexture.width && glTexture.height === baseTexture.height)
         {
@@ -9669,7 +9624,8 @@ var DepthResource = /*@__PURE__*/(function (BufferResource) {
             gl.texImage2D(
                 baseTexture.target,
                 0,
-                gl.DEPTH_COMPONENT16, // Needed for depth to render properly in webgl2.0
+                //  gl.DEPTH_COMPONENT16 Needed for depth to render properly in webgl2.0
+                renderer.context.webGLVersion === 1 ? gl.DEPTH_COMPONENT : gl.DEPTH_COMPONENT16,
                 baseTexture.width,
                 baseTexture.height,
                 0,
@@ -9735,11 +9691,13 @@ Framebuffer.prototype.addColorTexture = function addColorTexture (index, texture
         if ( index === void 0 ) index = 0;
 
     // TODO add some validation to the texture - same width / height etc?
-    this.colorTextures[index] = texture || new BaseTexture(null, { scaleMode: 0,
+    this.colorTextures[index] = texture || new BaseTexture(null, {
+        scaleMode: constants.SCALE_MODES.NEAREST,
         resolution: 1,
         mipmap: false,
         width: this.width,
-        height: this.height });// || new Texture();
+        height: this.height,
+    });
 
     this.dirtyId++;
     this.dirtyFormat++;
@@ -9755,14 +9713,16 @@ Framebuffer.prototype.addColorTexture = function addColorTexture (index, texture
 Framebuffer.prototype.addDepthTexture = function addDepthTexture (texture)
 {
     /* eslint-disable max-len */
-    this.depthTexture = texture || new BaseTexture(new DepthResource(null, { width: this.width, height: this.height }), { scaleMode: 0,
+    this.depthTexture = texture || new BaseTexture(new DepthResource(null, { width: this.width, height: this.height }), {
+        scaleMode: constants.SCALE_MODES.NEAREST,
         resolution: 1,
         width: this.width,
         height: this.height,
         mipmap: false,
         format: constants.FORMATS.DEPTH_COMPONENT,
-        type: constants.TYPES.UNSIGNED_SHORT });// UNSIGNED_SHORT;
-    /* eslint-disable max-len */
+        type: constants.TYPES.UNSIGNED_SHORT,
+    });
+
     this.dirtyId++;
     this.dirtyFormat++;
 
@@ -9920,22 +9880,21 @@ var BaseRenderTexture = /*@__PURE__*/(function (BaseTexture) {
         this.clearColor = [0, 0, 0, 0];
 
         this.framebuffer = new Framebuffer(this.width * this.resolution, this.height * this.resolution)
-            .addColorTexture(0, this)
-            .enableStencil();
+            .addColorTexture(0, this);
 
         // TODO - could this be added the systems?
 
         /**
          * The data structure for the stencil masks.
          *
-         * @member {PIXI.Graphics[]}
+         * @member {PIXI.MaskData[]}
          */
-        this.stencilMaskStack = [];
+        this.maskStack = [];
 
         /**
          * The data structure for the filters.
          *
-         * @member {PIXI.Graphics[]}
+         * @member {Object[]}
          */
         this.filterStack = [{}];
     }
@@ -10068,7 +10027,7 @@ var TextureUvs = function TextureUvs()
  * @protected
  * @param {PIXI.Rectangle} frame - The frame of the texture
  * @param {PIXI.Rectangle} baseFrame - The base frame of the texture
- * @param {number} rotate - Rotation of frame, see {@link PIXI.GroupD8}
+ * @param {number} rotate - Rotation of frame, see {@link PIXI.groupD8}
  */
 TextureUvs.prototype.set = function set (frame, baseFrame, rotate)
 {
@@ -10085,21 +10044,21 @@ TextureUvs.prototype.set = function set (frame, baseFrame, rotate)
         var cX = (frame.x / tw) + w2;
         var cY = (frame.y / th) + h2;
 
-        rotate = math.GroupD8.add(rotate, math.GroupD8.NW); // NW is top-left corner
-        this.x0 = cX + (w2 * math.GroupD8.uX(rotate));
-        this.y0 = cY + (h2 * math.GroupD8.uY(rotate));
+        rotate = math.groupD8.add(rotate, math.groupD8.NW); // NW is top-left corner
+        this.x0 = cX + (w2 * math.groupD8.uX(rotate));
+        this.y0 = cY + (h2 * math.groupD8.uY(rotate));
 
-        rotate = math.GroupD8.add(rotate, 2); // rotate 90 degrees clockwise
-        this.x1 = cX + (w2 * math.GroupD8.uX(rotate));
-        this.y1 = cY + (h2 * math.GroupD8.uY(rotate));
+        rotate = math.groupD8.add(rotate, 2); // rotate 90 degrees clockwise
+        this.x1 = cX + (w2 * math.groupD8.uX(rotate));
+        this.y1 = cY + (h2 * math.groupD8.uY(rotate));
 
-        rotate = math.GroupD8.add(rotate, 2);
-        this.x2 = cX + (w2 * math.GroupD8.uX(rotate));
-        this.y2 = cY + (h2 * math.GroupD8.uY(rotate));
+        rotate = math.groupD8.add(rotate, 2);
+        this.x2 = cX + (w2 * math.groupD8.uX(rotate));
+        this.y2 = cY + (h2 * math.groupD8.uY(rotate));
 
-        rotate = math.GroupD8.add(rotate, 2);
-        this.x3 = cX + (w2 * math.GroupD8.uX(rotate));
-        this.y3 = cY + (h2 * math.GroupD8.uY(rotate));
+        rotate = math.groupD8.add(rotate, 2);
+        this.x3 = cX + (w2 * math.groupD8.uX(rotate));
+        this.y3 = cY + (h2 * math.groupD8.uY(rotate));
     }
     else
     {
@@ -10392,6 +10351,7 @@ var Texture = /*@__PURE__*/(function (EventEmitter) {
                 this.baseTexture.destroy();
             }
 
+            this.baseTexture.off('loaded', this.onBaseTextureUpdated, this);
             this.baseTexture.off('update', this.onBaseTextureUpdated, this);
 
             this.baseTexture = null;
@@ -10415,7 +10375,13 @@ var Texture = /*@__PURE__*/(function (EventEmitter) {
      */
     Texture.prototype.clone = function clone ()
     {
-        return new Texture(this.baseTexture, this.frame, this.orig, this.trim, this.rotate, this.defaultAnchor);
+        return new Texture(this.baseTexture,
+            this.frame.clone(),
+            this.orig.clone(),
+            this.trim && this.trim.clone(),
+            this.rotate,
+            this.defaultAnchor
+        );
     };
 
     /**
@@ -10439,18 +10405,21 @@ var Texture = /*@__PURE__*/(function (EventEmitter) {
      * The source can be - frame id, image url, video url, canvas element, video element, base texture
      *
      * @static
-     * @param {number|string|HTMLImageElement|HTMLCanvasElement|HTMLVideoElement|PIXI.BaseTexture} source
+     * @param {string|HTMLImageElement|HTMLCanvasElement|HTMLVideoElement|PIXI.BaseTexture} source
      *        Source to create texture from
      * @param {object} [options] See {@link PIXI.BaseTexture}'s constructor for options.
+     * @param {boolean} [strict] Enforce strict-mode, see {@link PIXI.settings.STRICT_TEXTURE_CACHE}.
      * @return {PIXI.Texture} The newly created texture
      */
-    Texture.from = function from (source, options)
+    Texture.from = function from (source, options, strict)
     {
         if ( options === void 0 ) options = {};
+        if ( strict === void 0 ) strict = settings.settings.STRICT_TEXTURE_CACHE;
 
+        var isFrame = typeof source === 'string';
         var cacheId = null;
 
-        if (typeof source === 'string')
+        if (isFrame)
         {
             cacheId = source;
         }
@@ -10465,6 +10434,12 @@ var Texture = /*@__PURE__*/(function (EventEmitter) {
         }
 
         var texture = utils.TextureCache[cacheId];
+
+        // Strict-mode rejects invalid cacheIds
+        if (isFrame && strict && !texture)
+        {
+            throw new Error(("The cacheId \"" + cacheId + "\" does not exist in TextureCache."));
+        }
 
         if (!texture)
         {
@@ -10678,7 +10653,7 @@ var Texture = /*@__PURE__*/(function (EventEmitter) {
      * set to 2 to compensate for texture packer rotation
      * set to 6 to compensate for spine packer rotation
      * can be used to rotate or mirror sprites
-     * See {@link PIXI.GroupD8} for explanation
+     * See {@link PIXI.groupD8} for explanation
      *
      * @member {number}
      */
@@ -10781,7 +10756,7 @@ removeAllHandlers(Texture.WHITE.baseTexture);
  *
  * ```js
  * let renderer = PIXI.autoDetectRenderer();
- * let renderTexture = PIXI.RenderTexture.create(800, 600);
+ * let renderTexture = PIXI.RenderTexture.create({ width: 800, height: 600 });
  * let sprite = PIXI.Sprite.from("spinObj_01.png");
  *
  * sprite.position.x = 800/2;
@@ -11191,10 +11166,11 @@ Attribute.prototype.destroy = function destroy ()
  *
  * @static
  * @param {string} buffer  the id of the buffer that this attribute will look for
- * @param {Number} [size=2] the size of the attribute. If you have 2 floats per vertex (eg position x and y) this would be 2
- * @param {Number} [stride=0] How far apart (in floats) the start of each value is. (used for interleaving data)
- * @param {Number} [start=0] How far into the array to start reading values (used for interleaving data)
+ * @param {Number} [size=0] the size of the attribute. If you have 2 floats per vertex (eg position x and y) this would be 2
  * @param {Boolean} [normalized=false] should the data be normalized.
+ * @param {Number} [start=0] How far into the array to start reading values (used for interleaving data)
+ * @param {Number} [type=PIXI.TYPES.FLOAT] what type of number is the attribute. Check {@link PIXI.TYPES} to see the ones available
+ * @param {Number} [stride=0] How far apart (in floats) the start of each value is. (used for interleaving data)
  *
  * @returns {PIXI.Attribute} A new {@link PIXI.Attribute} based on the information provided
  */
@@ -11453,7 +11429,7 @@ var Geometry = function Geometry(buffers, attributes)
 * Adds an attribute to the geometry
 *
 * @param {String} id - the name of the attribute (matching up to a shader)
-* @param {PIXI.Buffer} [buffer] the buffer that holds the data of the attribute . You can also provide an Array and a buffer will be created from it.
+* @param {PIXI.Buffer|number[]} [buffer] the buffer that holds the data of the attribute . You can also provide an Array and a buffer will be created from it.
 * @param {Number} [size=0] the size of the attribute. If you have 2 floats per vertex (eg position x and y) this would be 2
 * @param {Boolean} [normalized=false] should the data be normalized.
 * @param {Number} [type=PIXI.TYPES.FLOAT] what type of number is the attribute. Check {PIXI.TYPES} to see the ones available
@@ -11539,7 +11515,7 @@ Geometry.prototype.getBuffer = function getBuffer (id)
 * Adds an index buffer to the geometry
 * The index buffer contains integers, three for each triangle in the geometry, which reference the various attribute buffers (position, colour, UV coordinates, other UV coordinates, normal, …). There is only ONE index buffer.
 *
-* @param {PIXI.Buffer} [buffer] the buffer that holds the data of the index buffer. You can also provide an Array and a buffer will be created from it.
+* @param {PIXI.Buffer|number[]} [buffer] the buffer that holds the data of the index buffer. You can also provide an Array and a buffer will be created from it.
 * @return {PIXI.Geometry} returns self, useful for chaining.
 */
 Geometry.prototype.addIndex = function addIndex (buffer)
@@ -11655,8 +11631,7 @@ Geometry.prototype.destroy = function destroy ()
     this.dispose();
 
     this.buffers = null;
-    this.indexBuffer.destroy();
-
+    this.indexBuffer = null;
     this.attributes = null;
 };
 
@@ -12147,8 +12122,19 @@ var FilterSystem = /*@__PURE__*/(function (System) {
             filterClamp: new Float32Array(4),
         }, true);
 
-        this._pixelsWidth = renderer.view.width;
-        this._pixelsHeight = renderer.view.height;
+        /**
+         * Whether to clear output renderTexture in AUTO/BLIT mode. See {@link PIXI.CLEAR_MODES}
+         * @member {boolean}
+         */
+        this.forceClear = false;
+
+        /**
+         * Old padding behavior is to use the max amount instead of sum padding.
+         * Use this flag if you need the old behavior.
+         * @member {boolean}
+         * @default false
+         */
+        this.useMaxPadding = false;
     }
 
     if ( System ) FilterSystem.__proto__ = System;
@@ -12178,8 +12164,12 @@ var FilterSystem = /*@__PURE__*/(function (System) {
 
             // lets use the lowest resolution..
             resolution = Math.min(resolution, filter.resolution);
-            // and the largest amount of padding!
-            padding = Math.max(padding, filter.padding);
+            // figure out the padding required for filters
+            padding = this.useMaxPadding
+                // old behavior: use largest amount of padding!
+                ? Math.max(padding, filter.padding)
+                // new behavior: sum the padding
+                : padding + filter.padding;
             // only auto fit if all filters are autofit
             autoFit = autoFit || filter.autoFit;
 
@@ -12602,6 +12592,76 @@ var BatchSystem = /*@__PURE__*/(function (System) {
         this.setObjectRenderer(this.emptyRenderer);
     };
 
+    /**
+     * Handy function for batch renderers: copies bound textures in first maxTextures locations to array
+     * sets actual _batchLocation for them
+     *
+     * @param arr
+     * @param maxTextures
+     */
+    BatchSystem.prototype.copyBoundTextures = function copyBoundTextures (arr, maxTextures)
+    {
+        var ref = this.renderer.texture;
+        var boundTextures = ref.boundTextures;
+
+        for (var i = maxTextures - 1; i >= 0; --i)
+        {
+            arr[i] = boundTextures[i] || null;
+            if (arr[i])
+            {
+                arr[i]._batchLocation = i;
+            }
+        }
+    };
+
+    /**
+     * Assigns batch locations to textures in array based on boundTextures state.
+     * All textures in texArray should have `_batchEnabled = _batchId`,
+     * and their count should be less than `maxTextures`.
+     *
+     * @param {PIXI.BatchTextureArray} texArray textures to bound
+     * @param {PIXI.BaseTexture[]} boundTextures current state of bound textures
+     * @param {number} batchId marker for _batchEnabled param of textures in texArray
+     * @param {number} maxTextures number of texture locations to manipulate
+     */
+    BatchSystem.prototype.boundArray = function boundArray (texArray, boundTextures, batchId, maxTextures)
+    {
+        var elements = texArray.elements;
+        var ids = texArray.ids;
+        var count = texArray.count;
+        var j = 0;
+
+        for (var i = 0; i < count; i++)
+        {
+            var tex = elements[i];
+            var loc = tex._batchLocation;
+
+            if (loc >= 0 && loc < maxTextures
+                && boundTextures[loc] === tex)
+            {
+                ids[i] = loc;
+                continue;
+            }
+
+            while (j < maxTextures)
+            {
+                var bound = boundTextures[j];
+
+                if (bound && bound._batchEnabled === batchId
+                    && bound._batchLocation === j)
+                {
+                    j++;
+                    continue;
+                }
+
+                ids[i] = j;
+                tex._batchLocation = j;
+                boundTextures[j] = tex;
+                break;
+            }
+        }
+    };
+
     return BatchSystem;
 }(System));
 
@@ -12622,6 +12682,24 @@ var BatchSystem = /*@__PURE__*/(function (System) {
  * @default PIXI.ENV.WEBGL2
  */
 settings.settings.PREFER_ENV = utils.isMobile.any ? constants.ENV.WEBGL : constants.ENV.WEBGL2;
+
+/**
+ * If set to `true`, Textures and BaseTexture objects stored
+ * in the caches ({@link PIXI.utils.TextureCache TextureCache} and
+ * {@link PIXI.utils.BaseTextureCache BaseTextureCache}) can *only* be
+ * used when calling {@link PIXI.Texture.from Texture.from} or
+ * {@link PIXI.BaseTexture.from BaseTexture.from}.
+ * Otherwise, these `from` calls throw an exception. Using this property
+ * can be useful if you want to enforce preloading all assets with
+ * {@link PIXI.Loader Loader}.
+ *
+ * @static
+ * @name STRICT_TEXTURE_CACHE
+ * @memberof PIXI.settings
+ * @type {boolean}
+ * @default false
+ */
+settings.settings.STRICT_TEXTURE_CACHE = false;
 
 var CONTEXT_UID = 0;
 
@@ -12784,7 +12862,7 @@ var ContextSystem = /*@__PURE__*/(function (System) {
         {
             Object.assign(this.extensions, {
                 drawBuffers: gl.getExtension('WEBGL_draw_buffers'),
-                depthTexture: gl.getExtension('WEBKIT_WEBGL_depth_texture'),
+                depthTexture: gl.getExtension('WEBGL_depth_texture'),
                 loseContext: gl.getExtension('WEBGL_lose_context'),
                 vertexArrayObject: gl.getExtension('OES_vertex_array_object')
                     || gl.getExtension('MOZ_OES_vertex_array_object')
@@ -12853,7 +12931,10 @@ var ContextSystem = /*@__PURE__*/(function (System) {
      */
     ContextSystem.prototype.postrender = function postrender ()
     {
-        this.gl.flush();
+        if (this.renderer.renderingToScreen)
+        {
+            this.gl.flush();
+        }
     };
 
     /**
@@ -13250,13 +13331,12 @@ var FramebufferSystem = /*@__PURE__*/(function (System) {
 
             gl.bindRenderbuffer(gl.RENDERBUFFER, fbo.stencil);
 
+            gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, framebuffer.width, framebuffer.height);
             // TODO.. this is depth AND stencil?
             if (!framebuffer.depthTexture)
             { // you can't have both, so one should take priority if enabled
                 gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, fbo.stencil);
             }
-            gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, framebuffer.width, framebuffer.height);
-            // fbo.enableStencil();
         }
     };
 
@@ -13310,6 +13390,43 @@ var FramebufferSystem = /*@__PURE__*/(function (System) {
         {
             this.disposeFramebuffer(list[i], contextLost);
         }
+    };
+
+    /**
+     * Forcing creation of stencil buffer for current framebuffer, if it wasn't done before.
+     * Used by MaskSystem, when its time to use stencil mask for Graphics element.
+     *
+     * Its an alternative for public lazy `framebuffer.enableStencil`, in case we need stencil without rebind.
+     *
+     * @private
+     */
+    FramebufferSystem.prototype.forceStencil = function forceStencil ()
+    {
+        var framebuffer = this.current;
+
+        if (!framebuffer)
+        {
+            return;
+        }
+
+        var fbo = framebuffer.glFramebuffers[this.CONTEXT_UID];
+
+        if (!fbo || fbo.stencil)
+        {
+            return;
+        }
+        framebuffer.enableStencil();
+
+        var w = framebuffer.width;
+        var h = framebuffer.height;
+        var gl = this.gl;
+        var stencil = gl.createRenderbuffer();
+
+        gl.bindRenderbuffer(gl.RENDERBUFFER, stencil);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, w, h);
+
+        fbo.stencil = stencil;
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, stencil);
     };
 
     /**
@@ -13981,6 +14098,112 @@ var GeometrySystem = /*@__PURE__*/(function (System) {
 }(System));
 
 /**
+ * Component for masked elements
+ *
+ * Holds mask mode and temporary data about current mask
+ *
+ * @class
+ * @memberof PIXI
+ */
+var MaskData = function MaskData(maskObject)
+{
+    /**
+     * Mask type
+     * @member {PIXI.MASK_TYPES}
+     */
+    this.type = constants.MASK_TYPES.NONE;
+
+    /**
+     * Whether we know the mask type beforehand
+     * @member {boolean}
+     * @default true
+     */
+    this.autoDetect = true;
+
+    /**
+     * Which element we use to mask
+     * @member {PIXI.DisplayObject}
+     */
+    this.maskObject = maskObject || null;
+
+    /**
+     * Whether it belongs to MaskSystem pool
+     * @member {boolean}
+     */
+    this.pooled = false;
+
+    /**
+     * Indicator of the type
+     * @member {boolean}
+     */
+    this.isMaskData = true;
+
+    /**
+     * Stencil counter above the mask in stack
+     * @member {number}
+     * @private
+     */
+    this._stencilCounter = 0;
+    /**
+     * Scissor counter above the mask in stack
+     * @member {number}
+     * @private
+     */
+    this._scissorCounter = 0;
+
+    /**
+     * Scissor operation above the mask in stack.
+     * Null if _scissorCounter is zero, rectangle instance if positive.
+     * @member {PIXI.Rectangle}
+     */
+    this._scissorRect = null;
+
+    /**
+     * Targeted element. Temporary variable set by MaskSystem
+     * @member {PIXI.DisplayObject}
+     * @private
+     */
+    this._target = null;
+};
+
+/**
+ * resets the mask data after popMask()
+ */
+MaskData.prototype.reset = function reset ()
+{
+    if (this.pooled)
+    {
+        this.maskObject = null;
+
+        this.type = constants.MASK_TYPES.NONE;
+
+        this.autoDetect = true;
+    }
+
+    this._target = null;
+};
+
+/**
+ * copies counters from maskData above, called from pushMask()
+ * @param {PIXI.MaskData|null} maskAbove
+ */
+MaskData.prototype.copyCountersOrReset = function copyCountersOrReset (maskAbove)
+{
+    if (maskAbove)
+    {
+        this._stencilCounter = maskAbove._stencilCounter;
+        this._scissorCounter = maskAbove._scissorCounter;
+        this._scissorRect = maskAbove._scissorRect;
+    }
+    else
+    {
+        this._stencilCounter = 0;
+        this._scissorCounter = 0;
+        this._scissorRect = null;
+    }
+};
+
+/**
  * @method compileProgram
  * @private
  * @memberof PIXI.glCore.shader
@@ -14014,6 +14237,18 @@ function compileProgram(gl, vertexSrc, fragmentSrc, attributeLocations)
     // if linking fails, then log and cleanup
     if (!gl.getProgramParameter(program, gl.LINK_STATUS))
     {
+        if (!gl.getShaderParameter(glVertShader, gl.COMPILE_STATUS))
+        {
+            console.warn(vertexSrc);
+            console.error(gl.getShaderInfoLog(glVertShader));
+        }
+
+        if (!gl.getShaderParameter(glFragShader, gl.COMPILE_STATUS))
+        {
+            console.warn(fragmentSrc);
+            console.error(gl.getShaderInfoLog(glFragShader));
+        }
+
         console.error('Pixi.js Error: Could not initialize shader.');
         console.error('gl.VALIDATE_STATUS', gl.getProgramParameter(program, gl.VALIDATE_STATUS));
         console.error('gl.getError()', gl.getError());
@@ -14048,14 +14283,6 @@ function compileShader(gl, type, src)
 
     gl.shaderSource(shader, src);
     gl.compileShader(shader);
-
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
-    {
-        console.warn(src);
-        console.error(gl.getShaderInfoLog(shader));
-
-        return null;
-    }
 
     return shader;
 }
@@ -14149,11 +14376,11 @@ var context = unknownContext;
  *
  * @static
  * @private
- * @returns {webGL-context} a gl context to test with
+ * @returns {WebGLRenderingContext} a gl context to test with
  */
 function getTestContext()
 {
-    if (context === unknownContext)
+    if (context === unknownContext || (context && context.isContextLost()))
     {
         var canvas = document.createElement('canvas');
 
@@ -14389,8 +14616,7 @@ var GLSL_TO_ARRAY_SETTERS = {
 
 function generateUniformsSync(group, uniformData)
 {
-    var textureCount = 0;
-    var func = "var v = null;\n    var cv = null\n    var gl = renderer.gl";
+    var func = "var v = null;\n    var cv = null\n    var t = 0;\n    var gl = renderer.gl\n    ";
 
     for (var i in group.uniforms)
     {
@@ -14400,7 +14626,7 @@ function generateUniformsSync(group, uniformData)
         {
             if (group.uniforms[i].group)
             {
-                func += "\n                    renderer.shader.syncUniformGroup(uv." + i + ");\n                ";
+                func += "\n                    renderer.shader.syncUniformGroup(uv." + i + ", syncData);\n                ";
             }
 
             continue;
@@ -14415,9 +14641,7 @@ function generateUniformsSync(group, uniformData)
         else if ((data.type === 'sampler2D' || data.type === 'samplerCube' || data.type === 'sampler2DArray') && data.size === 1 && !data.isArray)
         /* eslint-disable max-len */
         {
-            func += "\n            renderer.texture.bind(uv." + i + ", " + textureCount + ");\n\n            if(ud." + i + ".value !== " + textureCount + ")\n            {\n                ud." + i + ".value = " + textureCount + ";\n                gl.uniform1i(ud." + i + ".location, " + textureCount + ");\n; // eslint-disable-line max-len\n            }\n";
-
-            textureCount++;
+            func += "\n\n            t = syncData.textureCount++;\n\n            renderer.texture.bind(uv." + i + ", t);\n            \n            if(ud." + i + ".value !== t)\n            {\n                ud." + i + ".value = t;\n                gl.uniform1i(ud." + i + ".location, t);\n; // eslint-disable-line max-len\n            }\n";
         }
         else if (data.type === 'mat3' && data.size === 1)
         {
@@ -14467,7 +14691,13 @@ function generateUniformsSync(group, uniformData)
         }
     }
 
-    return new Function('ud', 'uv', 'renderer', func); // eslint-disable-line no-new-func
+    /**
+     * the introduction of syncData is to solve an issue where textures in uniform groups are not set correctly
+     * the texture count was always starting from 0 in each group. This needs to increment each time a texture is used
+     * no matter which group is being used
+     *
+     */
+    return new Function('ud', 'uv', 'renderer', 'syncData', func); // eslint-disable-line no-new-func
 }
 
 var fragTemplate = [
@@ -14774,7 +15004,7 @@ staticAccessors.defaultFragmentSrc.get = function ()
  *
  * @param {string} [vertexSrc] - The source of the vertex shader.
  * @param {string} [fragmentSrc] - The source of the fragment shader.
- * @param {object} [uniforms] - Custom uniforms to use to augment the built-in ones.
+ * @param {string} [name=pixi-shader] - Name for shader
  *
  * @returns {PIXI.Program} an shiny new Pixi shader!
  */
@@ -15594,7 +15824,7 @@ var SpriteMaskFilter = /*@__PURE__*/(function (Filter) {
         }
         tex.transform.update();
 
-        this.uniforms.npmAlpha = tex.baseTexture.premultiplyAlpha ? 0.0 : 1.0;
+        this.uniforms.npmAlpha = tex.baseTexture.alphaMode ? 0.0 : 1.0;
         this.uniforms.mask = tex;
         // get _normalized sprite texture coords_ and convert them to _normalized atlas texture coords_ with `prepend`
         this.uniforms.otherMatrix = filterManager.calculateSpriteMatrix(this.maskMatrix, maskSprite)
@@ -15620,21 +15850,6 @@ var MaskSystem = /*@__PURE__*/(function (System) {
     {
         System.call(this, renderer);
 
-        // TODO - we don't need both!
-        /**
-         * `true` if current pushed masked is scissor
-         * @member {boolean}
-         * @readonly
-         */
-        this.scissor = false;
-
-        /**
-         * Mask data
-         * @member {PIXI.Graphics}
-         * @readonly
-         */
-        this.scissorData = null;
-
         /**
          * Target to mask
          * @member {PIXI.DisplayObject}
@@ -15657,6 +15872,15 @@ var MaskSystem = /*@__PURE__*/(function (System) {
         this.alphaMaskPool = [];
 
         /**
+         * Pool of mask data
+         * @member {PIXI.MaskData[]}
+         * @readonly
+         */
+        this.maskDataPool = [];
+
+        this.maskStack = [];
+
+        /**
          * Current index of alpha mask pool
          * @member {number}
          * @default 0
@@ -15670,92 +15894,167 @@ var MaskSystem = /*@__PURE__*/(function (System) {
     MaskSystem.prototype.constructor = MaskSystem;
 
     /**
+     * Changes the mask stack that is used by this System.
+     *
+     * @param {PIXI.MaskData[]} maskStack - The mask stack
+     */
+    MaskSystem.prototype.setMaskStack = function setMaskStack (maskStack)
+    {
+        this.maskStack = maskStack;
+        this.renderer.scissor.setMaskStack(maskStack);
+        this.renderer.stencil.setMaskStack(maskStack);
+    };
+
+    /**
      * Applies the Mask and adds it to the current filter stack.
+     * Renderer batch must be flushed beforehand.
      *
      * @param {PIXI.DisplayObject} target - Display Object to push the mask to
-     * @param {PIXI.Sprite|PIXI.Graphics} maskData - The masking data.
+     * @param {PIXI.MaskData|PIXI.Sprite|PIXI.Graphics|PIXI.DisplayObject} maskData - The masking data.
      */
     MaskSystem.prototype.push = function push (target, maskData)
     {
-        // TODO the root check means scissor rect will not
-        // be used on render textures more info here:
-        // https://github.com/pixijs/pixi.js/pull/3545
-
-        if (maskData.isSprite)
+        if (!maskData.isMaskData)
         {
-            this.pushSpriteMask(target, maskData);
+            var d = this.maskDataPool.pop() || new MaskData();
+
+            d.pooled = true;
+            d.maskObject = maskData;
+            maskData = d;
         }
-        else if (this.enableScissor
-            && !this.scissor
-            && this.renderer._activeRenderTarget.root
-            && !this.renderer.stencil.stencilMaskStack.length
-            && maskData.isFastRect())
+
+        if (maskData.autoDetect)
         {
-            var matrix = maskData.worldTransform;
-
-            var rot = Math.atan2(matrix.b, matrix.a);
-
-            // use the nearest degree!
-            rot = Math.round(rot * (180 / Math.PI));
-
-            if (rot % 90)
-            {
-                this.pushStencilMask(maskData);
-            }
-            else
-            {
-                this.pushScissorMask(target, maskData);
-            }
+            this.detect(maskData);
         }
-        else
+
+        maskData.copyCountersOrReset(this.maskStack[this.maskStack.length - 1]);
+        maskData._target = target;
+
+        switch (maskData.type)
         {
-            this.pushStencilMask(maskData);
+            case constants.MASK_TYPES.SCISSOR:
+                this.maskStack.push(maskData);
+                this.renderer.scissor.push(maskData);
+                break;
+            case constants.MASK_TYPES.STENCIL:
+                this.maskStack.push(maskData);
+                this.renderer.stencil.push(maskData);
+                break;
+            case constants.MASK_TYPES.SPRITE:
+                maskData.copyCountersOrReset(null);
+                this.pushSpriteMask(maskData);
+                this.maskStack.push(maskData);
+                break;
+            default:
+                break;
         }
     };
 
     /**
      * Removes the last mask from the mask stack and doesn't return it.
+     * Renderer batch must be flushed beforehand.
      *
      * @param {PIXI.DisplayObject} target - Display Object to pop the mask from
-     * @param {PIXI.Sprite|PIXI.Graphics} maskData - The masking data.
      */
-    MaskSystem.prototype.pop = function pop (target, maskData)
+    MaskSystem.prototype.pop = function pop (target)
     {
-        if (maskData.isSprite)
+        var maskData = this.maskStack.pop();
+
+        if (!maskData || maskData._target !== target)
         {
-            this.popSpriteMask(target, maskData);
+            // TODO: add an assert when we have it
+
+            return;
         }
-        else if (this.enableScissor && !this.renderer.stencil.stencilMaskStack.length)
+
+        switch (maskData.type)
         {
-            this.popScissorMask(target, maskData);
+            case constants.MASK_TYPES.SCISSOR:
+                this.renderer.scissor.pop();
+                break;
+            case constants.MASK_TYPES.STENCIL:
+                this.renderer.stencil.pop(maskData.maskObject);
+                break;
+            case constants.MASK_TYPES.SPRITE:
+                this.popSpriteMask();
+                break;
+            default:
+                break;
         }
-        else
+
+        maskData.reset();
+
+        if (maskData.pooled)
         {
-            this.popStencilMask(target, maskData);
+            this.maskDataPool.push(maskData);
+        }
+    };
+
+    /**
+     * Sets type of MaskData based on its maskObject
+     * @param {PIXI.MaskData} maskData
+     */
+    MaskSystem.prototype.detect = function detect (maskData)
+    {
+        var maskObject = maskData.maskObject;
+
+        if (maskObject.isSprite)
+        {
+            maskData.type = constants.MASK_TYPES.SPRITE;
+
+            return;
+        }
+        maskData.type = constants.MASK_TYPES.STENCIL;
+        // detect scissor in graphics
+        if (this.enableScissor
+            && maskObject.isFastRect
+            && maskObject.isFastRect())
+        {
+            var matrix = maskObject.worldTransform;
+
+            // TODO: move the check to the matrix itself
+            // we are checking that its orthogonal and x rotation is 0 90 180 or 270
+
+            var rotX = Math.atan2(matrix.b, matrix.a);
+            var rotXY = Math.atan2(matrix.d, matrix.c);
+
+            // use the nearest degree to 0.01
+            rotX = Math.round(rotX * (180 / Math.PI) * 100);
+            rotXY = Math.round(rotXY * (180 / Math.PI) * 100) - rotX;
+
+            rotX = ((rotX % 9000) + 9000) % 9000;
+            rotXY = ((rotXY % 18000) + 18000) % 18000;
+
+            if (rotX === 0 && rotXY === 9000)
+            {
+                maskData.type = constants.MASK_TYPES.SCISSOR;
+            }
         }
     };
 
     /**
      * Applies the Mask and adds it to the current filter stack.
      *
-     * @param {PIXI.RenderTexture} target - Display Object to push the sprite mask to
-     * @param {PIXI.Sprite} maskData - Sprite to be used as the mask
+     * @param {PIXI.MaskData} maskData - Sprite to be used as the mask
      */
-    MaskSystem.prototype.pushSpriteMask = function pushSpriteMask (target, maskData)
+    MaskSystem.prototype.pushSpriteMask = function pushSpriteMask (maskData)
     {
+        var maskObject = maskData.maskObject;
+        var target = maskData._target;
         var alphaMaskFilter = this.alphaMaskPool[this.alphaMaskIndex];
 
         if (!alphaMaskFilter)
         {
-            alphaMaskFilter = this.alphaMaskPool[this.alphaMaskIndex] = [new SpriteMaskFilter(maskData)];
+            alphaMaskFilter = this.alphaMaskPool[this.alphaMaskIndex] = [new SpriteMaskFilter(maskObject)];
         }
 
         alphaMaskFilter[0].resolution = this.renderer.resolution;
-        alphaMaskFilter[0].maskSprite = maskData;
+        alphaMaskFilter[0].maskSprite = maskObject;
 
         var stashFilterArea = target.filterArea;
 
-        target.filterArea = maskData.getBounds(true);
+        target.filterArea = maskObject.getBounds(true);
         this.renderer.filter.push(target, alphaMaskFilter);
         target.filterArea = stashFilterArea;
 
@@ -15764,7 +16063,6 @@ var MaskSystem = /*@__PURE__*/(function (System) {
 
     /**
      * Removes the last filter from the filter stack and doesn't return it.
-     *
      */
     MaskSystem.prototype.popSpriteMask = function popSpriteMask ()
     {
@@ -15772,78 +16070,215 @@ var MaskSystem = /*@__PURE__*/(function (System) {
         this.alphaMaskIndex--;
     };
 
-    /**
-     * Applies the Mask and adds it to the current filter stack.
-     *
-     * @param {PIXI.Sprite|PIXI.Graphics} maskData - The masking data.
-     */
-    MaskSystem.prototype.pushStencilMask = function pushStencilMask (maskData)
+    return MaskSystem;
+}(System));
+
+/**
+ * System plugin to the renderer to manage masks of certain type
+ *
+ * @class
+ * @extends PIXI.System
+ * @memberof PIXI.systems
+ */
+var AbstractMaskSystem = /*@__PURE__*/(function (System) {
+    function AbstractMaskSystem(renderer)
     {
-        this.renderer.batch.flush();
-        this.renderer.stencil.pushStencil(maskData);
+        System.call(this, renderer);
+
+        /**
+         * The mask stack
+         * @member {PIXI.MaskData[]}
+         */
+        this.maskStack = [];
+
+        /**
+         * Constant for gl.enable
+         * @member {number}
+         * @private
+         */
+        this.glConst = 0;
+    }
+
+    if ( System ) AbstractMaskSystem.__proto__ = System;
+    AbstractMaskSystem.prototype = Object.create( System && System.prototype );
+    AbstractMaskSystem.prototype.constructor = AbstractMaskSystem;
+
+    /**
+     * gets count of masks of certain type
+     * @returns {number}
+     */
+    AbstractMaskSystem.prototype.getStackLength = function getStackLength ()
+    {
+        return this.maskStack.length;
     };
 
     /**
-     * Removes the last filter from the filter stack and doesn't return it.
+     * Changes the mask stack that is used by this System.
      *
+     * @param {PIXI.MaskData[]} maskStack - The mask stack
      */
-    MaskSystem.prototype.popStencilMask = function popStencilMask ()
+    AbstractMaskSystem.prototype.setMaskStack = function setMaskStack (maskStack)
     {
-        // this.renderer.currentRenderer.stop();
-        this.renderer.stencil.popStencil();
+        var ref = this.renderer;
+        var gl = ref.gl;
+        var curStackLen = this.getStackLength();
+
+        this.maskStack = maskStack;
+
+        var newStackLen = this.getStackLength();
+
+        if (newStackLen !== curStackLen)
+        {
+            if (newStackLen === 0)
+            {
+                gl.disable(this.glConst);
+            }
+            else
+            {
+                gl.enable(this.glConst);
+                this._useCurrent();
+            }
+        }
     };
 
     /**
-     *
-     * @param {PIXI.DisplayObject} target - Display Object to push the mask to
-     * @param {PIXI.Graphics} maskData - The masking data.
+     * Setup renderer to use the current mask data.
+     * @private
      */
-    MaskSystem.prototype.pushScissorMask = function pushScissorMask (target, maskData)
+    AbstractMaskSystem.prototype._useCurrent = function _useCurrent ()
     {
-        maskData.renderable = true;
-
-        var renderTarget = this.renderer._activeRenderTarget;
-
-        var bounds = maskData.getBounds();
-
-        bounds.fit(renderTarget.size);
-        maskData.renderable = false;
-
-        this.renderer.gl.enable(this.renderer.gl.SCISSOR_TEST);
-
-        var resolution = this.renderer.resolution;
-
-        this.renderer.gl.scissor(
-            bounds.x * resolution,
-            (renderTarget.root ? renderTarget.size.height - bounds.y - bounds.height : bounds.y) * resolution,
-            bounds.width * resolution,
-            bounds.height * resolution
-        );
-
-        this.scissorRenderTarget = renderTarget;
-        this.scissorData = maskData;
-        this.scissor = true;
+        // OVERWRITE;
     };
 
     /**
-     * Pop scissor mask
+     * Destroys the mask stack.
      *
      */
-    MaskSystem.prototype.popScissorMask = function popScissorMask ()
+    AbstractMaskSystem.prototype.destroy = function destroy ()
     {
-        this.scissorRenderTarget = null;
-        this.scissorData = null;
-        this.scissor = false;
+        System.prototype.destroy.call(this, this);
 
-        // must be scissor!
+        this.maskStack = null;
+    };
+
+    return AbstractMaskSystem;
+}(System));
+
+/**
+ * System plugin to the renderer to manage scissor rects (used for masks).
+ *
+ * @class
+ * @extends PIXI.System
+ * @memberof PIXI.systems
+ */
+var ScissorSystem = /*@__PURE__*/(function (AbstractMaskSystem) {
+    function ScissorSystem(renderer)
+    {
+        AbstractMaskSystem.call(this, renderer);
+
+        this.glConst = WebGLRenderingContext.SCISSOR_TEST;
+    }
+
+    if ( AbstractMaskSystem ) ScissorSystem.__proto__ = AbstractMaskSystem;
+    ScissorSystem.prototype = Object.create( AbstractMaskSystem && AbstractMaskSystem.prototype );
+    ScissorSystem.prototype.constructor = ScissorSystem;
+
+    ScissorSystem.prototype.getStackLength = function getStackLength ()
+    {
+        var maskData = this.maskStack[this.maskStack.length - 1];
+
+        if (maskData)
+        {
+            return maskData._scissorCounter;
+        }
+
+        return 0;
+    };
+
+    /**
+     * Applies the Mask and adds it to the current stencil stack. @alvin
+     *
+     * @param {PIXI.MaskData} maskData - The mask data
+     */
+    ScissorSystem.prototype.push = function push (maskData)
+    {
+        var maskObject = maskData.maskObject;
+
+        maskObject.renderable = true;
+
+        var prevData = maskData._scissorRect;
+        var bounds = maskObject.getBounds(true);
         var ref = this.renderer;
         var gl = ref.gl;
 
-        gl.disable(gl.SCISSOR_TEST);
+        maskObject.renderable = false;
+
+        if (prevData)
+        {
+            bounds.fit(prevData);
+        }
+        else
+        {
+            gl.enable(gl.SCISSOR_TEST);
+        }
+
+        maskData._scissorCounter++;
+        maskData._scissorRect = bounds;
+        this._useCurrent();
     };
 
-    return MaskSystem;
-}(System));
+    /**
+     * Pops scissor mask. MaskData is already removed from stack
+     */
+    ScissorSystem.prototype.pop = function pop ()
+    {
+        var ref = this.renderer;
+        var gl = ref.gl;
+
+        if (this.getStackLength() > 0)
+        {
+            this._useCurrent();
+        }
+        else
+        {
+            gl.disable(gl.SCISSOR_TEST);
+        }
+    };
+
+    /**
+     * Setup renderer to use the current scissor data.
+     * @private
+     */
+    ScissorSystem.prototype._useCurrent = function _useCurrent ()
+    {
+        var rect = this.maskStack[this.maskStack.length - 1]._scissorRect;
+        var rt = this.renderer.renderTexture.current;
+        var ref = this.renderer.projection;
+        var transform = ref.transform;
+        var sourceFrame = ref.sourceFrame;
+        var destinationFrame = ref.destinationFrame;
+        var resolution = rt ? rt.resolution : this.renderer.resolution;
+        var x = ((rect.x - sourceFrame.x) * resolution) + destinationFrame.x;
+        var y = ((rect.y - sourceFrame.y) * resolution) + destinationFrame.y;
+        var width = rect.width * resolution;
+        var height = rect.height * resolution;
+
+        if (transform)
+        {
+            x += transform.tx * resolution;
+            y += transform.ty * resolution;
+        }
+        if (!rt)
+        {
+            // flipY. In future we'll have it over renderTextures as an option
+            y = this.renderer.height - height - y;
+        }
+
+        this.renderer.gl.scissor(x, y, width, height);
+    };
+
+    return ScissorSystem;
+}(AbstractMaskSystem));
 
 /**
  * System plugin to the renderer to manage stencils (used for masks).
@@ -15852,86 +16287,74 @@ var MaskSystem = /*@__PURE__*/(function (System) {
  * @extends PIXI.System
  * @memberof PIXI.systems
  */
-var StencilSystem = /*@__PURE__*/(function (System) {
+var StencilSystem = /*@__PURE__*/(function (AbstractMaskSystem) {
     function StencilSystem(renderer)
     {
-        System.call(this, renderer);
+        AbstractMaskSystem.call(this, renderer);
 
-        /**
-         * The mask stack
-         * @member {PIXI.Graphics[]}
-         */
-        this.stencilMaskStack = [];
+        this.glConst = WebGLRenderingContext.STENCIL_TEST;
     }
 
-    if ( System ) StencilSystem.__proto__ = System;
-    StencilSystem.prototype = Object.create( System && System.prototype );
+    if ( AbstractMaskSystem ) StencilSystem.__proto__ = AbstractMaskSystem;
+    StencilSystem.prototype = Object.create( AbstractMaskSystem && AbstractMaskSystem.prototype );
     StencilSystem.prototype.constructor = StencilSystem;
 
-    /**
-     * Changes the mask stack that is used by this System.
-     *
-     * @param {PIXI.Graphics[]} stencilMaskStack - The mask stack
-     */
-    StencilSystem.prototype.setMaskStack = function setMaskStack (stencilMaskStack)
+    StencilSystem.prototype.getStackLength = function getStackLength ()
     {
-        var gl = this.renderer.gl;
-        var curStackLen = this.stencilMaskStack.length;
+        var maskData = this.maskStack[this.maskStack.length - 1];
 
-        this.stencilMaskStack = stencilMaskStack;
-        if (stencilMaskStack.length !== curStackLen)
+        if (maskData)
         {
-            if (stencilMaskStack.length === 0)
-            {
-                gl.disable(gl.STENCIL_TEST);
-            }
-            else
-            {
-                gl.enable(gl.STENCIL_TEST);
-                this._useCurrent();
-            }
+            return maskData._stencilCounter;
         }
+
+        return 0;
     };
 
     /**
-     * Applies the Mask and adds it to the current stencil stack. @alvin
+     * Applies the Mask and adds it to the current stencil stack.
      *
-     * @param {PIXI.Graphics} graphics - The mask
+     * @param {PIXI.MaskData} maskData - The mask data
      */
-    StencilSystem.prototype.pushStencil = function pushStencil (graphics)
+    StencilSystem.prototype.push = function push (maskData)
     {
-        var gl = this.renderer.gl;
-        var prevMaskCount = this.stencilMaskStack.length;
+        var maskObject = maskData.maskObject;
+        var ref = this.renderer;
+        var gl = ref.gl;
+        var prevMaskCount = maskData._stencilCounter;
 
         if (prevMaskCount === 0)
         {
+            // force use stencil texture in current framebuffer
+            this.renderer.framebuffer.forceStencil();
             gl.enable(gl.STENCIL_TEST);
         }
 
-        this.stencilMaskStack.push(graphics);
+        maskData._stencilCounter++;
 
         // Increment the reference stencil value where the new mask overlaps with the old ones.
         gl.colorMask(false, false, false, false);
         gl.stencilFunc(gl.EQUAL, prevMaskCount, this._getBitwiseMask());
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.INCR);
 
-        graphics.renderable = true;
-        graphics.render(this.renderer);
+        maskObject.renderable = true;
+        maskObject.render(this.renderer);
         this.renderer.batch.flush();
-        graphics.renderable = false;
+        maskObject.renderable = false;
 
         this._useCurrent();
     };
 
     /**
-     * Removes the last mask from the stencil stack. @alvin
+     * Pops stencil mask. MaskData is already removed from stack
+     *
+     * @param {PIXI.DisplayObject} maskObject - object of popped mask data
      */
-    StencilSystem.prototype.popStencil = function popStencil ()
+    StencilSystem.prototype.pop = function pop (maskObject)
     {
         var gl = this.renderer.gl;
-        var graphics = this.stencilMaskStack.pop();
 
-        if (this.stencilMaskStack.length === 0)
+        if (this.getStackLength() === 0)
         {
             // the stack is empty!
             gl.disable(gl.STENCIL_TEST);
@@ -15944,10 +16367,10 @@ var StencilSystem = /*@__PURE__*/(function (System) {
             gl.colorMask(false, false, false, false);
             gl.stencilOp(gl.KEEP, gl.KEEP, gl.DECR);
 
-            graphics.renderable = true;
-            graphics.render(this.renderer);
+            maskObject.renderable = true;
+            maskObject.render(this.renderer);
             this.renderer.batch.flush();
-            graphics.renderable = false;
+            maskObject.renderable = false;
 
             this._useCurrent();
         }
@@ -15962,7 +16385,7 @@ var StencilSystem = /*@__PURE__*/(function (System) {
         var gl = this.renderer.gl;
 
         gl.colorMask(true, true, true, true);
-        gl.stencilFunc(gl.EQUAL, this.stencilMaskStack.length, this._getBitwiseMask());
+        gl.stencilFunc(gl.EQUAL, this.getStackLength(), this._getBitwiseMask());
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
     };
 
@@ -15973,22 +16396,11 @@ var StencilSystem = /*@__PURE__*/(function (System) {
      */
     StencilSystem.prototype._getBitwiseMask = function _getBitwiseMask ()
     {
-        return (1 << this.stencilMaskStack.length) - 1;
-    };
-
-    /**
-     * Destroys the mask stack.
-     *
-     */
-    StencilSystem.prototype.destroy = function destroy ()
-    {
-        System.prototype.destroy.call(this, this);
-
-        this.stencilMaskStack = null;
+        return (1 << this.getStackLength()) - 1;
     };
 
     return StencilSystem;
-}(System));
+}(AbstractMaskSystem));
 
 /**
  * System plugin to the renderer to manage the projection matrix.
@@ -16218,7 +16630,7 @@ var RenderTextureSystem = /*@__PURE__*/(function (System) {
             this.renderer.framebuffer.bind(baseTexture.framebuffer, destinationFrame);
 
             this.renderer.projection.update(destinationFrame, sourceFrame, resolution, false);
-            this.renderer.stencil.setMaskStack(baseTexture.stencilMaskStack);
+            this.renderer.mask.setMaskStack(baseTexture.maskStack);
         }
         else
         {
@@ -16243,7 +16655,7 @@ var RenderTextureSystem = /*@__PURE__*/(function (System) {
 
             // TODO store this..
             this.renderer.projection.update(destinationFrame, sourceFrame, resolution, true);
-            this.renderer.stencil.setMaskStack(this.defaultMaskStack);
+            this.renderer.mask.setMaskStack(this.defaultMaskStack);
         }
 
         this.sourceFrame.copyFrom(sourceFrame);
@@ -16338,6 +16750,8 @@ GLProgram.prototype.destroy = function destroy ()
 };
 
 var UID$4 = 0;
+// defualt sync data so we don't create a new one each time!
+var defaultSyncData = { textureCount: 0 };
 
 /**
  * System plugin to the renderer to manage shaders.
@@ -16424,7 +16838,9 @@ var ShaderSystem = /*@__PURE__*/(function (System) {
 
         if (!dontSync)
         {
-            this.syncUniformGroup(shader.uniformGroup);
+            defaultSyncData.textureCount = 0;
+
+            this.syncUniformGroup(shader.uniformGroup, defaultSyncData);
         }
 
         return glProgram;
@@ -16443,7 +16859,13 @@ var ShaderSystem = /*@__PURE__*/(function (System) {
         shader.syncUniforms(glProgram.uniformData, uniforms, this.renderer);
     };
 
-    ShaderSystem.prototype.syncUniformGroup = function syncUniformGroup (group)
+    /**
+     *
+     * syncs uniforms on the group
+     * @param {*} group the uniform group to sync
+     * @param {*} syncData this is data that is passed to the sync function and any nested sync functions
+     */
+    ShaderSystem.prototype.syncUniformGroup = function syncUniformGroup (group, syncData)
     {
         var glProgram = this.getglProgram();
 
@@ -16451,7 +16873,7 @@ var ShaderSystem = /*@__PURE__*/(function (System) {
         {
             glProgram.uniformGroups[group.id] = group.dirtyId;
 
-            this.syncUniforms(group, glProgram);
+            this.syncUniforms(group, glProgram, syncData);
         }
     };
 
@@ -16461,11 +16883,11 @@ var ShaderSystem = /*@__PURE__*/(function (System) {
      *
      * @private
      */
-    ShaderSystem.prototype.syncUniforms = function syncUniforms (group, glProgram)
+    ShaderSystem.prototype.syncUniforms = function syncUniforms (group, glProgram, syncData)
     {
         var syncFunc = group.syncUniforms[this.shader.program.id] || this.createSyncGroups(group);
 
-        syncFunc(glProgram.uniformData, group.uniforms, this.renderer);
+        syncFunc(glProgram.uniformData, group.uniforms, this.renderer, syncData);
     };
 
     ShaderSystem.prototype.createSyncGroups = function createSyncGroups (group)
@@ -16634,6 +17056,7 @@ function mapWebGLBlendModesToPixi(gl, array)
     array[constants.BLEND_MODES.DST_IN] = [gl.ZERO, gl.SRC_ALPHA];
     array[constants.BLEND_MODES.DST_OUT] = [gl.ZERO, gl.ONE_MINUS_SRC_ALPHA];
     array[constants.BLEND_MODES.DST_ATOP] = [gl.ONE_MINUS_DST_ALPHA, gl.SRC_ALPHA];
+    array[constants.BLEND_MODES.XOR] = [gl.ONE_MINUS_DST_ALPHA, gl.ONE_MINUS_SRC_ALPHA];
 
     // SUBTRACT from flash
     array[constants.BLEND_MODES.SUBTRACT] = [gl.ONE, gl.ONE, gl.ONE, gl.ONE, gl.FUNC_REVERSE_SUBTRACT, gl.FUNC_ADD];
@@ -17029,6 +17452,11 @@ var TextureGCSystem = /*@__PURE__*/(function (System) {
      */
     TextureGCSystem.prototype.postrender = function postrender ()
     {
+        if (!this.renderer.renderingToScreen)
+        {
+            return;
+        }
+
         this.count++;
 
         if (this.mode === constants.GC_MODES.MANUAL)
@@ -17295,19 +17723,23 @@ var TextureSystem = /*@__PURE__*/(function (System) {
 
                 var glTexture = texture._glTextures[this.CONTEXT_UID] || this.initTexture(texture);
 
-                if (this.currentLocation !== location)
-                {
-                    this.currentLocation = location;
-                    gl.activeTexture(gl.TEXTURE0 + location);
-                }
-
                 if (this.boundTextures[location] !== texture)
                 {
+                    if (this.currentLocation !== location)
+                    {
+                        this.currentLocation = location;
+                        gl.activeTexture(gl.TEXTURE0 + location);
+                    }
                     gl.bindTexture(texture.target, glTexture.texture);
                 }
 
                 if (glTexture.dirtyId !== texture.dirtyId)
                 {
+                    if (this.currentLocation !== location)
+                    {
+                        this.currentLocation = location;
+                        gl.activeTexture(gl.TEXTURE0 + location);
+                    }
                     this.updateTexture(texture);
                 }
 
@@ -17539,11 +17971,18 @@ var TextureSystem = /*@__PURE__*/(function (System) {
         if ((texture.mipmap === constants.MIPMAP_MODES.POW2 || this.webGLVersion !== 2) && !texture.isPowerOfTwo)
         {
             glTexture.mipmap = 0;
-            glTexture.wrapMode = constants.WRAP_MODES.CLAMP;
         }
         else
         {
             glTexture.mipmap = texture.mipmap >= 1;
+        }
+
+        if (this.webGLVersion !== 2 && !texture.isPowerOfTwo)
+        {
+            glTexture.wrapMode = constants.WRAP_MODES.CLAMP;
+        }
+        else
+        {
             glTexture.wrapMode = texture.wrapMode;
         }
 
@@ -17579,7 +18018,7 @@ var TextureSystem = /*@__PURE__*/(function (System) {
         if (glTexture.mipmap)
         {
             /* eslint-disable max-len */
-            gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode ? gl.LINEAR_MIPMAP_LINEAR : gl.NEAREST_MIPMAP_NEAREST);
+            gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode === constants.SCALE_MODES.LINEAR ? gl.LINEAR_MIPMAP_LINEAR : gl.NEAREST_MIPMAP_NEAREST);
             /* eslint-disable max-len */
 
             var anisotropicExt = this.renderer.context.extensions.anisotropicFiltering;
@@ -17593,10 +18032,10 @@ var TextureSystem = /*@__PURE__*/(function (System) {
         }
         else
         {
-            gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode ? gl.LINEAR : gl.NEAREST);
+            gl.texParameteri(texture.target, gl.TEXTURE_MIN_FILTER, texture.scaleMode === constants.SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
         }
 
-        gl.texParameteri(texture.target, gl.TEXTURE_MAG_FILTER, texture.scaleMode ? gl.LINEAR : gl.NEAREST);
+        gl.texParameteri(texture.target, gl.TEXTURE_MAG_FILTER, texture.scaleMode === constants.SCALE_MODES.LINEAR ? gl.LINEAR : gl.NEAREST);
     };
 
     return TextureSystem;
@@ -17614,6 +18053,7 @@ var systems = ({
     FramebufferSystem: FramebufferSystem,
     GeometrySystem: GeometrySystem,
     MaskSystem: MaskSystem,
+    ScissorSystem: ScissorSystem,
     StencilSystem: StencilSystem,
     ProjectionSystem: ProjectionSystem,
     RenderTextureSystem: RenderTextureSystem,
@@ -17846,7 +18286,7 @@ var AbstractRenderer = /*@__PURE__*/(function (EventEmitter) {
      * This can be quite useful if your displayObject is complicated and needs to be reused multiple times.
      *
      * @param {PIXI.DisplayObject} displayObject - The displayObject the object will be generated from.
-     * @param {number} scaleMode - Should be one of the scaleMode consts.
+     * @param {PIXI.SCALE_MODES} scaleMode - The scale mode of the texture.
      * @param {number} resolution - The resolution / device pixel ratio of the texture being generated.
      * @param {PIXI.Rectangle} [region] - The region of the displayObject, that shall be rendered,
      *        if no region is specified, defaults to the local bounds of the displayObject.
@@ -17860,7 +18300,13 @@ var AbstractRenderer = /*@__PURE__*/(function (EventEmitter) {
         if (region.width === 0) { region.width = 1; }
         if (region.height === 0) { region.height = 1; }
 
-        var renderTexture = RenderTexture.create(region.width | 0, region.height | 0, scaleMode, resolution);
+        var renderTexture = RenderTexture.create(
+            {
+                width: region.width | 0,
+                height: region.height | 0,
+                scaleMode: scaleMode,
+                resolution: resolution,
+            });
 
         tempMatrix.tx = -region.x;
         tempMatrix.ty = -region.y;
@@ -17969,8 +18415,14 @@ var Renderer = /*@__PURE__*/(function (AbstractRenderer) {
          */
         this.type = constants.RENDERER_TYPE.WEBGL;
 
-        // this will be set by the contextSystem (this.context)
+        /**
+         * WebGL context, set by the contextSystem (this.context)
+         *
+         * @readonly
+         * @member {WebGLRenderingContext}
+         */
         this.gl = null;
+
         this.CONTEXT_UID = 0;
 
         // TODO legacy!
@@ -18058,6 +18510,13 @@ var Renderer = /*@__PURE__*/(function (AbstractRenderer) {
              * @readonly
              */
             .addSystem(FramebufferSystem, 'framebuffer')
+            /**
+             * Scissor system instance
+             * @member {PIXI.systems.ScissorSystem} scissor
+             * @memberof PIXI.Renderer#
+             * @readonly
+             */
+            .addSystem(ScissorSystem, 'scissor')
             /**
              * Stencil system instance
              * @member {PIXI.systems.StencilSystem} stencil
@@ -18334,9 +18793,9 @@ var Renderer = /*@__PURE__*/(function (AbstractRenderer) {
      * @type {object}
      * @readonly
      * @property {PIXI.accessibility.AccessibilityManager} accessibility Support tabbing interactive elements.
-     * @property {PIXI.extract.Extract} extract Extract image data from renderer.
+     * @property {PIXI.Extract} extract Extract image data from renderer.
      * @property {PIXI.interaction.InteractionManager} interaction Handles mouse, touch and pointer events.
-     * @property {PIXI.prepare.Prepare} prepare Pre-render display objects.
+     * @property {PIXI.Prepare} prepare Pre-render display objects.
      */
 
     /**
@@ -18428,13 +18887,53 @@ var CubeTexture = /*@__PURE__*/(function (BaseTexture) {
  */
 var BatchDrawCall = function BatchDrawCall()
 {
-    this.textures = [];
-    this.ids = [];
+    this.texArray = null;
     this.blend = 0;
-    this.textureCount = 0;
+    this.type = constants.DRAW_MODES.TRIANGLES;
+
     this.start = 0;
     this.size = 0;
-    this.type = 4;
+
+    /**
+     * data for uniforms or custom webgl state
+     * @member {object}
+     */
+    this.data = null;
+};
+
+/**
+ * Used by the batcher to build texture batches.
+ * Holds list of textures and their respective locations.
+ *
+ * @class
+ * @memberof PIXI
+ */
+var BatchTextureArray = function BatchTextureArray()
+{
+    /**
+     * inside textures array
+     * @member {PIXI.BaseTexture[]}
+     */
+    this.elements = [];
+    /**
+     * Respective locations for textures
+     * @member {number[]}
+     */
+    this.ids = [];
+    /**
+     * number of filled elements
+     * @member {number}
+     */
+    this.count = 0;
+};
+
+BatchTextureArray.prototype.clear = function clear ()
+{
+    for (var i = 0; i < this.count; i++)
+    {
+        this.elements[i] = null;
+    }
+    this.count = 0;
 };
 
 /**
@@ -18668,9 +19167,9 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
          * occurs automatically.
          *
          * @member {number}
-         * @default settings.SPRITE_MAX_TEXTURES
+         * @default settings.SPRITE_BATCH_SIZE * 4
          */
-        this.size = 2000 * 4;// settings.SPRITE_BATCH_SIZE, 2000 is a nice balance between mobile/desktop
+        this.size = settings.settings.SPRITE_BATCH_SIZE * 4;
 
         /**
          * Total count of all vertices used by the currently
@@ -18697,6 +19196,13 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
          * @private
          */
         this._bufferedElements = [];
+
+        /**
+         * Data for texture batch builder, helps to save a bit of CPU on a pass
+         * @type {PIXI.BaseTexture[]}
+         * @private
+         */
+        this._bufferedTextures = [];
 
         /**
          * Number of elements that are buffered and are
@@ -18759,22 +19265,6 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         this._flushId = 0;
 
         /**
-         * Pool of `BatchDrawCall` objects that `flush` used
-         * to create "batches" of the objects being rendered.
-         *
-         * These are never re-allocated again.
-         *
-         * @member BatchDrawCall[]
-         * @private
-         */
-        this._drawCalls = [];
-
-        for (var k = 0; k < this.size / 4; k++)
-        { // initialize the draw-calls pool to max size.
-            this._drawCalls[k] = new BatchDrawCall();
-        }
-
-        /**
          * Pool of `ViewableBuffer` objects that are sorted in
          * order of increasing size. The flush method uses
          * the buffer with the least size above the amount
@@ -18783,7 +19273,7 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
          * The first buffer has a size of 8; each subsequent
          * buffer has double capacity of its previous.
          *
-         * @member {PIXI.ViewableBuffer}
+         * @member {PIXI.ViewableBuffer[]}
          * @private
          * @see PIXI.AbstractBatchRenderer#getAttributeBuffer
          */
@@ -18817,6 +19307,13 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
 
         this.renderer.on('prerender', this.onPrerender, this);
         renderer.runners.contextChange.add(this);
+
+        this._dcIndex = 0;
+        this._aIndex = 0;
+        this._iIndex = 0;
+        this._attributeBuffer = null;
+        this._indexBuffer = null;
+        this._tempBoundTextures = [];
     }
 
     if ( ObjectRenderer ) AbstractBatchRenderer.__proto__ = ObjectRenderer;
@@ -18858,6 +19355,34 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
             /* eslint-disable max-len */
             this._packedGeometries[i] = new (this.geometryClass)();
         }
+
+        this.initFlushBuffers();
+    };
+
+    /**
+     * Makes sure that static and dynamic flush pooled objects have correct dimensions
+     */
+    AbstractBatchRenderer.prototype.initFlushBuffers = function initFlushBuffers ()
+    {
+        var _drawCallPool = AbstractBatchRenderer._drawCallPool;
+        var _textureArrayPool = AbstractBatchRenderer._textureArrayPool;
+        // max draw calls
+        var MAX_SPRITES = this.size / 4;
+        // max texture arrays
+        var MAX_TA = Math.floor(MAX_SPRITES / this.MAX_TEXTURES) + 1;
+
+        while (_drawCallPool.length < MAX_SPRITES)
+        {
+            _drawCallPool.push(new BatchDrawCall());
+        }
+        while (_textureArrayPool.length < MAX_TA)
+        {
+            _textureArrayPool.push(new BatchTextureArray());
+        }
+        for (var i = 0; i < this.MAX_TEXTURES; i++)
+        {
+            this._tempBoundTextures[i] = null;
+        }
     };
 
     /**
@@ -18875,8 +19400,8 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
      * Buffers the "batchable" object. It need not be rendered
      * immediately.
      *
-     * @param {PIXI.Sprite} sprite - the sprite to render when
-     *    using this spritebatch
+     * @param {PIXI.DisplayObject} element - the element to render when
+     *    using this renderer
      */
     AbstractBatchRenderer.prototype.render = function render (element)
     {
@@ -18892,7 +19417,209 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
 
         this._vertexCount += element.vertexData.length / 2;
         this._indexCount += element.indices.length;
+        this._bufferedTextures[this._bufferSize] = element._texture.baseTexture;
         this._bufferedElements[this._bufferSize++] = element;
+    };
+
+    AbstractBatchRenderer.prototype.buildTexturesAndDrawCalls = function buildTexturesAndDrawCalls ()
+    {
+        var ref = this;
+        var textures = ref._bufferedTextures;
+        var MAX_TEXTURES = ref.MAX_TEXTURES;
+        var textureArrays = AbstractBatchRenderer._textureArrayPool;
+        var batch = this.renderer.batch;
+        var boundTextures = this._tempBoundTextures;
+        var touch = this.renderer.textureGC.count;
+
+        var TICK = ++BaseTexture._globalBatch;
+        var countTexArrays = 0;
+        var texArray = textureArrays[0];
+        var start = 0;
+
+        batch.copyBoundTextures(boundTextures, MAX_TEXTURES);
+
+        for (var i = 0; i < this._bufferSize; ++i)
+        {
+            var tex = textures[i];
+
+            textures[i] = null;
+            if (tex._batchEnabled === TICK)
+            {
+                continue;
+            }
+
+            if (texArray.count >= MAX_TEXTURES)
+            {
+                batch.boundArray(texArray, boundTextures, TICK, MAX_TEXTURES);
+                this.buildDrawCalls(texArray, start, i);
+                start = i;
+                texArray = textureArrays[++countTexArrays];
+                ++TICK;
+            }
+
+            tex._batchEnabled = TICK;
+            tex.touched = touch;
+            texArray.elements[texArray.count++] = tex;
+        }
+
+        if (texArray.count > 0)
+        {
+            batch.boundArray(texArray, boundTextures, TICK, MAX_TEXTURES);
+            this.buildDrawCalls(texArray, start, this._bufferSize);
+            ++countTexArrays;
+            ++TICK;
+        }
+
+        // Clean-up
+
+        for (var i$1 = 0; i$1 < boundTextures.length; i$1++)
+        {
+            boundTextures[i$1] = null;
+        }
+        BaseTexture._globalBatch = TICK;
+    };
+
+    /**
+     * Populating drawcalls for rendering
+     *
+     * @param {PIXI.BatchTextureArray} texArray
+     * @param {number} start
+     * @param {number} finish
+     */
+    AbstractBatchRenderer.prototype.buildDrawCalls = function buildDrawCalls (texArray, start, finish)
+    {
+        var ref = this;
+        var elements = ref._bufferedElements;
+        var _attributeBuffer = ref._attributeBuffer;
+        var _indexBuffer = ref._indexBuffer;
+        var vertexSize = ref.vertexSize;
+        var drawCalls = AbstractBatchRenderer._drawCallPool;
+
+        var dcIndex = this._dcIndex;
+        var aIndex = this._aIndex;
+        var iIndex = this._iIndex;
+
+        var drawCall = drawCalls[dcIndex];
+
+        drawCall.start = this._iIndex;
+        drawCall.texArray = texArray;
+
+        for (var i = start; i < finish; ++i)
+        {
+            var sprite = elements[i];
+            var tex = sprite._texture.baseTexture;
+            var spriteBlendMode = utils.premultiplyBlendMode[
+                tex.alphaMode ? 1 : 0][sprite.blendMode];
+
+            elements[i] = null;
+
+            if (start < i && drawCall.blend !== spriteBlendMode)
+            {
+                drawCall.size = iIndex - drawCall.start;
+                start = i;
+                drawCall = drawCalls[++dcIndex];
+                drawCall.texArray = texArray;
+                drawCall.start = iIndex;
+            }
+
+            this.packInterleavedGeometry(sprite, _attributeBuffer, _indexBuffer, aIndex, iIndex);
+            aIndex += sprite.vertexData.length / 2 * vertexSize;
+            iIndex += sprite.indices.length;
+
+            drawCall.blend = spriteBlendMode;
+        }
+
+        if (start < finish)
+        {
+            drawCall.size = iIndex - drawCall.start;
+            ++dcIndex;
+        }
+
+        this._dcIndex = dcIndex;
+        this._aIndex = aIndex;
+        this._iIndex = iIndex;
+    };
+
+    /**
+     * Bind textures for current rendering
+     *
+     * @param {PIXI.BatchTextureArray} texArray
+     */
+    AbstractBatchRenderer.prototype.bindAndClearTexArray = function bindAndClearTexArray (texArray)
+    {
+        var textureSystem = this.renderer.texture;
+
+        for (var j = 0; j < texArray.count; j++)
+        {
+            textureSystem.bind(texArray.elements[j], texArray.ids[j]);
+            texArray.elements[j] = null;
+        }
+        texArray.count = 0;
+    };
+
+    AbstractBatchRenderer.prototype.updateGeometry = function updateGeometry ()
+    {
+        var ref = this;
+        var packedGeometries = ref._packedGeometries;
+        var attributeBuffer = ref._attributeBuffer;
+        var indexBuffer = ref._indexBuffer;
+
+        if (!settings.settings.CAN_UPLOAD_SAME_BUFFER)
+        { /* Usually on iOS devices, where the browser doesn't
+            like uploads to the same buffer in a single frame. */
+            if (this._packedGeometryPoolSize <= this._flushId)
+            {
+                this._packedGeometryPoolSize++;
+                packedGeometries[this._flushId] = new (this.geometryClass)();
+            }
+
+            packedGeometries[this._flushId]._buffer.update(attributeBuffer.rawBinaryData);
+            packedGeometries[this._flushId]._indexBuffer.update(indexBuffer);
+
+            this.renderer.geometry.bind(packedGeometries[this._flushId]);
+            this.renderer.geometry.updateBuffers();
+            this._flushId++;
+        }
+        else
+        {
+            // lets use the faster option, always use buffer number 0
+            packedGeometries[this._flushId]._buffer.update(attributeBuffer.rawBinaryData);
+            packedGeometries[this._flushId]._indexBuffer.update(indexBuffer);
+
+            this.renderer.geometry.updateBuffers();
+        }
+    };
+
+    AbstractBatchRenderer.prototype.drawBatches = function drawBatches ()
+    {
+        var dcCount = this._dcIndex;
+        var ref = this.renderer;
+        var gl = ref.gl;
+        var stateSystem = ref.state;
+        var drawCalls = AbstractBatchRenderer._drawCallPool;
+
+        var curTexArray = null;
+
+        // Upload textures and do the draw calls
+        for (var i = 0; i < dcCount; i++)
+        {
+            var ref$1 = drawCalls[i];
+            var texArray = ref$1.texArray;
+            var type = ref$1.type;
+            var size = ref$1.size;
+            var start = ref$1.start;
+            var blend = ref$1.blend;
+
+            if (curTexArray !== texArray)
+            {
+                curTexArray = texArray;
+                this.bindAndClearTexArray(texArray);
+            }
+
+            this.state.blendMode = blend;
+            stateSystem.set(this.state);
+            gl.drawElements(type, size, gl.UNSIGNED_SHORT, start * 2);
+        }
     };
 
     /**
@@ -18905,143 +19632,17 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
             return;
         }
 
-        var attributeBuffer = this.getAttributeBuffer(this._vertexCount);
-        var indexBuffer = this.getIndexBuffer(this._indexCount);
-        var gl = this.renderer.gl;
+        this._attributeBuffer = this.getAttributeBuffer(this._vertexCount);
+        this._indexBuffer = this.getIndexBuffer(this._indexCount);
+        this._aIndex = 0;
+        this._iIndex = 0;
+        this._dcIndex = 0;
 
-        var ref = this;
-        var elements = ref._bufferedElements;
-        var drawCalls = ref._drawCalls;
-        var MAX_TEXTURES = ref.MAX_TEXTURES;
-        var packedGeometries = ref._packedGeometries;
-        var vertexSize = ref.vertexSize;
+        this.buildTexturesAndDrawCalls();
+        this.updateGeometry();
+        this.drawBatches();
 
-        var touch = this.renderer.textureGC.count;
-
-        var index = 0;
-        var _indexCount = 0;
-
-        var nextTexture;
-        var currentTexture;
-        var textureCount = 0;
-
-        var currentGroup = drawCalls[0];
-        var groupCount = 0;
-
-        var blendMode = -1;// blend-mode of previous element/sprite/object!
-
-        currentGroup.textureCount = 0;
-        currentGroup.start = 0;
-        currentGroup.blend = blendMode;
-
-        var TICK = ++BaseTexture._globalBatch;
-        var i;
-
-        for (i = 0; i < this._bufferSize; ++i)
-        {
-            var sprite = elements[i];
-
-            elements[i] = null;
-            nextTexture = sprite._texture.baseTexture;
-
-            var spriteBlendMode = utils.premultiplyBlendMode[
-                nextTexture.premultiplyAlpha ? 1 : 0][sprite.blendMode];
-
-            if (blendMode !== spriteBlendMode)
-            {
-                blendMode = spriteBlendMode;
-
-                // force the batch to break!
-                currentTexture = null;
-                textureCount = MAX_TEXTURES;
-                TICK++;
-            }
-
-            if (currentTexture !== nextTexture)
-            {
-                currentTexture = nextTexture;
-
-                if (nextTexture._batchEnabled !== TICK)
-                {
-                    if (textureCount === MAX_TEXTURES)
-                    {
-                        TICK++;
-
-                        textureCount = 0;
-
-                        currentGroup.size = _indexCount - currentGroup.start;
-
-                        currentGroup = drawCalls[groupCount++];
-                        currentGroup.textureCount = 0;
-                        currentGroup.blend = blendMode;
-                        currentGroup.start = _indexCount;
-                    }
-
-                    nextTexture.touched = touch;
-                    nextTexture._batchEnabled = TICK;
-                    nextTexture._id = textureCount;
-
-                    currentGroup.textures[currentGroup.textureCount++] = nextTexture;
-                    textureCount++;
-                }
-            }
-
-            this.packInterleavedGeometry(sprite, attributeBuffer,
-                indexBuffer, index, _indexCount);
-
-            // push a graphics..
-            index += (sprite.vertexData.length / 2) * vertexSize;
-            _indexCount += sprite.indices.length;
-        }
-
-        BaseTexture._globalBatch = TICK;
-        currentGroup.size = _indexCount - currentGroup.start;
-
-        if (!settings.settings.CAN_UPLOAD_SAME_BUFFER)
-        { /* Usually on iOS devices, where the browser doesn't
-            like uploads to the same buffer in a single frame. */
-            if (this._packedGeometryPoolSize <= this._flushId)
-            {
-                this._packedGeometryPoolSize++;
-                packedGeometries[this._flushId] = new (this.geometryClass)();
-            }
-
-            packedGeometries[this._flushId]._buffer.update(attributeBuffer.rawBinaryData, 0);
-            packedGeometries[this._flushId]._indexBuffer.update(indexBuffer, 0);
-
-            this.renderer.geometry.bind(packedGeometries[this._flushId]);
-            this.renderer.geometry.updateBuffers();
-            this._flushId++;
-        }
-        else
-        {
-            // lets use the faster option, always use buffer number 0
-            packedGeometries[this._flushId]._buffer.update(attributeBuffer.rawBinaryData, 0);
-            packedGeometries[this._flushId]._indexBuffer.update(indexBuffer, 0);
-
-            this.renderer.geometry.updateBuffers();
-        }
-
-        var textureSystem = this.renderer.texture;
-        var stateSystem = this.renderer.state;
-
-        // Upload textures and do the draw calls
-        for (i = 0; i < groupCount; i++)
-        {
-            var group = drawCalls[i];
-            var groupTextureCount = group.textureCount;
-
-            for (var j = 0; j < groupTextureCount; j++)
-            {
-                textureSystem.bind(group.textures[j], j);
-                group.textures[j] = null;
-            }
-
-            stateSystem.setBlendMode(group.blend);
-            gl.drawElements(group.type, group.size, gl.UNSIGNED_SHORT, group.start * 2);
-        }
-
-        // reset elements for the next flush
+        // reset elements buffer for the next flush
         this._bufferSize = 0;
         this._vertexCount = 0;
         this._indexCount = 0;
@@ -19089,7 +19690,8 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         this._aBuffers = null;
         this._iBuffers = null;
         this._packedGeometries = null;
-        this._drawCalls = null;
+        this._attributeBuffer = null;
+        this._indexBuffer = null;
 
         if (this._shader)
         {
@@ -19184,11 +19786,11 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         var uvs = element.uvs;
         var indicies = element.indices;
         var vertexData = element.vertexData;
-        var textureId = element._texture.baseTexture._id;
+        var textureId = element._texture.baseTexture._batchLocation;
 
         var alpha = Math.min(element.worldAlpha, 1.0);
         var argb = (alpha < 1.0
-          && element._texture.baseTexture.premultiplyAlpha)
+            && element._texture.baseTexture.alphaMode)
             ? utils.premultiplyTint(element._tintRGB, alpha)
             : element._tintRGB + (alpha * 255 << 24);
 
@@ -19211,6 +19813,30 @@ var AbstractBatchRenderer = /*@__PURE__*/(function (ObjectRenderer) {
 
     return AbstractBatchRenderer;
 }(ObjectRenderer));
+
+/**
+ * Pool of `BatchDrawCall` objects that `flush` used
+ * to create "batches" of the objects being rendered.
+ *
+ * These are never re-allocated again.
+ * Shared between all batch renderers because it can be only one "flush" working at the moment.
+ *
+ * @static
+ * @member {PIXI.BatchDrawCall[]}
+ */
+AbstractBatchRenderer._drawCallPool = [];
+
+/**
+ * Pool of `BatchDrawCall` objects that `flush` used
+ * to create "batches" of the objects being rendered.
+ *
+ * These are never re-allocated again.
+ * Shared between all batch renderers because it can be only one "flush" working at the moment.
+ *
+ * @static
+ * @member {PIXI.BatchTextureArray[]}
+ */
+AbstractBatchRenderer._textureArrayPool = [];
 
 /**
  * Helper that generates batching multi-texture shader. Use it with your new BatchRenderer
@@ -19435,13 +20061,15 @@ exports.BatchGeometry = BatchGeometry;
 exports.BatchPluginFactory = BatchPluginFactory;
 exports.BatchRenderer = BatchRenderer;
 exports.BatchShaderGenerator = BatchShaderGenerator;
+exports.BatchTextureArray = BatchTextureArray;
 exports.Buffer = Buffer;
 exports.CubeTexture = CubeTexture;
 exports.Filter = Filter;
 exports.Framebuffer = Framebuffer;
 exports.GLProgram = GLProgram;
-exports.GLTexture = BaseTexture;
+exports.GLTexture = GLTexture;
 exports.Geometry = Geometry;
+exports.MaskData = MaskData;
 exports.ObjectRenderer = ObjectRenderer;
 exports.Program = Program;
 exports.Quad = Quad;
@@ -19468,8 +20096,8 @@ exports.systems = systems;
 
 },{"@pixi/constants":47,"@pixi/display":49,"@pixi/math":60,"@pixi/runner":69,"@pixi/settings":70,"@pixi/ticker":77,"@pixi/utils":78}],49:[function(require,module,exports){
 /*!
- * @pixi/display - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/display - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/display is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -19557,8 +20185,6 @@ Bounds.prototype.isEmpty = function isEmpty ()
  */
 Bounds.prototype.clear = function clear ()
 {
-    this.updateID++;
-
     this.minX = Infinity;
     this.minY = Infinity;
     this.maxX = -Infinity;
@@ -19652,15 +20278,28 @@ Bounds.prototype.addQuad = function addQuad (vertices)
 /**
  * Adds sprite frame, transformed.
  *
- * @param {PIXI.Transform} transform - TODO
- * @param {number} x0 - TODO
- * @param {number} y0 - TODO
- * @param {number} x1 - TODO
- * @param {number} y1 - TODO
+ * @param {PIXI.Transform} transform - transform to apply
+ * @param {number} x0 - left X of frame
+ * @param {number} y0 - top Y of frame
+ * @param {number} x1 - right X of frame
+ * @param {number} y1 - bottom Y of frame
  */
 Bounds.prototype.addFrame = function addFrame (transform, x0, y0, x1, y1)
 {
-    var matrix = transform.worldTransform;
+    this.addFrameMatrix(transform.worldTransform, x0, y0, x1, y1);
+};
+
+/**
+ * Adds sprite frame, multiplied by matrix
+ *
+ * @param {PIXI.Matrix} matrix - matrix to apply
+ * @param {number} x0 - left X of frame
+ * @param {number} y0 - top Y of frame
+ * @param {number} x1 - right X of frame
+ * @param {number} y1 - bottom Y of frame
+ */
+Bounds.prototype.addFrameMatrix = function addFrameMatrix (matrix, x0, y0, x1, y1)
+{
     var a = matrix.a;
     var b = matrix.b;
     var c = matrix.c;
@@ -19749,13 +20388,30 @@ Bounds.prototype.addVertexData = function addVertexData (vertexData, beginOffset
  */
 Bounds.prototype.addVertices = function addVertices (transform, vertices, beginOffset, endOffset)
 {
-    var matrix = transform.worldTransform;
+    this.addVerticesMatrix(transform.worldTransform, vertices, beginOffset, endOffset);
+};
+
+/**
+ * Add an array of mesh vertices
+ *
+ * @param {PIXI.Matrix} matrix - mesh matrix
+ * @param {Float32Array} vertices - mesh coordinates in array
+ * @param {number} beginOffset - begin offset
+ * @param {number} endOffset - end offset, excluded
+ * @param {number} [padX] - x padding
+ * @param {number} [padY] - y padding
+ */
+Bounds.prototype.addVerticesMatrix = function addVerticesMatrix (matrix, vertices, beginOffset, endOffset, padX, padY)
+{
     var a = matrix.a;
     var b = matrix.b;
     var c = matrix.c;
     var d = matrix.d;
     var tx = matrix.tx;
     var ty = matrix.ty;
+
+    padX = padX || 0;
+    padY = padY || 0;
 
     var minX = this.minX;
     var minY = this.minY;
@@ -19769,10 +20425,10 @@ Bounds.prototype.addVertices = function addVertices (transform, vertices, beginO
         var x = (a * rawX) + (c * rawY) + tx;
         var y = (d * rawY) + (b * rawX) + ty;
 
-        minX = x < minX ? x : minX;
-        minY = y < minY ? y : minY;
-        maxX = x > maxX ? x : maxX;
-        maxY = y > maxY ? y : maxY;
+        minX = Math.min(minX, x - padX);
+        maxX = Math.max(maxX, x + padX);
+        minY = Math.min(minY, y - padY);
+        maxY = Math.max(maxY, y + padY);
     }
 
     this.minX = minX;
@@ -19827,6 +20483,17 @@ Bounds.prototype.addBoundsMask = function addBoundsMask (bounds, mask)
 };
 
 /**
+ * Adds other Bounds, multiplied by matrix. Bounds shouldn't be empty
+ *
+ * @param {PIXI.Bounds} bounds other bounds
+ * @param {PIXI.Matrix} matrix multiplicator
+ */
+Bounds.prototype.addBoundsMatrix = function addBoundsMatrix (bounds, matrix)
+{
+    this.addFrameMatrix(matrix, bounds.minX, bounds.minY, bounds.maxX, bounds.maxY);
+};
+
+/**
  * Adds other Bounds, masked with Rectangle
  *
  * @param {PIXI.Bounds} bounds - TODO
@@ -19851,6 +20518,50 @@ Bounds.prototype.addBoundsArea = function addBoundsArea (bounds, area)
         this.maxX = _maxX > maxX ? _maxX : maxX;
         this.maxY = _maxY > maxY ? _maxY : maxY;
     }
+};
+
+/**
+ * Pads bounds object, making it grow in all directions.
+ * If paddingY is omitted, both paddingX and paddingY will be set to paddingX.
+ *
+ * @param {number} [paddingX=0] - The horizontal padding amount.
+ * @param {number} [paddingY=0] - The vertical padding amount.
+ */
+Bounds.prototype.pad = function pad (paddingX, paddingY)
+{
+    paddingX = paddingX || 0;
+    paddingY = paddingY || ((paddingY !== 0) ? paddingX : 0);
+
+    if (!this.isEmpty())
+    {
+        this.minX -= paddingX;
+        this.maxX += paddingX;
+        this.minY -= paddingY;
+        this.maxY += paddingY;
+    }
+};
+
+/**
+ * Adds padded frame. (x0, y0) should be strictly less than (x1, y1)
+ *
+ * @param {number} x0 - left X of frame
+ * @param {number} y0 - top Y of frame
+ * @param {number} x1 - right X of frame
+ * @param {number} y1 - bottom Y of frame
+ * @param {number} padX - padding X
+ * @param {number} padY - padding Y
+ */
+Bounds.prototype.addFramePad = function addFramePad (x0, y0, x1, y1, padX, padY)
+{
+    x0 -= padX;
+    y0 -= padY;
+    x1 += padX;
+    y1 += padY;
+
+    this.minX = this.minX < x0 ? this.minX : x0;
+    this.maxX = this.maxX > x1 ? this.maxX : x1;
+    this.minY = this.minY < y0 ? this.minY : y0;
+    this.maxY = this.maxY > y1 ? this.maxY : y1;
 };
 
 // _tempDisplayObjectParent = new DisplayObject();
@@ -20008,6 +20719,12 @@ var DisplayObject = /*@__PURE__*/(function (EventEmitter) {
          * @member {boolean}
          */
         this.isSprite = false;
+
+        /**
+         * Does any other displayObject use this object as a mask?
+         * @member {boolean}
+         */
+        this.isMask = false;
     }
 
     if ( EventEmitter ) DisplayObject.__proto__ = EventEmitter;
@@ -20059,11 +20776,21 @@ var DisplayObject = /*@__PURE__*/(function (EventEmitter) {
      */
     DisplayObject.prototype.updateTransform = function updateTransform ()
     {
+        this._boundsID++;
+
         this.transform.updateTransform(this.parent.transform);
         // multiply the alphas..
         this.worldAlpha = this.alpha * this.parent.worldAlpha;
+    };
 
-        this._bounds.updateID++;
+    /**
+     * Recalculates the bounds of the display object.
+     *
+     * Does nothing by default and can be overwritten in a parent class.
+     */
+    DisplayObject.prototype.calculateBounds = function calculateBounds ()
+    {
+        // OVERWRITE;
     };
 
     /**
@@ -20312,20 +21039,21 @@ var DisplayObject = /*@__PURE__*/(function (EventEmitter) {
      */
     DisplayObject.prototype.destroy = function destroy ()
     {
-        this.removeAllListeners();
         if (this.parent)
         {
             this.parent.removeChild(this);
         }
+        this.removeAllListeners();
         this.transform = null;
 
         this.parent = null;
-
         this._bounds = null;
         this._currentBounds = null;
         this._mask = null;
 
+        this.filters = null;
         this.filterArea = null;
+        this.hitArea = null;
 
         this.interactive = false;
         this.interactiveChildren = false;
@@ -20545,7 +21273,7 @@ var DisplayObject = /*@__PURE__*/(function (EventEmitter) {
      * sprite.mask = graphics;
      * @todo At the moment, PIXI.CanvasRenderer doesn't support PIXI.Sprite as mask.
      *
-     * @member {PIXI.Graphics|PIXI.Sprite|null}
+     * @member {PIXI.Container|PIXI.MaskData}
      */
     prototypeAccessors.mask.get = function ()
     {
@@ -20556,16 +21284,20 @@ var DisplayObject = /*@__PURE__*/(function (EventEmitter) {
     {
         if (this._mask)
         {
-            this._mask.renderable = true;
-            this._mask.isMask = false;
+            var maskObject = this._mask.maskObject || this._mask;
+
+            maskObject.renderable = true;
+            maskObject.isMask = false;
         }
 
         this._mask = value;
 
         if (this._mask)
         {
-            this._mask.renderable = false;
-            this._mask.isMask = true;
+            var maskObject$1 = this._mask.maskObject || this._mask;
+
+            maskObject$1.renderable = false;
+            maskObject$1.isMask = true;
         }
     };
 
@@ -21045,8 +21777,10 @@ var Container = /*@__PURE__*/(function (DisplayObject) {
             // TODO: filter+mask, need to mask both somehow
             if (child._mask)
             {
-                child._mask.calculateBounds();
-                this._bounds.addBoundsMask(child._bounds, child._mask._bounds);
+                var maskObject = child._mask.maskObject || child._mask;
+
+                maskObject.calculateBounds();
+                this._bounds.addBoundsMask(child._bounds, maskObject._bounds);
             }
             else if (child.filterArea)
             {
@@ -21276,8 +22010,8 @@ exports.DisplayObject = DisplayObject;
 
 },{"@pixi/math":60,"@pixi/settings":70,"@pixi/utils":78}],50:[function(require,module,exports){
 /*!
- * @pixi/extract - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/extract - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/extract is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -21294,12 +22028,25 @@ var TEMP_RECT = new math.Rectangle();
 var BYTES_PER_PIXEL = 4;
 
 /**
- * The extract manager provides functionality to export content from the renderers.
+ * This class provides renderer-specific plugins for exporting content from a renderer.
+ * For instance, these plugins can be used for saving an Image, Canvas element or for exporting the raw image data (pixels).
  *
- * An instance of this class is automatically created by default, and can be found at `renderer.plugins.extract`
+ * Do not instantiate these plugins directly. It is available from the `renderer.plugins` property.
+ * See {@link PIXI.CanvasRenderer#plugins} or {@link PIXI.Renderer#plugins}.
+ * @example
+ * // Create a new app (will auto-add extract plugin to renderer)
+ * const app = new PIXI.Application();
  *
+ * // Draw a red circle
+ * const graphics = new PIXI.Graphics()
+ *     .beginFill(0xFF0000)
+ *     .drawCircle(0, 0, 50);
+ *
+ * // Render the graphics as an HTMLImageElement
+ * const image = app.renderer.plugins.extract.image(graphics);
+ * document.body.appendChild(image);
  * @class
- * @memberof PIXI.extract
+ * @memberof PIXI
  */
 var Extract = function Extract(renderer)
 {
@@ -21307,9 +22054,9 @@ var Extract = function Extract(renderer)
     /**
      * Collection of methods for extracting data (image, pixels, etc.) from a display object or render texture
      *
-     * @member {PIXI.extract.Extract} extract
+     * @member {PIXI.Extract} extract
      * @memberof PIXI.Renderer#
-     * @see PIXI.extract.Extract
+     * @see PIXI.Extract
      */
     renderer.extract = this;
 };
@@ -21396,8 +22143,8 @@ Extract.prototype.canvas = function canvas (target)
         renderer.renderTexture.bind(null);
     }
 
-    var width = Math.floor(frame.width * resolution);
-    var height = Math.floor(frame.height * resolution);
+    var width = Math.floor((frame.width * resolution) + 1e-4);
+    var height = Math.floor((frame.height * resolution) + 1e-4);
 
     var canvasBuffer = new utils.CanvasRenderTarget(width, height, 1);
 
@@ -21426,8 +22173,15 @@ Extract.prototype.canvas = function canvas (target)
     // pulling pixels
     if (flipY)
     {
-        canvasBuffer.context.scale(1, -1);
-        canvasBuffer.context.drawImage(canvasBuffer.canvas, 0, -height);
+        var target$1 = new utils.CanvasRenderTarget(canvasBuffer.width, canvasBuffer.height, 1);
+
+        target$1.context.scale(1, -1);
+
+        // we can't render to itself because we should be empty before render.
+        target$1.context.drawImage(canvasBuffer.canvas, 0, -height);
+
+        canvasBuffer.destroy();
+        canvasBuffer = target$1;
     }
 
     if (generated)
@@ -21553,34 +22307,13 @@ Extract.arrayPostDivide = function arrayPostDivide (pixels, out)
     }
 };
 
-/**
- * This namespace provides renderer-specific plugins for exporting content from a renderer.
- * For instance, these plugins can be used for saving an Image, Canvas element or for exporting the raw image data (pixels).
- *
- * Do not instantiate these plugins directly. It is available from the `renderer.plugins` property.
- * See {@link PIXI.CanvasRenderer#plugins} or {@link PIXI.Renderer#plugins}.
- * @example
- * // Create a new app (will auto-add extract plugin to renderer)
- * const app = new PIXI.Application();
- *
- * // Draw a red circle
- * const graphics = new PIXI.Graphics()
- *     .beginFill(0xFF0000)
- *     .drawCircle(0, 0, 50);
- *
- * // Render the graphics as an HTMLImageElement
- * const image = app.renderer.plugins.extract.image(graphics);
- * document.body.appendChild(image);
- * @namespace PIXI.extract
- */
-
 exports.Extract = Extract;
 
 
 },{"@pixi/core":48,"@pixi/math":60,"@pixi/utils":78}],51:[function(require,module,exports){
 /*!
- * @pixi/filter-alpha - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-alpha - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-alpha is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -21652,8 +22385,8 @@ exports.AlphaFilter = AlphaFilter;
 
 },{"@pixi/core":48}],52:[function(require,module,exports){
 /*!
- * @pixi/filter-blur - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-blur - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-blur is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -21665,7 +22398,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var core = require('@pixi/core');
 var settings = require('@pixi/settings');
 
-var vertTemplate = "\n    attribute vec2 aVertexPosition;\n\n    uniform mat3 projectionMatrix;\n\n    uniform float strength;\n\n    varying vec2 vBlurTexCoords[%size%];\n\n    uniform vec4 inputSize;\n    uniform vec4 outputFrame;\n    \n    vec4 filterVertexPosition( void )\n    {\n        vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n    \n        return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n    }\n    \n    vec2 filterTextureCoord( void )\n    {\n        return aVertexPosition * (outputFrame.zw * inputSize.zw);\n    }\n\n    void main(void)\n    {\n        gl_Position = filterVertexPosition();\n\n        vec2 textureCoord = filterTextureCoord();\n        %blur%\n    }";
+var vertTemplate = "\n    attribute vec2 aVertexPosition;\n\n    uniform mat3 projectionMatrix;\n\n    uniform float strength;\n\n    varying vec2 vBlurTexCoords[%size%];\n\n    uniform vec4 inputSize;\n    uniform vec4 outputFrame;\n\n    vec4 filterVertexPosition( void )\n    {\n        vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;\n\n        return vec4((projectionMatrix * vec3(position, 1.0)).xy, 0.0, 1.0);\n    }\n\n    vec2 filterTextureCoord( void )\n    {\n        return aVertexPosition * (outputFrame.zw * inputSize.zw);\n    }\n\n    void main(void)\n    {\n        gl_Position = filterVertexPosition();\n\n        vec2 textureCoord = filterTextureCoord();\n        %blur%\n    }";
 
 function generateBlurVertSource(kernelSize, x)
 {
@@ -21842,7 +22575,7 @@ var BlurFilterPass = /*@__PURE__*/(function (Filter) {
             var flop = renderTarget;
 
             this.state.blend = false;
-            filterManager.applyFilter(this, flip, flop, false);
+            filterManager.applyFilter(this, flip, flop, true);
 
             for (var i = 1; i < this.passes - 1; i++)
             {
@@ -22088,8 +22821,8 @@ exports.BlurFilterPass = BlurFilterPass;
 
 },{"@pixi/core":48,"@pixi/settings":70}],53:[function(require,module,exports){
 /*!
- * @pixi/filter-color-matrix - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-color-matrix - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-color-matrix is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -22695,8 +23428,8 @@ exports.ColorMatrixFilter = ColorMatrixFilter;
 
 },{"@pixi/core":48}],54:[function(require,module,exports){
 /*!
- * @pixi/filter-displacement - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-displacement - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-displacement is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -22822,8 +23555,8 @@ exports.DisplacementFilter = DisplacementFilter;
 
 },{"@pixi/core":48,"@pixi/math":60}],55:[function(require,module,exports){
 /*!
- * @pixi/filter-fxaa - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-fxaa - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-fxaa is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -22868,8 +23601,8 @@ exports.FXAAFilter = FXAAFilter;
 
 },{"@pixi/core":48}],56:[function(require,module,exports){
 /*!
- * @pixi/filter-noise - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/filter-noise - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/filter-noise is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -22956,8 +23689,8 @@ exports.NoiseFilter = NoiseFilter;
 
 },{"@pixi/core":48}],57:[function(require,module,exports){
 /*!
- * @pixi/graphics - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/graphics - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/graphics is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -22969,8 +23702,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var core = require('@pixi/core');
 var math = require('@pixi/math');
 var utils = require('@pixi/utils');
-var display = require('@pixi/display');
 var constants = require('@pixi/constants');
+var display = require('@pixi/display');
 
 /**
  * Graphics curves resolution settings. If `adaptive` flag is set to `true`,
@@ -22996,7 +23729,7 @@ var GRAPHICS_CURVES = {
     {
         if ( defaultSegments === void 0 ) defaultSegments = 20;
 
-        if (!this.adaptive)
+        if (!this.adaptive || !length || isNaN(length))
         {
             return defaultSegments;
         }
@@ -23101,87 +23834,66 @@ FillStyle.prototype.destroy = function destroy ()
 };
 
 /**
- * A class to contain data useful for Graphics objects
+ * Builds a polygon to draw
  *
- * @class
- * @memberof PIXI
- */
-var GraphicsData = function GraphicsData(shape, fillStyle, lineStyle, matrix)
-{
-    if ( fillStyle === void 0 ) fillStyle = null;
-    if ( lineStyle === void 0 ) lineStyle = null;
-    if ( matrix === void 0 ) matrix = null;
-
-    /**
-     * The shape object to draw.
-     * @member {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle}
-     */
-    this.shape = shape;
-
-    /**
-     * The style of the line.
-     * @member {PIXI.LineStyle}
-     */
-    this.lineStyle = lineStyle;
-
-    /**
-     * The style of the fill.
-     * @member {PIXI.FillStyle}
-     */
-    this.fillStyle = fillStyle;
-
-    /**
-     * The transform matrix.
-     * @member {PIXI.Matrix}
-     */
-    this.matrix = matrix;
-
-    /**
-     * The type of the shape, see the Const.Shapes file for all the existing types,
-     * @member {number}
-     */
-    this.type = shape.type;
-
-    /**
-     * The collection of points.
-     * @member {number[]}
-     */
-    this.points = [];
-
-    /**
-     * The collection of holes.
-     * @member {PIXI.GraphicsData[]}
-     */
-    this.holes = [];
-};
-
-/**
- * Creates a new GraphicsData object with the same values as this one.
+ * Ignored from docs since it is not directly exposed.
  *
- * @return {PIXI.GraphicsData} Cloned GraphicsData object
+ * @ignore
+ * @private
+ * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
+ * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
+ * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
  */
-GraphicsData.prototype.clone = function clone ()
-{
-    return new GraphicsData(
-        this.shape,
-        this.fillStyle,
-        this.lineStyle,
-        this.matrix
-    );
-};
+var buildPoly = {
 
-/**
- * Destroys the Graphics data.
- */
-GraphicsData.prototype.destroy = function destroy ()
-{
-    this.shape = null;
-    this.holes.length = 0;
-    this.holes = null;
-    this.points.length = 0;
-    this.points = null;
-    this.lineStyle = null;
-    this.fillStyle = null;
+    build: function build(graphicsData)
+    {
+        graphicsData.points = graphicsData.shape.points.slice();
+    },
+
+    triangulate: function triangulate(graphicsData, graphicsGeometry)
+    {
+        var points = graphicsData.points;
+        var holes = graphicsData.holes;
+        var verts = graphicsGeometry.points;
+        var indices = graphicsGeometry.indices;
+
+        if (points.length >= 6)
+        {
+            var holeArray = [];
+            // Process holes..
+
+            for (var i = 0; i < holes.length; i++)
+            {
+                var hole = holes[i];
+
+                holeArray.push(points.length / 2);
+                points = points.concat(hole.points);
+            }
+
+            // sort color
+            var triangles = utils.earcut(points, holeArray, 2);
+
+            if (!triangles)
+            {
+                return;
+            }
+
+            var vertPos = verts.length / 2;
+
+            for (var i$1 = 0; i$1 < triangles.length; i$1 += 3)
+            {
+                indices.push(triangles[i$1] + vertPos);
+                indices.push(triangles[i$1 + 1] + vertPos);
+                indices.push(triangles[i$1 + 2] + vertPos);
+            }
+
+            for (var i$2 = 0; i$2 < points.length; i$2++)
+            {
+                verts.push(points[i$2]);
+            }
+        }
+    },
 };
 
 /**
@@ -23233,7 +23945,7 @@ var buildCircle = {
 
         var seg = (Math.PI * 2) / totalSegs;
 
-        for (var i = 0; i < totalSegs; i++)
+        for (var i = 0; i < totalSegs - 0.5; i++)
         {
             points.push(
                 x + (Math.sin(-seg * i) * width),
@@ -23241,10 +23953,7 @@ var buildCircle = {
             );
         }
 
-        points.push(
-            points[0],
-            points[1]
-        );
+        points.push(points[0], points[1]);
     },
 
     triangulate: function triangulate(graphicsData, graphicsGeometry)
@@ -23256,7 +23965,15 @@ var buildCircle = {
         var vertPos = verts.length / 2;
         var center = vertPos;
 
-        verts.push(graphicsData.shape.x, graphicsData.shape.y);
+        var circle = graphicsData.shape;
+        var matrix = graphicsData.matrix;
+        var x = circle.x;
+        var y = circle.y;
+
+        // Push center (special point)
+        verts.push(
+            graphicsData.matrix ? (matrix.a * x) + (matrix.c * y) + matrix.tx : x,
+            graphicsData.matrix ? (matrix.b * x) + (matrix.d * y) + matrix.ty : y);
 
         for (var i = 0; i < points.length; i += 2)
         {
@@ -23269,6 +23986,214 @@ var buildCircle = {
 };
 
 /**
+ * Builds a rectangle to draw
+ *
+ * Ignored from docs since it is not directly exposed.
+ *
+ * @ignore
+ * @private
+ * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
+ * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
+ * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
+ */
+var buildRectangle = {
+
+    build: function build(graphicsData)
+    {
+        // --- //
+        // need to convert points to a nice regular data
+        //
+        var rectData = graphicsData.shape;
+        var x = rectData.x;
+        var y = rectData.y;
+        var width = rectData.width;
+        var height = rectData.height;
+
+        var points = graphicsData.points;
+
+        points.length = 0;
+
+        points.push(x, y,
+            x + width, y,
+            x + width, y + height,
+            x, y + height);
+    },
+
+    triangulate: function triangulate(graphicsData, graphicsGeometry)
+    {
+        var points = graphicsData.points;
+        var verts = graphicsGeometry.points;
+
+        var vertPos = verts.length / 2;
+
+        verts.push(points[0], points[1],
+            points[2], points[3],
+            points[6], points[7],
+            points[4], points[5]);
+
+        graphicsGeometry.indices.push(vertPos, vertPos + 1, vertPos + 2,
+            vertPos + 1, vertPos + 2, vertPos + 3);
+    },
+};
+
+/**
+ * Builds a rounded rectangle to draw
+ *
+ * Ignored from docs since it is not directly exposed.
+ *
+ * @ignore
+ * @private
+ * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
+ * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
+ * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
+ */
+var buildRoundedRectangle = {
+
+    build: function build(graphicsData)
+    {
+        var rrectData = graphicsData.shape;
+        var points = graphicsData.points;
+        var x = rrectData.x;
+        var y = rrectData.y;
+        var width = rrectData.width;
+        var height = rrectData.height;
+
+        // Don't allow negative radius or greater than half the smallest width
+        var radius = Math.max(0, Math.min(rrectData.radius, Math.min(width, height) / 2));
+
+        points.length = 0;
+
+        // No radius, do a simple rectangle
+        if (!radius)
+        {
+            points.push(x, y,
+                x + width, y,
+                x + width, y + height,
+                x, y + height);
+        }
+        else
+        {
+            quadraticBezierCurve(x, y + radius,
+                x, y,
+                x + radius, y,
+                points);
+            quadraticBezierCurve(x + width - radius,
+                y, x + width, y,
+                x + width, y + radius,
+                points);
+            quadraticBezierCurve(x + width, y + height - radius,
+                x + width, y + height,
+                x + width - radius, y + height,
+                points);
+            quadraticBezierCurve(x + radius, y + height,
+                x, y + height,
+                x, y + height - radius,
+                points);
+        }
+
+        // this tiny number deals with the issue that occurs when points overlap and earcut fails to triangulate the item.
+        // TODO - fix this properly, this is not very elegant.. but it works for now.
+    },
+
+    triangulate: function triangulate(graphicsData, graphicsGeometry)
+    {
+        var points = graphicsData.points;
+
+        var verts = graphicsGeometry.points;
+        var indices = graphicsGeometry.indices;
+
+        var vecPos = verts.length / 2;
+
+        var triangles = utils.earcut(points, null, 2);
+
+        for (var i = 0, j = triangles.length; i < j; i += 3)
+        {
+            indices.push(triangles[i] + vecPos);
+            //     indices.push(triangles[i] + vecPos);
+            indices.push(triangles[i + 1] + vecPos);
+            //   indices.push(triangles[i + 2] + vecPos);
+            indices.push(triangles[i + 2] + vecPos);
+        }
+
+        for (var i$1 = 0, j$1 = points.length; i$1 < j$1; i$1++)
+        {
+            verts.push(points[i$1], points[++i$1]);
+        }
+    },
+};
+
+/**
+ * Calculate a single point for a quadratic bezier curve.
+ * Utility function used by quadraticBezierCurve.
+ * Ignored from docs since it is not directly exposed.
+ *
+ * @ignore
+ * @private
+ * @param {number} n1 - first number
+ * @param {number} n2 - second number
+ * @param {number} perc - percentage
+ * @return {number} the result
+ *
+ */
+function getPt(n1, n2, perc)
+{
+    var diff = n2 - n1;
+
+    return n1 + (diff * perc);
+}
+
+/**
+ * Calculate the points for a quadratic bezier curve. (helper function..)
+ * Based on: https://stackoverflow.com/questions/785097/how-do-i-implement-a-bezier-curve-in-c
+ *
+ * Ignored from docs since it is not directly exposed.
+ *
+ * @ignore
+ * @private
+ * @param {number} fromX - Origin point x
+ * @param {number} fromY - Origin point x
+ * @param {number} cpX - Control point x
+ * @param {number} cpY - Control point y
+ * @param {number} toX - Destination point x
+ * @param {number} toY - Destination point y
+ * @param {number[]} [out=[]] - The output array to add points into. If not passed, a new array is created.
+ * @return {number[]} an array of points
+ */
+function quadraticBezierCurve(fromX, fromY, cpX, cpY, toX, toY, out)
+{
+    if ( out === void 0 ) out = [];
+
+    var n = 20;
+    var points = out;
+
+    var xa = 0;
+    var ya = 0;
+    var xb = 0;
+    var yb = 0;
+    var x = 0;
+    var y = 0;
+
+    for (var i = 0, j = 0; i <= n; ++i)
+    {
+        j = i / n;
+
+        // The Green Line
+        xa = getPt(fromX, cpX, j);
+        ya = getPt(fromY, cpY, j);
+        xb = getPt(cpX, toX, j);
+        yb = getPt(cpY, toY, j);
+
+        // The Black Dot
+        x = getPt(xa, xb, j);
+        y = getPt(ya, yb, j);
+
+        points.push(x, y);
+    }
+
+    return points;
+}
+
+/**
  * Builds a line to draw
  *
  * Ignored from docs since it is not directly exposed.
@@ -23278,7 +24203,7 @@ var buildCircle = {
  * @param {PIXI.GraphicsData} graphicsData - The graphics object containing all the necessary properties
  * @param {PIXI.GraphicsGeometry} graphicsGeometry - Geometry where to append output
  */
-function buildLine (graphicsData, graphicsGeometry)
+function buildLine(graphicsData, graphicsGeometry)
 {
     if (graphicsData.lineStyle.native)
     {
@@ -23286,7 +24211,7 @@ function buildLine (graphicsData, graphicsGeometry)
     }
     else
     {
-        buildLine$1(graphicsData, graphicsGeometry);
+        buildNonNativeLine(graphicsData, graphicsGeometry);
     }
 }
 
@@ -23300,7 +24225,7 @@ function buildLine (graphicsData, graphicsGeometry)
  * @param {PIXI.GraphicsData} graphicsData - The graphics object containing all the necessary properties
  * @param {PIXI.GraphicsGeometry} graphicsGeometry - Geometry where to append output
  */
-function buildLine$1(graphicsData, graphicsGeometry)
+function buildNonNativeLine(graphicsData, graphicsGeometry)
 {
     var shape = graphicsData.shape;
     var points = graphicsData.points || shape.points.slice();
@@ -23550,1378 +24475,267 @@ function buildNativeLine(graphicsData, graphicsGeometry)
 }
 
 /**
- * Builds a polygon to draw
+ * Builds a complex polygon to draw
  *
  * Ignored from docs since it is not directly exposed.
  *
  * @ignore
  * @private
- * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
+ * @param {PIXI.Graphics} graphicsData - The graphics object containing all the necessary properties
  * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
- * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
  */
-var buildPoly = {
-
-    build: function build(graphicsData)
-    {
-        graphicsData.points = graphicsData.shape.points.slice();
-    },
-
-    triangulate: function triangulate(graphicsData, graphicsGeometry)
-    {
-        var points = graphicsData.points;
-        var holes = graphicsData.holes;
-        var verts = graphicsGeometry.points;
-        var indices = graphicsGeometry.indices;
-
-        if (points.length >= 6)
-        {
-            var holeArray = [];
-            // Process holes..
-
-            for (var i = 0; i < holes.length; i++)
-            {
-                var hole = holes[i];
-
-                holeArray.push(points.length / 2);
-                points = points.concat(hole.points);
-            }
-
-            // sort color
-            var triangles = utils.earcut(points, holeArray, 2);
-
-            if (!triangles)
-            {
-                return;
-            }
-
-            var vertPos = verts.length / 2;
-
-            for (var i$1 = 0; i$1 < triangles.length; i$1 += 3)
-            {
-                indices.push(triangles[i$1] + vertPos);
-                indices.push(triangles[i$1 + 1] + vertPos);
-                indices.push(triangles[i$1 + 2] + vertPos);
-            }
-
-            for (var i$2 = 0; i$2 < points.length; i$2++)
-            {
-                verts.push(points[i$2]);
-            }
-        }
-    },
-};
-
-/**
- * Builds a rectangle to draw
- *
- * Ignored from docs since it is not directly exposed.
- *
- * @ignore
- * @private
- * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
- * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
- * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
- */
-var buildRectangle = {
-
-    build: function build(graphicsData)
-    {
-        // --- //
-        // need to convert points to a nice regular data
-        //
-        var rectData = graphicsData.shape;
-        var x = rectData.x;
-        var y = rectData.y;
-        var width = rectData.width;
-        var height = rectData.height;
-
-        var points = graphicsData.points;
-
-        points.length = 0;
-
-        points.push(x, y,
-            x + width, y,
-            x + width, y + height,
-            x, y + height);
-    },
-
-    triangulate: function triangulate(graphicsData, graphicsGeometry)
-    {
-        var points = graphicsData.points;
-        var verts = graphicsGeometry.points;
-
-        var vertPos = verts.length / 2;
-
-        verts.push(points[0], points[1],
-            points[2], points[3],
-            points[6], points[7],
-            points[4], points[5]);
-
-        graphicsGeometry.indices.push(vertPos, vertPos + 1, vertPos + 2,
-            vertPos + 1, vertPos + 2, vertPos + 3);
-    },
-};
-
-/**
- * Builds a rounded rectangle to draw
- *
- * Ignored from docs since it is not directly exposed.
- *
- * @ignore
- * @private
- * @param {PIXI.WebGLGraphicsData} graphicsData - The graphics object containing all the necessary properties
- * @param {object} webGLData - an object containing all the WebGL-specific information to create this shape
- * @param {object} webGLDataNativeLines - an object containing all the WebGL-specific information to create nativeLines
- */
-var buildRoundedRectangle = {
-
-    build: function build(graphicsData)
-    {
-        var rrectData = graphicsData.shape;
-        var points = graphicsData.points;
-        var x = rrectData.x;
-        var y = rrectData.y;
-        var width = rrectData.width;
-        var height = rrectData.height;
-
-        var radius = rrectData.radius;
-
-        points.length = 0;
-
-        quadraticBezierCurve(x, y + radius,
-            x, y,
-            x + radius, y,
-            points);
-        quadraticBezierCurve(x + width - radius,
-            y, x + width, y,
-            x + width, y + radius,
-            points);
-        quadraticBezierCurve(x + width, y + height - radius,
-            x + width, y + height,
-            x + width - radius, y + height,
-            points);
-        quadraticBezierCurve(x + radius, y + height,
-            x, y + height,
-            x, y + height - radius,
-            points);
-
-        // this tiny number deals with the issue that occurs when points overlap and earcut fails to triangulate the item.
-        // TODO - fix this properly, this is not very elegant.. but it works for now.
-    },
-
-    triangulate: function triangulate(graphicsData, graphicsGeometry)
-    {
-        var points = graphicsData.points;
-
-        var verts = graphicsGeometry.points;
-        var indices = graphicsGeometry.indices;
-
-        var vecPos = verts.length / 2;
-
-        var triangles = utils.earcut(points, null, 2);
-
-        for (var i = 0, j = triangles.length; i < j; i += 3)
-        {
-            indices.push(triangles[i] + vecPos);
-            //     indices.push(triangles[i] + vecPos);
-            indices.push(triangles[i + 1] + vecPos);
-            //   indices.push(triangles[i + 2] + vecPos);
-            indices.push(triangles[i + 2] + vecPos);
-        }
-
-        for (var i$1 = 0, j$1 = points.length; i$1 < j$1; i$1++)
-        {
-            verts.push(points[i$1], points[++i$1]);
-        }
-    },
-};
-
-/**
- * Calculate a single point for a quadratic bezier curve.
- * Utility function used by quadraticBezierCurve.
- * Ignored from docs since it is not directly exposed.
- *
- * @ignore
- * @private
- * @param {number} n1 - first number
- * @param {number} n2 - second number
- * @param {number} perc - percentage
- * @return {number} the result
- *
- */
-function getPt(n1, n2, perc)
+function buildComplexPoly(graphicsData, webGLData)
 {
-    var diff = n2 - n1;
+    // TODO - no need to copy this as it gets turned into a Float32Array anyways..
+    var points = graphicsData.points.slice();
 
-    return n1 + (diff * perc);
-}
+    if (points.length < 6)
+    {
+        return;
+    }
 
-/**
- * Calculate the points for a quadratic bezier curve. (helper function..)
- * Based on: https://stackoverflow.com/questions/785097/how-do-i-implement-a-bezier-curve-in-c
- *
- * Ignored from docs since it is not directly exposed.
- *
- * @ignore
- * @private
- * @param {number} fromX - Origin point x
- * @param {number} fromY - Origin point x
- * @param {number} cpX - Control point x
- * @param {number} cpY - Control point y
- * @param {number} toX - Destination point x
- * @param {number} toY - Destination point y
- * @param {number[]} [out=[]] - The output array to add points into. If not passed, a new array is created.
- * @return {number[]} an array of points
- */
-function quadraticBezierCurve(fromX, fromY, cpX, cpY, toX, toY, out)
-{
-    if ( out === void 0 ) out = [];
+    // get first and last point.. figure out the middle!
+    var indices = webGLData.indices;
 
-    var n = 20;
-    var points = out;
+    webGLData.points = points;
+    webGLData.alpha = graphicsData.fillAlpha;
+    webGLData.color = utils.hex2rgb(graphicsData.fillColor);
 
-    var xa = 0;
-    var ya = 0;
-    var xb = 0;
-    var yb = 0;
+    // calculate the bounds..
+    var minX = Infinity;
+    var maxX = -Infinity;
+
+    var minY = Infinity;
+    var maxY = -Infinity;
+
     var x = 0;
     var y = 0;
 
-    for (var i = 0, j = 0; i <= n; ++i)
+    // get size..
+    for (var i = 0; i < points.length; i += 2)
+    {
+        x = points[i];
+        y = points[i + 1];
+
+        minX = x < minX ? x : minX;
+        maxX = x > maxX ? x : maxX;
+
+        minY = y < minY ? y : minY;
+        maxY = y > maxY ? y : maxY;
+    }
+
+    // add a quad to the end cos there is no point making another buffer!
+    points.push(minX, minY,
+        maxX, minY,
+        maxX, maxY,
+        minX, maxY);
+
+    // push a quad onto the end..
+
+    // TODO - this ain't needed!
+    var length = points.length / 2;
+
+    for (var i$1 = 0; i$1 < length; i$1++)
+    {
+        indices.push(i$1);
+    }
+}
+
+/**
+ * Calculate the points for a bezier curve and then draws it.
+ *
+ * Ignored from docs since it is not directly exposed.
+ *
+ * @ignore
+ * @param {number} fromX - Starting point x
+ * @param {number} fromY - Starting point y
+ * @param {number} cpX - Control point x
+ * @param {number} cpY - Control point y
+ * @param {number} cpX2 - Second Control point x
+ * @param {number} cpY2 - Second Control point y
+ * @param {number} toX - Destination point x
+ * @param {number} toY - Destination point y
+ * @param {number} n - Number of segments approximating the bezier curve
+ * @param {number[]} [path=[]] - Path array to push points into
+ * @return {number[]} Array of points of the curve
+ */
+function bezierCurveTo(fromX, fromY, cpX, cpY, cpX2, cpY2, toX, toY, n, path)
+{
+    if ( path === void 0 ) path = [];
+
+    var dt = 0;
+    var dt2 = 0;
+    var dt3 = 0;
+    var t2 = 0;
+    var t3 = 0;
+
+    path.push(fromX, fromY);
+
+    for (var i = 1, j = 0; i <= n; ++i)
     {
         j = i / n;
 
-        // The Green Line
-        xa = getPt(fromX, cpX, j);
-        ya = getPt(fromY, cpY, j);
-        xb = getPt(cpX, toX, j);
-        yb = getPt(cpY, toY, j);
+        dt = (1 - j);
+        dt2 = dt * dt;
+        dt3 = dt2 * dt;
 
-        // The Black Dot
-        x = getPt(xa, xb, j);
-        y = getPt(ya, yb, j);
+        t2 = j * j;
+        t3 = t2 * j;
 
-        points.push(x, y);
+        path.push(
+            (dt3 * fromX) + (3 * dt2 * j * cpX) + (3 * dt * t2 * cpX2) + (t3 * toX),
+            (dt3 * fromY) + (3 * dt2 * j * cpY) + (3 * dt * t2 * cpY2) + (t3 * toY)
+        );
     }
 
-    return points;
+    return path;
 }
 
-var BATCH_POOL = [];
-var DRAW_CALL_POOL = [];
-var tmpPoint = new math.Point();
+/**
+ * Draw a star shape with an arbitrary number of points.
+ *
+ * @class
+ * @extends PIXI.Polygon
+ * @memberof PIXI
+ * @param {number} x - Center X position of the star
+ * @param {number} y - Center Y position of the star
+ * @param {number} points - The number of points of the star, must be > 1
+ * @param {number} radius - The outer radius of the star
+ * @param {number} [innerRadius] - The inner radius between points, default half `radius`
+ * @param {number} [rotation=0] - The rotation of the star in radians, where 0 is vertical
+ * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
+ */
+var Star = /*@__PURE__*/(function (Polygon) {
+    function Star(x, y, points, radius, innerRadius, rotation)
+    {
+        innerRadius = innerRadius || radius / 2;
+
+        var startAngle = (-1 * Math.PI / 2) + rotation;
+        var len = points * 2;
+        var delta = math.PI_2 / len;
+        var polygon = [];
+
+        for (var i = 0; i < len; i++)
+        {
+            var r = i % 2 ? innerRadius : radius;
+            var angle = (i * delta) + startAngle;
+
+            polygon.push(
+                x + (r * Math.cos(angle)),
+                y + (r * Math.sin(angle))
+            );
+        }
+
+        Polygon.call(this, polygon);
+    }
+
+    if ( Polygon ) Star.__proto__ = Polygon;
+    Star.prototype = Object.create( Polygon && Polygon.prototype );
+    Star.prototype.constructor = Star;
+
+    return Star;
+}(math.Polygon));
 
 /**
- * Map of fill commands for each shape type.
- *
- * @member {Object}
+ * Utilities for arc curves
+ * @class
  * @private
  */
-var fillCommands = {};
+var ArcUtils = function ArcUtils () {};
 
-fillCommands[math.SHAPES.POLY] = buildPoly;
-fillCommands[math.SHAPES.CIRC] = buildCircle;
-fillCommands[math.SHAPES.ELIP] = buildCircle;
-fillCommands[math.SHAPES.RECT] = buildRectangle;
-fillCommands[math.SHAPES.RREC] = buildRoundedRectangle;
-
-/**
- * A little internal structure to hold interim batch objects.
- *
- * @private
- */
-var BatchPart = function BatchPart()
+ArcUtils.curveTo = function curveTo (x1, y1, x2, y2, radius, points)
 {
-    this.style = null;
-    this.size = 0;
-    this.start = 0;
-    this.attribStart = 0;
-    this.attribSize = 0;
+    var fromX = points[points.length - 2];
+    var fromY = points[points.length - 1];
+
+    var a1 = fromY - y1;
+    var b1 = fromX - x1;
+    var a2 = y2 - y1;
+    var b2 = x2 - x1;
+    var mm = Math.abs((a1 * b2) - (b1 * a2));
+
+    if (mm < 1.0e-8 || radius === 0)
+    {
+        if (points[points.length - 2] !== x1 || points[points.length - 1] !== y1)
+        {
+            points.push(x1, y1);
+        }
+
+        return null;
+    }
+
+    var dd = (a1 * a1) + (b1 * b1);
+    var cc = (a2 * a2) + (b2 * b2);
+    var tt = (a1 * a2) + (b1 * b2);
+    var k1 = radius * Math.sqrt(dd) / mm;
+    var k2 = radius * Math.sqrt(cc) / mm;
+    var j1 = k1 * tt / dd;
+    var j2 = k2 * tt / cc;
+    var cx = (k1 * b2) + (k2 * b1);
+    var cy = (k1 * a2) + (k2 * a1);
+    var px = b1 * (k2 + j1);
+    var py = a1 * (k2 + j1);
+    var qx = b2 * (k1 + j2);
+    var qy = a2 * (k1 + j2);
+    var startAngle = Math.atan2(py - cy, px - cx);
+    var endAngle = Math.atan2(qy - cy, qx - cx);
+
+    return {
+        cx: (cx + x1),
+        cy: (cy + y1),
+        radius: radius,
+        startAngle: startAngle,
+        endAngle: endAngle,
+        anticlockwise: (b1 * a2 > b2 * a1),
+    };
 };
 
 /**
- * The Graphics class contains methods used to draw primitive shapes such as lines, circles and
- * rectangles to the display, and to color and fill them.
+ * The arc method creates an arc/curve (used to create circles, or parts of circles).
  *
- * GraphicsGeometry is designed to not be continually updating the geometry since it's expensive
- * to re-tesselate using **earcut**. Consider using {@link PIXI.Mesh} for this use-case, it's much faster.
- *
- * @class
- * @extends PIXI.BatchGeometry
- * @memberof PIXI
+ * @private
+ * @param {number} startX - Start x location of arc
+ * @param {number} startY - Start y location of arc
+ * @param {number} cx - The x-coordinate of the center of the circle
+ * @param {number} cy - The y-coordinate of the center of the circle
+ * @param {number} radius - The radius of the circle
+ * @param {number} startAngle - The starting angle, in radians (0 is at the 3 o'clock position
+ *  of the arc's circle)
+ * @param {number} endAngle - The ending angle, in radians
+ * @param {boolean} anticlockwise - Specifies whether the drawing should be
+ *  counter-clockwise or clockwise. False is default, and indicates clockwise, while true
+ *  indicates counter-clockwise.
+ * @param {number} n - Number of segments
+ * @param {number[]} points - Collection of points to add to
  */
-var GraphicsGeometry = /*@__PURE__*/(function (BatchGeometry) {
-    function GraphicsGeometry()
+ArcUtils.arc = function arc (startX, startY, cx, cy, radius, startAngle, endAngle, anticlockwise, points)
+{
+    var sweep = endAngle - startAngle;
+    var n = GRAPHICS_CURVES._segmentsCount(
+        Math.abs(sweep) * radius,
+        Math.ceil(Math.abs(sweep) / math.PI_2) * 40
+    );
+
+    var theta = (sweep) / (n * 2);
+    var theta2 = theta * 2;
+    var cTheta = Math.cos(theta);
+    var sTheta = Math.sin(theta);
+    var segMinus = n - 1;
+    var remainder = (segMinus % 1) / segMinus;
+
+    for (var i = 0; i <= segMinus; ++i)
     {
-        BatchGeometry.call(this);
+        var real = i + (remainder * i);
+        var angle = ((theta) + startAngle + (theta2 * real));
+        var c = Math.cos(angle);
+        var s = -Math.sin(angle);
 
-        /**
-         * An array of points to draw, 2 numbers per point
-         *
-         * @member {number[]}
-         * @protected
-         */
-        this.points = [];
-
-        /**
-         * The collection of colors
-         *
-         * @member {number[]}
-         * @protected
-         */
-        this.colors = [];
-
-        /**
-         * The UVs collection
-         *
-         * @member {number[]}
-         * @protected
-         */
-        this.uvs = [];
-
-        /**
-         * The indices of the vertices
-         *
-         * @member {number[]}
-         * @protected
-         */
-        this.indices = [];
-
-        /**
-         * Reference to the texture IDs.
-         *
-         * @member {number[]}
-         * @protected
-         */
-        this.textureIds = [];
-
-        /**
-         * The collection of drawn shapes.
-         *
-         * @member {PIXI.GraphicsData[]}
-         * @protected
-         */
-        this.graphicsData = [];
-
-        /**
-         * Used to detect if the graphics object has changed.
-         *
-         * @member {number}
-         * @protected
-         */
-        this.dirty = 0;
-
-        /**
-         * Batches need to regenerated if the geometry is updated.
-         *
-         * @member {number}
-         * @protected
-         */
-        this.batchDirty = -1;
-
-        /**
-         * Used to check if the cache is dirty.
-         *
-         * @member {number}
-         * @protected
-         */
-        this.cacheDirty = -1;
-
-        /**
-         * Used to detect if we cleared the graphicsData.
-         *
-         * @member {number}
-         * @default 0
-         * @protected
-         */
-        this.clearDirty = 0;
-
-        /**
-         * List of current draw calls drived from the batches.
-         *
-         * @member {object[]}
-         * @protected
-         */
-        this.drawCalls = [];
-
-        /**
-         * Intermediate abstract format sent to batch system.
-         * Can be converted to drawCalls or to batchable objects.
-         *
-         * @member {object[]}
-         * @protected
-         */
-        this.batches = [];
-
-        /**
-         * Index of the last batched shape in the stack of calls.
-         *
-         * @member {number}
-         * @protected
-         */
-        this.shapeIndex = 0;
-
-        /**
-         * Cached bounds.
-         *
-         * @member {PIXI.Bounds}
-         * @protected
-         */
-        this._bounds = new display.Bounds();
-
-        /**
-         * The bounds dirty flag.
-         *
-         * @member {number}
-         * @protected
-         */
-        this.boundsDirty = -1;
-
-        /**
-         * Padding to add to the bounds.
-         *
-         * @member {number}
-         * @default 0
-         */
-        this.boundsPadding = 0;
-
-        this.batchable = false;
-
-        this.indicesUint16 = null;
-
-        this.uvsFloat32 = null;
-
-        /**
-         * Minimal distance between points that are considered different.
-         * Affects line tesselation.
-         *
-         * @member {number}
-         */
-        this.closePointEps = 1e-4;
+        points.push(
+            (((cTheta * c) + (sTheta * s)) * radius) + cx,
+            (((cTheta * -s) + (sTheta * c)) * radius) + cy
+        );
     }
-
-    if ( BatchGeometry ) GraphicsGeometry.__proto__ = BatchGeometry;
-    GraphicsGeometry.prototype = Object.create( BatchGeometry && BatchGeometry.prototype );
-    GraphicsGeometry.prototype.constructor = GraphicsGeometry;
-
-    var prototypeAccessors = { bounds: { configurable: true } };
-
-    /**
-     * Get the current bounds of the graphic geometry.
-     *
-     * @member {PIXI.Bounds}
-     * @readonly
-     */
-    prototypeAccessors.bounds.get = function ()
-    {
-        if (this.boundsDirty !== this.dirty)
-        {
-            this.boundsDirty = this.dirty;
-            this.calculateBounds();
-        }
-
-        return this._bounds;
-    };
-
-    /**
-     * Call if you changed graphicsData manually.
-     * Empties all batch buffers.
-     */
-    GraphicsGeometry.prototype.invalidate = function invalidate ()
-    {
-        this.boundsDirty = -1;
-        this.dirty++;
-        this.batchDirty++;
-        this.shapeIndex = 0;
-
-        this.points.length = 0;
-        this.colors.length = 0;
-        this.uvs.length = 0;
-        this.indices.length = 0;
-        this.textureIds.length = 0;
-
-        for (var i = 0; i < this.drawCalls.length; i++)
-        {
-            this.drawCalls[i].textures.length = 0;
-            DRAW_CALL_POOL.push(this.drawCalls[i]);
-        }
-
-        this.drawCalls.length = 0;
-
-        for (var i$1 = 0; i$1 < this.batches.length; i$1++)
-        {
-            var batch =  this.batches[i$1];
-
-            batch.start = 0;
-            batch.attribStart = 0;
-            batch.style = null;
-            BATCH_POOL.push(batch);
-        }
-
-        this.batches.length = 0;
-    };
-
-    /**
-     * Clears the graphics that were drawn to this Graphics object, and resets fill and line style settings.
-     *
-     * @return {PIXI.GraphicsGeometry} This GraphicsGeometry object. Good for chaining method calls
-     */
-    GraphicsGeometry.prototype.clear = function clear ()
-    {
-        if (this.graphicsData.length > 0)
-        {
-            this.invalidate();
-            this.clearDirty++;
-            this.graphicsData.length = 0;
-        }
-
-        return this;
-    };
-
-    /**
-     * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-     *
-     * @param {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle} shape - The shape object to draw.
-     * @param {PIXI.FillStyle} fillStyle - Defines style of the fill.
-     * @param {PIXI.LineStyle} lineStyle - Defines style of the lines.
-     * @param {PIXI.Matrix} matrix - Transform applied to the points of the shape.
-     * @return {PIXI.GraphicsGeometry} Returns geometry for chaining.
-     */
-    GraphicsGeometry.prototype.drawShape = function drawShape (shape, fillStyle, lineStyle, matrix)
-    {
-        var data = new GraphicsData(shape, fillStyle, lineStyle, matrix);
-
-        this.graphicsData.push(data);
-        this.dirty++;
-
-        return this;
-    };
-
-    /**
-     * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
-     *
-     * @param {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle} shape - The shape object to draw.
-     * @param {PIXI.Matrix} matrix - Transform applied to the points of the shape.
-     * @return {PIXI.GraphicsGeometry} Returns geometry for chaining.
-     */
-    GraphicsGeometry.prototype.drawHole = function drawHole (shape, matrix)
-    {
-        if (!this.graphicsData.length)
-        {
-            return null;
-        }
-
-        var data = new GraphicsData(shape, null, null, matrix);
-
-        var lastShape = this.graphicsData[this.graphicsData.length - 1];
-
-        data.lineStyle = lastShape.lineStyle;
-
-        lastShape.holes.push(data);
-
-        this.dirty++;
-
-        return this;
-    };
-
-    /**
-     * Destroys the Graphics object.
-     *
-     * @param {object|boolean} [options] - Options parameter. A boolean will act as if all
-     *  options have been set to that value
-     * @param {boolean} [options.children=false] - if set to true, all the children will have
-     *  their destroy method called as well. 'options' will be passed on to those calls.
-     * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the texture of the child sprite
-     * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
-     *  Should it destroy the base texture of the child sprite
-     */
-    GraphicsGeometry.prototype.destroy = function destroy (options)
-    {
-        BatchGeometry.prototype.destroy.call(this, options);
-
-        // destroy each of the GraphicsData objects
-        for (var i = 0; i < this.graphicsData.length; ++i)
-        {
-            this.graphicsData[i].destroy();
-        }
-
-        this.points.length = 0;
-        this.points = null;
-        this.colors.length = 0;
-        this.colors = null;
-        this.uvs.length = 0;
-        this.uvs = null;
-        this.indices.length = 0;
-        this.indices = null;
-        this.indexBuffer.destroy();
-        this.indexBuffer = null;
-        this.graphicsData.length = 0;
-        this.graphicsData = null;
-        this.drawCalls.length = 0;
-        this.drawCalls = null;
-        this.batches.length = 0;
-        this.batches = null;
-        this._bounds = null;
-    };
-
-    /**
-     * Check to see if a point is contained within this geometry.
-     *
-     * @param {PIXI.Point} point - Point to check if it's contained.
-     * @return {Boolean} `true` if the point is contained within geometry.
-     */
-    GraphicsGeometry.prototype.containsPoint = function containsPoint (point)
-    {
-        var graphicsData = this.graphicsData;
-
-        for (var i = 0; i < graphicsData.length; ++i)
-        {
-            var data = graphicsData[i];
-
-            if (!data.fillStyle.visible)
-            {
-                continue;
-            }
-
-            // only deal with fills..
-            if (data.shape)
-            {
-                if (data.matrix)
-                {
-                    data.matrix.applyInverse(point, tmpPoint);
-                }
-                else
-                {
-                    tmpPoint.copyFrom(point);
-                }
-
-                if (data.shape.contains(tmpPoint.x, tmpPoint.y))
-                {
-                    if (data.holes)
-                    {
-                        for (var i$1 = 0; i$1 < data.holes.length; i$1++)
-                        {
-                            var hole = data.holes[i$1];
-
-                            if (hole.shape.contains(tmpPoint.x, tmpPoint.y))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    };
-
-    /**
-     * Generates intermediate batch data. Either gets converted to drawCalls
-     * or used to convert to batch objects directly by the Graphics object.
-     */
-    GraphicsGeometry.prototype.updateBatches = function updateBatches ()
-    {
-        if (this.dirty === this.cacheDirty) { return; }
-        if (this.graphicsData.length === 0)
-        {
-            this.batchable = true;
-
-            return;
-        }
-
-        if (this.dirty !== this.cacheDirty)
-        {
-            for (var i = 0; i < this.graphicsData.length; i++)
-            {
-                var data = this.graphicsData[i];
-
-                if (data.fillStyle && !data.fillStyle.texture.baseTexture.valid) { return; }
-                if (data.lineStyle && !data.lineStyle.texture.baseTexture.valid) { return; }
-            }
-        }
-
-        this.cacheDirty = this.dirty;
-
-        var uvs = this.uvs;
-
-        var batchPart = null;
-        var currentTexture = null;
-        var currentColor = 0;
-        var currentNative = false;
-
-        if (this.batches.length > 0)
-        {
-            batchPart = this.batches[this.batches.length - 1];
-
-            var style = batchPart.style;
-
-            currentTexture = style.texture.baseTexture;
-            currentColor = style.color + style.alpha;
-            currentNative = !!style.native;
-        }
-
-        for (var i$1 = this.shapeIndex; i$1 < this.graphicsData.length; i$1++)
-        {
-            this.shapeIndex++;
-
-            var data$1 = this.graphicsData[i$1];
-            var command = fillCommands[data$1.type];
-
-            var fillStyle = data$1.fillStyle;
-            var lineStyle = data$1.lineStyle;
-
-            // build out the shapes points..
-            command.build(data$1);
-
-            if (data$1.matrix)
-            {
-                this.transformPoints(data$1.points, data$1.matrix);
-            }
-
-            for (var j = 0; j < 2; j++)
-            {
-                var style$1 = (j === 0) ? fillStyle : lineStyle;
-
-                if (!style$1.visible) { continue; }
-
-                var nextTexture = style$1.texture.baseTexture;
-
-                var index$1 = this.indices.length;
-                var attribIndex = this.points.length / 2;
-
-                // close batch if style is different
-                if (batchPart
-                    && (currentTexture !== nextTexture
-                    || currentColor !== (style$1.color + style$1.alpha)
-                    || currentNative !== !!style$1.native))
-                {
-                    batchPart.size = index$1 - batchPart.start;
-                    batchPart.attribSize = attribIndex - batchPart.attribStart;
-
-                    if (batchPart.size > 0)
-                    {
-                        batchPart = null;
-                    }
-                }
-                // spawn new batch if its first batch or previous was closed
-                if (!batchPart)
-                {
-                    batchPart = BATCH_POOL.pop() || new BatchPart();
-                    this.batches.push(batchPart);
-                    nextTexture.wrapMode = constants.WRAP_MODES.REPEAT;
-                    currentTexture = nextTexture;
-                    currentColor = style$1.color + style$1.alpha;
-                    currentNative = style$1.native;
-
-                    batchPart.style = style$1;
-                    batchPart.start = index$1;
-                    batchPart.attribStart = attribIndex;
-                }
-
-                var start = this.points.length / 2;
-
-                if (j === 0)
-                {
-                    if (data$1.holes.length)
-                    {
-                        this.processHoles(data$1.holes);
-
-                        buildPoly.triangulate(data$1, this);
-                    }
-                    else
-                    {
-                        command.triangulate(data$1, this);
-                    }
-                }
-                else
-                {
-                    buildLine(data$1, this);
-
-                    for (var i$2 = 0; i$2 < data$1.holes.length; i$2++)
-                    {
-                        buildLine(data$1.holes[i$2], this);
-                    }
-                }
-
-                var size = (this.points.length / 2) - start;
-
-                this.addUvs(this.points, uvs, style$1.texture, start, size, style$1.matrix);
-            }
-        }
-
-        var index = this.indices.length;
-        var attrib = this.points.length / 2;
-
-        if (!batchPart)
-        {
-            // there are no visible styles in GraphicsData
-            // its possible that someone wants Graphics just for the bounds
-            this.batchable = true;
-
-            return;
-        }
-
-        batchPart.size = index - batchPart.start;
-        batchPart.attribSize = attrib - batchPart.attribStart;
-        this.indicesUint16 = new Uint16Array(this.indices);
-
-        // TODO make this a const..
-        this.batchable = this.isBatchable();
-
-        if (this.batchable)
-        {
-            this.batchDirty++;
-
-            this.uvsFloat32 = new Float32Array(this.uvs);
-
-            // offset the indices so that it works with the batcher...
-            for (var i$3 = 0; i$3 < this.batches.length; i$3++)
-            {
-                var batch = this.batches[i$3];
-
-                for (var j$1 = 0; j$1 < batch.size; j$1++)
-                {
-                    var index$2 = batch.start + j$1;
-
-                    this.indicesUint16[index$2] = this.indicesUint16[index$2] - batch.attribStart;
-                }
-            }
-        }
-        else
-        {
-            this.buildDrawCalls();
-        }
-    };
-
-    /**
-     * Checks to see if this graphics geometry can be batched.
-     * Currently it needs to be small enough and not contain any native lines.
-     * @protected
-     */
-    GraphicsGeometry.prototype.isBatchable = function isBatchable ()
-    {
-        var batches = this.batches;
-
-        for (var i = 0; i < batches.length; i++)
-        {
-            if (batches[i].style.native)
-            {
-                return false;
-            }
-        }
-
-        return (this.points.length < GraphicsGeometry.BATCHABLE_SIZE * 2);
-    };
-
-    /**
-     * Converts intermediate batches data to drawCalls.
-     * @protected
-     */
-    GraphicsGeometry.prototype.buildDrawCalls = function buildDrawCalls ()
-    {
-        var TICK = ++core.BaseTexture._globalBatch;
-
-        for (var i = 0; i < this.drawCalls.length; i++)
-        {
-            this.drawCalls[i].textures.length = 0;
-            DRAW_CALL_POOL.push(this.drawCalls[i]);
-        }
-
-        this.drawCalls.length = 0;
-
-        var uvs = this.uvs;
-        var colors = this.colors;
-        var textureIds = this.textureIds;
-
-        var currentGroup =  DRAW_CALL_POOL.pop() || new core.BatchDrawCall();
-
-        currentGroup.textureCount = 0;
-        currentGroup.start = 0;
-        currentGroup.size = 0;
-        currentGroup.type = constants.DRAW_MODES.TRIANGLES;
-
-        var textureCount = 0;
-        var currentTexture = null;
-        var textureId = 0;
-        var native = false;
-        var drawMode = constants.DRAW_MODES.TRIANGLES;
-
-        var index = 0;
-
-        this.drawCalls.push(currentGroup);
-
-        // TODO - this can be simplified
-        for (var i$1 = 0; i$1 < this.batches.length; i$1++)
-        {
-            var data = this.batches[i$1];
-
-            // TODO add some full on MAX_TEXTURE CODE..
-            var MAX_TEXTURES = 8;
-
-            var style = data.style;
-
-            var nextTexture = style.texture.baseTexture;
-
-            if (native !== !!style.native)
-            {
-                native = style.native;
-                drawMode = native ? constants.DRAW_MODES.LINES : constants.DRAW_MODES.TRIANGLES;
-
-                // force the batch to break!
-                currentTexture = null;
-                textureCount = MAX_TEXTURES;
-                TICK++;
-            }
-
-            if (currentTexture !== nextTexture)
-            {
-                currentTexture = nextTexture;
-
-                if (nextTexture._batchEnabled !== TICK)
-                {
-                    if (textureCount === MAX_TEXTURES)
-                    {
-                        TICK++;
-
-                        textureCount = 0;
-
-                        if (currentGroup.size > 0)
-                        {
-                            currentGroup = DRAW_CALL_POOL.pop() || new core.BatchDrawCall();
-                            this.drawCalls.push(currentGroup);
-                        }
-
-                        currentGroup.start = index;
-                        currentGroup.size = 0;
-                        currentGroup.textureCount = 0;
-                        currentGroup.type = drawMode;
-                    }
-
-                    // TODO add this to the render part..
-                    nextTexture.touched = 1;// touch;
-                    nextTexture._batchEnabled = TICK;
-                    nextTexture._id = textureCount;
-                    nextTexture.wrapMode = 10497;
-
-                    currentGroup.textures[currentGroup.textureCount++] = nextTexture;
-                    textureCount++;
-                }
-            }
-
-            currentGroup.size += data.size;
-            index += data.size;
-
-            textureId = nextTexture._id;
-
-            this.addColors(colors, style.color, style.alpha, data.attribSize);
-            this.addTextureIds(textureIds, textureId, data.attribSize);
-        }
-
-        core.BaseTexture._globalBatch = TICK;
-
-        // upload..
-        // merge for now!
-        var verts = this.points;
-
-        // verts are 2 positions.. so we * by 3 as there are 6 properties.. then 4 cos its bytes
-        var glPoints = new ArrayBuffer(verts.length * 3 * 4);
-        var f32 = new Float32Array(glPoints);
-        var u32 = new Uint32Array(glPoints);
-
-        var p = 0;
-
-        for (var i$2 = 0; i$2 < verts.length / 2; i$2++)
-        {
-            f32[p++] = verts[i$2 * 2];
-            f32[p++] = verts[(i$2 * 2) + 1];
-
-            f32[p++] = uvs[i$2 * 2];
-            f32[p++] = uvs[(i$2 * 2) + 1];
-
-            u32[p++] = colors[i$2];
-
-            f32[p++] = textureIds[i$2];
-        }
-
-        this._buffer.update(glPoints);
-        this._indexBuffer.update(this.indicesUint16);
-    };
-
-    /**
-     * Process the holes data.
-     *
-     * @param {PIXI.GraphicsData[]} holes - Holes to render
-     * @protected
-     */
-    GraphicsGeometry.prototype.processHoles = function processHoles (holes)
-    {
-        for (var i = 0; i < holes.length; i++)
-        {
-            var hole = holes[i];
-
-            var command = fillCommands[hole.type];
-
-            command.build(hole);
-
-            if (hole.matrix)
-            {
-                this.transformPoints(hole.points, hole.matrix);
-            }
-        }
-    };
-
-    /**
-     * Update the local bounds of the object. Expensive to use performance-wise.
-     * @protected
-     */
-    GraphicsGeometry.prototype.calculateBounds = function calculateBounds ()
-    {
-        var minX = Infinity;
-        var maxX = -Infinity;
-
-        var minY = Infinity;
-        var maxY = -Infinity;
-
-        if (this.graphicsData.length)
-        {
-            var shape = null;
-            var x = 0;
-            var y = 0;
-            var w = 0;
-            var h = 0;
-
-            for (var i = 0; i < this.graphicsData.length; i++)
-            {
-                var data = this.graphicsData[i];
-
-                var type = data.type;
-                var lineWidth = data.lineStyle ? data.lineStyle.width : 0;
-
-                shape = data.shape;
-
-                if (type === math.SHAPES.RECT || type === math.SHAPES.RREC)
-                {
-                    x = shape.x - (lineWidth / 2);
-                    y = shape.y - (lineWidth / 2);
-                    w = shape.width + lineWidth;
-                    h = shape.height + lineWidth;
-
-                    minX = x < minX ? x : minX;
-                    maxX = x + w > maxX ? x + w : maxX;
-
-                    minY = y < minY ? y : minY;
-                    maxY = y + h > maxY ? y + h : maxY;
-                }
-                else if (type === math.SHAPES.CIRC)
-                {
-                    x = shape.x;
-                    y = shape.y;
-                    w = shape.radius + (lineWidth / 2);
-                    h = shape.radius + (lineWidth / 2);
-
-                    minX = x - w < minX ? x - w : minX;
-                    maxX = x + w > maxX ? x + w : maxX;
-
-                    minY = y - h < minY ? y - h : minY;
-                    maxY = y + h > maxY ? y + h : maxY;
-                }
-                else if (type === math.SHAPES.ELIP)
-                {
-                    x = shape.x;
-                    y = shape.y;
-                    w = shape.width + (lineWidth / 2);
-                    h = shape.height + (lineWidth / 2);
-
-                    minX = x - w < minX ? x - w : minX;
-                    maxX = x + w > maxX ? x + w : maxX;
-
-                    minY = y - h < minY ? y - h : minY;
-                    maxY = y + h > maxY ? y + h : maxY;
-                }
-                else
-                {
-                    // POLY
-                    var points = shape.points;
-                    var x2 = 0;
-                    var y2 = 0;
-                    var dx = 0;
-                    var dy = 0;
-                    var rw = 0;
-                    var rh = 0;
-                    var cx = 0;
-                    var cy = 0;
-
-                    for (var j = 0; j + 2 < points.length; j += 2)
-                    {
-                        x = points[j];
-                        y = points[j + 1];
-                        x2 = points[j + 2];
-                        y2 = points[j + 3];
-                        dx = Math.abs(x2 - x);
-                        dy = Math.abs(y2 - y);
-                        h = lineWidth;
-                        w = Math.sqrt((dx * dx) + (dy * dy));
-
-                        if (w < 1e-9)
-                        {
-                            continue;
-                        }
-
-                        rw = ((h / w * dy) + dx) / 2;
-                        rh = ((h / w * dx) + dy) / 2;
-                        cx = (x2 + x) / 2;
-                        cy = (y2 + y) / 2;
-
-                        minX = cx - rw < minX ? cx - rw : minX;
-                        maxX = cx + rw > maxX ? cx + rw : maxX;
-
-                        minY = cy - rh < minY ? cy - rh : minY;
-                        maxY = cy + rh > maxY ? cy + rh : maxY;
-                    }
-                }
-            }
-        }
-        else
-        {
-            minX = 0;
-            maxX = 0;
-            minY = 0;
-            maxY = 0;
-        }
-
-        var padding = this.boundsPadding;
-
-        this._bounds.minX = minX - padding;
-        this._bounds.maxX = maxX + padding;
-
-        this._bounds.minY = minY - padding;
-        this._bounds.maxY = maxY + padding;
-    };
-
-    /**
-     * Transform points using matrix.
-     *
-     * @protected
-     * @param {number[]} points - Points to transform
-     * @param {PIXI.Matrix} matrix - Transform matrix
-     */
-    GraphicsGeometry.prototype.transformPoints = function transformPoints (points, matrix)
-    {
-        for (var i = 0; i < points.length / 2; i++)
-        {
-            var x = points[(i * 2)];
-            var y = points[(i * 2) + 1];
-
-            points[(i * 2)] = (matrix.a * x) + (matrix.c * y) + matrix.tx;
-            points[(i * 2) + 1] = (matrix.b * x) + (matrix.d * y) + matrix.ty;
-        }
-    };
-
-    /**
-     * Add colors.
-     *
-     * @protected
-     * @param {number[]} colors - List of colors to add to
-     * @param {number} color - Color to add
-     * @param {number} alpha - Alpha to use
-     * @param {number} size - Number of colors to add
-     */
-    GraphicsGeometry.prototype.addColors = function addColors (colors, color, alpha, size)
-    {
-        // TODO use the premultiply bits Ivan added
-        var rgb = (color >> 16) + (color & 0xff00) + ((color & 0xff) << 16);
-
-        var rgba =  utils.premultiplyTint(rgb, alpha);
-
-        while (size-- > 0)
-        {
-            colors.push(rgba);
-        }
-    };
-
-    /**
-     * Add texture id that the shader/fragment wants to use.
-     *
-     * @protected
-     * @param {number[]} textureIds
-     * @param {number} id
-     * @param {number} size
-     */
-    GraphicsGeometry.prototype.addTextureIds = function addTextureIds (textureIds, id, size)
-    {
-        while (size-- > 0)
-        {
-            textureIds.push(id);
-        }
-    };
-
-    /**
-     * Generates the UVs for a shape.
-     *
-     * @protected
-     * @param {number[]} verts - Vertices
-     * @param {number[]} uvs - UVs
-     * @param {PIXI.Texture} texture - Reference to Texture
-     * @param {number} start - Index buffer start index.
-     * @param {number} size - The size/length for index buffer.
-     * @param {PIXI.Matrix} [matrix] - Optional transform for all points.
-     */
-    GraphicsGeometry.prototype.addUvs = function addUvs (verts, uvs, texture, start, size, matrix)
-    {
-        var index = 0;
-        var uvsStart = uvs.length;
-        var frame = texture.frame;
-
-        while (index < size)
-        {
-            var x = verts[(start + index) * 2];
-            var y = verts[((start + index) * 2) + 1];
-
-            if (matrix)
-            {
-                var nx = (matrix.a * x) + (matrix.c * y) + matrix.tx;
-
-                y = (matrix.b * x) + (matrix.d * y) + matrix.ty;
-                x = nx;
-            }
-
-            index++;
-
-            uvs.push(x / frame.width, y / frame.height);
-        }
-
-        var baseTexture = texture.baseTexture;
-
-        if (frame.width < baseTexture.width
-            || frame.height < baseTexture.height)
-        {
-            this.adjustUvs(uvs, texture, uvsStart, size);
-        }
-    };
-
-    /**
-     * Modify uvs array according to position of texture region
-     * Does not work with rotated or trimmed textures
-     * @param {number[]} uvs array
-     * @param {PIXI.Texture} texture region
-     * @param {number} start starting index for uvs
-     * @param {number} size how many points to adjust
-     */
-    GraphicsGeometry.prototype.adjustUvs = function adjustUvs (uvs, texture, start, size)
-    {
-        var baseTexture = texture.baseTexture;
-        var eps = 1e-6;
-        var finish = start + (size * 2);
-        var frame = texture.frame;
-        var scaleX = frame.width / baseTexture.width;
-        var scaleY = frame.height / baseTexture.height;
-        var offsetX = frame.x / frame.width;
-        var offsetY = frame.y / frame.height;
-        var minX = Math.floor(uvs[start] + eps);
-        var minY = Math.floor(uvs[start + 1] + eps);
-
-        for (var i = start + 2; i < finish; i += 2)
-        {
-            minX = Math.min(minX, Math.floor(uvs[i] + eps));
-            minY = Math.min(minY, Math.floor(uvs[i + 1] + eps));
-        }
-        offsetX -= minX;
-        offsetY -= minY;
-        for (var i$1 = start; i$1 < finish; i$1 += 2)
-        {
-            uvs[i$1] = (uvs[i$1] + offsetX) * scaleX;
-            uvs[i$1 + 1] = (uvs[i$1 + 1] + offsetY) * scaleY;
-        }
-    };
-
-    Object.defineProperties( GraphicsGeometry.prototype, prototypeAccessors );
-
-    return GraphicsGeometry;
-}(core.BatchGeometry));
-
-/**
- * The maximum number of points to consider an object "batchable",
- * able to be batched by the renderer's batch system.
- *
- * @memberof PIXI.GraphicsGeometry
- * @static
- * @member {number} BATCHABLE_SIZE
- * @default 100
- */
-GraphicsGeometry.BATCHABLE_SIZE = 100;
-
-/**
- * Represents the line style for Graphics.
- * @memberof PIXI
- * @class
- * @extends PIXI.FillStyle
- */
-var LineStyle = /*@__PURE__*/(function (FillStyle) {
-    function LineStyle () {
-        FillStyle.apply(this, arguments);
-    }
-
-    if ( FillStyle ) LineStyle.__proto__ = FillStyle;
-    LineStyle.prototype = Object.create( FillStyle && FillStyle.prototype );
-    LineStyle.prototype.constructor = LineStyle;
-
-    LineStyle.prototype.clone = function clone ()
-    {
-        var obj = new LineStyle();
-
-        obj.color = this.color;
-        obj.alpha = this.alpha;
-        obj.texture = this.texture;
-        obj.matrix = this.matrix;
-        obj.visible = this.visible;
-        obj.width = this.width;
-        obj.alignment = this.alignment;
-        obj.native = this.native;
-
-        return obj;
-    };
-    /**
-     * Reset the line style to default.
-     */
-    LineStyle.prototype.reset = function reset ()
-    {
-        FillStyle.prototype.reset.call(this);
-
-        // Override default line style color
-        this.color = 0x0;
-
-        /**
-         * The width (thickness) of any lines drawn.
-         *
-         * @member {number}
-         * @default 0
-         */
-        this.width = 0;
-
-        /**
-         * The alignment of any lines drawn (0.5 = middle, 1 = outter, 0 = inner).
-         *
-         * @member {number}
-         * @default 0
-         */
-        this.alignment = 0.5;
-
-        /**
-         * If true the lines will be draw using LINES instead of TRIANGLE_STRIP
-         *
-         * @member {boolean}
-         * @default false
-         */
-        this.native = false;
-    };
-
-    return LineStyle;
-}(FillStyle));
+};
 
 /**
  * Utilities for bezier curves
@@ -25089,155 +24903,1323 @@ QuadraticUtils.curveTo = function curveTo (cpX, cpY, toX, toY, points)
 };
 
 /**
- * Utilities for arc curves
+ * A structure to hold interim batch objects for Graphics.
  * @class
- * @private
+ * @memberof PIXI.graphicsUtils
  */
-var ArcUtils = function ArcUtils () {};
-
-ArcUtils.curveTo = function curveTo (x1, y1, x2, y2, radius, points)
+var BatchPart = function BatchPart()
 {
-    var fromX = points[points.length - 2];
-    var fromY = points[points.length - 1];
-
-    var a1 = fromY - y1;
-    var b1 = fromX - x1;
-    var a2 = y2 - y1;
-    var b2 = x2 - x1;
-    var mm = Math.abs((a1 * b2) - (b1 * a2));
-
-    if (mm < 1.0e-8 || radius === 0)
-    {
-        if (points[points.length - 2] !== x1 || points[points.length - 1] !== y1)
-        {
-            points.push(x1, y1);
-        }
-
-        return null;
-    }
-
-    var dd = (a1 * a1) + (b1 * b1);
-    var cc = (a2 * a2) + (b2 * b2);
-    var tt = (a1 * a2) + (b1 * b2);
-    var k1 = radius * Math.sqrt(dd) / mm;
-    var k2 = radius * Math.sqrt(cc) / mm;
-    var j1 = k1 * tt / dd;
-    var j2 = k2 * tt / cc;
-    var cx = (k1 * b2) + (k2 * b1);
-    var cy = (k1 * a2) + (k2 * a1);
-    var px = b1 * (k2 + j1);
-    var py = a1 * (k2 + j1);
-    var qx = b2 * (k1 + j2);
-    var qy = a2 * (k1 + j2);
-    var startAngle = Math.atan2(py - cy, px - cx);
-    var endAngle = Math.atan2(qy - cy, qx - cx);
-
-    return {
-        cx: (cx + x1),
-        cy: (cy + y1),
-        radius: radius,
-        startAngle: startAngle,
-        endAngle: endAngle,
-        anticlockwise: (b1 * a2 > b2 * a1),
-    };
+    this.reset();
 };
 
 /**
- * The arc method creates an arc/curve (used to create circles, or parts of circles).
+ * Begin batch part
  *
- * @private
- * @param {number} startX - Start x location of arc
- * @param {number} startY - Start y location of arc
- * @param {number} cx - The x-coordinate of the center of the circle
- * @param {number} cy - The y-coordinate of the center of the circle
- * @param {number} radius - The radius of the circle
- * @param {number} startAngle - The starting angle, in radians (0 is at the 3 o'clock position
- *  of the arc's circle)
- * @param {number} endAngle - The ending angle, in radians
- * @param {boolean} anticlockwise - Specifies whether the drawing should be
- *  counter-clockwise or clockwise. False is default, and indicates clockwise, while true
- *  indicates counter-clockwise.
- * @param {number} n - Number of segments
- * @param {number[]} points - Collection of points to add to
+ * @param {PIXI.FillStyle | PIXI.LineStyle} style
+ * @param {number} startIndex
+ * @param {number} attribStart
  */
-ArcUtils.arc = function arc (startX, startY, cx, cy, radius, startAngle, endAngle, anticlockwise, points)
+BatchPart.prototype.begin = function begin (style, startIndex, attribStart)
 {
-    var sweep = endAngle - startAngle;
-    var n = GRAPHICS_CURVES._segmentsCount(
-        Math.abs(sweep) * radius,
-        Math.ceil(Math.abs(sweep) / math.PI_2) * 40
-    );
-
-    var theta = (sweep) / (n * 2);
-    var theta2 = theta * 2;
-    var cTheta = Math.cos(theta);
-    var sTheta = Math.sin(theta);
-    var segMinus = n - 1;
-    var remainder = (segMinus % 1) / segMinus;
-
-    for (var i = 0; i <= segMinus; ++i)
-    {
-        var real = i + (remainder * i);
-        var angle = ((theta) + startAngle + (theta2 * real));
-        var c = Math.cos(angle);
-        var s = -Math.sin(angle);
-
-        points.push(
-            (((cTheta * c) + (sTheta * s)) * radius) + cx,
-            (((cTheta * -s) + (sTheta * c)) * radius) + cy
-        );
-    }
+    this.reset();
+    this.style = style;
+    this.start = startIndex;
+    this.attribStart = attribStart;
 };
 
 /**
- * Draw a star shape with an arbitrary number of points.
+ * End batch part
+ *
+ * @param {number} endIndex
+ * @param {number} endAttrib
+ */
+BatchPart.prototype.end = function end (endIndex, endAttrib)
+{
+    this.attribSize = endAttrib - this.attribStart;
+    this.size = endIndex - this.start;
+};
+
+BatchPart.prototype.reset = function reset ()
+{
+    this.style = null;
+    this.size = 0;
+    this.start = 0;
+    this.attribStart = 0;
+    this.attribSize = 0;
+};
+
+/**
+ * Generalized convenience utilities for Graphics.
+ *
+ * @namespace PIXI.graphicsUtils
+ */
+
+/**
+ * Map of fill commands for each shape type.
+ *
+ * @memberof PIXI.graphicsUtils
+ * @member {Object}
+ */
+var FILL_COMMANDS = {};
+FILL_COMMANDS[math.SHAPES.POLY] = buildPoly;
+FILL_COMMANDS[math.SHAPES.CIRC] = buildCircle;
+FILL_COMMANDS[math.SHAPES.ELIP] = buildCircle;
+FILL_COMMANDS[math.SHAPES.RECT] = buildRectangle;
+FILL_COMMANDS[math.SHAPES.RREC] = buildRoundedRectangle;
+
+/**
+ * Batch pool, stores unused batches for preventing allocations.
+ *
+ * @memberof PIXI.graphicsUtils
+ * @type {Array<PIXI.graphicsUtils.BatchPart>}
+ */
+var BATCH_POOL = [];
+
+/**
+ * Draw call pool, stores unused draw calls for preventing allocations.
+ *
+ * @memberof PIXI.graphicsUtils
+ * @type {Array<PIXI.BatchDrawCall>}
+ */
+var DRAW_CALL_POOL = [];
+
+var index = ({
+    buildPoly: buildPoly,
+    buildCircle: buildCircle,
+    buildRectangle: buildRectangle,
+    buildRoundedRectangle: buildRoundedRectangle,
+    FILL_COMMANDS: FILL_COMMANDS,
+    BATCH_POOL: BATCH_POOL,
+    DRAW_CALL_POOL: DRAW_CALL_POOL,
+    buildLine: buildLine,
+    buildComplexPoly: buildComplexPoly,
+    bezierCurveTo: bezierCurveTo,
+    Star: Star,
+    ArcUtils: ArcUtils,
+    BezierUtils: BezierUtils,
+    QuadraticUtils: QuadraticUtils,
+    BatchPart: BatchPart
+});
+
+/**
+ * A class to contain data useful for Graphics objects
  *
  * @class
- * @extends PIXI.Polygon
  * @memberof PIXI
- * @param {number} x - Center X position of the star
- * @param {number} y - Center Y position of the star
- * @param {number} points - The number of points of the star, must be > 1
- * @param {number} radius - The outer radius of the star
- * @param {number} [innerRadius] - The inner radius between points, default half `radius`
- * @param {number} [rotation=0] - The rotation of the star in radians, where 0 is vertical
- * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
  */
-var Star = /*@__PURE__*/(function (Polygon) {
-    function Star(x, y, points, radius, innerRadius, rotation)
+var GraphicsData = function GraphicsData(shape, fillStyle, lineStyle, matrix)
+{
+    if ( fillStyle === void 0 ) fillStyle = null;
+    if ( lineStyle === void 0 ) lineStyle = null;
+    if ( matrix === void 0 ) matrix = null;
+
+    /**
+     * The shape object to draw.
+     * @member {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle}
+     */
+    this.shape = shape;
+
+    /**
+     * The style of the line.
+     * @member {PIXI.LineStyle}
+     */
+    this.lineStyle = lineStyle;
+
+    /**
+     * The style of the fill.
+     * @member {PIXI.FillStyle}
+     */
+    this.fillStyle = fillStyle;
+
+    /**
+     * The transform matrix.
+     * @member {PIXI.Matrix}
+     */
+    this.matrix = matrix;
+
+    /**
+     * The type of the shape, see the Const.Shapes file for all the existing types,
+     * @member {number}
+     */
+    this.type = shape.type;
+
+    /**
+     * The collection of points.
+     * @member {number[]}
+     */
+    this.points = [];
+
+    /**
+     * The collection of holes.
+     * @member {PIXI.GraphicsData[]}
+     */
+    this.holes = [];
+};
+
+/**
+ * Creates a new GraphicsData object with the same values as this one.
+ *
+ * @return {PIXI.GraphicsData} Cloned GraphicsData object
+ */
+GraphicsData.prototype.clone = function clone ()
+{
+    return new GraphicsData(
+        this.shape,
+        this.fillStyle,
+        this.lineStyle,
+        this.matrix
+    );
+};
+
+/**
+ * Destroys the Graphics data.
+ */
+GraphicsData.prototype.destroy = function destroy ()
+{
+    this.shape = null;
+    this.holes.length = 0;
+    this.holes = null;
+    this.points.length = 0;
+    this.points = null;
+    this.lineStyle = null;
+    this.fillStyle = null;
+};
+
+var tmpPoint = new math.Point();
+var tmpBounds = new display.Bounds();
+
+/**
+ * The Graphics class contains methods used to draw primitive shapes such as lines, circles and
+ * rectangles to the display, and to color and fill them.
+ *
+ * GraphicsGeometry is designed to not be continually updating the geometry since it's expensive
+ * to re-tesselate using **earcut**. Consider using {@link PIXI.Mesh} for this use-case, it's much faster.
+ *
+ * @class
+ * @extends PIXI.BatchGeometry
+ * @memberof PIXI
+ */
+var GraphicsGeometry = /*@__PURE__*/(function (BatchGeometry) {
+    function GraphicsGeometry()
     {
-        innerRadius = innerRadius || radius / 2;
+        BatchGeometry.call(this);
 
-        var startAngle = (-1 * Math.PI / 2) + rotation;
-        var len = points * 2;
-        var delta = math.PI_2 / len;
-        var polygon = [];
+        /**
+         * An array of points to draw, 2 numbers per point
+         *
+         * @member {number[]}
+         * @protected
+         */
+        this.points = [];
 
-        for (var i = 0; i < len; i++)
-        {
-            var r = i % 2 ? innerRadius : radius;
-            var angle = (i * delta) + startAngle;
+        /**
+         * The collection of colors
+         *
+         * @member {number[]}
+         * @protected
+         */
+        this.colors = [];
 
-            polygon.push(
-                x + (r * Math.cos(angle)),
-                y + (r * Math.sin(angle))
-            );
-        }
+        /**
+         * The UVs collection
+         *
+         * @member {number[]}
+         * @protected
+         */
+        this.uvs = [];
 
-        Polygon.call(this, polygon);
+        /**
+         * The indices of the vertices
+         *
+         * @member {number[]}
+         * @protected
+         */
+        this.indices = [];
+
+        /**
+         * Reference to the texture IDs.
+         *
+         * @member {number[]}
+         * @protected
+         */
+        this.textureIds = [];
+
+        /**
+         * The collection of drawn shapes.
+         *
+         * @member {PIXI.GraphicsData[]}
+         * @protected
+         */
+        this.graphicsData = [];
+
+        /**
+         * Used to detect if the graphics object has changed.
+         *
+         * @member {number}
+         * @protected
+         */
+        this.dirty = 0;
+
+        /**
+         * Batches need to regenerated if the geometry is updated.
+         *
+         * @member {number}
+         * @protected
+         */
+        this.batchDirty = -1;
+
+        /**
+         * Used to check if the cache is dirty.
+         *
+         * @member {number}
+         * @protected
+         */
+        this.cacheDirty = -1;
+
+        /**
+         * Used to detect if we cleared the graphicsData.
+         *
+         * @member {number}
+         * @default 0
+         * @protected
+         */
+        this.clearDirty = 0;
+
+        /**
+         * List of current draw calls drived from the batches.
+         *
+         * @member {object[]}
+         * @protected
+         */
+        this.drawCalls = [];
+
+        /**
+         * Intermediate abstract format sent to batch system.
+         * Can be converted to drawCalls or to batchable objects.
+         *
+         * @member {PIXI.graphicsUtils.BatchPart[]}
+         * @protected
+         */
+        this.batches = [];
+
+        /**
+         * Index of the last batched shape in the stack of calls.
+         *
+         * @member {number}
+         * @protected
+         */
+        this.shapeIndex = 0;
+
+        /**
+         * Cached bounds.
+         *
+         * @member {PIXI.Bounds}
+         * @protected
+         */
+        this._bounds = new display.Bounds();
+
+        /**
+         * The bounds dirty flag.
+         *
+         * @member {number}
+         * @protected
+         */
+        this.boundsDirty = -1;
+
+        /**
+         * Padding to add to the bounds.
+         *
+         * @member {number}
+         * @default 0
+         */
+        this.boundsPadding = 0;
+
+        this.batchable = false;
+
+        this.indicesUint16 = null;
+
+        this.uvsFloat32 = null;
+
+        /**
+         * Minimal distance between points that are considered different.
+         * Affects line tesselation.
+         *
+         * @member {number}
+         */
+        this.closePointEps = 1e-4;
     }
 
-    if ( Polygon ) Star.__proto__ = Polygon;
-    Star.prototype = Object.create( Polygon && Polygon.prototype );
-    Star.prototype.constructor = Star;
+    if ( BatchGeometry ) GraphicsGeometry.__proto__ = BatchGeometry;
+    GraphicsGeometry.prototype = Object.create( BatchGeometry && BatchGeometry.prototype );
+    GraphicsGeometry.prototype.constructor = GraphicsGeometry;
 
-    return Star;
-}(math.Polygon));
+    var prototypeAccessors = { bounds: { configurable: true } };
+
+    /**
+     * Get the current bounds of the graphic geometry.
+     *
+     * @member {PIXI.Bounds}
+     * @readonly
+     */
+    prototypeAccessors.bounds.get = function ()
+    {
+        if (this.boundsDirty !== this.dirty)
+        {
+            this.boundsDirty = this.dirty;
+            this.calculateBounds();
+        }
+
+        return this._bounds;
+    };
+
+    /**
+     * Call if you changed graphicsData manually.
+     * Empties all batch buffers.
+     */
+    GraphicsGeometry.prototype.invalidate = function invalidate ()
+    {
+        this.boundsDirty = -1;
+        this.dirty++;
+        this.batchDirty++;
+        this.shapeIndex = 0;
+
+        this.points.length = 0;
+        this.colors.length = 0;
+        this.uvs.length = 0;
+        this.indices.length = 0;
+        this.textureIds.length = 0;
+
+        for (var i = 0; i < this.drawCalls.length; i++)
+        {
+            this.drawCalls[i].textures.length = 0;
+            DRAW_CALL_POOL.push(this.drawCalls[i]);
+        }
+
+        this.drawCalls.length = 0;
+
+        for (var i$1 = 0; i$1 < this.batches.length; i$1++)
+        {
+            var batchPart = this.batches[i$1];
+
+            batchPart.reset();
+            BATCH_POOL.push(batchPart);
+        }
+
+        this.batches.length = 0;
+    };
+
+    /**
+     * Clears the graphics that were drawn to this Graphics object, and resets fill and line style settings.
+     *
+     * @return {PIXI.GraphicsGeometry} This GraphicsGeometry object. Good for chaining method calls
+     */
+    GraphicsGeometry.prototype.clear = function clear ()
+    {
+        if (this.graphicsData.length > 0)
+        {
+            this.invalidate();
+            this.clearDirty++;
+            this.graphicsData.length = 0;
+        }
+
+        return this;
+    };
+
+    /**
+     * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
+     *
+     * @param {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle} shape - The shape object to draw.
+     * @param {PIXI.FillStyle} fillStyle - Defines style of the fill.
+     * @param {PIXI.LineStyle} lineStyle - Defines style of the lines.
+     * @param {PIXI.Matrix} matrix - Transform applied to the points of the shape.
+     * @return {PIXI.GraphicsGeometry} Returns geometry for chaining.
+     */
+    GraphicsGeometry.prototype.drawShape = function drawShape (shape, fillStyle, lineStyle, matrix)
+    {
+        var data = new GraphicsData(shape, fillStyle, lineStyle, matrix);
+
+        this.graphicsData.push(data);
+        this.dirty++;
+
+        return this;
+    };
+
+    /**
+     * Draws the given shape to this Graphics object. Can be any of Circle, Rectangle, Ellipse, Line or Polygon.
+     *
+     * @param {PIXI.Circle|PIXI.Ellipse|PIXI.Polygon|PIXI.Rectangle|PIXI.RoundedRectangle} shape - The shape object to draw.
+     * @param {PIXI.Matrix} matrix - Transform applied to the points of the shape.
+     * @return {PIXI.GraphicsGeometry} Returns geometry for chaining.
+     */
+    GraphicsGeometry.prototype.drawHole = function drawHole (shape, matrix)
+    {
+        if (!this.graphicsData.length)
+        {
+            return null;
+        }
+
+        var data = new GraphicsData(shape, null, null, matrix);
+
+        var lastShape = this.graphicsData[this.graphicsData.length - 1];
+
+        data.lineStyle = lastShape.lineStyle;
+
+        lastShape.holes.push(data);
+
+        this.dirty++;
+
+        return this;
+    };
+
+    /**
+     * Destroys the Graphics object.
+     *
+     * @param {object|boolean} [options] - Options parameter. A boolean will act as if all
+     *  options have been set to that value
+     * @param {boolean} [options.children=false] - if set to true, all the children will have
+     *  their destroy method called as well. 'options' will be passed on to those calls.
+     * @param {boolean} [options.texture=false] - Only used for child Sprites if options.children is set to true
+     *  Should it destroy the texture of the child sprite
+     * @param {boolean} [options.baseTexture=false] - Only used for child Sprites if options.children is set to true
+     *  Should it destroy the base texture of the child sprite
+     */
+    GraphicsGeometry.prototype.destroy = function destroy (options)
+    {
+        BatchGeometry.prototype.destroy.call(this, options);
+
+        // destroy each of the GraphicsData objects
+        for (var i = 0; i < this.graphicsData.length; ++i)
+        {
+            this.graphicsData[i].destroy();
+        }
+
+        this.points.length = 0;
+        this.points = null;
+        this.colors.length = 0;
+        this.colors = null;
+        this.uvs.length = 0;
+        this.uvs = null;
+        this.indices.length = 0;
+        this.indices = null;
+        this.indexBuffer.destroy();
+        this.indexBuffer = null;
+        this.graphicsData.length = 0;
+        this.graphicsData = null;
+        this.drawCalls.length = 0;
+        this.drawCalls = null;
+        this.batches.length = 0;
+        this.batches = null;
+        this._bounds = null;
+    };
+
+    /**
+     * Check to see if a point is contained within this geometry.
+     *
+     * @param {PIXI.Point} point - Point to check if it's contained.
+     * @return {Boolean} `true` if the point is contained within geometry.
+     */
+    GraphicsGeometry.prototype.containsPoint = function containsPoint (point)
+    {
+        var graphicsData = this.graphicsData;
+
+        for (var i = 0; i < graphicsData.length; ++i)
+        {
+            var data = graphicsData[i];
+
+            if (!data.fillStyle.visible)
+            {
+                continue;
+            }
+
+            // only deal with fills..
+            if (data.shape)
+            {
+                if (data.matrix)
+                {
+                    data.matrix.applyInverse(point, tmpPoint);
+                }
+                else
+                {
+                    tmpPoint.copyFrom(point);
+                }
+
+                if (data.shape.contains(tmpPoint.x, tmpPoint.y))
+                {
+                    var hitHole = false;
+
+                    if (data.holes)
+                    {
+                        for (var i$1 = 0; i$1 < data.holes.length; i$1++)
+                        {
+                            var hole = data.holes[i$1];
+
+                            if (hole.shape.contains(tmpPoint.x, tmpPoint.y))
+                            {
+                                hitHole = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!hitHole)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    };
+
+    /**
+     * Generates intermediate batch data. Either gets converted to drawCalls
+     * or used to convert to batch objects directly by the Graphics object.
+     */
+    GraphicsGeometry.prototype.updateBatches = function updateBatches ()
+    {
+        if (!this.graphicsData.length)
+        {
+            this.batchable = true;
+
+            return;
+        }
+
+        if (!this.validateBatching())
+        {
+            return;
+        }
+
+        this.cacheDirty = this.dirty;
+
+        var uvs = this.uvs;
+        var graphicsData = this.graphicsData;
+
+        var batchPart = null;
+
+        var currentStyle = null;
+
+        if (this.batches.length > 0)
+        {
+            batchPart = this.batches[this.batches.length - 1];
+            currentStyle = batchPart.style;
+        }
+
+        for (var i = this.shapeIndex; i < graphicsData.length; i++)
+        {
+            this.shapeIndex++;
+
+            var data = graphicsData[i];
+            var fillStyle = data.fillStyle;
+            var lineStyle = data.lineStyle;
+            var command = FILL_COMMANDS[data.type];
+
+            // build out the shapes points..
+            command.build(data);
+
+            if (data.matrix)
+            {
+                this.transformPoints(data.points, data.matrix);
+            }
+
+            for (var j = 0; j < 2; j++)
+            {
+                var style = (j === 0) ? fillStyle : lineStyle;
+
+                if (!style.visible) { continue; }
+
+                var nextTexture = style.texture.baseTexture;
+                var index = this.indices.length;
+                var attribIndex = this.points.length / 2;
+
+                nextTexture.wrapMode = constants.WRAP_MODES.REPEAT;
+
+                if (j === 0)
+                {
+                    this.processFill(data);
+                }
+                else
+                {
+                    this.processLine(data);
+                }
+
+                var size = (this.points.length / 2) - attribIndex;
+
+                if (size === 0) { continue; }
+                // close batch if style is different
+                if (batchPart && !this._compareStyles(currentStyle, style))
+                {
+                    batchPart.end(index, attribIndex);
+                    batchPart = null;
+                }
+                // spawn new batch if its first batch or previous was closed
+                if (!batchPart)
+                {
+                    batchPart = BATCH_POOL.pop() || new BatchPart();
+                    batchPart.begin(style, index, attribIndex);
+                    this.batches.push(batchPart);
+                    currentStyle = style;
+                }
+
+                this.addUvs(this.points, uvs, style.texture, attribIndex, size, style.matrix);
+            }
+        }
+
+        if (batchPart)
+        {
+            var index$1 = this.indices.length;
+            var attrib = this.points.length / 2;
+
+            batchPart.end(index$1, attrib);
+        }
+
+        if (this.batches.length === 0)
+        {
+            // there are no visible styles in GraphicsData
+            // its possible that someone wants Graphics just for the bounds
+            this.batchable = true;
+
+            return;
+        }
+
+        this.indicesUint16 = new Uint16Array(this.indices);
+
+        // TODO make this a const..
+        this.batchable = this.isBatchable();
+
+        if (this.batchable)
+        {
+            this.packBatches();
+        }
+        else
+        {
+            this.buildDrawCalls();
+        }
+    };
+
+    /**
+     * Affinity check
+     *
+     * @param {PIXI.FillStyle | PIXI.LineStyle} styleA
+     * @param {PIXI.FillStyle | PIXI.LineStyle} styleB
+     */
+    GraphicsGeometry.prototype._compareStyles = function _compareStyles (styleA, styleB)
+    {
+        if (!styleA || !styleB)
+        {
+            return false;
+        }
+
+        if (styleA.texture.baseTexture !== styleB.texture.baseTexture)
+        {
+            return false;
+        }
+
+        if (styleA.color + styleA.alpha !== styleB.color + styleB.alpha)
+        {
+            return false;
+        }
+
+        if (!!styleA.native !== !!styleB.native)
+        {
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
+     * Test geometry for batching process.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.validateBatching = function validateBatching ()
+    {
+        if (this.dirty === this.cacheDirty || !this.graphicsData.length)
+        {
+            return false;
+        }
+
+        for (var i = 0, l = this.graphicsData.length; i < l; i++)
+        {
+            var data = this.graphicsData[i];
+            var fill = data.fillStyle;
+            var line = data.lineStyle;
+
+            if (fill && !fill.texture.baseTexture.valid) { return false; }
+            if (line && !line.texture.baseTexture.valid) { return false; }
+        }
+
+        return true;
+    };
+
+    /**
+     * Offset the indices so that it works with the batcher.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.packBatches = function packBatches ()
+    {
+        this.batchDirty++;
+        this.uvsFloat32 = new Float32Array(this.uvs);
+
+        var batches = this.batches;
+
+        for (var i = 0, l = batches.length; i < l; i++)
+        {
+            var batch = batches[i];
+
+            for (var j = 0; j < batch.size; j++)
+            {
+                var index = batch.start + j;
+
+                this.indicesUint16[index] = this.indicesUint16[index] - batch.attribStart;
+            }
+        }
+    };
+
+    /**
+     * Checks to see if this graphics geometry can be batched.
+     * Currently it needs to be small enough and not contain any native lines.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.isBatchable = function isBatchable ()
+    {
+        var batches = this.batches;
+
+        for (var i = 0; i < batches.length; i++)
+        {
+            if (batches[i].style.native)
+            {
+                return false;
+            }
+        }
+
+        return (this.points.length < GraphicsGeometry.BATCHABLE_SIZE * 2);
+    };
+
+    /**
+     * Converts intermediate batches data to drawCalls.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.buildDrawCalls = function buildDrawCalls ()
+    {
+        var TICK = ++core.BaseTexture._globalBatch;
+
+        for (var i = 0; i < this.drawCalls.length; i++)
+        {
+            this.drawCalls[i].textures.length = 0;
+            DRAW_CALL_POOL.push(this.drawCalls[i]);
+        }
+
+        this.drawCalls.length = 0;
+
+        var colors = this.colors;
+        var textureIds = this.textureIds;
+
+        var currentGroup =  DRAW_CALL_POOL.pop();
+
+        if (!currentGroup)
+        {
+            currentGroup = new core.BatchDrawCall();
+            currentGroup.textures = new core.BatchTextureArray();
+        }
+        currentGroup.textures.count = 0;
+        currentGroup.start = 0;
+        currentGroup.size = 0;
+        currentGroup.type = constants.DRAW_MODES.TRIANGLES;
+
+        var textureCount = 0;
+        var currentTexture = null;
+        var textureId = 0;
+        var native = false;
+        var drawMode = constants.DRAW_MODES.TRIANGLES;
+
+        var index = 0;
+
+        this.drawCalls.push(currentGroup);
+
+        // TODO - this can be simplified
+        for (var i$1 = 0; i$1 < this.batches.length; i$1++)
+        {
+            var data = this.batches[i$1];
+
+            // TODO add some full on MAX_TEXTURE CODE..
+            var MAX_TEXTURES = 8;
+
+            var style = data.style;
+
+            var nextTexture = style.texture.baseTexture;
+
+            if (native !== !!style.native)
+            {
+                native = !!style.native;
+                drawMode = native ? constants.DRAW_MODES.LINES : constants.DRAW_MODES.TRIANGLES;
+
+                // force the batch to break!
+                currentTexture = null;
+                textureCount = MAX_TEXTURES;
+                TICK++;
+            }
+
+            if (currentTexture !== nextTexture)
+            {
+                currentTexture = nextTexture;
+
+                if (nextTexture._batchEnabled !== TICK)
+                {
+                    if (textureCount === MAX_TEXTURES)
+                    {
+                        TICK++;
+
+                        textureCount = 0;
+
+                        if (currentGroup.size > 0)
+                        {
+                            currentGroup = DRAW_CALL_POOL.pop();
+                            if (!currentGroup)
+                            {
+                                currentGroup = new core.BatchDrawCall();
+                                currentGroup.textures = new core.BatchTextureArray();
+                            }
+                            this.drawCalls.push(currentGroup);
+                        }
+
+                        currentGroup.start = index;
+                        currentGroup.size = 0;
+                        currentGroup.textures.count = 0;
+                        currentGroup.type = drawMode;
+                    }
+
+                    // TODO add this to the render part..
+                    nextTexture.touched = 1;// touch;
+                    nextTexture._batchEnabled = TICK;
+                    nextTexture._batchLocation = textureCount;
+                    nextTexture.wrapMode = 10497;
+
+                    currentGroup.textures.elements[currentGroup.textures.count++] = nextTexture;
+                    textureCount++;
+                }
+            }
+
+            currentGroup.size += data.size;
+            index += data.size;
+
+            textureId = nextTexture._batchLocation;
+
+            this.addColors(colors, style.color, style.alpha, data.attribSize);
+            this.addTextureIds(textureIds, textureId, data.attribSize);
+        }
+
+        core.BaseTexture._globalBatch = TICK;
+
+        // upload..
+        // merge for now!
+        this.packAttributes();
+    };
+
+    /**
+     * Packs attributes to single buffer.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.packAttributes = function packAttributes ()
+    {
+        var verts = this.points;
+        var uvs = this.uvs;
+        var colors = this.colors;
+        var textureIds = this.textureIds;
+
+        // verts are 2 positions.. so we * by 3 as there are 6 properties.. then 4 cos its bytes
+        var glPoints = new ArrayBuffer(verts.length * 3 * 4);
+        var f32 = new Float32Array(glPoints);
+        var u32 = new Uint32Array(glPoints);
+
+        var p = 0;
+
+        for (var i = 0; i < verts.length / 2; i++)
+        {
+            f32[p++] = verts[i * 2];
+            f32[p++] = verts[(i * 2) + 1];
+
+            f32[p++] = uvs[i * 2];
+            f32[p++] = uvs[(i * 2) + 1];
+
+            u32[p++] = colors[i];
+
+            f32[p++] = textureIds[i];
+        }
+
+        this._buffer.update(glPoints);
+        this._indexBuffer.update(this.indicesUint16);
+    };
+
+    /**
+     * Process fill part of Graphics.
+     *
+     * @param {PIXI.GraphicsData} data
+     * @protected
+     */
+    GraphicsGeometry.prototype.processFill = function processFill (data)
+    {
+        if (data.holes.length)
+        {
+            this.processHoles(data.holes);
+
+            buildPoly.triangulate(data, this);
+        }
+        else
+        {
+            var command = FILL_COMMANDS[data.type];
+
+            command.triangulate(data, this);
+        }
+    };
+
+    /**
+     * Process line part of Graphics.
+     *
+     * @param {PIXI.GraphicsData} data
+     * @protected
+     */
+    GraphicsGeometry.prototype.processLine = function processLine (data)
+    {
+        buildLine(data, this);
+
+        for (var i = 0; i < data.holes.length; i++)
+        {
+            buildLine(data.holes[i], this);
+        }
+    };
+
+    /**
+     * Process the holes data.
+     *
+     * @param {PIXI.GraphicsData[]} holes - Holes to render
+     * @protected
+     */
+    GraphicsGeometry.prototype.processHoles = function processHoles (holes)
+    {
+        for (var i = 0; i < holes.length; i++)
+        {
+            var hole = holes[i];
+            var command = FILL_COMMANDS[hole.type];
+
+            command.build(hole);
+
+            if (hole.matrix)
+            {
+                this.transformPoints(hole.points, hole.matrix);
+            }
+        }
+    };
+
+    /**
+     * Update the local bounds of the object. Expensive to use performance-wise.
+     *
+     * @protected
+     */
+    GraphicsGeometry.prototype.calculateBounds = function calculateBounds ()
+    {
+        var bounds = this._bounds;
+        var sequenceBounds = tmpBounds;
+        var curMatrix = math.Matrix.IDENTITY;
+
+        this._bounds.clear();
+        sequenceBounds.clear();
+
+        for (var i = 0; i < this.graphicsData.length; i++)
+        {
+            var data = this.graphicsData[i];
+            var shape = data.shape;
+            var type = data.type;
+            var lineStyle = data.lineStyle;
+            var nextMatrix = data.matrix || math.Matrix.IDENTITY;
+            var lineWidth = 0.0;
+
+            if (lineStyle && lineStyle.visible)
+            {
+                var alignment = lineStyle.alignment;
+
+                lineWidth = lineStyle.width;
+
+                if (type === math.SHAPES.POLY)
+                {
+                    lineWidth = lineWidth * (0.5 + Math.abs(0.5 - alignment));
+                }
+                else
+                {
+                    lineWidth = lineWidth * Math.max(0, alignment);
+                }
+            }
+
+            if (curMatrix !== nextMatrix)
+            {
+                if (!sequenceBounds.isEmpty())
+                {
+                    bounds.addBoundsMatrix(sequenceBounds, curMatrix);
+                    sequenceBounds.clear();
+                }
+                curMatrix = nextMatrix;
+            }
+
+            if (type === math.SHAPES.RECT || type === math.SHAPES.RREC)
+            {
+                sequenceBounds.addFramePad(shape.x, shape.y, shape.x + shape.width, shape.y + shape.height,
+                    lineWidth, lineWidth);
+            }
+            else if (type === math.SHAPES.CIRC)
+            {
+                sequenceBounds.addFramePad(shape.x, shape.y, shape.x, shape.y,
+                    shape.radius + lineWidth, shape.radius + lineWidth);
+            }
+            else if (type === math.SHAPES.ELIP)
+            {
+                sequenceBounds.addFramePad(shape.x, shape.y, shape.x, shape.y,
+                    shape.width + lineWidth, shape.height + lineWidth);
+            }
+            else
+            {
+                // adding directly to the bounds
+                bounds.addVerticesMatrix(curMatrix, shape.points, 0, shape.points.length, lineWidth, lineWidth);
+            }
+        }
+
+        if (!sequenceBounds.isEmpty())
+        {
+            bounds.addBoundsMatrix(sequenceBounds, curMatrix);
+        }
+
+        bounds.pad(this.boundsPadding, this.boundsPadding);
+    };
+
+    /**
+     * Transform points using matrix.
+     *
+     * @protected
+     * @param {number[]} points - Points to transform
+     * @param {PIXI.Matrix} matrix - Transform matrix
+     */
+    GraphicsGeometry.prototype.transformPoints = function transformPoints (points, matrix)
+    {
+        for (var i = 0; i < points.length / 2; i++)
+        {
+            var x = points[(i * 2)];
+            var y = points[(i * 2) + 1];
+
+            points[(i * 2)] = (matrix.a * x) + (matrix.c * y) + matrix.tx;
+            points[(i * 2) + 1] = (matrix.b * x) + (matrix.d * y) + matrix.ty;
+        }
+    };
+
+    /**
+     * Add colors.
+     *
+     * @protected
+     * @param {number[]} colors - List of colors to add to
+     * @param {number} color - Color to add
+     * @param {number} alpha - Alpha to use
+     * @param {number} size - Number of colors to add
+     */
+    GraphicsGeometry.prototype.addColors = function addColors (colors, color, alpha, size)
+    {
+        // TODO use the premultiply bits Ivan added
+        var rgb = (color >> 16) + (color & 0xff00) + ((color & 0xff) << 16);
+
+        var rgba =  utils.premultiplyTint(rgb, alpha);
+
+        while (size-- > 0)
+        {
+            colors.push(rgba);
+        }
+    };
+
+    /**
+     * Add texture id that the shader/fragment wants to use.
+     *
+     * @protected
+     * @param {number[]} textureIds
+     * @param {number} id
+     * @param {number} size
+     */
+    GraphicsGeometry.prototype.addTextureIds = function addTextureIds (textureIds, id, size)
+    {
+        while (size-- > 0)
+        {
+            textureIds.push(id);
+        }
+    };
+
+    /**
+     * Generates the UVs for a shape.
+     *
+     * @protected
+     * @param {number[]} verts - Vertices
+     * @param {number[]} uvs - UVs
+     * @param {PIXI.Texture} texture - Reference to Texture
+     * @param {number} start - Index buffer start index.
+     * @param {number} size - The size/length for index buffer.
+     * @param {PIXI.Matrix} [matrix] - Optional transform for all points.
+     */
+    GraphicsGeometry.prototype.addUvs = function addUvs (verts, uvs, texture, start, size, matrix)
+    {
+        var index = 0;
+        var uvsStart = uvs.length;
+        var frame = texture.frame;
+
+        while (index < size)
+        {
+            var x = verts[(start + index) * 2];
+            var y = verts[((start + index) * 2) + 1];
+
+            if (matrix)
+            {
+                var nx = (matrix.a * x) + (matrix.c * y) + matrix.tx;
+
+                y = (matrix.b * x) + (matrix.d * y) + matrix.ty;
+                x = nx;
+            }
+
+            index++;
+
+            uvs.push(x / frame.width, y / frame.height);
+        }
+
+        var baseTexture = texture.baseTexture;
+
+        if (frame.width < baseTexture.width
+            || frame.height < baseTexture.height)
+        {
+            this.adjustUvs(uvs, texture, uvsStart, size);
+        }
+    };
+
+    /**
+     * Modify uvs array according to position of texture region
+     * Does not work with rotated or trimmed textures
+     *
+     * @param {number[]} uvs array
+     * @param {PIXI.Texture} texture region
+     * @param {number} start starting index for uvs
+     * @param {number} size how many points to adjust
+     */
+    GraphicsGeometry.prototype.adjustUvs = function adjustUvs (uvs, texture, start, size)
+    {
+        var baseTexture = texture.baseTexture;
+        var eps = 1e-6;
+        var finish = start + (size * 2);
+        var frame = texture.frame;
+        var scaleX = frame.width / baseTexture.width;
+        var scaleY = frame.height / baseTexture.height;
+        var offsetX = frame.x / frame.width;
+        var offsetY = frame.y / frame.height;
+        var minX = Math.floor(uvs[start] + eps);
+        var minY = Math.floor(uvs[start + 1] + eps);
+
+        for (var i = start + 2; i < finish; i += 2)
+        {
+            minX = Math.min(minX, Math.floor(uvs[i] + eps));
+            minY = Math.min(minY, Math.floor(uvs[i + 1] + eps));
+        }
+        offsetX -= minX;
+        offsetY -= minY;
+        for (var i$1 = start; i$1 < finish; i$1 += 2)
+        {
+            uvs[i$1] = (uvs[i$1] + offsetX) * scaleX;
+            uvs[i$1 + 1] = (uvs[i$1 + 1] + offsetY) * scaleY;
+        }
+    };
+
+    Object.defineProperties( GraphicsGeometry.prototype, prototypeAccessors );
+
+    return GraphicsGeometry;
+}(core.BatchGeometry));
+
+/**
+ * The maximum number of points to consider an object "batchable",
+ * able to be batched by the renderer's batch system.
+ *
+ * @memberof PIXI.GraphicsGeometry
+ * @static
+ * @member {number} BATCHABLE_SIZE
+ * @default 100
+ */
+GraphicsGeometry.BATCHABLE_SIZE = 100;
+
+/**
+ * Represents the line style for Graphics.
+ * @memberof PIXI
+ * @class
+ * @extends PIXI.FillStyle
+ */
+var LineStyle = /*@__PURE__*/(function (FillStyle) {
+    function LineStyle () {
+        FillStyle.apply(this, arguments);
+    }
+
+    if ( FillStyle ) LineStyle.__proto__ = FillStyle;
+    LineStyle.prototype = Object.create( FillStyle && FillStyle.prototype );
+    LineStyle.prototype.constructor = LineStyle;
+
+    LineStyle.prototype.clone = function clone ()
+    {
+        var obj = new LineStyle();
+
+        obj.color = this.color;
+        obj.alpha = this.alpha;
+        obj.texture = this.texture;
+        obj.matrix = this.matrix;
+        obj.visible = this.visible;
+        obj.width = this.width;
+        obj.alignment = this.alignment;
+        obj.native = this.native;
+
+        return obj;
+    };
+    /**
+     * Reset the line style to default.
+     */
+    LineStyle.prototype.reset = function reset ()
+    {
+        FillStyle.prototype.reset.call(this);
+
+        // Override default line style color
+        this.color = 0x0;
+
+        /**
+         * The width (thickness) of any lines drawn.
+         *
+         * @member {number}
+         * @default 0
+         */
+        this.width = 0;
+
+        /**
+         * The alignment of any lines drawn (0.5 = middle, 1 = outer, 0 = inner).
+         *
+         * @member {number}
+         * @default 0.5
+         */
+        this.alignment = 0.5;
+
+        /**
+         * If true the lines will be draw using LINES instead of TRIANGLE_STRIP
+         *
+         * @member {boolean}
+         * @default false
+         */
+        this.native = false;
+    };
+
+    return LineStyle;
+}(FillStyle));
 
 var temp = new Float32Array(3);
 
-// a default shader used by graphics..
-var defaultShader = null;
+// a default shaders map used by graphics..
+var DEFAULT_SHADERS = {};
 
 /**
  * The Graphics class contains methods used to draw primitive shapes such as lines, circles and
@@ -25457,55 +26439,98 @@ var Graphics = /*@__PURE__*/(function (Container) {
      * Specifies the line style used for subsequent calls to Graphics methods such as the lineTo()
      * method or the drawCircle() method.
      *
+     * @method PIXI.Graphics#lineStyle
      * @param {number} [width=0] - width of the line to draw, will update the objects stored style
-     * @param {number} [color=0] - color of the line to draw, will update the objects stored style
+     * @param {number} [color=0x0] - color of the line to draw, will update the objects stored style
      * @param {number} [alpha=1] - alpha of the line to draw, will update the objects stored style
      * @param {number} [alignment=0.5] - alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outter)
      * @param {boolean} [native=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
      * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
      */
-    Graphics.prototype.lineStyle = function lineStyle (width, color, alpha, alignment, native)
+    /**
+     * Specifies the line style used for subsequent calls to Graphics methods such as the lineTo()
+     * method or the drawCircle() method.
+     *
+     * @param {object} [options] - Line style options
+     * @param {number} [options.width=0] - width of the line to draw, will update the objects stored style
+     * @param {number} [options.color=0x0] - color of the line to draw, will update the objects stored style
+     * @param {number} [options.alpha=1] - alpha of the line to draw, will update the objects stored style
+     * @param {number} [options.alignment=0.5] - alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outter)
+     * @param {boolean} [options.native=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
+     * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
+     */
+    Graphics.prototype.lineStyle = function lineStyle (options)
     {
-        if ( width === void 0 ) width = 0;
-        if ( color === void 0 ) color = 0;
-        if ( alpha === void 0 ) alpha = 1;
-        if ( alignment === void 0 ) alignment = 0.5;
-        if ( native === void 0 ) native = false;
+        // Support non-object params: (width, color, alpha, alignment, native)
+        if (typeof options === 'number')
+        {
+            var args = arguments;
 
-        this.lineTextureStyle(width, core.Texture.WHITE, color, alpha, null, alignment, native);
+            options = {
+                width: args[0] || 0,
+                color: args[1] || 0x0,
+                alpha: args[2] !== undefined ? args[2] : 1,
+                alignment: args[3] !== undefined ? args[3] : 0.5,
+                native: !!args[4],
+            };
+        }
 
-        return this;
+        return this.lineTextureStyle(options);
     };
 
     /**
      * Like line style but support texture for line fill.
      *
-     * @param {number} [width=0] - width of the line to draw, will update the objects stored style
-     * @param {PIXI.Texture} [texture=PIXI.Texture.WHITE] - Texture to use
-     * @param {number} [color=0] - color of the line to draw, will update the objects stored style
-     * @param {number} [alpha=1] - alpha of the line to draw, will update the objects stored style
-     * @param {PIXI.Matrix} [matrix=null] Texture matrix to transform texture
-     * @param {number} [alignment=0.5] - alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outter)
-     * @param {boolean} [native=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
+     * @param {object} [options] - Collection of options for setting line style.
+     * @param {number} [options.width=0] - width of the line to draw, will update the objects stored style
+     * @param {PIXI.Texture} [options.texture=PIXI.Texture.WHITE] - Texture to use
+     * @param {number} [options.color=0x0] - color of the line to draw, will update the objects stored style.
+     *  Default 0xFFFFFF if texture present.
+     * @param {number} [options.alpha=1] - alpha of the line to draw, will update the objects stored style
+     * @param {PIXI.Matrix} [options.matrix=null] Texture matrix to transform texture
+     * @param {number} [options.alignment=0.5] - alignment of the line to draw, (0 = inner, 0.5 = middle, 1 = outter)
+     * @param {boolean} [options.native=false] - If true the lines will be draw using LINES instead of TRIANGLE_STRIP
      * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
      */
-    Graphics.prototype.lineTextureStyle = function lineTextureStyle (width, texture, color, alpha,
-        matrix, alignment, native)
+    Graphics.prototype.lineTextureStyle = function lineTextureStyle (options)
     {
-        if ( width === void 0 ) width = 0;
-        if ( texture === void 0 ) texture = core.Texture.WHITE;
-        if ( color === void 0 ) color = 0xFFFFFF;
-        if ( alpha === void 0 ) alpha = 1;
-        if ( matrix === void 0 ) matrix = null;
-        if ( alignment === void 0 ) alignment = 0.5;
-        if ( native === void 0 ) native = false;
+        // backward compatibility with params: (width, texture,
+        // color, alpha, matrix, alignment, native)
+        if (typeof options === 'number')
+        {
+            utils.deprecation('v5.2.0', 'Please use object-based options for Graphics#lineTextureStyle');
+
+            var width = arguments[0];
+            var texture = arguments[1];
+            var color = arguments[2];
+            var alpha = arguments[3];
+            var matrix = arguments[4];
+            var alignment = arguments[5];
+            var native = arguments[6];
+
+            options = { width: width, texture: texture, color: color, alpha: alpha, matrix: matrix, alignment: alignment, native: native };
+
+            // Remove undefined keys
+            Object.keys(options).forEach(function (key) { return options[key] === undefined && delete options[key]; });
+        }
+
+        // Apply defaults
+        options = Object.assign({
+            width: 0,
+            texture: core.Texture.WHITE,
+            color: (options && options.texture) ? 0xFFFFFF : 0x0,
+            alpha: 1,
+            matrix: null,
+            alignment: 0.5,
+            native: false,
+        }, options);
 
         if (this.currentPath)
         {
             this.startPoly();
         }
 
-        var visible = width > 0 && alpha > 0;
+        var visible = options.width > 0 && options.alpha > 0;
 
         if (!visible)
         {
@@ -25513,22 +26538,13 @@ var Graphics = /*@__PURE__*/(function (Container) {
         }
         else
         {
-            if (matrix)
+            if (options.matrix)
             {
-                matrix = matrix.clone();
-                matrix.invert();
+                options.matrix = options.matrix.clone();
+                options.matrix.invert();
             }
 
-            Object.assign(this._lineStyle, {
-                color: color,
-                width: width,
-                alpha: alpha,
-                matrix: matrix,
-                texture: texture,
-                alignment: alignment,
-                native: native,
-                visible: visible,
-            });
+            Object.assign(this._lineStyle, { visible: visible }, options);
         }
 
         return this;
@@ -25815,31 +26831,51 @@ var Graphics = /*@__PURE__*/(function (Container) {
         if ( color === void 0 ) color = 0;
         if ( alpha === void 0 ) alpha = 1;
 
-        return this.beginTextureFill(core.Texture.WHITE, color, alpha);
+        return this.beginTextureFill({ texture: core.Texture.WHITE, color: color, alpha: alpha });
     };
 
     /**
      * Begin the texture fill
      *
-     * @param {PIXI.Texture} [texture=PIXI.Texture.WHITE] - Texture to fill
-     * @param {number} [color=0xffffff] - Background to fill behind texture
-     * @param {number} [alpha=1] - Alpha of fill
-     * @param {PIXI.Matrix} [matrix=null] - Transform matrix
+     * @param {object} [options] - Object object.
+     * @param {PIXI.Texture} [options.texture=PIXI.Texture.WHITE] - Texture to fill
+     * @param {number} [options.color=0xffffff] - Background to fill behind texture
+     * @param {number} [options.alpha=1] - Alpha of fill
+     * @param {PIXI.Matrix} [options.matrix=null] - Transform matrix
      * @return {PIXI.Graphics} This Graphics object. Good for chaining method calls
      */
-    Graphics.prototype.beginTextureFill = function beginTextureFill (texture, color, alpha, matrix)
+    Graphics.prototype.beginTextureFill = function beginTextureFill (options)
     {
-        if ( texture === void 0 ) texture = core.Texture.WHITE;
-        if ( color === void 0 ) color = 0xFFFFFF;
-        if ( alpha === void 0 ) alpha = 1;
-        if ( matrix === void 0 ) matrix = null;
+        // backward compatibility with params: (texture, color, alpha, matrix)
+        if (options instanceof core.Texture)
+        {
+            utils.deprecation('v5.2.0', 'Please use object-based options for Graphics#beginTextureFill');
+
+            var texture = arguments[0];
+            var color = arguments[1];
+            var alpha = arguments[2];
+            var matrix = arguments[3];
+
+            options = { texture: texture, color: color, alpha: alpha, matrix: matrix };
+
+            // Remove undefined keys
+            Object.keys(options).forEach(function (key) { return options[key] === undefined && delete options[key]; });
+        }
+
+        // Apply defaults
+        options = Object.assign({
+            texture: core.Texture.WHITE,
+            color: 0xFFFFFF,
+            alpha: 1,
+            matrix: null,
+        }, options);
 
         if (this.currentPath)
         {
             this.startPoly();
         }
 
-        var visible = alpha > 0;
+        var visible = options.alpha > 0;
 
         if (!visible)
         {
@@ -25847,19 +26883,13 @@ var Graphics = /*@__PURE__*/(function (Container) {
         }
         else
         {
-            if (matrix)
+            if (options.matrix)
             {
-                matrix = matrix.clone();
-                matrix.invert();
+                options.matrix = options.matrix.clone();
+                options.matrix.invert();
             }
 
-            Object.assign(this._fillStyle, {
-                color: color,
-                alpha: alpha,
-                texture: texture,
-                matrix: matrix,
-                visible: visible,
-            });
+            Object.assign(this._fillStyle, { visible: visible }, options);
         }
 
         return this;
@@ -26048,11 +27078,9 @@ var Graphics = /*@__PURE__*/(function (Container) {
      */
     Graphics.prototype.isFastRect = function isFastRect ()
     {
-        // will fix this!
-        return false;
-        // this.graphicsData.length === 1
-        //  && this.graphicsData[0].shape.type === SHAPES.RECT
-        // && !this.graphicsData[0].lineWidth;
+        return this.geometry.graphicsData.length === 1
+        && this.geometry.graphicsData[0].shape.type === math.SHAPES.RECT
+        && !this.geometry.graphicsData[0].lineWidth;
     };
 
     /**
@@ -26075,143 +27103,202 @@ var Graphics = /*@__PURE__*/(function (Container) {
         {
             if (this.batchDirty !== geometry.batchDirty)
             {
-                this.batches = [];
-                this.batchTint = -1;
-                this._transformID = -1;
-                this.batchDirty = geometry.batchDirty;
-
-                this.vertexData = new Float32Array(geometry.points);
-
-                var blendMode = this.blendMode;
-
-                for (var i = 0; i < geometry.batches.length; i++)
-                {
-                    var gI = geometry.batches[i];
-
-                    var color = gI.style.color;
-
-                    //        + (alpha * 255 << 24);
-
-                    var vertexData = new Float32Array(this.vertexData.buffer,
-                        gI.attribStart * 4 * 2,
-                        gI.attribSize * 2);
-
-                    var uvs = new Float32Array(geometry.uvsFloat32.buffer,
-                        gI.attribStart * 4 * 2,
-                        gI.attribSize * 2);
-
-                    var indices = new Uint16Array(geometry.indicesUint16.buffer,
-                        gI.start * 2,
-                        gI.size);
-
-                    var batch = {
-                        vertexData: vertexData,
-                        blendMode: blendMode,
-                        indices: indices,
-                        uvs: uvs,
-                        _batchRGB: utils.hex2rgb(color),
-                        _tintRGB: color,
-                        _texture: gI.style.texture,
-                        alpha: gI.style.alpha,
-                        worldAlpha: 1 };
-
-                    this.batches[i] = batch;
-                }
+                this._populateBatches();
             }
 
-            if (this.batches.length)
-            {
-                renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
-
-                this.calculateVertices();
-                this.calculateTints();
-
-                for (var i$1 = 0; i$1 < this.batches.length; i$1++)
-                {
-                    var batch$1 = this.batches[i$1];
-
-                    batch$1.worldAlpha = this.worldAlpha * batch$1.alpha;
-
-                    renderer.plugins[this.pluginName].render(batch$1);
-                }
-            }
+            this._renderBatched(renderer);
         }
         else
         {
             // no batching...
             renderer.batch.flush();
 
-            if (!this.shader)
-            {
-                // if there is no shader here, we can use the default shader.
-                // and that only gets created if we actually need it..
-                if (!defaultShader)
-                {
-                    var sampleValues = new Int32Array(16);
-
-                    for (var i$2 = 0; i$2 < 16; i$2++)
-                    {
-                        sampleValues[i$2] = i$2;
-                    }
-
-                    var uniforms = {
-                        tint: new Float32Array([1, 1, 1, 1]),
-                        translationMatrix: new math.Matrix(),
-                        default: core.UniformGroup.from({ uSamplers: sampleValues }, true),
-                    };
-
-                    // we can bbase default shader of the batch renderers program
-                    var program =  renderer.plugins.batch._shader.program;
-
-                    defaultShader = new core.Shader(program, uniforms);
-                }
-
-                this.shader = defaultShader;
-            }
-
-            var uniforms$1 = this.shader.uniforms;
-
-            // lets set the transfomr
-            uniforms$1.translationMatrix = this.transform.worldTransform;
-
-            var tint = this.tint;
-            var wa = this.worldAlpha;
-
-            // and then lets set the tint..
-            uniforms$1.tint[0] = (((tint >> 16) & 0xFF) / 255) * wa;
-            uniforms$1.tint[1] = (((tint >> 8) & 0xFF) / 255) * wa;
-            uniforms$1.tint[2] = ((tint & 0xFF) / 255) * wa;
-            uniforms$1.tint[3] = wa;
-
-            // the first draw call, we can set the uniforms of the shader directly here.
-
-            // this means that we can tack advantage of the sync function of pixi!
-            // bind and sync uniforms..
-            // there is a way to optimise this..
-            renderer.shader.bind(this.shader);
-
-            // then render it
-            renderer.geometry.bind(geometry, this.shader);
-
-            // set state..
-            renderer.state.set(this.state);
-
-            // then render the rest of them...
-            for (var i$3 = 0; i$3 < geometry.drawCalls.length; i$3++)
-            {
-                var drawCall = geometry.drawCalls[i$3];
-
-                var groupTextureCount = drawCall.textureCount;
-
-                for (var j = 0; j < groupTextureCount; j++)
-                {
-                    renderer.texture.bind(drawCall.textures[j], j);
-                }
-
-                // bind the geometry...
-                renderer.geometry.draw(drawCall.type, drawCall.size, drawCall.start);
-            }
+            this._renderDirect(renderer);
         }
+    };
+
+    /**
+     * Populating batches for rendering
+     *
+     * @protected
+     */
+    Graphics.prototype._populateBatches = function _populateBatches ()
+    {
+        var geometry = this.geometry;
+        var blendMode = this.blendMode;
+
+        this.batches = [];
+        this.batchTint = -1;
+        this._transformID = -1;
+        this.batchDirty = geometry.batchDirty;
+
+        this.vertexData = new Float32Array(geometry.points);
+
+        for (var i = 0, l = geometry.batches.length; i < l; i++)
+        {
+            var gI = geometry.batches[i];
+            var color = gI.style.color;
+            var vertexData = new Float32Array(this.vertexData.buffer,
+                gI.attribStart * 4 * 2,
+                gI.attribSize * 2);
+
+            var uvs = new Float32Array(geometry.uvsFloat32.buffer,
+                gI.attribStart * 4 * 2,
+                gI.attribSize * 2);
+
+            var indices = new Uint16Array(geometry.indicesUint16.buffer,
+                gI.start * 2,
+                gI.size);
+
+            var batch = {
+                vertexData: vertexData,
+                blendMode: blendMode,
+                indices: indices,
+                uvs: uvs,
+                _batchRGB: utils.hex2rgb(color),
+                _tintRGB: color,
+                _texture: gI.style.texture,
+                alpha: gI.style.alpha,
+                worldAlpha: 1 };
+
+            this.batches[i] = batch;
+        }
+    };
+
+    /**
+     * Renders the batches using the BathedRenderer plugin
+     *
+     * @protected
+     * @param {PIXI.Renderer} renderer - The renderer
+     */
+    Graphics.prototype._renderBatched = function _renderBatched (renderer)
+    {
+        if (!this.batches.length)
+        {
+            return;
+        }
+
+        renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
+
+        this.calculateVertices();
+        this.calculateTints();
+
+        for (var i = 0, l = this.batches.length; i < l; i++)
+        {
+            var batch = this.batches[i];
+
+            batch.worldAlpha = this.worldAlpha * batch.alpha;
+
+            renderer.plugins[this.pluginName].render(batch);
+        }
+    };
+
+    /**
+     * Renders the graphics direct
+     *
+     * @protected
+     * @param {PIXI.Renderer} renderer - The renderer
+     */
+    Graphics.prototype._renderDirect = function _renderDirect (renderer)
+    {
+        var shader = this._resolveDirectShader(renderer);
+
+        var geometry = this.geometry;
+        var tint = this.tint;
+        var worldAlpha = this.worldAlpha;
+        var uniforms = shader.uniforms;
+        var drawCalls = geometry.drawCalls;
+
+        // lets set the transfomr
+        uniforms.translationMatrix = this.transform.worldTransform;
+
+        // and then lets set the tint..
+        uniforms.tint[0] = (((tint >> 16) & 0xFF) / 255) * worldAlpha;
+        uniforms.tint[1] = (((tint >> 8) & 0xFF) / 255) * worldAlpha;
+        uniforms.tint[2] = ((tint & 0xFF) / 255) * worldAlpha;
+        uniforms.tint[3] = worldAlpha;
+
+        // the first draw call, we can set the uniforms of the shader directly here.
+
+        // this means that we can tack advantage of the sync function of pixi!
+        // bind and sync uniforms..
+        // there is a way to optimise this..
+        renderer.shader.bind(shader);
+        renderer.geometry.bind(geometry, shader);
+
+        // set state..
+        renderer.state.set(this.state);
+
+        // then render the rest of them...
+        for (var i = 0, l = drawCalls.length; i < l; i++)
+        {
+            this._renderDrawCallDirect(renderer, geometry.drawCalls[i]);
+        }
+    };
+
+    /**
+     * Renders specific DrawCall
+     *
+     * @param {PIXI.Renderer} renderer
+     * @param {PIXI.BatchDrawCall} drawCall
+     */
+    Graphics.prototype._renderDrawCallDirect = function _renderDrawCallDirect (renderer, drawCall)
+    {
+        var textures = drawCall.textures;
+        var type = drawCall.type;
+        var size = drawCall.size;
+        var start = drawCall.start;
+        var groupTextureCount = textures.count;
+
+        for (var j = 0; j < groupTextureCount; j++)
+        {
+            renderer.texture.bind(textures.elements[j], j);
+        }
+
+        renderer.geometry.draw(type, size, start);
+    };
+
+    /**
+     * Resolves shader for direct rendering
+     *
+     * @protected
+     * @param {PIXI.Renderer} renderer - The renderer
+     */
+    Graphics.prototype._resolveDirectShader = function _resolveDirectShader (renderer)
+    {
+        var shader = this.shader;
+
+        var pluginName = this.pluginName;
+
+        if (!shader)
+        {
+            // if there is no shader here, we can use the default shader.
+            // and that only gets created if we actually need it..
+            // but may be more than one plugins for graphics
+            if (!DEFAULT_SHADERS[pluginName])
+            {
+                var sampleValues = new Int32Array(16);
+
+                for (var i = 0; i < 16; i++)
+                {
+                    sampleValues[i] = i;
+                }
+
+                var uniforms = {
+                    tint: new Float32Array([1, 1, 1, 1]),
+                    translationMatrix: new math.Matrix(),
+                    default: core.UniformGroup.from({ uSamplers: sampleValues }, true),
+                };
+
+                var program = renderer.plugins[pluginName]._shader.program;
+
+                DEFAULT_SHADERS[pluginName] = new core.Shader(program, uniforms);
+            }
+
+            shader = DEFAULT_SHADERS[pluginName];
+        }
+
+        return shader;
     };
 
     /**
@@ -26222,9 +27309,22 @@ var Graphics = /*@__PURE__*/(function (Container) {
     Graphics.prototype._calculateBounds = function _calculateBounds ()
     {
         this.finishPoly();
-        var lb = this.geometry.bounds;
 
-        this._bounds.addFrame(this.transform, lb.minX, lb.minY, lb.maxX, lb.maxY);
+        var geometry = this.geometry;
+
+        // skipping when graphics is empty, like a container
+        if (!geometry.graphicsData.length)
+        {
+            return;
+        }
+
+        var ref = geometry.bounds;
+        var minX = ref.minX;
+        var minY = ref.minY;
+        var maxX = ref.maxX;
+        var maxY = ref.maxY;
+
+        this._bounds.addFrame(this.transform, minX, minY, maxX, maxY);
     };
 
     /**
@@ -26425,12 +27525,13 @@ exports.Graphics = Graphics;
 exports.GraphicsData = GraphicsData;
 exports.GraphicsGeometry = GraphicsGeometry;
 exports.LineStyle = LineStyle;
+exports.graphicsUtils = index;
 
 
 },{"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/math":60,"@pixi/utils":78}],58:[function(require,module,exports){
 /*!
- * @pixi/interaction - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/interaction - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/interaction is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -26651,11 +27752,32 @@ Object.defineProperties( InteractionData.prototype, prototypeAccessors );
 var InteractionEvent = function InteractionEvent()
 {
     /**
-     * Whether this event will continue propagating in the tree
+     * Whether this event will continue propagating in the tree.
+     *
+     * Remaining events for the {@link stopsPropagatingAt} object
+     * will still be dispatched.
      *
      * @member {boolean}
      */
     this.stopped = false;
+
+    /**
+     * At which object this event stops propagating.
+     *
+     * @private
+     * @member {PIXI.DisplayObject}
+     */
+    this.stopsPropagatingAt = null;
+
+    /**
+     * Whether we already reached the element we want to
+     * stop propagating at. This is important for delayed events,
+     * where we start over deeper in the tree again.
+     *
+     * @private
+     * @member {boolean}
+     */
+    this.stopPropagationHint = false;
 
     /**
      * The object which caused this event to be dispatched.
@@ -26694,6 +27816,8 @@ var InteractionEvent = function InteractionEvent()
 InteractionEvent.prototype.stopPropagation = function stopPropagation ()
 {
     this.stopped = true;
+    this.stopPropagationHint = true;
+    this.stopsPropagatingAt = this.currentTarget;
 };
 
 /**
@@ -26702,6 +27826,8 @@ InteractionEvent.prototype.stopPropagation = function stopPropagation ()
 InteractionEvent.prototype.reset = function reset ()
 {
     this.stopped = false;
+    this.stopsPropagatingAt = null;
+    this.stopPropagationHint = false;
     this.currentTarget = null;
     this.target = null;
 };
@@ -26834,6 +27960,195 @@ InteractionTrackingData.FLAGS = Object.freeze({
     LEFT_DOWN: 1 << 1,
     RIGHT_DOWN: 1 << 2,
 });
+
+/**
+ * Strategy how to search through stage tree for interactive objects
+ *
+ * @private
+ * @class
+ * @memberof PIXI.interaction
+ */
+var TreeSearch = function TreeSearch()
+{
+    this._tempPoint = new math.Point();
+};
+
+/**
+ * Recursive implementation for findHit
+ *
+ * @private
+ * @param {PIXI.interaction.InteractionEvent} interactionEvent - event containing the point that
+ *  is tested for collision
+ * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the displayObject
+ *  that will be hit test (recursively crawls its children)
+ * @param {Function} [func] - the function that will be called on each interactive object. The
+ *  interactionEvent, displayObject and hit will be passed to the function
+ * @param {boolean} [hitTest] - this indicates if the objects inside should be hit test against the point
+ * @param {boolean} [interactive] - Whether the displayObject is interactive
+ * @return {boolean} returns true if the displayObject hit the point
+ */
+TreeSearch.prototype.recursiveFindHit = function recursiveFindHit (interactionEvent, displayObject, func, hitTest, interactive)
+{
+    if (!displayObject || !displayObject.visible)
+    {
+        return false;
+    }
+
+    var point = interactionEvent.data.global;
+
+    // Took a little while to rework this function correctly! But now it is done and nice and optimized! ^_^
+    //
+    // This function will now loop through all objects and then only hit test the objects it HAS
+    // to, not all of them. MUCH faster..
+    // An object will be hit test if the following is true:
+    //
+    // 1: It is interactive.
+    // 2: It belongs to a parent that is interactive AND one of the parents children have not already been hit.
+    //
+    // As another little optimization once an interactive object has been hit we can carry on
+    // through the scenegraph, but we know that there will be no more hits! So we can avoid extra hit tests
+    // A final optimization is that an object is not hit test directly if a child has already been hit.
+
+    interactive = displayObject.interactive || interactive;
+
+    var hit = false;
+    var interactiveParent = interactive;
+
+    // Flag here can set to false if the event is outside the parents hitArea or mask
+    var hitTestChildren = true;
+
+    // If there is a hitArea, no need to test against anything else if the pointer is not within the hitArea
+    // There is also no longer a need to hitTest children.
+    if (displayObject.hitArea)
+    {
+        if (hitTest)
+        {
+            displayObject.worldTransform.applyInverse(point, this._tempPoint);
+            if (!displayObject.hitArea.contains(this._tempPoint.x, this._tempPoint.y))
+            {
+                hitTest = false;
+                hitTestChildren = false;
+            }
+            else
+            {
+                hit = true;
+            }
+        }
+        interactiveParent = false;
+    }
+    // If there is a mask, no need to hitTest against anything else if the pointer is not within the mask.
+    // We still want to hitTestChildren, however, to ensure a mouseout can still be generated.
+    // https://github.com/pixijs/pixi.js/issues/5135
+    else if (displayObject._mask)
+    {
+        if (hitTest)
+        {
+            if (!(displayObject._mask.containsPoint && displayObject._mask.containsPoint(point)))
+            {
+                hitTest = false;
+            }
+        }
+    }
+
+    // ** FREE TIP **! If an object is not interactive or has no buttons in it
+    // (such as a game scene!) set interactiveChildren to false for that displayObject.
+    // This will allow PixiJS to completely ignore and bypass checking the displayObjects children.
+    if (hitTestChildren && displayObject.interactiveChildren && displayObject.children)
+    {
+        var children = displayObject.children;
+
+        for (var i = children.length - 1; i >= 0; i--)
+        {
+            var child = children[i];
+
+            // time to get recursive.. if this function will return if something is hit..
+            var childHit = this.recursiveFindHit(interactionEvent, child, func, hitTest, interactiveParent);
+
+            if (childHit)
+            {
+                // its a good idea to check if a child has lost its parent.
+                // this means it has been removed whilst looping so its best
+                if (!child.parent)
+                {
+                    continue;
+                }
+
+                // we no longer need to hit test any more objects in this container as we we
+                // now know the parent has been hit
+                interactiveParent = false;
+
+                // If the child is interactive , that means that the object hit was actually
+                // interactive and not just the child of an interactive object.
+                // This means we no longer need to hit test anything else. We still need to run
+                // through all objects, but we don't need to perform any hit tests.
+
+                if (childHit)
+                {
+                    if (interactionEvent.target)
+                    {
+                        hitTest = false;
+                    }
+                    hit = true;
+                }
+            }
+        }
+    }
+
+    // no point running this if the item is not interactive or does not have an interactive parent.
+    if (interactive)
+    {
+        // if we are hit testing (as in we have no hit any objects yet)
+        // We also don't need to worry about hit testing if once of the displayObjects children
+        // has already been hit - but only if it was interactive, otherwise we need to keep
+        // looking for an interactive child, just in case we hit one
+        if (hitTest && !interactionEvent.target)
+        {
+            // already tested against hitArea if it is defined
+            if (!displayObject.hitArea && displayObject.containsPoint)
+            {
+                if (displayObject.containsPoint(point))
+                {
+                    hit = true;
+                }
+            }
+        }
+
+        if (displayObject.interactive)
+        {
+            if (hit && !interactionEvent.target)
+            {
+                interactionEvent.target = displayObject;
+            }
+
+            if (func)
+            {
+                func(interactionEvent, displayObject, !!hit);
+            }
+        }
+    }
+
+    return hit;
+};
+
+/**
+ * This function is provides a neat way of crawling through the scene graph and running a
+ * specified function on all interactive objects it finds. It will also take care of hit
+ * testing the interactive objects and passes the hit across in the function.
+ *
+ * @private
+ * @param {PIXI.interaction.InteractionEvent} interactionEvent - event containing the point that
+ *  is tested for collision
+ * @param {PIXI.Container|PIXI.Sprite|PIXI.TilingSprite} displayObject - the displayObject
+ *  that will be hit test (recursively crawls its children)
+ * @param {Function} [func] - the function that will be called on each interactive object. The
+ *  interactionEvent, displayObject and hit will be passed to the function
+ * @param {boolean} [hitTest] - this indicates if the objects inside should be hit test against the point
+ * @return {boolean} returns true if the displayObject hit the point
+ */
+TreeSearch.prototype.findHit = function findHit (interactionEvent, displayObject, func, hitTest)
+{
+    this.recursiveFindHit(interactionEvent, displayObject, func, hitTest, false);
+};
 
 /**
  * Interface for classes that represent a hit area.
@@ -27032,7 +28347,7 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
         this.autoPreventDefault = options.autoPreventDefault !== undefined ? options.autoPreventDefault : true;
 
         /**
-         * Frequency in milliseconds that the mousemove, mouseover & mouseout interaction events will be checked.
+         * Maximum requency in milliseconds at which pointer over/out states will be checked by {@link tickerUpdate}.
          *
          * @member {number}
          * @default 10
@@ -27103,6 +28418,14 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
          * @member {boolean}
          */
         this.eventsAdded = false;
+
+        /**
+         * Has the system ticker been added?
+         *
+         * @protected
+         * @member {boolean}
+         */
+        this.tickerAdded = false;
 
         /**
          * Is the mouse hovering over the renderer?
@@ -27202,14 +28525,6 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
         this.cursor = null;
 
         /**
-         * Internal cached let.
-         *
-         * @private
-         * @member {PIXI.Point}
-         */
-        this._tempPoint = new math.Point();
-
-        /**
          * The current resolution / device pixel ratio.
          *
          * @member {number}
@@ -27224,6 +28539,14 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
          * @member {Array}
          */
         this.delayedEvents = [];
+
+        /**
+         * TreeSearch component that is used to hitTest stage tree
+         *
+         * @private
+         * @member {PIXI.interaction.TreeSearch}
+         */
+        this.search = new TreeSearch();
 
         /**
          * Fired when a pointer device button (usually a mouse left-button) is pressed on the display
@@ -27621,12 +28944,40 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
          * @param {PIXI.interaction.InteractionEvent} event - Interaction event
          */
 
+        this._useSystemTicker = options.useSystemTicker !== undefined ? options.useSystemTicker : true;
+
         this.setTargetElement(this.renderer.view, this.renderer.resolution);
     }
 
     if ( EventEmitter ) InteractionManager.__proto__ = EventEmitter;
     InteractionManager.prototype = Object.create( EventEmitter && EventEmitter.prototype );
     InteractionManager.prototype.constructor = InteractionManager;
+
+    var prototypeAccessors = { useSystemTicker: { configurable: true } };
+
+    /**
+     * Should the InteractionManager automatically add {@link tickerUpdate} to {@link PIXI.Ticker.system}.
+     *
+     * @member {boolean}
+     * @default true
+     */
+    prototypeAccessors.useSystemTicker.get = function ()
+    {
+        return this._useSystemTicker;
+    };
+    prototypeAccessors.useSystemTicker.set = function (useSystemTicker)
+    {
+        this._useSystemTicker = useSystemTicker;
+
+        if (useSystemTicker)
+        {
+            this.addTickerListener();
+        }
+        else
+        {
+            this.removeTickerListener();
+        }
+    };
 
     /**
      * Hit tests a point against the display tree, returning the first interactive object that is hit.
@@ -27666,6 +29017,8 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
     {
         if ( resolution === void 0 ) resolution = 1;
 
+        this.removeTickerListener();
+
         this.removeEvents();
 
         this.interactionDOMElement = element;
@@ -27673,6 +29026,42 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
         this.resolution = resolution;
 
         this.addEvents();
+
+        this.addTickerListener();
+    };
+
+    /**
+     * Add the ticker listener
+     *
+     * @private
+     */
+    InteractionManager.prototype.addTickerListener = function addTickerListener ()
+    {
+        if (this.tickerAdded || !this.interactionDOMElement || !this._useSystemTicker)
+        {
+            return;
+        }
+
+        ticker.Ticker.system.add(this.tickerUpdate, this, ticker.UPDATE_PRIORITY.INTERACTION);
+
+        this.tickerAdded = true;
+    };
+
+    /**
+     * Remove the ticker listener
+     *
+     * @private
+     */
+    InteractionManager.prototype.removeTickerListener = function removeTickerListener ()
+    {
+        if (!this.tickerAdded)
+        {
+            return;
+        }
+
+        ticker.Ticker.system.remove(this.tickerUpdate, this);
+
+        this.tickerAdded = false;
     };
 
     /**
@@ -27682,12 +29071,10 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
      */
     InteractionManager.prototype.addEvents = function addEvents ()
     {
-        if (!this.interactionDOMElement)
+        if (this.eventsAdded || !this.interactionDOMElement)
         {
             return;
         }
-
-        ticker.Ticker.system.add(this.update, this, ticker.UPDATE_PRIORITY.INTERACTION);
 
         if (window.navigator.msPointerEnabled)
         {
@@ -27745,12 +29132,10 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
      */
     InteractionManager.prototype.removeEvents = function removeEvents ()
     {
-        if (!this.interactionDOMElement)
+        if (!this.eventsAdded || !this.interactionDOMElement)
         {
             return;
         }
-
-        ticker.Ticker.system.remove(this.update, this);
 
         if (window.navigator.msPointerEnabled)
         {
@@ -27794,12 +29179,14 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
     };
 
     /**
-     * Updates the state of interactive objects.
+     * Updates the state of interactive objects if at least {@link interactionFrequency}
+     * milliseconds have passed since the last invocation.
+     *
      * Invoked by a throttled ticker update from {@link PIXI.Ticker.system}.
      *
-     * @param {number} deltaTime - time delta since last tick
+     * @param {number} deltaTime - time delta since the last call
      */
-    InteractionManager.prototype.update = function update (deltaTime)
+    InteractionManager.prototype.tickerUpdate = function tickerUpdate (deltaTime)
     {
         this._deltaTime += deltaTime;
 
@@ -27810,6 +29197,14 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
 
         this._deltaTime = 0;
 
+        this.update();
+    };
+
+    /**
+     * Updates the state of interactive objects.
+     */
+    InteractionManager.prototype.update = function update ()
+    {
         if (!this.interactionDOMElement)
         {
             return;
@@ -27910,7 +29305,9 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
      */
     InteractionManager.prototype.dispatchEvent = function dispatchEvent (displayObject, eventString, eventData)
     {
-        if (!eventData.stopped)
+        // Even if the event was stopped, at least dispatch any remaining events
+        // for the same display object.
+        if (!eventData.stopPropagationHint || displayObject === eventData.stopsPropagatingAt)
         {
             eventData.currentTarget = displayObject;
             eventData.type = eventString;
@@ -27979,166 +29376,41 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
      *  that will be hit test (recursively crawls its children)
      * @param {Function} [func] - the function that will be called on each interactive object. The
      *  interactionEvent, displayObject and hit will be passed to the function
-     * @param {boolean} [hitTest] - this indicates if the objects inside should be hit test against the point
-     * @param {boolean} [interactive] - Whether the displayObject is interactive
-     * @param {boolean} [skipDelayed] - Whether to process delayed events before returning. This is
-     *  used to avoid processing them too early during recursive calls.
-     * @return {boolean} returns true if the displayObject hit the point
+     * @param {boolean} [hitTest] - indicates whether we want to calculate hits
+     *  or just iterate through all interactive objects
      */
-    InteractionManager.prototype.processInteractive = function processInteractive (interactionEvent, displayObject, func, hitTest, interactive, skipDelayed)
+    InteractionManager.prototype.processInteractive = function processInteractive (interactionEvent, displayObject, func, hitTest)
     {
-        if (!displayObject || !displayObject.visible)
-        {
-            return false;
-        }
-
-        var point = interactionEvent.data.global;
-
-        // Took a little while to rework this function correctly! But now it is done and nice and optimized! ^_^
-        //
-        // This function will now loop through all objects and then only hit test the objects it HAS
-        // to, not all of them. MUCH faster..
-        // An object will be hit test if the following is true:
-        //
-        // 1: It is interactive.
-        // 2: It belongs to a parent that is interactive AND one of the parents children have not already been hit.
-        //
-        // As another little optimization once an interactive object has been hit we can carry on
-        // through the scenegraph, but we know that there will be no more hits! So we can avoid extra hit tests
-        // A final optimization is that an object is not hit test directly if a child has already been hit.
-
-        interactive = displayObject.interactive || interactive;
-
-        var hit = false;
-        var interactiveParent = interactive;
-
-        // Flag here can set to false if the event is outside the parents hitArea or mask
-        var hitTestChildren = true;
-
-        // If there is a hitArea, no need to test against anything else if the pointer is not within the hitArea
-        // There is also no longer a need to hitTest children.
-        if (displayObject.hitArea)
-        {
-            if (hitTest)
-            {
-                displayObject.worldTransform.applyInverse(point, this._tempPoint);
-                if (!displayObject.hitArea.contains(this._tempPoint.x, this._tempPoint.y))
-                {
-                    hitTest = false;
-                    hitTestChildren = false;
-                }
-                else
-                {
-                    hit = true;
-                }
-            }
-            interactiveParent = false;
-        }
-        // If there is a mask, no need to hitTest against anything else if the pointer is not within the mask.
-        // We still want to hitTestChildren, however, to ensure a mouseout can still be generated.
-        // https://github.com/pixijs/pixi.js/issues/5135
-        else if (displayObject._mask)
-        {
-            if (hitTest)
-            {
-                if (!(displayObject._mask.containsPoint && displayObject._mask.containsPoint(point)))
-                {
-                    hitTest = false;
-                }
-            }
-        }
-
-        // ** FREE TIP **! If an object is not interactive or has no buttons in it
-        // (such as a game scene!) set interactiveChildren to false for that displayObject.
-        // This will allow PixiJS to completely ignore and bypass checking the displayObjects children.
-        if (hitTestChildren && displayObject.interactiveChildren && displayObject.children)
-        {
-            var children = displayObject.children;
-
-            for (var i = children.length - 1; i >= 0; i--)
-            {
-                var child = children[i];
-
-                // time to get recursive.. if this function will return if something is hit..
-                var childHit = this.processInteractive(interactionEvent, child, func, hitTest, interactiveParent, true);
-
-                if (childHit)
-                {
-                    // its a good idea to check if a child has lost its parent.
-                    // this means it has been removed whilst looping so its best
-                    if (!child.parent)
-                    {
-                        continue;
-                    }
-
-                    // we no longer need to hit test any more objects in this container as we we
-                    // now know the parent has been hit
-                    interactiveParent = false;
-
-                    // If the child is interactive , that means that the object hit was actually
-                    // interactive and not just the child of an interactive object.
-                    // This means we no longer need to hit test anything else. We still need to run
-                    // through all objects, but we don't need to perform any hit tests.
-
-                    if (childHit)
-                    {
-                        if (interactionEvent.target)
-                        {
-                            hitTest = false;
-                        }
-                        hit = true;
-                    }
-                }
-            }
-        }
-
-        // no point running this if the item is not interactive or does not have an interactive parent.
-        if (interactive)
-        {
-            // if we are hit testing (as in we have no hit any objects yet)
-            // We also don't need to worry about hit testing if once of the displayObjects children
-            // has already been hit - but only if it was interactive, otherwise we need to keep
-            // looking for an interactive child, just in case we hit one
-            if (hitTest && !interactionEvent.target)
-            {
-                // already tested against hitArea if it is defined
-                if (!displayObject.hitArea && displayObject.containsPoint)
-                {
-                    if (displayObject.containsPoint(point))
-                    {
-                        hit = true;
-                    }
-                }
-            }
-
-            if (displayObject.interactive)
-            {
-                if (hit && !interactionEvent.target)
-                {
-                    interactionEvent.target = displayObject;
-                }
-
-                if (func)
-                {
-                    func(interactionEvent, displayObject, !!hit);
-                }
-            }
-        }
+        var hit = this.search.findHit(interactionEvent, displayObject, func, hitTest);
 
         var delayedEvents = this.delayedEvents;
 
-        if (delayedEvents.length && !skipDelayed)
+        if (!delayedEvents.length)
         {
-            var delayedLen = delayedEvents.length;
+            return hit;
+        }
+        // Reset the propagation hint, because we start deeper in the tree again.
+        interactionEvent.stopPropagationHint = false;
 
-            this.delayedEvents = [];
+        var delayedLen = delayedEvents.length;
 
-            for (var i$1 = 0; i$1 < delayedLen; i$1++)
+        this.delayedEvents = [];
+
+        for (var i = 0; i < delayedLen; i++)
+        {
+            var ref = delayedEvents[i];
+            var displayObject$1 = ref.displayObject;
+            var eventString = ref.eventString;
+            var eventData = ref.eventData;
+
+            // When we reach the object we wanted to stop propagating at,
+            // set the propagation hint.
+            if (eventData.stopsPropagatingAt === displayObject$1)
             {
-                var delayed = delayedEvents[i$1];
-
-                this.dispatchEvent(delayed.displayObject, delayed.eventString, delayed.eventData);
+                eventData.stopPropagationHint = true;
             }
+
+            this.dispatchEvent(displayObject$1, eventString, eventData);
         }
 
         return hit;
@@ -28817,6 +30089,8 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
     {
         this.removeEvents();
 
+        this.removeTickerListener();
+
         this.removeAllListeners();
 
         this.renderer = null;
@@ -28844,8 +30118,10 @@ var InteractionManager = /*@__PURE__*/(function (EventEmitter) {
 
         this.onPointerOver = null;
 
-        this._tempPoint = null;
+        this.search = null;
     };
+
+    Object.defineProperties( InteractionManager.prototype, prototypeAccessors );
 
     return InteractionManager;
 }(utils.EventEmitter));
@@ -28867,8 +30143,8 @@ exports.interactiveTarget = interactiveTarget;
 
 },{"@pixi/display":49,"@pixi/math":60,"@pixi/ticker":77,"@pixi/utils":78}],59:[function(require,module,exports){
 /*!
- * @pixi/loaders - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/loaders - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/loaders is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -29180,10 +30456,10 @@ exports.LoaderResource = LoaderResource;
 exports.TextureLoader = TextureLoader;
 
 
-},{"@pixi/core":48,"@pixi/utils":78,"resource-loader":110}],60:[function(require,module,exports){
+},{"@pixi/core":48,"@pixi/utils":78,"resource-loader":111}],60:[function(require,module,exports){
 /*!
- * @pixi/math - v5.1.0
- * Compiled Fri, 19 Jul 2019 21:54:36 UTC
+ * @pixi/math - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/math is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -29193,89 +30469,133 @@ exports.TextureLoader = TextureLoader;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /**
+ * Common interface for points. Both Point and ObservablePoint implement it
+ * @memberof PIXI
+ * @interface IPoint
+ */
+/**
+ * X coord
+ * @memberof PIXI.IPoint#
+ * @member {number} x
+ */
+/**
+ * Y coord
+ * @memberof PIXI.IPoint#
+ * @member {number} y
+ */
+/**
+ * Sets the point to a new x and y position.
+ * If y is omitted, both x and y will be set to x.
+ *
+ * @method set
+ * @memberof PIXI.IPoint#
+ * @param {number} [x=0] - position of the point on the x axis
+ * @param {number} [y=x] - position of the point on the y axis
+ */
+/**
+ * Copies x and y from the given point
+ * @method copyFrom
+ * @memberof PIXI.IPoint#
+ * @param {PIXI.IPoint} p - The point to copy from
+ * @returns {this} Returns itself.
+ */
+/**
+ * Copies x and y into the given point
+ * @method copyTo
+ * @memberof PIXI.IPoint#
+ * @param {PIXI.IPoint} p - The point to copy.
+ * @returns {PIXI.IPoint} Given point with values updated
+ */
+/**
+ * Returns true if the given point is equal to this point
+ *
+ * @method equals
+ * @memberof PIXI.IPoint#
+ * @param {PIXI.IPoint} p - The point to check
+ * @returns {boolean} Whether the given point equal to this point
+ */
+
+/**
  * The Point object represents a location in a two-dimensional coordinate system, where x represents
  * the horizontal axis and y represents the vertical axis.
  *
  * @class
  * @memberof PIXI
+ * @implements IPoint
  */
-var Point = function Point(x, y)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-
+var Point = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 0
+     * @param {number} [x=0] - position of the point on the x axis
+     * @param {number} [y=0] - position of the point on the y axis
      */
-    this.x = x;
-
+    function Point(x, y) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.x = x;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.y = y;
+    }
     /**
-     * @member {number}
-     * @default 0
+     * Creates a clone of this point
+     *
+     * @return {PIXI.Point} a copy of the point
      */
-    this.y = y;
-};
-
-/**
- * Creates a clone of this point
- *
- * @return {PIXI.Point} a copy of the point
- */
-Point.prototype.clone = function clone ()
-{
-    return new Point(this.x, this.y);
-};
-
-/**
- * Copies x and y from the given point
- *
- * @param {PIXI.IPoint} p - The point to copy from
- * @returns {PIXI.IPoint} Returns itself.
- */
-Point.prototype.copyFrom = function copyFrom (p)
-{
-    this.set(p.x, p.y);
-
-    return this;
-};
-
-/**
- * Copies x and y into the given point
- *
- * @param {PIXI.IPoint} p - The point to copy.
- * @returns {PIXI.IPoint} Given point with values updated
- */
-Point.prototype.copyTo = function copyTo (p)
-{
-    p.set(this.x, this.y);
-
-    return p;
-};
-
-/**
- * Returns true if the given point is equal to this point
- *
- * @param {PIXI.IPoint} p - The point to check
- * @returns {boolean} Whether the given point equal to this point
- */
-Point.prototype.equals = function equals (p)
-{
-    return (p.x === this.x) && (p.y === this.y);
-};
-
-/**
- * Sets the point to a new x and y position.
- * If y is omitted, both x and y will be set to x.
- *
- * @param {number} [x=0] - position of the point on the x axis
- * @param {number} [y=0] - position of the point on the y axis
- */
-Point.prototype.set = function set (x, y)
-{
-    this.x = x || 0;
-    this.y = y || ((y !== 0) ? this.x : 0);
-};
+    Point.prototype.clone = function () {
+        return new Point(this.x, this.y);
+    };
+    /**
+     * Copies x and y from the given point
+     *
+     * @param {PIXI.IPoint} p - The point to copy from
+     * @returns {this} Returns itself.
+     */
+    Point.prototype.copyFrom = function (p) {
+        this.set(p.x, p.y);
+        return this;
+    };
+    /**
+     * Copies x and y into the given point
+     *
+     * @param {PIXI.IPoint} p - The point to copy.
+     * @returns {PIXI.IPoint} Given point with values updated
+     */
+    Point.prototype.copyTo = function (p) {
+        p.set(this.x, this.y);
+        return p;
+    };
+    /**
+     * Returns true if the given point is equal to this point
+     *
+     * @param {PIXI.IPoint} p - The point to check
+     * @returns {boolean} Whether the given point equal to this point
+     */
+    Point.prototype.equals = function (p) {
+        return (p.x === this.x) && (p.y === this.y);
+    };
+    /**
+     * Sets the point to a new x and y position.
+     * If y is omitted, both x and y will be set to x.
+     *
+     * @param {number} [x=0] - position of the point on the x axis
+     * @param {number} [y=x] - position of the point on the y axis
+     * @returns {this} Returns itself.
+     */
+    Point.prototype.set = function (x, y) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = x; }
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+    return Point;
+}());
 
 /**
  * The Point object represents a location in a two-dimensional coordinate system, where x represents
@@ -29285,149 +30605,127 @@ Point.prototype.set = function set (x, y)
  *
  * @class
  * @memberof PIXI
+ * @implements IPoint
  */
-var ObservablePoint = function ObservablePoint(cb, scope, x, y)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-
-    this._x = x;
-    this._y = y;
-
-    this.cb = cb;
-    this.scope = scope;
-};
-
-var prototypeAccessors = { x: { configurable: true },y: { configurable: true } };
-
-/**
- * Creates a clone of this point.
- * The callback and scope params can be overidden otherwise they will default
- * to the clone object's values.
- *
- * @override
- * @param {Function} [cb=null] - callback when changed
- * @param {object} [scope=null] - owner of callback
- * @return {PIXI.ObservablePoint} a copy of the point
- */
-ObservablePoint.prototype.clone = function clone (cb, scope)
-{
-        if ( cb === void 0 ) cb = null;
-        if ( scope === void 0 ) scope = null;
-
-    var _cb = cb || this.cb;
-    var _scope = scope || this.scope;
-
-    return new ObservablePoint(_cb, _scope, this._x, this._y);
-};
-
-/**
- * Sets the point to a new x and y position.
- * If y is omitted, both x and y will be set to x.
- *
- * @param {number} [x=0] - position of the point on the x axis
- * @param {number} [y=0] - position of the point on the y axis
- */
-ObservablePoint.prototype.set = function set (x, y)
-{
-    var _x = x || 0;
-    var _y = y || ((y !== 0) ? _x : 0);
-
-    if (this._x !== _x || this._y !== _y)
-    {
-        this._x = _x;
-        this._y = _y;
-        this.cb.call(this.scope);
+var ObservablePoint = /** @class */ (function () {
+    /**
+     * @param {Function} cb - callback when changed
+     * @param {object} scope - owner of callback
+     * @param {number} [x=0] - position of the point on the x axis
+     * @param {number} [y=0] - position of the point on the y axis
+     */
+    function ObservablePoint(cb, scope, x, y) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        this._x = x;
+        this._y = y;
+        this.cb = cb;
+        this.scope = scope;
     }
-};
-
-/**
- * Copies x and y from the given point
- *
- * @param {PIXI.IPoint} p - The point to copy from.
- * @returns {PIXI.IPoint} Returns itself.
- */
-ObservablePoint.prototype.copyFrom = function copyFrom (p)
-{
-    if (this._x !== p.x || this._y !== p.y)
-    {
-        this._x = p.x;
-        this._y = p.y;
-        this.cb.call(this.scope);
-    }
-
-    return this;
-};
-
-/**
- * Copies x and y into the given point
- *
- * @param {PIXI.IPoint} p - The point to copy.
- * @returns {PIXI.IPoint} Given point with values updated
- */
-ObservablePoint.prototype.copyTo = function copyTo (p)
-{
-    p.set(this._x, this._y);
-
-    return p;
-};
-
-/**
- * Returns true if the given point is equal to this point
- *
- * @param {PIXI.IPoint} p - The point to check
- * @returns {boolean} Whether the given point equal to this point
- */
-ObservablePoint.prototype.equals = function equals (p)
-{
-    return (p.x === this._x) && (p.y === this._y);
-};
-
-/**
- * The position of the displayObject on the x axis relative to the local coordinates of the parent.
- *
- * @member {number}
- */
-prototypeAccessors.x.get = function ()
-{
-    return this._x;
-};
-
-prototypeAccessors.x.set = function (value) // eslint-disable-line require-jsdoc
-{
-    if (this._x !== value)
-    {
-        this._x = value;
-        this.cb.call(this.scope);
-    }
-};
-
-/**
- * The position of the displayObject on the x axis relative to the local coordinates of the parent.
- *
- * @member {number}
- */
-prototypeAccessors.y.get = function ()
-{
-    return this._y;
-};
-
-prototypeAccessors.y.set = function (value) // eslint-disable-line require-jsdoc
-{
-    if (this._y !== value)
-    {
-        this._y = value;
-        this.cb.call(this.scope);
-    }
-};
-
-Object.defineProperties( ObservablePoint.prototype, prototypeAccessors );
-
-/**
- * A number, or a string containing a number.
- * @memberof PIXI
- * @typedef {(PIXI.Point|PIXI.ObservablePoint)} IPoint
- */
+    /**
+     * Creates a clone of this point.
+     * The callback and scope params can be overidden otherwise they will default
+     * to the clone object's values.
+     *
+     * @override
+     * @param {Function} [cb=null] - callback when changed
+     * @param {object} [scope=null] - owner of callback
+     * @return {PIXI.ObservablePoint} a copy of the point
+     */
+    ObservablePoint.prototype.clone = function (cb, scope) {
+        if (cb === void 0) { cb = this.cb; }
+        if (scope === void 0) { scope = this.scope; }
+        return new ObservablePoint(cb, scope, this._x, this._y);
+    };
+    /**
+     * Sets the point to a new x and y position.
+     * If y is omitted, both x and y will be set to x.
+     *
+     * @param {number} [x=0] - position of the point on the x axis
+     * @param {number} [y=x] - position of the point on the y axis
+     * @returns {this} Returns itself.
+     */
+    ObservablePoint.prototype.set = function (x, y) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = x; }
+        if (this._x !== x || this._y !== y) {
+            this._x = x;
+            this._y = y;
+            this.cb.call(this.scope);
+        }
+        return this;
+    };
+    /**
+     * Copies x and y from the given point
+     *
+     * @param {PIXI.IPoint} p - The point to copy from.
+     * @returns {this} Returns itself.
+     */
+    ObservablePoint.prototype.copyFrom = function (p) {
+        if (this._x !== p.x || this._y !== p.y) {
+            this._x = p.x;
+            this._y = p.y;
+            this.cb.call(this.scope);
+        }
+        return this;
+    };
+    /**
+     * Copies x and y into the given point
+     *
+     * @param {PIXI.IPoint} p - The point to copy.
+     * @returns {PIXI.IPoint} Given point with values updated
+     */
+    ObservablePoint.prototype.copyTo = function (p) {
+        p.set(this._x, this._y);
+        return p;
+    };
+    /**
+     * Returns true if the given point is equal to this point
+     *
+     * @param {PIXI.IPoint} p - The point to check
+     * @returns {boolean} Whether the given point equal to this point
+     */
+    ObservablePoint.prototype.equals = function (p) {
+        return (p.x === this._x) && (p.y === this._y);
+    };
+    Object.defineProperty(ObservablePoint.prototype, "x", {
+        /**
+         * The position of the displayObject on the x axis relative to the local coordinates of the parent.
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this._x;
+        },
+        set: function (value) {
+            if (this._x !== value) {
+                this._x = value;
+                this.cb.call(this.scope);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ObservablePoint.prototype, "y", {
+        /**
+         * The position of the displayObject on the x axis relative to the local coordinates of the parent.
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this._y;
+        },
+        set: function (value) {
+            if (this._y !== value) {
+                this._y = value;
+                this.cb.call(this.scope);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ObservablePoint;
+}());
 
 /**
  * Two Pi.
@@ -29437,7 +30735,6 @@ Object.defineProperties( ObservablePoint.prototype, prototypeAccessors );
  * @memberof PIXI
  */
 var PI_2 = Math.PI * 2;
-
 /**
  * Conversion factor for converting radians to degrees.
  *
@@ -29446,7 +30743,6 @@ var PI_2 = Math.PI * 2;
  * @memberof PIXI
  */
 var RAD_TO_DEG = 180 / Math.PI;
-
 /**
  * Conversion factor for converting degrees to radians.
  *
@@ -29455,7 +30751,13 @@ var RAD_TO_DEG = 180 / Math.PI;
  * @memberof PIXI
  */
 var DEG_TO_RAD = Math.PI / 180;
-
+(function (SHAPES) {
+    SHAPES[SHAPES["POLY"] = 0] = "POLY";
+    SHAPES[SHAPES["RECT"] = 1] = "RECT";
+    SHAPES[SHAPES["CIRC"] = 2] = "CIRC";
+    SHAPES[SHAPES["ELIP"] = 3] = "ELIP";
+    SHAPES[SHAPES["RREC"] = 4] = "RREC";
+})(exports.SHAPES || (exports.SHAPES = {}));
 /**
  * Constants that identify shapes, mainly to prevent `instanceof` calls.
  *
@@ -29463,20 +30765,14 @@ var DEG_TO_RAD = Math.PI / 180;
  * @constant
  * @name SHAPES
  * @memberof PIXI
- * @type {object}
+ * @type {enum}
  * @property {number} POLY Polygon
  * @property {number} RECT Rectangle
  * @property {number} CIRC Circle
  * @property {number} ELIP Ellipse
  * @property {number} RREC Rounded Rectangle
+ * @enum {number}
  */
-var SHAPES = {
-    POLY: 0,
-    RECT: 1,
-    CIRC: 2,
-    ELIP: 3,
-    RREC: 4,
-};
 
 /**
  * The PixiJS Matrix as a class makes it a lot faster.
@@ -29490,504 +30786,426 @@ var SHAPES = {
  * @class
  * @memberof PIXI
  */
-var Matrix = function Matrix(a, b, c, d, tx, ty)
-{
-    if ( a === void 0 ) a = 1;
-    if ( b === void 0 ) b = 0;
-    if ( c === void 0 ) c = 0;
-    if ( d === void 0 ) d = 1;
-    if ( tx === void 0 ) tx = 0;
-    if ( ty === void 0 ) ty = 0;
-
+var Matrix = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 1
+     * @param {number} [a=1] - x scale
+     * @param {number} [b=0] - x skew
+     * @param {number} [c=0] - y skew
+     * @param {number} [d=1] - y scale
+     * @param {number} [tx=0] - x translation
+     * @param {number} [ty=0] - y translation
      */
-    this.a = a;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.b = b;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.c = c;
-
-    /**
-     * @member {number}
-     * @default 1
-     */
-    this.d = d;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.tx = tx;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.ty = ty;
-
-    this.array = null;
-};
-
-var staticAccessors = { IDENTITY: { configurable: true },TEMP_MATRIX: { configurable: true } };
-
-/**
- * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
- *
- * a = array[0]
- * b = array[1]
- * c = array[3]
- * d = array[4]
- * tx = array[2]
- * ty = array[5]
- *
- * @param {number[]} array - The array that the matrix will be populated from.
- */
-Matrix.prototype.fromArray = function fromArray (array)
-{
-    this.a = array[0];
-    this.b = array[1];
-    this.c = array[3];
-    this.d = array[4];
-    this.tx = array[2];
-    this.ty = array[5];
-};
-
-/**
- * sets the matrix properties
- *
- * @param {number} a - Matrix component
- * @param {number} b - Matrix component
- * @param {number} c - Matrix component
- * @param {number} d - Matrix component
- * @param {number} tx - Matrix component
- * @param {number} ty - Matrix component
- *
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.set = function set (a, b, c, d, tx, ty)
-{
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.tx = tx;
-    this.ty = ty;
-
-    return this;
-};
-
-/**
- * Creates an array from the current Matrix object.
- *
- * @param {boolean} transpose - Whether we need to transpose the matrix or not
- * @param {Float32Array} [out=new Float32Array(9)] - If provided the array will be assigned to out
- * @return {number[]} the newly created array which contains the matrix
- */
-Matrix.prototype.toArray = function toArray (transpose, out)
-{
-    if (!this.array)
-    {
-        this.array = new Float32Array(9);
+    function Matrix(a, b, c, d, tx, ty) {
+        if (a === void 0) { a = 1; }
+        if (b === void 0) { b = 0; }
+        if (c === void 0) { c = 0; }
+        if (d === void 0) { d = 1; }
+        if (tx === void 0) { tx = 0; }
+        if (ty === void 0) { ty = 0; }
+        this.array = null;
+        /**
+         * @member {number}
+         * @default 1
+         */
+        this.a = a;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.b = b;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.c = c;
+        /**
+         * @member {number}
+         * @default 1
+         */
+        this.d = d;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.tx = tx;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.ty = ty;
     }
-
-    var array = out || this.array;
-
-    if (transpose)
-    {
-        array[0] = this.a;
-        array[1] = this.b;
-        array[2] = 0;
-        array[3] = this.c;
-        array[4] = this.d;
-        array[5] = 0;
-        array[6] = this.tx;
-        array[7] = this.ty;
-        array[8] = 1;
-    }
-    else
-    {
-        array[0] = this.a;
-        array[1] = this.c;
-        array[2] = this.tx;
-        array[3] = this.b;
-        array[4] = this.d;
-        array[5] = this.ty;
-        array[6] = 0;
-        array[7] = 0;
-        array[8] = 1;
-    }
-
-    return array;
-};
-
-/**
- * Get a new position with the current transformation applied.
- * Can be used to go from a child's coordinate space to the world coordinate space. (e.g. rendering)
- *
- * @param {PIXI.Point} pos - The origin
- * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
- * @return {PIXI.Point} The new point, transformed through this matrix
- */
-Matrix.prototype.apply = function apply (pos, newPos)
-{
-    newPos = newPos || new Point();
-
-    var x = pos.x;
-    var y = pos.y;
-
-    newPos.x = (this.a * x) + (this.c * y) + this.tx;
-    newPos.y = (this.b * x) + (this.d * y) + this.ty;
-
-    return newPos;
-};
-
-/**
- * Get a new position with the inverse of the current transformation applied.
- * Can be used to go from the world coordinate space to a child's coordinate space. (e.g. input)
- *
- * @param {PIXI.Point} pos - The origin
- * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
- * @return {PIXI.Point} The new point, inverse-transformed through this matrix
- */
-Matrix.prototype.applyInverse = function applyInverse (pos, newPos)
-{
-    newPos = newPos || new Point();
-
-    var id = 1 / ((this.a * this.d) + (this.c * -this.b));
-
-    var x = pos.x;
-    var y = pos.y;
-
-    newPos.x = (this.d * id * x) + (-this.c * id * y) + (((this.ty * this.c) - (this.tx * this.d)) * id);
-    newPos.y = (this.a * id * y) + (-this.b * id * x) + (((-this.ty * this.a) + (this.tx * this.b)) * id);
-
-    return newPos;
-};
-
-/**
- * Translates the matrix on the x and y.
- *
- * @param {number} x How much to translate x by
- * @param {number} y How much to translate y by
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.translate = function translate (x, y)
-{
-    this.tx += x;
-    this.ty += y;
-
-    return this;
-};
-
-/**
- * Applies a scale transformation to the matrix.
- *
- * @param {number} x The amount to scale horizontally
- * @param {number} y The amount to scale vertically
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.scale = function scale (x, y)
-{
-    this.a *= x;
-    this.d *= y;
-    this.c *= x;
-    this.b *= y;
-    this.tx *= x;
-    this.ty *= y;
-
-    return this;
-};
-
-/**
- * Applies a rotation transformation to the matrix.
- *
- * @param {number} angle - The angle in radians.
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.rotate = function rotate (angle)
-{
-    var cos = Math.cos(angle);
-    var sin = Math.sin(angle);
-
-    var a1 = this.a;
-    var c1 = this.c;
-    var tx1 = this.tx;
-
-    this.a = (a1 * cos) - (this.b * sin);
-    this.b = (a1 * sin) + (this.b * cos);
-    this.c = (c1 * cos) - (this.d * sin);
-    this.d = (c1 * sin) + (this.d * cos);
-    this.tx = (tx1 * cos) - (this.ty * sin);
-    this.ty = (tx1 * sin) + (this.ty * cos);
-
-    return this;
-};
-
-/**
- * Appends the given Matrix to this Matrix.
- *
- * @param {PIXI.Matrix} matrix - The matrix to append.
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.append = function append (matrix)
-{
-    var a1 = this.a;
-    var b1 = this.b;
-    var c1 = this.c;
-    var d1 = this.d;
-
-    this.a = (matrix.a * a1) + (matrix.b * c1);
-    this.b = (matrix.a * b1) + (matrix.b * d1);
-    this.c = (matrix.c * a1) + (matrix.d * c1);
-    this.d = (matrix.c * b1) + (matrix.d * d1);
-
-    this.tx = (matrix.tx * a1) + (matrix.ty * c1) + this.tx;
-    this.ty = (matrix.tx * b1) + (matrix.ty * d1) + this.ty;
-
-    return this;
-};
-
-/**
- * Sets the matrix based on all the available properties
- *
- * @param {number} x - Position on the x axis
- * @param {number} y - Position on the y axis
- * @param {number} pivotX - Pivot on the x axis
- * @param {number} pivotY - Pivot on the y axis
- * @param {number} scaleX - Scale on the x axis
- * @param {number} scaleY - Scale on the y axis
- * @param {number} rotation - Rotation in radians
- * @param {number} skewX - Skew on the x axis
- * @param {number} skewY - Skew on the y axis
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.setTransform = function setTransform (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY)
-{
-    this.a = Math.cos(rotation + skewY) * scaleX;
-    this.b = Math.sin(rotation + skewY) * scaleX;
-    this.c = -Math.sin(rotation - skewX) * scaleY;
-    this.d = Math.cos(rotation - skewX) * scaleY;
-
-    this.tx = x - ((pivotX * this.a) + (pivotY * this.c));
-    this.ty = y - ((pivotX * this.b) + (pivotY * this.d));
-
-    return this;
-};
-
-/**
- * Prepends the given Matrix to this Matrix.
- *
- * @param {PIXI.Matrix} matrix - The matrix to prepend
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.prepend = function prepend (matrix)
-{
-    var tx1 = this.tx;
-
-    if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1)
-    {
+    /**
+     * Creates a Matrix object based on the given array. The Element to Matrix mapping order is as follows:
+     *
+     * a = array[0]
+     * b = array[1]
+     * c = array[3]
+     * d = array[4]
+     * tx = array[2]
+     * ty = array[5]
+     *
+     * @param {number[]} array - The array that the matrix will be populated from.
+     */
+    Matrix.prototype.fromArray = function (array) {
+        this.a = array[0];
+        this.b = array[1];
+        this.c = array[3];
+        this.d = array[4];
+        this.tx = array[2];
+        this.ty = array[5];
+    };
+    /**
+     * sets the matrix properties
+     *
+     * @param {number} a - Matrix component
+     * @param {number} b - Matrix component
+     * @param {number} c - Matrix component
+     * @param {number} d - Matrix component
+     * @param {number} tx - Matrix component
+     * @param {number} ty - Matrix component
+     *
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.set = function (a, b, c, d, tx, ty) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.tx = tx;
+        this.ty = ty;
+        return this;
+    };
+    /**
+     * Creates an array from the current Matrix object.
+     *
+     * @param {boolean} transpose - Whether we need to transpose the matrix or not
+     * @param {Float32Array} [out=new Float32Array(9)] - If provided the array will be assigned to out
+     * @return {number[]} the newly created array which contains the matrix
+     */
+    Matrix.prototype.toArray = function (transpose, out) {
+        if (!this.array) {
+            this.array = new Float32Array(9);
+        }
+        var array = out || this.array;
+        if (transpose) {
+            array[0] = this.a;
+            array[1] = this.b;
+            array[2] = 0;
+            array[3] = this.c;
+            array[4] = this.d;
+            array[5] = 0;
+            array[6] = this.tx;
+            array[7] = this.ty;
+            array[8] = 1;
+        }
+        else {
+            array[0] = this.a;
+            array[1] = this.c;
+            array[2] = this.tx;
+            array[3] = this.b;
+            array[4] = this.d;
+            array[5] = this.ty;
+            array[6] = 0;
+            array[7] = 0;
+            array[8] = 1;
+        }
+        return array;
+    };
+    /**
+     * Get a new position with the current transformation applied.
+     * Can be used to go from a child's coordinate space to the world coordinate space. (e.g. rendering)
+     *
+     * @param {PIXI.Point} pos - The origin
+     * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+     * @return {PIXI.Point} The new point, transformed through this matrix
+     */
+    Matrix.prototype.apply = function (pos, newPos) {
+        newPos = newPos || new Point();
+        var x = pos.x;
+        var y = pos.y;
+        newPos.x = (this.a * x) + (this.c * y) + this.tx;
+        newPos.y = (this.b * x) + (this.d * y) + this.ty;
+        return newPos;
+    };
+    /**
+     * Get a new position with the inverse of the current transformation applied.
+     * Can be used to go from the world coordinate space to a child's coordinate space. (e.g. input)
+     *
+     * @param {PIXI.Point} pos - The origin
+     * @param {PIXI.Point} [newPos] - The point that the new position is assigned to (allowed to be same as input)
+     * @return {PIXI.Point} The new point, inverse-transformed through this matrix
+     */
+    Matrix.prototype.applyInverse = function (pos, newPos) {
+        newPos = newPos || new Point();
+        var id = 1 / ((this.a * this.d) + (this.c * -this.b));
+        var x = pos.x;
+        var y = pos.y;
+        newPos.x = (this.d * id * x) + (-this.c * id * y) + (((this.ty * this.c) - (this.tx * this.d)) * id);
+        newPos.y = (this.a * id * y) + (-this.b * id * x) + (((-this.ty * this.a) + (this.tx * this.b)) * id);
+        return newPos;
+    };
+    /**
+     * Translates the matrix on the x and y.
+     *
+     * @param {number} x How much to translate x by
+     * @param {number} y How much to translate y by
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.translate = function (x, y) {
+        this.tx += x;
+        this.ty += y;
+        return this;
+    };
+    /**
+     * Applies a scale transformation to the matrix.
+     *
+     * @param {number} x The amount to scale horizontally
+     * @param {number} y The amount to scale vertically
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.scale = function (x, y) {
+        this.a *= x;
+        this.d *= y;
+        this.c *= x;
+        this.b *= y;
+        this.tx *= x;
+        this.ty *= y;
+        return this;
+    };
+    /**
+     * Applies a rotation transformation to the matrix.
+     *
+     * @param {number} angle - The angle in radians.
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.rotate = function (angle) {
+        var cos = Math.cos(angle);
+        var sin = Math.sin(angle);
         var a1 = this.a;
         var c1 = this.c;
-
-        this.a = (a1 * matrix.a) + (this.b * matrix.c);
-        this.b = (a1 * matrix.b) + (this.b * matrix.d);
-        this.c = (c1 * matrix.a) + (this.d * matrix.c);
-        this.d = (c1 * matrix.b) + (this.d * matrix.d);
-    }
-
-    this.tx = (tx1 * matrix.a) + (this.ty * matrix.c) + matrix.tx;
-    this.ty = (tx1 * matrix.b) + (this.ty * matrix.d) + matrix.ty;
-
-    return this;
-};
-
-/**
- * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
- *
- * @param {PIXI.Transform} transform - The transform to apply the properties to.
- * @return {PIXI.Transform} The transform with the newly applied properties
- */
-Matrix.prototype.decompose = function decompose (transform)
-{
-    // sort out rotation / skew..
-    var a = this.a;
-    var b = this.b;
-    var c = this.c;
-    var d = this.d;
-
-    var skewX = -Math.atan2(-c, d);
-    var skewY = Math.atan2(b, a);
-
-    var delta = Math.abs(skewX + skewY);
-
-    if (delta < 0.00001 || Math.abs(PI_2 - delta) < 0.00001)
-    {
-        transform.rotation = skewY;
-        transform.skew.x = transform.skew.y = 0;
-    }
-    else
-    {
-        transform.rotation = 0;
-        transform.skew.x = skewX;
-        transform.skew.y = skewY;
-    }
-
-    // next set scale
-    transform.scale.x = Math.sqrt((a * a) + (b * b));
-    transform.scale.y = Math.sqrt((c * c) + (d * d));
-
-    // next set position
-    transform.position.x = this.tx;
-    transform.position.y = this.ty;
-
-    return transform;
-};
-
-/**
- * Inverts this matrix
- *
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.invert = function invert ()
-{
-    var a1 = this.a;
-    var b1 = this.b;
-    var c1 = this.c;
-    var d1 = this.d;
-    var tx1 = this.tx;
-    var n = (a1 * d1) - (b1 * c1);
-
-    this.a = d1 / n;
-    this.b = -b1 / n;
-    this.c = -c1 / n;
-    this.d = a1 / n;
-    this.tx = ((c1 * this.ty) - (d1 * tx1)) / n;
-    this.ty = -((a1 * this.ty) - (b1 * tx1)) / n;
-
-    return this;
-};
-
-/**
- * Resets this Matrix to an identity (default) matrix.
- *
- * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
- */
-Matrix.prototype.identity = function identity ()
-{
-    this.a = 1;
-    this.b = 0;
-    this.c = 0;
-    this.d = 1;
-    this.tx = 0;
-    this.ty = 0;
-
-    return this;
-};
-
-/**
- * Creates a new Matrix object with the same values as this one.
- *
- * @return {PIXI.Matrix} A copy of this matrix. Good for chaining method calls.
- */
-Matrix.prototype.clone = function clone ()
-{
-    var matrix = new Matrix();
-
-    matrix.a = this.a;
-    matrix.b = this.b;
-    matrix.c = this.c;
-    matrix.d = this.d;
-    matrix.tx = this.tx;
-    matrix.ty = this.ty;
-
-    return matrix;
-};
-
-/**
- * Changes the values of the given matrix to be the same as the ones in this matrix
- *
- * @param {PIXI.Matrix} matrix - The matrix to copy to.
- * @return {PIXI.Matrix} The matrix given in parameter with its values updated.
- */
-Matrix.prototype.copyTo = function copyTo (matrix)
-{
-    matrix.a = this.a;
-    matrix.b = this.b;
-    matrix.c = this.c;
-    matrix.d = this.d;
-    matrix.tx = this.tx;
-    matrix.ty = this.ty;
-
-    return matrix;
-};
-
-/**
- * Changes the values of the matrix to be the same as the ones in given matrix
- *
- * @param {PIXI.Matrix} matrix - The matrix to copy from.
- * @return {PIXI.Matrix} this
- */
-Matrix.prototype.copyFrom = function copyFrom (matrix)
-{
-    this.a = matrix.a;
-    this.b = matrix.b;
-    this.c = matrix.c;
-    this.d = matrix.d;
-    this.tx = matrix.tx;
-    this.ty = matrix.ty;
-
-    return this;
-};
-
-/**
- * A default (identity) matrix
- *
- * @static
- * @const
- * @member {PIXI.Matrix}
- */
-staticAccessors.IDENTITY.get = function ()
-{
-    return new Matrix();
-};
-
-/**
- * A temp matrix
- *
- * @static
- * @const
- * @member {PIXI.Matrix}
- */
-staticAccessors.TEMP_MATRIX.get = function ()
-{
-    return new Matrix();
-};
-
-Object.defineProperties( Matrix, staticAccessors );
+        var tx1 = this.tx;
+        this.a = (a1 * cos) - (this.b * sin);
+        this.b = (a1 * sin) + (this.b * cos);
+        this.c = (c1 * cos) - (this.d * sin);
+        this.d = (c1 * sin) + (this.d * cos);
+        this.tx = (tx1 * cos) - (this.ty * sin);
+        this.ty = (tx1 * sin) + (this.ty * cos);
+        return this;
+    };
+    /**
+     * Appends the given Matrix to this Matrix.
+     *
+     * @param {PIXI.Matrix} matrix - The matrix to append.
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.append = function (matrix) {
+        var a1 = this.a;
+        var b1 = this.b;
+        var c1 = this.c;
+        var d1 = this.d;
+        this.a = (matrix.a * a1) + (matrix.b * c1);
+        this.b = (matrix.a * b1) + (matrix.b * d1);
+        this.c = (matrix.c * a1) + (matrix.d * c1);
+        this.d = (matrix.c * b1) + (matrix.d * d1);
+        this.tx = (matrix.tx * a1) + (matrix.ty * c1) + this.tx;
+        this.ty = (matrix.tx * b1) + (matrix.ty * d1) + this.ty;
+        return this;
+    };
+    /**
+     * Sets the matrix based on all the available properties
+     *
+     * @param {number} x - Position on the x axis
+     * @param {number} y - Position on the y axis
+     * @param {number} pivotX - Pivot on the x axis
+     * @param {number} pivotY - Pivot on the y axis
+     * @param {number} scaleX - Scale on the x axis
+     * @param {number} scaleY - Scale on the y axis
+     * @param {number} rotation - Rotation in radians
+     * @param {number} skewX - Skew on the x axis
+     * @param {number} skewY - Skew on the y axis
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.setTransform = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) {
+        this.a = Math.cos(rotation + skewY) * scaleX;
+        this.b = Math.sin(rotation + skewY) * scaleX;
+        this.c = -Math.sin(rotation - skewX) * scaleY;
+        this.d = Math.cos(rotation - skewX) * scaleY;
+        this.tx = x - ((pivotX * this.a) + (pivotY * this.c));
+        this.ty = y - ((pivotX * this.b) + (pivotY * this.d));
+        return this;
+    };
+    /**
+     * Prepends the given Matrix to this Matrix.
+     *
+     * @param {PIXI.Matrix} matrix - The matrix to prepend
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.prepend = function (matrix) {
+        var tx1 = this.tx;
+        if (matrix.a !== 1 || matrix.b !== 0 || matrix.c !== 0 || matrix.d !== 1) {
+            var a1 = this.a;
+            var c1 = this.c;
+            this.a = (a1 * matrix.a) + (this.b * matrix.c);
+            this.b = (a1 * matrix.b) + (this.b * matrix.d);
+            this.c = (c1 * matrix.a) + (this.d * matrix.c);
+            this.d = (c1 * matrix.b) + (this.d * matrix.d);
+        }
+        this.tx = (tx1 * matrix.a) + (this.ty * matrix.c) + matrix.tx;
+        this.ty = (tx1 * matrix.b) + (this.ty * matrix.d) + matrix.ty;
+        return this;
+    };
+    /**
+     * Decomposes the matrix (x, y, scaleX, scaleY, and rotation) and sets the properties on to a transform.
+     *
+     * @param {PIXI.Transform} transform - The transform to apply the properties to.
+     * @return {PIXI.Transform} The transform with the newly applied properties
+     */
+    Matrix.prototype.decompose = function (transform) {
+        // sort out rotation / skew..
+        var a = this.a;
+        var b = this.b;
+        var c = this.c;
+        var d = this.d;
+        var skewX = -Math.atan2(-c, d);
+        var skewY = Math.atan2(b, a);
+        var delta = Math.abs(skewX + skewY);
+        if (delta < 0.00001 || Math.abs(PI_2 - delta) < 0.00001) {
+            transform.rotation = skewY;
+            transform.skew.x = transform.skew.y = 0;
+        }
+        else {
+            transform.rotation = 0;
+            transform.skew.x = skewX;
+            transform.skew.y = skewY;
+        }
+        // next set scale
+        transform.scale.x = Math.sqrt((a * a) + (b * b));
+        transform.scale.y = Math.sqrt((c * c) + (d * d));
+        // next set position
+        transform.position.x = this.tx;
+        transform.position.y = this.ty;
+        return transform;
+    };
+    /**
+     * Inverts this matrix
+     *
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.invert = function () {
+        var a1 = this.a;
+        var b1 = this.b;
+        var c1 = this.c;
+        var d1 = this.d;
+        var tx1 = this.tx;
+        var n = (a1 * d1) - (b1 * c1);
+        this.a = d1 / n;
+        this.b = -b1 / n;
+        this.c = -c1 / n;
+        this.d = a1 / n;
+        this.tx = ((c1 * this.ty) - (d1 * tx1)) / n;
+        this.ty = -((a1 * this.ty) - (b1 * tx1)) / n;
+        return this;
+    };
+    /**
+     * Resets this Matrix to an identity (default) matrix.
+     *
+     * @return {PIXI.Matrix} This matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.identity = function () {
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.tx = 0;
+        this.ty = 0;
+        return this;
+    };
+    /**
+     * Creates a new Matrix object with the same values as this one.
+     *
+     * @return {PIXI.Matrix} A copy of this matrix. Good for chaining method calls.
+     */
+    Matrix.prototype.clone = function () {
+        var matrix = new Matrix();
+        matrix.a = this.a;
+        matrix.b = this.b;
+        matrix.c = this.c;
+        matrix.d = this.d;
+        matrix.tx = this.tx;
+        matrix.ty = this.ty;
+        return matrix;
+    };
+    /**
+     * Changes the values of the given matrix to be the same as the ones in this matrix
+     *
+     * @param {PIXI.Matrix} matrix - The matrix to copy to.
+     * @return {PIXI.Matrix} The matrix given in parameter with its values updated.
+     */
+    Matrix.prototype.copyTo = function (matrix) {
+        matrix.a = this.a;
+        matrix.b = this.b;
+        matrix.c = this.c;
+        matrix.d = this.d;
+        matrix.tx = this.tx;
+        matrix.ty = this.ty;
+        return matrix;
+    };
+    /**
+     * Changes the values of the matrix to be the same as the ones in given matrix
+     *
+     * @param {PIXI.Matrix} matrix - The matrix to copy from.
+     * @return {PIXI.Matrix} this
+     */
+    Matrix.prototype.copyFrom = function (matrix) {
+        this.a = matrix.a;
+        this.b = matrix.b;
+        this.c = matrix.c;
+        this.d = matrix.d;
+        this.tx = matrix.tx;
+        this.ty = matrix.ty;
+        return this;
+    };
+    Object.defineProperty(Matrix, "IDENTITY", {
+        /**
+         * A default (identity) matrix
+         *
+         * @static
+         * @const
+         * @member {PIXI.Matrix}
+         */
+        get: function () {
+            return new Matrix();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Matrix, "TEMP_MATRIX", {
+        /**
+         * A temp matrix
+         *
+         * @static
+         * @const
+         * @member {PIXI.Matrix}
+         */
+        get: function () {
+            return new Matrix();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Matrix;
+}());
 
 // Your friendly neighbour https://en.wikipedia.org/wiki/Dihedral_group
-
 /*
  * Transform matrix for operation n is:
  * | ux | vx |
  * | uy | vy |
  */
-
 var ux = [1, 1, 0, -1, -1, -1, 0, 1, 1, 1, 0, -1, -1, -1, 0, 1];
 var uy = [0, 1, 1, 1, 0, -1, -1, -1, 0, 1, 1, 1, 0, -1, -1, -1];
 var vx = [0, -1, -1, -1, 0, 1, 1, 1, 0, 1, 1, 1, 0, -1, -1, -1];
 var vy = [1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, 1, 1, 1, 0, -1];
-
 /**
  * [Cayley Table]{@link https://en.wikipedia.org/wiki/Cayley_table}
  * for the composition of each rotation in the dihederal group D8.
@@ -29996,7 +31214,6 @@ var vy = [1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, 1, 1, 1, 0, -1];
  * @private
  */
 var rotationCayley = [];
-
 /**
  * Matrices for each `GD8Symmetry` rotation.
  *
@@ -30004,62 +31221,46 @@ var rotationCayley = [];
  * @private
  */
 var rotationMatrices = [];
-
 /*
  * Alias for {@code Math.sign}.
  */
 var signum = Math.sign;
-
 /*
  * Initializes `rotationCayley` and `rotationMatrices`. It is called
  * only once below.
  */
-function init()
-{
-    for (var i = 0; i < 16; i++)
-    {
+function init() {
+    for (var i = 0; i < 16; i++) {
         var row = [];
-
         rotationCayley.push(row);
-
-        for (var j = 0; j < 16; j++)
-        {
+        for (var j = 0; j < 16; j++) {
             /* Multiplies rotation matrices i and j. */
             var _ux = signum((ux[i] * ux[j]) + (vx[i] * uy[j]));
             var _uy = signum((uy[i] * ux[j]) + (vy[i] * uy[j]));
             var _vx = signum((ux[i] * vx[j]) + (vx[i] * vy[j]));
             var _vy = signum((uy[i] * vx[j]) + (vy[i] * vy[j]));
-
             /* Finds rotation matrix matching the product and pushes it. */
-            for (var k = 0; k < 16; k++)
-            {
+            for (var k = 0; k < 16; k++) {
                 if (ux[k] === _ux && uy[k] === _uy
-                      && vx[k] === _vx && vy[k] === _vy)
-                {
+                    && vx[k] === _vx && vy[k] === _vy) {
                     row.push(k);
                     break;
                 }
             }
         }
     }
-
-    for (var i$1 = 0; i$1 < 16; i$1++)
-    {
+    for (var i = 0; i < 16; i++) {
         var mat = new Matrix();
-
-        mat.set(ux[i$1], uy[i$1], vx[i$1], vy[i$1], 0, 0);
+        mat.set(ux[i], uy[i], vx[i], vy[i], 0, 0);
         rotationMatrices.push(mat);
     }
 }
-
 init();
-
 /**
  * @memberof PIXI
  * @typedef {number} GD8Symmetry
- * @see PIXI.GroupD8
+ * @see PIXI.groupD8
  */
-
 /**
  * Implements the dihedral group D8, which is similar to
  * [group D4]{@link http://mathworld.wolfram.com/DihedralGroupD4.html};
@@ -30073,167 +31274,161 @@ init();
  * **Origin:**<br>
  *  This is the small part of gameofbombs.com portal system. It works.
  *
- * @see PIXI.GroupD8.E
- * @see PIXI.GroupD8.SE
- * @see PIXI.GroupD8.S
- * @see PIXI.GroupD8.SW
- * @see PIXI.GroupD8.W
- * @see PIXI.GroupD8.NW
- * @see PIXI.GroupD8.N
- * @see PIXI.GroupD8.NE
+ * @see PIXI.groupD8.E
+ * @see PIXI.groupD8.SE
+ * @see PIXI.groupD8.S
+ * @see PIXI.groupD8.SW
+ * @see PIXI.groupD8.W
+ * @see PIXI.groupD8.NW
+ * @see PIXI.groupD8.N
+ * @see PIXI.groupD8.NE
  * @author Ivan @ivanpopelyshev
- * @class
+ * @namespace PIXI.groupD8
  * @memberof PIXI
  */
-var GroupD8 = {
+var groupD8 = {
     /**
      * | Rotation | Direction |
      * |----------|-----------|
      * | 0°       | East      |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     E: 0,
-
     /**
      * | Rotation | Direction |
      * |----------|-----------|
      * | 45°↻     | Southeast |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     SE: 1,
-
     /**
      * | Rotation | Direction |
      * |----------|-----------|
      * | 90°↻     | South     |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     S: 2,
-
     /**
      * | Rotation | Direction |
      * |----------|-----------|
      * | 135°↻    | Southwest |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     SW: 3,
-
     /**
      * | Rotation | Direction |
      * |----------|-----------|
      * | 180°     | West      |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     W: 4,
-
     /**
      * | Rotation    | Direction    |
      * |-------------|--------------|
      * | -135°/225°↻ | Northwest    |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     NW: 5,
-
     /**
      * | Rotation    | Direction    |
      * |-------------|--------------|
      * | -90°/270°↻  | North        |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     N: 6,
-
     /**
      * | Rotation    | Direction    |
      * |-------------|--------------|
      * | -45°/315°↻  | Northeast    |
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     NE: 7,
-
     /**
      * Reflection about Y-axis.
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     MIRROR_VERTICAL: 8,
-
     /**
      * Reflection about the main diagonal.
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     MAIN_DIAGONAL: 10,
-
     /**
      * Reflection about X-axis.
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     MIRROR_HORIZONTAL: 12,
-
     /**
      * Reflection about reverse diagonal.
      *
+     * @memberof PIXI.groupD8
      * @constant {PIXI.GD8Symmetry}
      */
     REVERSE_DIAGONAL: 14,
-
     /**
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} ind - sprite rotation angle.
      * @return {PIXI.GD8Symmetry} The X-component of the U-axis
      *    after rotating the axes.
      */
     uX: function (ind) { return ux[ind]; },
-
     /**
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} ind - sprite rotation angle.
      * @return {PIXI.GD8Symmetry} The Y-component of the U-axis
      *    after rotating the axes.
      */
     uY: function (ind) { return uy[ind]; },
-
     /**
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} ind - sprite rotation angle.
      * @return {PIXI.GD8Symmetry} The X-component of the V-axis
      *    after rotating the axes.
      */
     vX: function (ind) { return vx[ind]; },
-
     /**
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} ind - sprite rotation angle.
      * @return {PIXI.GD8Symmetry} The Y-component of the V-axis
      *    after rotating the axes.
      */
     vY: function (ind) { return vy[ind]; },
-
     /**
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} rotation - symmetry whose opposite
      *   is needed. Only rotations have opposite symmetries while
      *   reflections don't.
      * @return {PIXI.GD8Symmetry} The opposite symmetry of `rotation`
      */
     inv: function (rotation) {
-        if (rotation & 8)// true only if between 8 & 15 (reflections)
-        {
-            return rotation & 15;// or rotation % 16
+        if (rotation & 8) // true only if between 8 & 15 (reflections)
+         {
+            return rotation & 15; // or rotation % 16
         }
-
-        return (-rotation) & 7;// or (8 - rotation) % 8
+        return (-rotation) & 7; // or (8 - rotation) % 8
     },
-
     /**
      * Composes the two D8 operations.
      *
@@ -30251,111 +31446,89 @@ var GroupD8 = {
      * | N^=14 | N^  | W^  | S^  | E^  | N    | W     | S     | E     |
      *
      * [This is a Cayley table]{@link https://en.wikipedia.org/wiki/Cayley_table}
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} rotationSecond - Second operation, which
      *   is the row in the above cayley table.
      * @param {PIXI.GD8Symmetry} rotationFirst - First operation, which
      *   is the column in the above cayley table.
      * @return {PIXI.GD8Symmetry} Composed operation
      */
-    add: function (rotationSecond, rotationFirst) { return (
-        rotationCayley[rotationSecond][rotationFirst]
-    ); },
-
+    add: function (rotationSecond, rotationFirst) { return (rotationCayley[rotationSecond][rotationFirst]); },
     /**
      * Reverse of `add`.
      *
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} rotationSecond - Second operation
      * @param {PIXI.GD8Symmetry} rotationFirst - First operation
      * @return {PIXI.GD8Symmetry} Result
      */
-    sub: function (rotationSecond, rotationFirst) { return (
-        rotationCayley[rotationSecond][GroupD8.inv(rotationFirst)]
-    ); },
-
+    sub: function (rotationSecond, rotationFirst) { return (rotationCayley[rotationSecond][groupD8.inv(rotationFirst)]); },
     /**
      * Adds 180 degrees to rotation, which is a commutative
      * operation.
      *
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {number} rotation - The number to rotate.
      * @returns {number} Rotated number
      */
     rotate180: function (rotation) { return rotation ^ 4; },
-
     /**
      * Checks if the rotation angle is vertical, i.e. south
      * or north. It doesn't work for reflections.
      *
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.GD8Symmetry} rotation - The number to check.
      * @returns {boolean} Whether or not the direction is vertical
      */
-    isVertical: function (rotation) { return (rotation & 3) === 2; }, // rotation % 4 === 2
-
+    isVertical: function (rotation) { return (rotation & 3) === 2; },
     /**
      * Approximates the vector `V(dx,dy)` into one of the
-     * eight directions provided by `GroupD8`.
+     * eight directions provided by `groupD8`.
      *
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {number} dx - X-component of the vector
      * @param {number} dy - Y-component of the vector
      * @return {PIXI.GD8Symmetry} Approximation of the vector into
      *  one of the eight symmetries.
      */
     byDirection: function (dx, dy) {
-        if (Math.abs(dx) * 2 <= Math.abs(dy))
-        {
-            if (dy >= 0)
-            {
-                return GroupD8.S;
+        if (Math.abs(dx) * 2 <= Math.abs(dy)) {
+            if (dy >= 0) {
+                return groupD8.S;
             }
-
-            return GroupD8.N;
+            return groupD8.N;
         }
-        else if (Math.abs(dy) * 2 <= Math.abs(dx))
-        {
-            if (dx > 0)
-            {
-                return GroupD8.E;
+        else if (Math.abs(dy) * 2 <= Math.abs(dx)) {
+            if (dx > 0) {
+                return groupD8.E;
             }
-
-            return GroupD8.W;
+            return groupD8.W;
         }
-        else if (dy > 0)
-        {
-            if (dx > 0)
-            {
-                return GroupD8.SE;
+        else if (dy > 0) {
+            if (dx > 0) {
+                return groupD8.SE;
             }
-
-            return GroupD8.SW;
+            return groupD8.SW;
         }
-        else if (dx > 0)
-        {
-            return GroupD8.NE;
+        else if (dx > 0) {
+            return groupD8.NE;
         }
-
-        return GroupD8.NW;
+        return groupD8.NW;
     },
-
     /**
      * Helps sprite to compensate texture packer rotation.
      *
-     * @memberof PIXI.GroupD8
+     * @memberof PIXI.groupD8
      * @param {PIXI.Matrix} matrix - sprite world matrix
      * @param {PIXI.GD8Symmetry} rotation - The rotation factor to use.
      * @param {number} tx - sprite anchoring
      * @param {number} ty - sprite anchoring
      */
     matrixAppendRotationInv: function (matrix, rotation, tx, ty) {
-        if ( tx === void 0 ) tx = 0;
-        if ( ty === void 0 ) ty = 0;
-
+        if (tx === void 0) { tx = 0; }
+        if (ty === void 0) { ty = 0; }
         // Packer used "rotation", we use "inv(rotation)"
-        var mat = rotationMatrices[GroupD8.inv(rotation)];
-
+        var mat = rotationMatrices[groupD8.inv(rotation)];
         mat.tx = tx;
         mat.ty = ty;
         matrix.append(mat);
@@ -30368,265 +31541,223 @@ var GroupD8 = {
  * @class
  * @memberof PIXI
  */
-var Transform = function Transform()
-{
-    /**
-     * The world transformation matrix.
-     *
-     * @member {PIXI.Matrix}
-     */
-    this.worldTransform = new Matrix();
-
-    /**
-     * The local transformation matrix.
-     *
-     * @member {PIXI.Matrix}
-     */
-    this.localTransform = new Matrix();
-
-    /**
-     * The coordinate of the object relative to the local coordinates of the parent.
-     *
-     * @member {PIXI.ObservablePoint}
-     */
-    this.position = new ObservablePoint(this.onChange, this, 0, 0);
-
-    /**
-     * The scale factor of the object.
-     *
-     * @member {PIXI.ObservablePoint}
-     */
-    this.scale = new ObservablePoint(this.onChange, this, 1, 1);
-
-    /**
-     * The pivot point of the displayObject that it rotates around.
-     *
-     * @member {PIXI.ObservablePoint}
-     */
-    this.pivot = new ObservablePoint(this.onChange, this, 0, 0);
-
-    /**
-     * The skew amount, on the x and y axis.
-     *
-     * @member {PIXI.ObservablePoint}
-     */
-    this.skew = new ObservablePoint(this.updateSkew, this, 0, 0);
-
-    /**
-     * The rotation amount.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._rotation = 0;
-
-    /**
-     * The X-coordinate value of the normalized local X axis,
-     * the first column of the local transformation matrix without a scale.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._cx = 1;
-
-    /**
-     * The Y-coordinate value of the normalized local X axis,
-     * the first column of the local transformation matrix without a scale.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._sx = 0;
-
-    /**
-     * The X-coordinate value of the normalized local Y axis,
-     * the second column of the local transformation matrix without a scale.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._cy = 0;
-
-    /**
-     * The Y-coordinate value of the normalized local Y axis,
-     * the second column of the local transformation matrix without a scale.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._sy = 1;
-
-    /**
-     * The locally unique ID of the local transform.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._localID = 0;
-
-    /**
-     * The locally unique ID of the local transform
-     * used to calculate the current local transformation matrix.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._currentLocalID = 0;
-
-    /**
-     * The locally unique ID of the world transform.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._worldID = 0;
-
-    /**
-     * The locally unique ID of the parent's world transform
-     * used to calculate the current world transformation matrix.
-     *
-     * @protected
-     * @member {number}
-     */
-    this._parentID = 0;
-};
-
-var prototypeAccessors$1 = { rotation: { configurable: true } };
-
-/**
- * Called when a value changes.
- *
- * @protected
- */
-Transform.prototype.onChange = function onChange ()
-{
-    this._localID++;
-};
-
-/**
- * Called when the skew or the rotation changes.
- *
- * @protected
- */
-Transform.prototype.updateSkew = function updateSkew ()
-{
-    this._cx = Math.cos(this._rotation + this.skew._y);
-    this._sx = Math.sin(this._rotation + this.skew._y);
-    this._cy = -Math.sin(this._rotation - this.skew._x); // cos, added PI/2
-    this._sy = Math.cos(this._rotation - this.skew._x); // sin, added PI/2
-
-    this._localID++;
-};
-
-/**
- * Updates the local transformation matrix.
- */
-Transform.prototype.updateLocalTransform = function updateLocalTransform ()
-{
-    var lt = this.localTransform;
-
-    if (this._localID !== this._currentLocalID)
-    {
-        // get the matrix values of the displayobject based on its transform properties..
-        lt.a = this._cx * this.scale._x;
-        lt.b = this._sx * this.scale._x;
-        lt.c = this._cy * this.scale._y;
-        lt.d = this._sy * this.scale._y;
-
-        lt.tx = this.position._x - ((this.pivot._x * lt.a) + (this.pivot._y * lt.c));
-        lt.ty = this.position._y - ((this.pivot._x * lt.b) + (this.pivot._y * lt.d));
-        this._currentLocalID = this._localID;
-
-        // force an update..
-        this._parentID = -1;
+var Transform = /** @class */ (function () {
+    function Transform() {
+        /**
+         * The world transformation matrix.
+         *
+         * @member {PIXI.Matrix}
+         */
+        this.worldTransform = new Matrix();
+        /**
+         * The local transformation matrix.
+         *
+         * @member {PIXI.Matrix}
+         */
+        this.localTransform = new Matrix();
+        /**
+         * The coordinate of the object relative to the local coordinates of the parent.
+         *
+         * @member {PIXI.ObservablePoint}
+         */
+        this.position = new ObservablePoint(this.onChange, this, 0, 0);
+        /**
+         * The scale factor of the object.
+         *
+         * @member {PIXI.ObservablePoint}
+         */
+        this.scale = new ObservablePoint(this.onChange, this, 1, 1);
+        /**
+         * The pivot point of the displayObject that it rotates around.
+         *
+         * @member {PIXI.ObservablePoint}
+         */
+        this.pivot = new ObservablePoint(this.onChange, this, 0, 0);
+        /**
+         * The skew amount, on the x and y axis.
+         *
+         * @member {PIXI.ObservablePoint}
+         */
+        this.skew = new ObservablePoint(this.updateSkew, this, 0, 0);
+        /**
+         * The rotation amount.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._rotation = 0;
+        /**
+         * The X-coordinate value of the normalized local X axis,
+         * the first column of the local transformation matrix without a scale.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._cx = 1;
+        /**
+         * The Y-coordinate value of the normalized local X axis,
+         * the first column of the local transformation matrix without a scale.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._sx = 0;
+        /**
+         * The X-coordinate value of the normalized local Y axis,
+         * the second column of the local transformation matrix without a scale.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._cy = 0;
+        /**
+         * The Y-coordinate value of the normalized local Y axis,
+         * the second column of the local transformation matrix without a scale.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._sy = 1;
+        /**
+         * The locally unique ID of the local transform.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._localID = 0;
+        /**
+         * The locally unique ID of the local transform
+         * used to calculate the current local transformation matrix.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._currentLocalID = 0;
+        /**
+         * The locally unique ID of the world transform.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._worldID = 0;
+        /**
+         * The locally unique ID of the parent's world transform
+         * used to calculate the current world transformation matrix.
+         *
+         * @protected
+         * @member {number}
+         */
+        this._parentID = 0;
     }
-};
-
-/**
- * Updates the local and the world transformation matrices.
- *
- * @param {PIXI.Transform} parentTransform - The parent transform
- */
-Transform.prototype.updateTransform = function updateTransform (parentTransform)
-{
-    var lt = this.localTransform;
-
-    if (this._localID !== this._currentLocalID)
-    {
-        // get the matrix values of the displayobject based on its transform properties..
-        lt.a = this._cx * this.scale._x;
-        lt.b = this._sx * this.scale._x;
-        lt.c = this._cy * this.scale._y;
-        lt.d = this._sy * this.scale._y;
-
-        lt.tx = this.position._x - ((this.pivot._x * lt.a) + (this.pivot._y * lt.c));
-        lt.ty = this.position._y - ((this.pivot._x * lt.b) + (this.pivot._y * lt.d));
-        this._currentLocalID = this._localID;
-
-        // force an update..
-        this._parentID = -1;
-    }
-
-    if (this._parentID !== parentTransform._worldID)
-    {
-        // concat the parent matrix with the objects transform.
-        var pt = parentTransform.worldTransform;
-        var wt = this.worldTransform;
-
-        wt.a = (lt.a * pt.a) + (lt.b * pt.c);
-        wt.b = (lt.a * pt.b) + (lt.b * pt.d);
-        wt.c = (lt.c * pt.a) + (lt.d * pt.c);
-        wt.d = (lt.c * pt.b) + (lt.d * pt.d);
-        wt.tx = (lt.tx * pt.a) + (lt.ty * pt.c) + pt.tx;
-        wt.ty = (lt.tx * pt.b) + (lt.ty * pt.d) + pt.ty;
-
-        this._parentID = parentTransform._worldID;
-
-        // update the id of the transform..
-        this._worldID++;
-    }
-};
-
-/**
- * Decomposes a matrix and sets the transforms properties based on it.
- *
- * @param {PIXI.Matrix} matrix - The matrix to decompose
- */
-Transform.prototype.setFromMatrix = function setFromMatrix (matrix)
-{
-    matrix.decompose(this);
-    this._localID++;
-};
-
-/**
- * The rotation of the object in radians.
- *
- * @member {number}
- */
-prototypeAccessors$1.rotation.get = function ()
-{
-    return this._rotation;
-};
-
-prototypeAccessors$1.rotation.set = function (value) // eslint-disable-line require-jsdoc
-{
-    if (this._rotation !== value)
-    {
-        this._rotation = value;
-        this.updateSkew();
-    }
-};
-
-Object.defineProperties( Transform.prototype, prototypeAccessors$1 );
-
-/**
- * A default (identity) transform
- *
- * @static
- * @constant
- * @member {PIXI.Transform}
- */
-Transform.IDENTITY = new Transform();
+    /**
+     * Called when a value changes.
+     *
+     * @protected
+     */
+    Transform.prototype.onChange = function () {
+        this._localID++;
+    };
+    /**
+     * Called when the skew or the rotation changes.
+     *
+     * @protected
+     */
+    Transform.prototype.updateSkew = function () {
+        this._cx = Math.cos(this._rotation + this.skew.y);
+        this._sx = Math.sin(this._rotation + this.skew.y);
+        this._cy = -Math.sin(this._rotation - this.skew.x); // cos, added PI/2
+        this._sy = Math.cos(this._rotation - this.skew.x); // sin, added PI/2
+        this._localID++;
+    };
+    /**
+     * Updates the local transformation matrix.
+     */
+    Transform.prototype.updateLocalTransform = function () {
+        var lt = this.localTransform;
+        if (this._localID !== this._currentLocalID) {
+            // get the matrix values of the displayobject based on its transform properties..
+            lt.a = this._cx * this.scale.x;
+            lt.b = this._sx * this.scale.x;
+            lt.c = this._cy * this.scale.y;
+            lt.d = this._sy * this.scale.y;
+            lt.tx = this.position.x - ((this.pivot.x * lt.a) + (this.pivot.y * lt.c));
+            lt.ty = this.position.y - ((this.pivot.x * lt.b) + (this.pivot.y * lt.d));
+            this._currentLocalID = this._localID;
+            // force an update..
+            this._parentID = -1;
+        }
+    };
+    /**
+     * Updates the local and the world transformation matrices.
+     *
+     * @param {PIXI.Transform} parentTransform - The parent transform
+     */
+    Transform.prototype.updateTransform = function (parentTransform) {
+        var lt = this.localTransform;
+        if (this._localID !== this._currentLocalID) {
+            // get the matrix values of the displayobject based on its transform properties..
+            lt.a = this._cx * this.scale.x;
+            lt.b = this._sx * this.scale.x;
+            lt.c = this._cy * this.scale.y;
+            lt.d = this._sy * this.scale.y;
+            lt.tx = this.position.x - ((this.pivot.x * lt.a) + (this.pivot.y * lt.c));
+            lt.ty = this.position.y - ((this.pivot.x * lt.b) + (this.pivot.y * lt.d));
+            this._currentLocalID = this._localID;
+            // force an update..
+            this._parentID = -1;
+        }
+        if (this._parentID !== parentTransform._worldID) {
+            // concat the parent matrix with the objects transform.
+            var pt = parentTransform.worldTransform;
+            var wt = this.worldTransform;
+            wt.a = (lt.a * pt.a) + (lt.b * pt.c);
+            wt.b = (lt.a * pt.b) + (lt.b * pt.d);
+            wt.c = (lt.c * pt.a) + (lt.d * pt.c);
+            wt.d = (lt.c * pt.b) + (lt.d * pt.d);
+            wt.tx = (lt.tx * pt.a) + (lt.ty * pt.c) + pt.tx;
+            wt.ty = (lt.tx * pt.b) + (lt.ty * pt.d) + pt.ty;
+            this._parentID = parentTransform._worldID;
+            // update the id of the transform..
+            this._worldID++;
+        }
+    };
+    /**
+     * Decomposes a matrix and sets the transforms properties based on it.
+     *
+     * @param {PIXI.Matrix} matrix - The matrix to decompose
+     */
+    Transform.prototype.setFromMatrix = function (matrix) {
+        matrix.decompose(this);
+        this._localID++;
+    };
+    Object.defineProperty(Transform.prototype, "rotation", {
+        /**
+         * The rotation of the object in radians.
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this._rotation;
+        },
+        set: function (value) {
+            if (this._rotation !== value) {
+                this._rotation = value;
+                this.updateSkew();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * A default (identity) transform
+     *
+     * @static
+     * @constant
+     * @member {PIXI.Transform}
+     */
+    Transform.IDENTITY = new Transform();
+    return Transform;
+}());
 
 /**
  * Size object, contains width and height
@@ -30636,7 +31767,6 @@ Transform.IDENTITY = new Transform();
  * @property {number} width - Width component
  * @property {number} height - Height component
  */
-
 /**
  * Rectangle object is an area defined by its position, as indicated by its top-left corner
  * point (x, y) and by its width and its height.
@@ -30644,247 +31774,234 @@ Transform.IDENTITY = new Transform();
  * @class
  * @memberof PIXI
  */
-var Rectangle = function Rectangle(x, y, width, height)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-    if ( width === void 0 ) width = 0;
-    if ( height === void 0 ) height = 0;
-
+var Rectangle = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 0
+     * @param {number} [x=0] - The X coordinate of the upper-left corner of the rectangle
+     * @param {number} [y=0] - The Y coordinate of the upper-left corner of the rectangle
+     * @param {number} [width=0] - The overall width of this rectangle
+     * @param {number} [height=0] - The overall height of this rectangle
      */
-    this.x = Number(x);
-
+    function Rectangle(x, y, width, height) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.x = Number(x);
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.y = Number(y);
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.width = Number(width);
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.height = Number(height);
+        /**
+         * The type of the object, mainly used to avoid `instanceof` checks
+         *
+         * @member {number}
+         * @readOnly
+         * @default PIXI.SHAPES.RECT
+         * @see PIXI.SHAPES
+         */
+        this.type = exports.SHAPES.RECT;
+    }
+    Object.defineProperty(Rectangle.prototype, "left", {
+        /**
+         * returns the left edge of the rectangle
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rectangle.prototype, "right", {
+        /**
+         * returns the right edge of the rectangle
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.x + this.width;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rectangle.prototype, "top", {
+        /**
+         * returns the top edge of the rectangle
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.y;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rectangle.prototype, "bottom", {
+        /**
+         * returns the bottom edge of the rectangle
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.y + this.height;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rectangle, "EMPTY", {
+        /**
+         * A constant empty rectangle.
+         *
+         * @static
+         * @constant
+         * @member {PIXI.Rectangle}
+         * @return {PIXI.Rectangle} An empty rectangle
+         */
+        get: function () {
+            return new Rectangle(0, 0, 0, 0);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
-     * @member {number}
-     * @default 0
-     */
-    this.y = Number(y);
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.width = Number(width);
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.height = Number(height);
-
-    /**
-     * The type of the object, mainly used to avoid `instanceof` checks
+     * Creates a clone of this Rectangle
      *
-     * @member {number}
-     * @readOnly
-     * @default PIXI.SHAPES.RECT
-     * @see PIXI.SHAPES
+     * @return {PIXI.Rectangle} a copy of the rectangle
      */
-    this.type = SHAPES.RECT;
-};
-
-var prototypeAccessors$2 = { left: { configurable: true },right: { configurable: true },top: { configurable: true },bottom: { configurable: true } };
-var staticAccessors$1 = { EMPTY: { configurable: true } };
-
-/**
- * returns the left edge of the rectangle
- *
- * @member {number}
- */
-prototypeAccessors$2.left.get = function ()
-{
-    return this.x;
-};
-
-/**
- * returns the right edge of the rectangle
- *
- * @member {number}
- */
-prototypeAccessors$2.right.get = function ()
-{
-    return this.x + this.width;
-};
-
-/**
- * returns the top edge of the rectangle
- *
- * @member {number}
- */
-prototypeAccessors$2.top.get = function ()
-{
-    return this.y;
-};
-
-/**
- * returns the bottom edge of the rectangle
- *
- * @member {number}
- */
-prototypeAccessors$2.bottom.get = function ()
-{
-    return this.y + this.height;
-};
-
-/**
- * A constant empty rectangle.
- *
- * @static
- * @constant
- * @member {PIXI.Rectangle}
- */
-staticAccessors$1.EMPTY.get = function ()
-{
-    return new Rectangle(0, 0, 0, 0);
-};
-
-/**
- * Creates a clone of this Rectangle
- *
- * @return {PIXI.Rectangle} a copy of the rectangle
- */
-Rectangle.prototype.clone = function clone ()
-{
-    return new Rectangle(this.x, this.y, this.width, this.height);
-};
-
-/**
- * Copies another rectangle to this one.
- *
- * @param {PIXI.Rectangle} rectangle - The rectangle to copy from.
- * @return {PIXI.Rectangle} Returns itself.
- */
-Rectangle.prototype.copyFrom = function copyFrom (rectangle)
-{
-    this.x = rectangle.x;
-    this.y = rectangle.y;
-    this.width = rectangle.width;
-    this.height = rectangle.height;
-
-    return this;
-};
-
-/**
- * Copies this rectangle to another one.
- *
- * @param {PIXI.Rectangle} rectangle - The rectangle to copy to.
- * @return {PIXI.Rectangle} Returns given parameter.
- */
-Rectangle.prototype.copyTo = function copyTo (rectangle)
-{
-    rectangle.x = this.x;
-    rectangle.y = this.y;
-    rectangle.width = this.width;
-    rectangle.height = this.height;
-
-    return rectangle;
-};
-
-/**
- * Checks whether the x and y coordinates given are contained within this Rectangle
- *
- * @param {number} x - The X coordinate of the point to test
- * @param {number} y - The Y coordinate of the point to test
- * @return {boolean} Whether the x/y coordinates are within this Rectangle
- */
-Rectangle.prototype.contains = function contains (x, y)
-{
-    if (this.width <= 0 || this.height <= 0)
-    {
-        return false;
-    }
-
-    if (x >= this.x && x < this.x + this.width)
-    {
-        if (y >= this.y && y < this.y + this.height)
-        {
-            return true;
+    Rectangle.prototype.clone = function () {
+        return new Rectangle(this.x, this.y, this.width, this.height);
+    };
+    /**
+     * Copies another rectangle to this one.
+     *
+     * @param {PIXI.Rectangle} rectangle - The rectangle to copy from.
+     * @return {PIXI.Rectangle} Returns itself.
+     */
+    Rectangle.prototype.copyFrom = function (rectangle) {
+        this.x = rectangle.x;
+        this.y = rectangle.y;
+        this.width = rectangle.width;
+        this.height = rectangle.height;
+        return this;
+    };
+    /**
+     * Copies this rectangle to another one.
+     *
+     * @param {PIXI.Rectangle} rectangle - The rectangle to copy to.
+     * @return {PIXI.Rectangle} Returns given parameter.
+     */
+    Rectangle.prototype.copyTo = function (rectangle) {
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = this.width;
+        rectangle.height = this.height;
+        return rectangle;
+    };
+    /**
+     * Checks whether the x and y coordinates given are contained within this Rectangle
+     *
+     * @param {number} x - The X coordinate of the point to test
+     * @param {number} y - The Y coordinate of the point to test
+     * @return {boolean} Whether the x/y coordinates are within this Rectangle
+     */
+    Rectangle.prototype.contains = function (x, y) {
+        if (this.width <= 0 || this.height <= 0) {
+            return false;
         }
-    }
-
-    return false;
-};
-
-/**
- * Pads the rectangle making it grow in all directions.
- *
- * @param {number} paddingX - The horizontal padding amount.
- * @param {number} paddingY - The vertical padding amount.
- */
-Rectangle.prototype.pad = function pad (paddingX, paddingY)
-{
-    paddingX = paddingX || 0;
-    paddingY = paddingY || ((paddingY !== 0) ? paddingX : 0);
-
-    this.x -= paddingX;
-    this.y -= paddingY;
-
-    this.width += paddingX * 2;
-    this.height += paddingY * 2;
-};
-
-/**
- * Fits this rectangle around the passed one.
- *
- * @param {PIXI.Rectangle} rectangle - The rectangle to fit.
- */
-Rectangle.prototype.fit = function fit (rectangle)
-{
-    var x1 = Math.max(this.x, rectangle.x);
-    var x2 = Math.min(this.x + this.width, rectangle.x + rectangle.width);
-    var y1 = Math.max(this.y, rectangle.y);
-    var y2 = Math.min(this.y + this.height, rectangle.y + rectangle.height);
-
-    this.x = x1;
-    this.width = Math.max(x2 - x1, 0);
-    this.y = y1;
-    this.height = Math.max(y2 - y1, 0);
-};
-
-/**
- * Enlarges rectangle that way its corners lie on grid
- *
- * @param {number} [resolution=1] resolution
- * @param {number} [eps=0.001] precision
- */
-Rectangle.prototype.ceil = function ceil (resolution, eps)
-{
-        if ( resolution === void 0 ) resolution = 1;
-        if ( eps === void 0 ) eps = 0.001;
-
-    var x2 = Math.ceil((this.x + this.width - eps) * resolution) / resolution;
-    var y2 = Math.ceil((this.y + this.height - eps) * resolution) / resolution;
-
-    this.x = Math.floor((this.x + eps) * resolution) / resolution;
-    this.y = Math.floor((this.y + eps) * resolution) / resolution;
-
-    this.width = x2 - this.x;
-    this.height = y2 - this.y;
-};
-
-/**
- * Enlarges this rectangle to include the passed rectangle.
- *
- * @param {PIXI.Rectangle} rectangle - The rectangle to include.
- */
-Rectangle.prototype.enlarge = function enlarge (rectangle)
-{
-    var x1 = Math.min(this.x, rectangle.x);
-    var x2 = Math.max(this.x + this.width, rectangle.x + rectangle.width);
-    var y1 = Math.min(this.y, rectangle.y);
-    var y2 = Math.max(this.y + this.height, rectangle.y + rectangle.height);
-
-    this.x = x1;
-    this.width = x2 - x1;
-    this.y = y1;
-    this.height = y2 - y1;
-};
-
-Object.defineProperties( Rectangle.prototype, prototypeAccessors$2 );
-Object.defineProperties( Rectangle, staticAccessors$1 );
+        if (x >= this.x && x < this.x + this.width) {
+            if (y >= this.y && y < this.y + this.height) {
+                return true;
+            }
+        }
+        return false;
+    };
+    /**
+     * Pads the rectangle making it grow in all directions.
+     * If paddingY is omitted, both paddingX and paddingY will be set to paddingX.
+     *
+     * @param {number} [paddingX=0] - The horizontal padding amount.
+     * @param {number} [paddingY=0] - The vertical padding amount.
+     * @return {PIXI.Rectangle} Returns itself.
+     */
+    Rectangle.prototype.pad = function (paddingX, paddingY) {
+        if (paddingX === void 0) { paddingX = 0; }
+        if (paddingY === void 0) { paddingY = paddingX; }
+        this.x -= paddingX;
+        this.y -= paddingY;
+        this.width += paddingX * 2;
+        this.height += paddingY * 2;
+        return this;
+    };
+    /**
+     * Fits this rectangle around the passed one.
+     *
+     * @param {PIXI.Rectangle} rectangle - The rectangle to fit.
+     * @return {PIXI.Rectangle} Returns itself.
+     */
+    Rectangle.prototype.fit = function (rectangle) {
+        var x1 = Math.max(this.x, rectangle.x);
+        var x2 = Math.min(this.x + this.width, rectangle.x + rectangle.width);
+        var y1 = Math.max(this.y, rectangle.y);
+        var y2 = Math.min(this.y + this.height, rectangle.y + rectangle.height);
+        this.x = x1;
+        this.width = Math.max(x2 - x1, 0);
+        this.y = y1;
+        this.height = Math.max(y2 - y1, 0);
+        return this;
+    };
+    /**
+     * Enlarges rectangle that way its corners lie on grid
+     *
+     * @param {number} [resolution=1] resolution
+     * @param {number} [eps=0.001] precision
+     * @return {PIXI.Rectangle} Returns itself.
+     */
+    Rectangle.prototype.ceil = function (resolution, eps) {
+        if (resolution === void 0) { resolution = 1; }
+        if (eps === void 0) { eps = 0.001; }
+        var x2 = Math.ceil((this.x + this.width - eps) * resolution) / resolution;
+        var y2 = Math.ceil((this.y + this.height - eps) * resolution) / resolution;
+        this.x = Math.floor((this.x + eps) * resolution) / resolution;
+        this.y = Math.floor((this.y + eps) * resolution) / resolution;
+        this.width = x2 - this.x;
+        this.height = y2 - this.y;
+        return this;
+    };
+    /**
+     * Enlarges this rectangle to include the passed rectangle.
+     *
+     * @param {PIXI.Rectangle} rectangle - The rectangle to include.
+     * @return {PIXI.Rectangle} Returns itself.
+     */
+    Rectangle.prototype.enlarge = function (rectangle) {
+        var x1 = Math.min(this.x, rectangle.x);
+        var x2 = Math.max(this.x + this.width, rectangle.x + rectangle.width);
+        var y1 = Math.min(this.y, rectangle.y);
+        var y2 = Math.max(this.y + this.height, rectangle.y + rectangle.height);
+        this.x = x1;
+        this.width = x2 - x1;
+        this.y = y1;
+        this.height = y2 - y1;
+        return this;
+    };
+    return Rectangle;
+}());
 
 /**
  * The Circle object is used to help draw graphics and can also be used to specify a hit area for displayObjects.
@@ -30892,84 +32009,77 @@ Object.defineProperties( Rectangle, staticAccessors$1 );
  * @class
  * @memberof PIXI
  */
-var Circle = function Circle(x, y, radius)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-    if ( radius === void 0 ) radius = 0;
-
+var Circle = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 0
+     * @param {number} [x=0] - The X coordinate of the center of this circle
+     * @param {number} [y=0] - The Y coordinate of the center of this circle
+     * @param {number} [radius=0] - The radius of the circle
      */
-    this.x = x;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.y = y;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.radius = radius;
-
-    /**
-     * The type of the object, mainly used to avoid `instanceof` checks
-     *
-     * @member {number}
-     * @readOnly
-     * @default PIXI.SHAPES.CIRC
-     * @see PIXI.SHAPES
-     */
-    this.type = SHAPES.CIRC;
-};
-
-/**
- * Creates a clone of this Circle instance
- *
- * @return {PIXI.Circle} a copy of the Circle
- */
-Circle.prototype.clone = function clone ()
-{
-    return new Circle(this.x, this.y, this.radius);
-};
-
-/**
- * Checks whether the x and y coordinates given are contained within this circle
- *
- * @param {number} x - The X coordinate of the point to test
- * @param {number} y - The Y coordinate of the point to test
- * @return {boolean} Whether the x/y coordinates are within this Circle
- */
-Circle.prototype.contains = function contains (x, y)
-{
-    if (this.radius <= 0)
-    {
-        return false;
+    function Circle(x, y, radius) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (radius === void 0) { radius = 0; }
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.x = x;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.y = y;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.radius = radius;
+        /**
+         * The type of the object, mainly used to avoid `instanceof` checks
+         *
+         * @member {number}
+         * @readOnly
+         * @default PIXI.SHAPES.CIRC
+         * @see PIXI.SHAPES
+         */
+        this.type = exports.SHAPES.CIRC;
     }
-
-    var r2 = this.radius * this.radius;
-    var dx = (this.x - x);
-    var dy = (this.y - y);
-
-    dx *= dx;
-    dy *= dy;
-
-    return (dx + dy <= r2);
-};
-
-/**
-* Returns the framing rectangle of the circle as a Rectangle object
-*
-* @return {PIXI.Rectangle} the framing rectangle
-*/
-Circle.prototype.getBounds = function getBounds ()
-{
-    return new Rectangle(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
-};
+    /**
+     * Creates a clone of this Circle instance
+     *
+     * @return {PIXI.Circle} a copy of the Circle
+     */
+    Circle.prototype.clone = function () {
+        return new Circle(this.x, this.y, this.radius);
+    };
+    /**
+     * Checks whether the x and y coordinates given are contained within this circle
+     *
+     * @param {number} x - The X coordinate of the point to test
+     * @param {number} y - The Y coordinate of the point to test
+     * @return {boolean} Whether the x/y coordinates are within this Circle
+     */
+    Circle.prototype.contains = function (x, y) {
+        if (this.radius <= 0) {
+            return false;
+        }
+        var r2 = this.radius * this.radius;
+        var dx = (this.x - x);
+        var dy = (this.y - y);
+        dx *= dx;
+        dy *= dy;
+        return (dx + dy <= r2);
+    };
+    /**
+    * Returns the framing rectangle of the circle as a Rectangle object
+    *
+    * @return {PIXI.Rectangle} the framing rectangle
+    */
+    Circle.prototype.getBounds = function () {
+        return new Rectangle(this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+    };
+    return Circle;
+}());
 
 /**
  * The Ellipse object is used to help draw graphics and can also be used to specify a hit area for displayObjects.
@@ -30977,91 +32087,84 @@ Circle.prototype.getBounds = function getBounds ()
  * @class
  * @memberof PIXI
  */
-var Ellipse = function Ellipse(x, y, halfWidth, halfHeight)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-    if ( halfWidth === void 0 ) halfWidth = 0;
-    if ( halfHeight === void 0 ) halfHeight = 0;
-
+var Ellipse = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 0
+     * @param {number} [x=0] - The X coordinate of the center of this ellipse
+     * @param {number} [y=0] - The Y coordinate of the center of this ellipse
+     * @param {number} [halfWidth=0] - The half width of this ellipse
+     * @param {number} [halfHeight=0] - The half height of this ellipse
      */
-    this.x = x;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.y = y;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.width = halfWidth;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.height = halfHeight;
-
-    /**
-     * The type of the object, mainly used to avoid `instanceof` checks
-     *
-     * @member {number}
-     * @readOnly
-     * @default PIXI.SHAPES.ELIP
-     * @see PIXI.SHAPES
-     */
-    this.type = SHAPES.ELIP;
-};
-
-/**
- * Creates a clone of this Ellipse instance
- *
- * @return {PIXI.Ellipse} a copy of the ellipse
- */
-Ellipse.prototype.clone = function clone ()
-{
-    return new Ellipse(this.x, this.y, this.width, this.height);
-};
-
-/**
- * Checks whether the x and y coordinates given are contained within this ellipse
- *
- * @param {number} x - The X coordinate of the point to test
- * @param {number} y - The Y coordinate of the point to test
- * @return {boolean} Whether the x/y coords are within this ellipse
- */
-Ellipse.prototype.contains = function contains (x, y)
-{
-    if (this.width <= 0 || this.height <= 0)
-    {
-        return false;
+    function Ellipse(x, y, halfWidth, halfHeight) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (halfWidth === void 0) { halfWidth = 0; }
+        if (halfHeight === void 0) { halfHeight = 0; }
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.x = x;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.y = y;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.width = halfWidth;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.height = halfHeight;
+        /**
+         * The type of the object, mainly used to avoid `instanceof` checks
+         *
+         * @member {number}
+         * @readOnly
+         * @default PIXI.SHAPES.ELIP
+         * @see PIXI.SHAPES
+         */
+        this.type = exports.SHAPES.ELIP;
     }
-
-    // normalize the coords to an ellipse with center 0,0
-    var normx = ((x - this.x) / this.width);
-    var normy = ((y - this.y) / this.height);
-
-    normx *= normx;
-    normy *= normy;
-
-    return (normx + normy <= 1);
-};
-
-/**
- * Returns the framing rectangle of the ellipse as a Rectangle object
- *
- * @return {PIXI.Rectangle} the framing rectangle
- */
-Ellipse.prototype.getBounds = function getBounds ()
-{
-    return new Rectangle(this.x - this.width, this.y - this.height, this.width, this.height);
-};
+    /**
+     * Creates a clone of this Ellipse instance
+     *
+     * @return {PIXI.Ellipse} a copy of the ellipse
+     */
+    Ellipse.prototype.clone = function () {
+        return new Ellipse(this.x, this.y, this.width, this.height);
+    };
+    /**
+     * Checks whether the x and y coordinates given are contained within this ellipse
+     *
+     * @param {number} x - The X coordinate of the point to test
+     * @param {number} y - The Y coordinate of the point to test
+     * @return {boolean} Whether the x/y coords are within this ellipse
+     */
+    Ellipse.prototype.contains = function (x, y) {
+        if (this.width <= 0 || this.height <= 0) {
+            return false;
+        }
+        // normalize the coords to an ellipse with center 0,0
+        var normx = ((x - this.x) / this.width);
+        var normy = ((y - this.y) / this.height);
+        normx *= normx;
+        normy *= normy;
+        return (normx + normy <= 1);
+    };
+    /**
+     * Returns the framing rectangle of the ellipse as a Rectangle object
+     *
+     * @return {PIXI.Rectangle} the framing rectangle
+     */
+    Ellipse.prototype.getBounds = function () {
+        return new Rectangle(this.x - this.width, this.y - this.height, this.width, this.height);
+    };
+    return Ellipse;
+}());
 
 /**
  * A class to define a shape via user defined co-orinates.
@@ -31069,99 +32172,92 @@ Ellipse.prototype.getBounds = function getBounds ()
  * @class
  * @memberof PIXI
  */
-var Polygon = function Polygon()
-{
-    var points = [], len = arguments.length;
-    while ( len-- ) points[ len ] = arguments[ len ];
+var Polygon = /** @class */ (function () {
+    /**
+     * @param {PIXI.Point[]|number[]|number[][]} points - This can be an array of Points
+     *  that form the polygon, a flat array of numbers that will be interpreted as [x,y, x,y, ...], or
+     *  the arguments passed can be all the points of the polygon e.g.
+     *  `new PIXI.Polygon(new PIXI.Point(), new PIXI.Point(), ...)`, or the arguments passed can be flat
+     *  x,y values e.g. `new Polygon(x,y, x,y, x,y, ...)` where `x` and `y` are Numbers.
+     */
+    function Polygon() {
+        var arguments$1 = arguments;
 
-    if (Array.isArray(points[0]))
-    {
-        points = points[0];
-    }
-
-    // if this is an array of points, convert it to a flat array of numbers
-    if (points[0] instanceof Point)
-    {
-        var p = [];
-
-        for (var i = 0, il = points.length; i < il; i++)
-        {
-            p.push(points[i].x, points[i].y);
+        var points = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            points[_i] = arguments$1[_i];
         }
-
-        points = p;
-    }
-
-    /**
-     * An array of the points of this polygon
-     *
-     * @member {number[]}
-     */
-    this.points = points;
-
-    /**
-     * The type of the object, mainly used to avoid `instanceof` checks
-     *
-     * @member {number}
-     * @readOnly
-     * @default PIXI.SHAPES.POLY
-     * @see PIXI.SHAPES
-     */
-    this.type = SHAPES.POLY;
-
-    /**
-     * `false` after moveTo, `true` after `closePath`. In all other cases it is `true`.
-     * @member {boolean}
-     * @default true
-     */
-    this.closeStroke = true;
-};
-
-/**
- * Creates a clone of this polygon
- *
- * @return {PIXI.Polygon} a copy of the polygon
- */
-Polygon.prototype.clone = function clone ()
-{
-    var polygon = new Polygon(this.points.slice());
-
-    polygon.closeStroke = this.closeStroke;
-
-    return polygon;
-};
-
-/**
- * Checks whether the x and y coordinates passed to this function are contained within this polygon
- *
- * @param {number} x - The X coordinate of the point to test
- * @param {number} y - The Y coordinate of the point to test
- * @return {boolean} Whether the x/y coordinates are within this polygon
- */
-Polygon.prototype.contains = function contains (x, y)
-{
-    var inside = false;
-
-    // use some raycasting to test hits
-    // https://github.com/substack/point-in-polygon/blob/master/index.js
-    var length = this.points.length / 2;
-
-    for (var i = 0, j = length - 1; i < length; j = i++)
-    {
-        var xi = this.points[i * 2];
-        var yi = this.points[(i * 2) + 1];
-        var xj = this.points[j * 2];
-        var yj = this.points[(j * 2) + 1];
-        var intersect = ((yi > y) !== (yj > y)) && (x < ((xj - xi) * ((y - yi) / (yj - yi))) + xi);
-
-        if (intersect)
-        {
-            inside = !inside;
+        if (Array.isArray(points[0])) {
+            points = points[0];
         }
+        // if this is an array of points, convert it to a flat array of numbers
+        if (points[0] instanceof Point) {
+            points = points;
+            var p = [];
+            for (var i = 0, il = points.length; i < il; i++) {
+                p.push(points[i].x, points[i].y);
+            }
+            points = p;
+        }
+        /**
+         * An array of the points of this polygon
+         *
+         * @member {number[]}
+         */
+        this.points = points;
+        /**
+         * The type of the object, mainly used to avoid `instanceof` checks
+         *
+         * @member {number}
+         * @readOnly
+         * @default PIXI.SHAPES.POLY
+         * @see PIXI.SHAPES
+         */
+        this.type = exports.SHAPES.POLY;
+        /**
+         * `false` after moveTo, `true` after `closePath`. In all other cases it is `true`.
+         * @member {boolean}
+         * @default true
+         */
+        this.closeStroke = true;
     }
-
-    return inside;
-};
+    /**
+     * Creates a clone of this polygon
+     *
+     * @return {PIXI.Polygon} a copy of the polygon
+     */
+    Polygon.prototype.clone = function () {
+        var points = this.points.slice();
+        var polygon = new Polygon(points);
+        polygon.closeStroke = this.closeStroke;
+        return polygon;
+    };
+    /**
+     * Checks whether the x and y coordinates passed to this function are contained within this polygon
+     *
+     * @param {number} x - The X coordinate of the point to test
+     * @param {number} y - The Y coordinate of the point to test
+     * @return {boolean} Whether the x/y coordinates are within this polygon
+     */
+    Polygon.prototype.contains = function (x, y) {
+        var inside = false;
+        // use some raycasting to test hits
+        // https://github.com/substack/point-in-polygon/blob/master/index.js
+        var length = this.points.length / 2;
+        for (var i = 0, j = length - 1; i < length; j = i++) {
+            var xi = this.points[i * 2];
+            var yi = this.points[(i * 2) + 1];
+            var xj = this.points[j * 2];
+            var yj = this.points[(j * 2) + 1];
+            var intersect = ((yi > y) !== (yj > y)) && (x < ((xj - xi) * ((y - yi) / (yj - yi))) + xi);
+            if (intersect) {
+                inside = !inside;
+            }
+        }
+        return inside;
+    };
+    return Polygon;
+}());
 
 /**
  * The Rounded Rectangle object is an area that has nice rounded corners, as indicated by its
@@ -31170,115 +32266,104 @@ Polygon.prototype.contains = function contains (x, y)
  * @class
  * @memberof PIXI
  */
-var RoundedRectangle = function RoundedRectangle(x, y, width, height, radius)
-{
-    if ( x === void 0 ) x = 0;
-    if ( y === void 0 ) y = 0;
-    if ( width === void 0 ) width = 0;
-    if ( height === void 0 ) height = 0;
-    if ( radius === void 0 ) radius = 20;
-
+var RoundedRectangle = /** @class */ (function () {
     /**
-     * @member {number}
-     * @default 0
+     * @param {number} [x=0] - The X coordinate of the upper-left corner of the rounded rectangle
+     * @param {number} [y=0] - The Y coordinate of the upper-left corner of the rounded rectangle
+     * @param {number} [width=0] - The overall width of this rounded rectangle
+     * @param {number} [height=0] - The overall height of this rounded rectangle
+     * @param {number} [radius=20] - Controls the radius of the rounded corners
      */
-    this.x = x;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.y = y;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.width = width;
-
-    /**
-     * @member {number}
-     * @default 0
-     */
-    this.height = height;
-
-    /**
-     * @member {number}
-     * @default 20
-     */
-    this.radius = radius;
-
-    /**
-     * The type of the object, mainly used to avoid `instanceof` checks
-     *
-     * @member {number}
-     * @readonly
-     * @default PIXI.SHAPES.RREC
-     * @see PIXI.SHAPES
-     */
-    this.type = SHAPES.RREC;
-};
-
-/**
- * Creates a clone of this Rounded Rectangle
- *
- * @return {PIXI.RoundedRectangle} a copy of the rounded rectangle
- */
-RoundedRectangle.prototype.clone = function clone ()
-{
-    return new RoundedRectangle(this.x, this.y, this.width, this.height, this.radius);
-};
-
-/**
- * Checks whether the x and y coordinates given are contained within this Rounded Rectangle
- *
- * @param {number} x - The X coordinate of the point to test
- * @param {number} y - The Y coordinate of the point to test
- * @return {boolean} Whether the x/y coordinates are within this Rounded Rectangle
- */
-RoundedRectangle.prototype.contains = function contains (x, y)
-{
-    if (this.width <= 0 || this.height <= 0)
-    {
-        return false;
+    function RoundedRectangle(x, y, width, height, radius) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
+        if (width === void 0) { width = 0; }
+        if (height === void 0) { height = 0; }
+        if (radius === void 0) { radius = 20; }
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.x = x;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.y = y;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.width = width;
+        /**
+         * @member {number}
+         * @default 0
+         */
+        this.height = height;
+        /**
+         * @member {number}
+         * @default 20
+         */
+        this.radius = radius;
+        /**
+         * The type of the object, mainly used to avoid `instanceof` checks
+         *
+         * @member {number}
+         * @readonly
+         * @default PIXI.SHAPES.RREC
+         * @see PIXI.SHAPES
+         */
+        this.type = exports.SHAPES.RREC;
     }
-    if (x >= this.x && x <= this.x + this.width)
-    {
-        if (y >= this.y && y <= this.y + this.height)
-        {
-            if ((y >= this.y + this.radius && y <= this.y + this.height - this.radius)
-            || (x >= this.x + this.radius && x <= this.x + this.width - this.radius))
-            {
-                return true;
-            }
-            var dx = x - (this.x + this.radius);
-            var dy = y - (this.y + this.radius);
-            var radius2 = this.radius * this.radius;
-
-            if ((dx * dx) + (dy * dy) <= radius2)
-            {
-                return true;
-            }
-            dx = x - (this.x + this.width - this.radius);
-            if ((dx * dx) + (dy * dy) <= radius2)
-            {
-                return true;
-            }
-            dy = y - (this.y + this.height - this.radius);
-            if ((dx * dx) + (dy * dy) <= radius2)
-            {
-                return true;
-            }
-            dx = x - (this.x + this.radius);
-            if ((dx * dx) + (dy * dy) <= radius2)
-            {
-                return true;
+    /**
+     * Creates a clone of this Rounded Rectangle
+     *
+     * @return {PIXI.RoundedRectangle} a copy of the rounded rectangle
+     */
+    RoundedRectangle.prototype.clone = function () {
+        return new RoundedRectangle(this.x, this.y, this.width, this.height, this.radius);
+    };
+    /**
+     * Checks whether the x and y coordinates given are contained within this Rounded Rectangle
+     *
+     * @param {number} x - The X coordinate of the point to test
+     * @param {number} y - The Y coordinate of the point to test
+     * @return {boolean} Whether the x/y coordinates are within this Rounded Rectangle
+     */
+    RoundedRectangle.prototype.contains = function (x, y) {
+        if (this.width <= 0 || this.height <= 0) {
+            return false;
+        }
+        if (x >= this.x && x <= this.x + this.width) {
+            if (y >= this.y && y <= this.y + this.height) {
+                if ((y >= this.y + this.radius && y <= this.y + this.height - this.radius)
+                    || (x >= this.x + this.radius && x <= this.x + this.width - this.radius)) {
+                    return true;
+                }
+                var dx = x - (this.x + this.radius);
+                var dy = y - (this.y + this.radius);
+                var radius2 = this.radius * this.radius;
+                if ((dx * dx) + (dy * dy) <= radius2) {
+                    return true;
+                }
+                dx = x - (this.x + this.width - this.radius);
+                if ((dx * dx) + (dy * dy) <= radius2) {
+                    return true;
+                }
+                dy = y - (this.y + this.height - this.radius);
+                if ((dx * dx) + (dy * dy) <= radius2) {
+                    return true;
+                }
+                dx = x - (this.x + this.radius);
+                if ((dx * dx) + (dy * dy) <= radius2) {
+                    return true;
+                }
             }
         }
-    }
-
-    return false;
-};
+        return false;
+    };
+    return RoundedRectangle;
+}());
 
 /**
  * Math classes and utilities mixed into PIXI namespace.
@@ -31289,7 +32374,6 @@ RoundedRectangle.prototype.contains = function contains (x, y)
 exports.Circle = Circle;
 exports.DEG_TO_RAD = DEG_TO_RAD;
 exports.Ellipse = Ellipse;
-exports.GroupD8 = GroupD8;
 exports.Matrix = Matrix;
 exports.ObservablePoint = ObservablePoint;
 exports.PI_2 = PI_2;
@@ -31298,14 +32382,14 @@ exports.Polygon = Polygon;
 exports.RAD_TO_DEG = RAD_TO_DEG;
 exports.Rectangle = Rectangle;
 exports.RoundedRectangle = RoundedRectangle;
-exports.SHAPES = SHAPES;
 exports.Transform = Transform;
+exports.groupD8 = groupD8;
 
 
 },{}],61:[function(require,module,exports){
 /*!
- * @pixi/mesh-extras - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/mesh-extras - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/mesh-extras is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -31315,6 +32399,7 @@ exports.Transform = Transform;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var mesh = require('@pixi/mesh');
+var constants = require('@pixi/constants');
 var core = require('@pixi/core');
 
 var PlaneGeometry = /*@__PURE__*/(function (MeshGeometry) {
@@ -31411,9 +32496,10 @@ var PlaneGeometry = /*@__PURE__*/(function (MeshGeometry) {
  *
  */
 var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
-    function RopeGeometry(width, points)
+    function RopeGeometry(width, points, textureScale)
     {
         if ( width === void 0 ) width = 200;
+        if ( textureScale === void 0 ) textureScale = 0;
 
         MeshGeometry.call(this, new Float32Array(points.length * 4),
             new Float32Array(points.length * 4),
@@ -31431,6 +32517,13 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
          * @readOnly
          */
         this.width = width;
+
+        /**
+         * Rope texture scale, if zero then the rope texture is stretched.
+         * @member {number}
+         * @readOnly
+         */
+        this.textureScale = textureScale;
 
         this.build();
     }
@@ -31474,16 +32567,31 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
         uvs[2] = 0;
         uvs[3] = 1;
 
-        // indices[0] = 0;
-        // indices[1] = 1;
-
+        var amount = 0;
+        var prev = points[0];
+        var textureWidth = this.width * this.textureScale;
         var total = points.length; // - 1;
 
         for (var i = 0; i < total; i++)
         {
             // time to do some smart drawing!
             var index = i * 4;
-            var amount = i / (total - 1);
+
+            if (this.textureScale > 0)
+            {
+                // calculate pixel distance from previous point
+                var dx = prev.x - points[i].x;
+                var dy = prev.y - points[i].y;
+                var distance = Math.sqrt((dx * dx) + (dy * dy));
+
+                prev = points[i];
+                amount += distance / textureWidth;
+            }
+            else
+            {
+                // stretch texture
+                amount = i / (total - 1);
+            }
 
             uvs[index] = amount;
             uvs[index + 1] = 0;
@@ -31531,8 +32639,6 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
         var perpX = 0;
         var perpY = 0;
 
-        // this.count -= 0.2;
-
         var vertices = this.buffers[0].data;
         var total = points.length;
 
@@ -31554,7 +32660,7 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
             perpX = nextPoint.y - lastPoint.y;
 
             var perpLength = Math.sqrt((perpX * perpX) + (perpY * perpY));
-            var num = this.width / 2; // (20 + Math.abs(Math.sin((i + this.count) * 0.3) * 50) )* ratio;
+            var num = this.textureScale > 0 ? this.textureScale * this.width / 2 : this.width / 2;
 
             perpX /= perpLength;
             perpY /= perpLength;
@@ -31575,7 +32681,14 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
 
     RopeGeometry.prototype.update = function update ()
     {
-        this.updateVertices();
+        if (this.textureScale > 0)
+        {
+            this.build(); // we need to update UVs
+        }
+        else
+        {
+            this.updateVertices();
+        }
     };
 
     return RopeGeometry;
@@ -31597,11 +32710,18 @@ var RopeGeometry = /*@__PURE__*/(function (MeshGeometry) {
  *
  */
 var SimpleRope = /*@__PURE__*/(function (Mesh) {
-    function SimpleRope(texture, points)
+    function SimpleRope(texture, points, textureScale)
     {
-        var ropeGeometry = new RopeGeometry(texture.height, points);
+        if ( textureScale === void 0 ) textureScale = 0;
+
+        var ropeGeometry = new RopeGeometry(texture.height, points, textureScale);
         var meshMaterial = new mesh.MeshMaterial(texture);
 
+        if (textureScale > 0)
+        {
+            // attempt to set UV wrapping, will fail on non-power of two textures
+            texture.baseTexture.wrapMode = constants.WRAP_MODES.REPEAT;
+        }
         Mesh.call(this, ropeGeometry, meshMaterial);
 
         /**
@@ -31907,8 +33027,7 @@ var NineSlicePlane = /*@__PURE__*/(function (SimplePlane) {
     {
         var vertices = this.vertices;
 
-        var h = this._topHeight + this._bottomHeight;
-        var scale = this._height > h ? 1.0 : this._height / h;
+        var scale = this._getMinScale();
 
         vertices[9] = vertices[11] = vertices[13] = vertices[15] = this._topHeight * scale;
         vertices[17] = vertices[19] = vertices[21] = vertices[23] = this._height - (this._bottomHeight * scale);
@@ -31923,12 +33042,30 @@ var NineSlicePlane = /*@__PURE__*/(function (SimplePlane) {
     {
         var vertices = this.vertices;
 
-        var w = this._leftWidth + this._rightWidth;
-        var scale = this._width > w ? 1.0 : this._width / w;
+        var scale = this._getMinScale();
 
         vertices[2] = vertices[10] = vertices[18] = vertices[26] = this._leftWidth * scale;
         vertices[4] = vertices[12] = vertices[20] = vertices[28] = this._width - (this._rightWidth * scale);
         vertices[6] = vertices[14] = vertices[22] = vertices[30] = this._width;
+    };
+
+    /**
+     * Returns the smaller of a set of vertical and horizontal scale of nine slice corners.
+     *
+     * @return {number} Smaller number of vertical and horizontal scale.
+     * @private
+     */
+    NineSlicePlane.prototype._getMinScale = function _getMinScale ()
+    {
+        var w = this._leftWidth + this._rightWidth;
+        var scaleW = this._width > w ? 1.0 : this._width / w;
+
+        var h = this._topHeight + this._bottomHeight;
+        var scaleH = this._height > h ? 1.0 : this._height / h;
+
+        var scale = Math.min(scaleW, scaleH);
+
+        return scale;
     };
 
     /**
@@ -32072,10 +33209,10 @@ exports.SimplePlane = SimplePlane;
 exports.SimpleRope = SimpleRope;
 
 
-},{"@pixi/core":48,"@pixi/mesh":62}],62:[function(require,module,exports){
+},{"@pixi/constants":47,"@pixi/core":48,"@pixi/mesh":62}],62:[function(require,module,exports){
 /*!
- * @pixi/mesh - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/mesh - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/mesh is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -32519,9 +33656,11 @@ var Mesh = /*@__PURE__*/(function (Container) {
 
         if (this._roundPixels)
         {
-            for (var i$1 = 0; i$1 < vertexData.length; i$1++)
+            var resolution = settings.settings.RESOLUTION;
+
+            for (var i$1 = 0; i$1 < vertexData.length; ++i$1)
             {
-                vertexData[i$1] = Math.round(vertexData[i$1]);
+                vertexData[i$1] = Math.round((vertexData[i$1] * resolution | 0) / resolution);
             }
         }
 
@@ -32785,7 +33924,7 @@ var MeshMaterial = /*@__PURE__*/(function (Shader) {
             this._colorDirty = false;
             var baseTexture = this.texture.baseTexture;
 
-            utils.premultiplyTintToRgba(this._tint, this._alpha, this.uniforms.uColor, baseTexture.premultiplyAlpha);
+            utils.premultiplyTintToRgba(this._tint, this._alpha, this.uniforms.uColor, baseTexture.alphaMode);
         }
         if (this.uvMatrix.update())
         {
@@ -32869,8 +34008,8 @@ exports.MeshMaterial = MeshMaterial;
 
 },{"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/math":60,"@pixi/settings":70,"@pixi/utils":78}],63:[function(require,module,exports){
 /*!
- * @pixi/mixin-cache-as-bitmap - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/mixin-cache-as-bitmap - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/mixin-cache-as-bitmap is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -33061,7 +34200,7 @@ display.DisplayObject.prototype._initCachedDisplayObject = function _initCachedD
     // for now we cache the current renderTarget that the WebGL renderer is currently using.
     // this could be more elegant..
     var cachedRenderTexture = renderer.renderTexture.current;
-    var cachedSourceFrame = renderer.renderTexture.sourceFrame;
+    var cachedSourceFrame = renderer.renderTexture.sourceFrame.clone();
     var cachedProjectionTransform = renderer.projection.transform;
 
     // We also store the filter stack - I will definitely look to change how this works a little later down the line.
@@ -33179,6 +34318,7 @@ display.DisplayObject.prototype._initCachedDisplayObjectCanvas = function _initC
     this.alpha = 1;
 
     var cachedRenderTarget = renderer.context;
+    var cachedProjectionTransform = renderer._projTransform;
 
     bounds.ceil(settings.settings.RESOLUTION);
 
@@ -33204,11 +34344,10 @@ display.DisplayObject.prototype._initCachedDisplayObjectCanvas = function _initC
     // set all properties to there original so we can render to a texture
     this.renderCanvas = this._cacheData.originalRenderCanvas;
 
-    // renderTexture.render(this, m, true);
     renderer.render(this, renderTexture, true, m, false);
-
     // now restore the state be setting the new properties
     renderer.context = cachedRenderTarget;
+    renderer._projTransform = cachedProjectionTransform;
 
     this.renderCanvas = this._renderCachedCanvas;
     // the rest is the same as for WebGL
@@ -33304,8 +34443,8 @@ display.DisplayObject.prototype._cacheAsBitmapDestroy = function _cacheAsBitmapD
 
 },{"@pixi/core":48,"@pixi/display":49,"@pixi/math":60,"@pixi/settings":70,"@pixi/sprite":73,"@pixi/utils":78}],64:[function(require,module,exports){
 /*!
- * @pixi/mixin-get-child-by-name - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/mixin-get-child-by-name - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/mixin-get-child-by-name is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -33346,8 +34485,8 @@ display.Container.prototype.getChildByName = function getChildByName(name)
 
 },{"@pixi/display":49}],65:[function(require,module,exports){
 /*!
- * @pixi/mixin-get-global-position - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/mixin-get-global-position - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/mixin-get-global-position is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -33389,8 +34528,8 @@ display.DisplayObject.prototype.getGlobalPosition = function getGlobalPosition(p
 
 },{"@pixi/display":49,"@pixi/math":60}],66:[function(require,module,exports){
 /*!
- * @pixi/particles - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/particles - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/particles is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -34016,6 +35155,14 @@ var ParticleRenderer = /*@__PURE__*/(function (ObjectRenderer) {
             } ];
 
         this.shader = core.Shader.from(vertex, fragment, {});
+
+        /**
+         * The WebGL state in which this renderer will work.
+         *
+         * @member {PIXI.State}
+         * @readonly
+         */
+        this.state = core.State.for2d();
     }
 
     if ( ObjectRenderer ) ParticleRenderer.__proto__ = ObjectRenderer;
@@ -34054,7 +35201,8 @@ var ParticleRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         var baseTexture = children[0]._texture.baseTexture;
 
         // if the uvs have not updated then no point rendering just yet!
-        this.renderer.state.setBlendMode(utils.correctBlendMode(container.blendMode, baseTexture.premultiplyAlpha));
+        this.state.blendMode = utils.correctBlendMode(container.blendMode, baseTexture.alphaMode);
+        renderer.state.set(this.state);
 
         var gl = renderer.gl;
 
@@ -34065,7 +35213,7 @@ var ParticleRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         this.shader.uniforms.translationMatrix = m.toArray(true);
 
         this.shader.uniforms.uColor = utils.premultiplyRgba(container.tintRgb,
-            container.worldAlpha, this.shader.uniforms.uColor, baseTexture.premultiplyAlpha);
+            container.worldAlpha, this.shader.uniforms.uColor, baseTexture.alphaMode);
 
         this.shader.uniforms.uSampler = baseTexture;
 
@@ -34331,7 +35479,7 @@ var ParticleRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         for (var i = 0; i < amount; ++i)
         {
             var sprite = children[startIndex + i];
-            var premultiplied = sprite._texture.baseTexture.premultiplyAlpha;
+            var premultiplied = sprite._texture.baseTexture.alphaMode > 0;
             var alpha = sprite.alpha;
             // we dont call extra function if alpha is 1.0, that's faster
             var argb = alpha < 1.0 && premultiplied ? utils.premultiplyTint(sprite._tintRGB, alpha)
@@ -34372,8 +35520,8 @@ exports.ParticleRenderer = ParticleRenderer;
 },{"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/math":60,"@pixi/utils":78}],67:[function(require,module,exports){
 (function (global){
 /*!
- * @pixi/polyfill - v5.1.0
- * Compiled Fri, 19 Jul 2019 21:54:36 UTC
+ * @pixi/polyfill - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/polyfill is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -34538,10 +35686,10 @@ if (!window.Int32Array)
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"es6-promise-polyfill":92,"object-assign":99}],68:[function(require,module,exports){
+},{"es6-promise-polyfill":92,"object-assign":100}],68:[function(require,module,exports){
 /*!
- * @pixi/prepare - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/prepare - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/prepare is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -34569,11 +35717,11 @@ var text = require('@pixi/text');
 settings.settings.UPLOADS_PER_FRAME = 4;
 
 /**
- * CountLimiter limits the number of items handled by a {@link PIXI.prepare.BasePrepare} to a specified
+ * CountLimiter limits the number of items handled by a {@link PIXI.BasePrepare} to a specified
  * number of items per frame.
  *
  * @class
- * @memberof PIXI.prepare
+ * @memberof PIXI
  */
 var CountLimiter = function CountLimiter(maxItemsPerFrame)
 {
@@ -34612,7 +35760,7 @@ CountLimiter.prototype.allowedToUpload = function allowedToUpload ()
  * The prepare manager provides functionality to upload content to the GPU.
  *
  * BasePrepare handles basic queuing functionality and is extended by
- * {@link PIXI.prepare.Prepare} and {@link PIXI.prepare.CanvasPrepare}
+ * {@link PIXI.Prepare} and {@link PIXI.CanvasPrepare}
  * to provide preparation capabilities specific to their respective renderers.
  *
  * @example
@@ -34629,7 +35777,7 @@ CountLimiter.prototype.allowedToUpload = function allowedToUpload ()
  *
  * @abstract
  * @class
- * @memberof PIXI.prepare
+ * @memberof PIXI
  */
 var BasePrepare = function BasePrepare(renderer)
 {
@@ -34637,7 +35785,7 @@ var BasePrepare = function BasePrepare(renderer)
 
     /**
      * The limiter to be used to control how quickly items are prepared.
-     * @type {PIXI.prepare.CountLimiter|PIXI.prepare.TimeLimiter}
+     * @type {PIXI.CountLimiter|PIXI.TimeLimiter}
      */
     this.limiter = new CountLimiter(settings.settings.UPLOADS_PER_FRAME);
 
@@ -34651,7 +35799,7 @@ var BasePrepare = function BasePrepare(renderer)
     /**
      * The only real difference between CanvasPrepare and Prepare is what they pass
      * to upload hooks. That different parameter is stored here.
-     * @type {PIXI.prepare.CanvasPrepare|PIXI.Renderer}
+     * @type {object}
      * @protected
      */
     this.uploadHookHelper = null;
@@ -34830,7 +35978,7 @@ BasePrepare.prototype.prepareItems = function prepareItems ()
  *
  * @param {Function} addHook - Function call that takes two parameters: `item:*, queue:Array`
  *      function must return `true` if it was able to add item to the queue.
- * @return {PIXI.prepare.BasePrepare} Instance of plugin for chaining.
+ * @return {this} Instance of plugin for chaining.
  */
 BasePrepare.prototype.registerFindHook = function registerFindHook (addHook)
 {
@@ -34847,7 +35995,7 @@ BasePrepare.prototype.registerFindHook = function registerFindHook (addHook)
  *
  * @param {Function} uploadHook - Function call that takes two parameters: `prepare:CanvasPrepare, item:*` and
  *      function must return `true` if it was able to handle upload of item.
- * @return {PIXI.prepare.BasePrepare} Instance of plugin for chaining.
+ * @return {this} Instance of plugin for chaining.
  */
 BasePrepare.prototype.registerUploadHook = function registerUploadHook (uploadHook)
 {
@@ -34864,7 +36012,7 @@ BasePrepare.prototype.registerUploadHook = function registerUploadHook (uploadHo
  *
  * @param {PIXI.DisplayObject|PIXI.Container|PIXI.BaseTexture|PIXI.Texture|PIXI.Graphics|PIXI.Text|*} item - Object to
  *    add to the queue
- * @return {PIXI.prepare.BasePrepare} Instance of plugin for chaining.
+ * @return {this} Instance of plugin for chaining.
  */
 BasePrepare.prototype.add = function add (item)
 {
@@ -34944,21 +36092,22 @@ function findMultipleBaseTextures(item, queue)
 }
 
 /**
- * Built-in hook to find BaseTextures from Sprites.
+ * Built-in hook to find BaseTextures from Texture.
  *
  * @private
- * @param {PIXI.DisplayObject} item - Display object to check
+ * @param {PIXI.Texture} item - Display object to check
  * @param {Array<*>} queue - Collection of items to upload
  * @return {boolean} if a PIXI.Texture object was found.
  */
 function findBaseTexture(item, queue)
 {
-    // Objects with textures, like Sprites/Text
-    if (item instanceof core.BaseTexture)
+    if (item.baseTexture instanceof core.BaseTexture)
     {
-        if (queue.indexOf(item) === -1)
+        var texture = item.baseTexture;
+
+        if (queue.indexOf(texture) === -1)
         {
-            queue.push(item);
+            queue.push(texture);
         }
 
         return true;
@@ -35095,13 +36244,35 @@ function findTextStyle(item, queue)
 }
 
 /**
- * The prepare manager provides functionality to upload content to the GPU.
+ * The prepare plugin provides renderer-specific plugins for pre-rendering DisplayObjects. These plugins are useful for
+ * asynchronously preparing and uploading to the GPU assets, textures, graphics waiting to be displayed.
  *
- * An instance of this class is automatically created by default, and can be found at `renderer.plugins.prepare`
+ * Do not instantiate this plugin directly. It is available from the `renderer.plugins` property.
+ * See {@link PIXI.CanvasRenderer#plugins} or {@link PIXI.Renderer#plugins}.
+ * @example
+ * // Create a new application
+ * const app = new PIXI.Application();
+ * document.body.appendChild(app.view);
+ *
+ * // Don't start rendering right away
+ * app.stop();
+ *
+ * // create a display object
+ * const rect = new PIXI.Graphics()
+ *     .beginFill(0x00ff00)
+ *     .drawRect(40, 40, 200, 200);
+ *
+ * // Add to the stage
+ * app.stage.addChild(rect);
+ *
+ * // Don't start rendering until the graphic is uploaded to the GPU
+ * app.renderer.plugins.prepare.upload(app.stage, () => {
+ *     app.start();
+ * });
  *
  * @class
- * @extends PIXI.prepare.BasePrepare
- * @memberof PIXI.prepare
+ * @extends PIXI.BasePrepare
+ * @memberof PIXI
  */
 var Prepare = /*@__PURE__*/(function (BasePrepare) {
     function Prepare(renderer)
@@ -35127,7 +36298,7 @@ var Prepare = /*@__PURE__*/(function (BasePrepare) {
  *
  * @private
  * @param {PIXI.Renderer} renderer - instance of the webgl renderer
- * @param {PIXI.DisplayObject} item - Item to check
+ * @param {PIXI.BaseTexture} item - Item to check
  * @return {boolean} If item was uploaded.
  */
 function uploadBaseTextures(renderer, item)
@@ -35158,19 +36329,38 @@ function uploadBaseTextures(renderer, item)
  */
 function uploadGraphics(renderer, item)
 {
-    if (item instanceof graphics.Graphics)
+    if (!(item instanceof graphics.Graphics))
     {
-        // if the item is not dirty and already has webgl data, then it got prepared or rendered
-        // before now and we shouldn't waste time updating it again
-        if (item.dirty || item.clearDirty || !item._webGL[renderer.plugins.graphics.CONTEXT_UID])
-        {
-            renderer.plugins.graphics.updateGraphics(item);
-        }
-
-        return true;
+        return false;
     }
 
-    return false;
+    var geometry = item.geometry;
+
+    // update dirty graphics to get batches
+    item.finishPoly();
+    geometry.updateBatches();
+
+    var batches = geometry.batches;
+
+    // upload all textures found in styles
+    for (var i = 0; i < batches.length; i++)
+    {
+        var ref = batches[i].style;
+        var texture = ref.texture;
+
+        if (texture)
+        {
+            uploadBaseTextures(renderer, texture.baseTexture);
+        }
+    }
+
+    // if its not batchable - update vao for particular shader
+    if (!geometry.batchable)
+    {
+        renderer.geometry.bind(geometry, item._resolveDirectShader(renderer));
+    }
+
+    return true;
 }
 
 /**
@@ -35198,7 +36388,7 @@ function findGraphics(item, queue)
  * number of milliseconds per frame.
  *
  * @class
- * @memberof PIXI.prepare
+ * @memberof PIXI
  */
 var TimeLimiter = function TimeLimiter(maxMilliseconds)
 {
@@ -35233,35 +36423,6 @@ TimeLimiter.prototype.allowedToUpload = function allowedToUpload ()
     return Date.now() - this.frameStart < this.maxMilliseconds;
 };
 
-/**
- * The prepare namespace provides renderer-specific plugins for pre-rendering DisplayObjects. These plugins are useful for
- * asynchronously preparing and uploading to the GPU assets, textures, graphics waiting to be displayed.
- *
- * Do not instantiate these plugins directly. It is available from the `renderer.plugins` property.
- * See {@link PIXI.CanvasRenderer#plugins} or {@link PIXI.Renderer#plugins}.
- * @example
- * // Create a new application
- * const app = new PIXI.Application();
- * document.body.appendChild(app.view);
- *
- * // Don't start rendering right away
- * app.stop();
- *
- * // create a display object
- * const rect = new PIXI.Graphics()
- *     .beginFill(0x00ff00)
- *     .drawRect(40, 40, 200, 200);
- *
- * // Add to the stage
- * app.stage.addChild(rect);
- *
- * // Don't start rendering until the graphic is uploaded to the GPU
- * app.renderer.plugins.prepare.upload(app.stage, () => {
- *     app.start();
- * });
- * @namespace PIXI.prepare
- */
-
 exports.BasePrepare = BasePrepare;
 exports.CountLimiter = CountLimiter;
 exports.Prepare = Prepare;
@@ -35270,8 +36431,8 @@ exports.TimeLimiter = TimeLimiter;
 
 },{"@pixi/core":48,"@pixi/display":49,"@pixi/graphics":57,"@pixi/settings":70,"@pixi/text":76,"@pixi/ticker":77}],69:[function(require,module,exports){
 /*!
- * @pixi/runner - v5.1.1
- * Compiled Fri, 02 Aug 2019 23:20:23 UTC
+ * @pixi/runner - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/runner is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -35287,8 +36448,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
  *
  * like a signal..
  * ```
+ * import { Runner } from '@pixi/runner';
+ *
  * const myObject = {
- *     loaded: new PIXI.Runner('loaded')
+ *     loaded: new Runner('loaded')
  * }
  *
  * const listener = {
@@ -35304,8 +36467,10 @@ Object.defineProperty(exports, '__esModule', { value: true });
  *
  * Or for handling calling the same function on many items
  * ```
+ * import { Runner } from '@pixi/runner';
+ *
  * const myGame = {
- *     update: new PIXI.Runner('update')
+ *     update: new Runner('update')
  * }
  *
  * const gameObject = {
@@ -35321,177 +36486,157 @@ Object.defineProperty(exports, '__esModule', { value: true });
  * @class
  * @memberof PIXI
  */
-var Runner = function Runner(name)
-{
-    this.items = [];
-    this._name = name;
-    this._aliasCount = 0;
-};
-
-var prototypeAccessors = { empty: { configurable: true },name: { configurable: true } };
-
-/**
- * Dispatch/Broadcast Runner to all listeners added to the queue.
- * @param {...any} params - optional parameters to pass to each listener
- */
-Runner.prototype.emit = function emit (a0, a1, a2, a3, a4, a5, a6, a7)
-{
-    if (arguments.length > 8)
-    {
-        throw new Error('max arguments reached');
-    }
-
-    var ref = this;
-        var name = ref.name;
-        var items = ref.items;
-
-    this._aliasCount++;
-
-    for (var i = 0, len = items.length; i < len; i++)
-    {
-        items[i][name](a0, a1, a2, a3, a4, a5, a6, a7);
-    }
-
-    if (items === this.items)
-    {
-        this._aliasCount--;
-    }
-
-    return this;
-};
-
-Runner.prototype.ensureNonAliasedItems = function ensureNonAliasedItems ()
-{
-    if (this._aliasCount > 0 && this.items.length > 1)
-    {
+var Runner = /** @class */ (function () {
+    /**
+     *  @param {string} name the function name that will be executed on the listeners added to this Runner.
+     */
+    function Runner(name) {
+        this.items = [];
+        this._name = name;
         this._aliasCount = 0;
-        this.items = this.items.slice(0);
     }
-};
-
-/**
- * Add a listener to the Runner
- *
- * Runners do not need to have scope or functions passed to them.
- * All that is required is to pass the listening object and ensure that it has contains a function that has the same name
- * as the name provided to the Runner when it was created.
- *
- * Eg A listener passed to this Runner will require a 'complete' function.
- *
- * ```
- * const complete = new PIXI.Runner('complete');
- * ```
- *
- * The scope used will be the object itself.
- *
- * @param {any} item - The object that will be listening.
- */
-Runner.prototype.add = function add (item)
-{
-    if (item[this._name])
-    {
+    /**
+     * Dispatch/Broadcast Runner to all listeners added to the queue.
+     * @param {...any} params - optional parameters to pass to each listener
+     * @return {PIXI.Runner}
+     */
+    Runner.prototype.emit = function (a0, a1, a2, a3, a4, a5, a6, a7) {
+        if (arguments.length > 8) {
+            throw new Error('max arguments reached');
+        }
+        var _a = this, name = _a.name, items = _a.items;
+        this._aliasCount++;
+        for (var i = 0, len = items.length; i < len; i++) {
+            items[i][name](a0, a1, a2, a3, a4, a5, a6, a7);
+        }
+        if (items === this.items) {
+            this._aliasCount--;
+        }
+        return this;
+    };
+    Runner.prototype.ensureNonAliasedItems = function () {
+        if (this._aliasCount > 0 && this.items.length > 1) {
+            this._aliasCount = 0;
+            this.items = this.items.slice(0);
+        }
+    };
+    /**
+     * Add a listener to the Runner
+     *
+     * Runners do not need to have scope or functions passed to them.
+     * All that is required is to pass the listening object and ensure that it has contains a function that has the same name
+     * as the name provided to the Runner when it was created.
+     *
+     * Eg A listener passed to this Runner will require a 'complete' function.
+     *
+     * ```
+     * import { Runner } from '@pixi/runner';
+     *
+     * const complete = new Runner('complete');
+     * ```
+     *
+     * The scope used will be the object itself.
+     *
+     * @param {any} item - The object that will be listening.
+     * @return {PIXI.Runner}
+     */
+    Runner.prototype.add = function (item) {
+        if (item[this._name]) {
+            this.ensureNonAliasedItems();
+            this.remove(item);
+            this.items.push(item);
+        }
+        return this;
+    };
+    /**
+     * Remove a single listener from the dispatch queue.
+     * @param {any} item - The listenr that you would like to remove.
+     * @return {PIXI.Runner}
+     */
+    Runner.prototype.remove = function (item) {
+        var index = this.items.indexOf(item);
+        if (index !== -1) {
+            this.ensureNonAliasedItems();
+            this.items.splice(index, 1);
+        }
+        return this;
+    };
+    /**
+     * Check to see if the listener is already in the Runner
+     * @param {any} item - The listener that you would like to check.
+     */
+    Runner.prototype.contains = function (item) {
+        return this.items.indexOf(item) !== -1;
+    };
+    /**
+     * Remove all listeners from the Runner
+     * @return {PIXI.Runner}
+     */
+    Runner.prototype.removeAll = function () {
         this.ensureNonAliasedItems();
-        this.remove(item);
-        this.items.push(item);
-    }
-
-    return this;
-};
-
-/**
- * Remove a single listener from the dispatch queue.
- * @param {any} item - The listenr that you would like to remove.
- */
-Runner.prototype.remove = function remove (item)
-{
-    var index = this.items.indexOf(item);
-
-    if (index !== -1)
-    {
-        this.ensureNonAliasedItems();
-        this.items.splice(index, 1);
-    }
-
-    return this;
-};
-
-/**
- * Check to see if the listener is already in the Runner
- * @param {any} item - The listener that you would like to check.
- */
-Runner.prototype.contains = function contains (item)
-{
-    return this.items.indexOf(item) !== -1;
-};
-
-/**
- * Remove all listeners from the Runner
- */
-Runner.prototype.removeAll = function removeAll ()
-{
-    this.ensureNonAliasedItems();
-    this.items.length = 0;
-
-    return this;
-};
-
-/**
- * Remove all references, don't use after this.
- */
-Runner.prototype.destroy = function destroy ()
-{
-    this.removeAll();
-    this.items = null;
-    this._name = null;
-};
-
-/**
- * `true` if there are no this Runner contains no listeners
- *
- * @member {boolean}
- * @readonly
- */
-prototypeAccessors.empty.get = function ()
-{
-    return this.items.length === 0;
-};
-
-/**
- * The name of the runner.
- *
- * @member {string}
- * @readonly
- */
-prototypeAccessors.name.get = function ()
-{
-    return this._name;
-};
-
-Object.defineProperties( Runner.prototype, prototypeAccessors );
-
-/**
- * Alias for `emit`
- * @memberof PIXI.Runner#
- * @method dispatch
- * @see PIXI.Runner#emit
- */
-Runner.prototype.dispatch = Runner.prototype.emit;
-
-/**
- * Alias for `emit`
- * @memberof PIXI.Runner#
- * @method run
- * @see PIXI.Runner#emit
- */
-Runner.prototype.run = Runner.prototype.emit;
+        this.items.length = 0;
+        return this;
+    };
+    /**
+     * Remove all references, don't use after this.
+     */
+    Runner.prototype.destroy = function () {
+        this.removeAll();
+        this.items = null;
+        this._name = null;
+    };
+    Object.defineProperty(Runner.prototype, "empty", {
+        /**
+         * `true` if there are no this Runner contains no listeners
+         *
+         * @member {boolean}
+         * @readonly
+         */
+        get: function () {
+            return this.items.length === 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Runner.prototype, "name", {
+        /**
+         * The name of the runner.
+         *
+         * @member {string}
+         * @readonly
+         */
+        get: function () {
+            return this._name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Runner;
+}());
+Object.defineProperties(Runner.prototype, {
+    /**
+     * Alias for `emit`
+     * @memberof PIXI.Runner#
+     * @method dispatch
+     * @see PIXI.Runner#emit
+     */
+    dispatch: { value: Runner.prototype.emit },
+    /**
+     * Alias for `emit`
+     * @memberof PIXI.Runner#
+     * @method run
+     * @see PIXI.Runner#emit
+     */
+    run: { value: Runner.prototype.emit },
+});
 
 exports.Runner = Runner;
 
 
 },{}],70:[function(require,module,exports){
 /*!
- * @pixi/settings - v5.1.1
- * Compiled Fri, 02 Aug 2019 23:20:23 UTC
+ * @pixi/settings - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/settings is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -35502,7 +36647,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var isMobile = _interopDefault(require('ismobilejs'));
+var isMobileCall = _interopDefault(require('ismobilejs'));
+
+// The ESM/CJS versions of ismobilejs only
+
+var isMobile = isMobileCall(window.navigator);
 
 /**
  * The maximum recommended texture units to use.
@@ -35579,7 +36728,7 @@ function canUploadSameBuffer()
  * @example
  * // Use the native window resolution as the default resolution
  * // will support high-density displays when rendering
- * PIXI.settings.RESOLUTION = window.devicePixelRatio.
+ * PIXI.settings.RESOLUTION = window.devicePixelRatio;
  *
  * // Disable interpolation when scaling, will make texture be pixelated
  * PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -35814,8 +36963,8 @@ exports.settings = settings;
 
 },{"ismobilejs":96}],71:[function(require,module,exports){
 /*!
- * @pixi/sprite-animated - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/sprite-animated - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/sprite-animated is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -35878,15 +37027,23 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
          */
         this._durations = null;
 
-        this.textures = textures;
-
         /**
          * `true` uses PIXI.Ticker.shared to auto update animation time.
+         *
          * @type {boolean}
          * @default true
          * @private
          */
         this._autoUpdate = autoUpdate !== false;
+
+        /**
+         * `true` if the instance is currently connected to PIXI.Ticker.shared to auto update animation time.
+         *
+         * @type {boolean}
+         * @default false
+         * @private
+         */
+        this._isConnectedToTicker = false;
 
         /**
          * The speed that the AnimatedSprite will play at. Higher is faster, lower is slower.
@@ -35947,20 +37104,24 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
          */
         this._currentTime = 0;
 
+        this._playing = false;
+
         /**
-         * Indicates if the AnimatedSprite is currently playing.
+         * The texture index that was displayed last time
          *
-         * @member {boolean}
-         * @readonly
+         * @member {number}
+         * @private
          */
-        this.playing = false;
+        this._previousFrame = null;
+
+        this.textures = textures;
     }
 
     if ( Sprite ) AnimatedSprite.__proto__ = Sprite;
     AnimatedSprite.prototype = Object.create( Sprite && Sprite.prototype );
     AnimatedSprite.prototype.constructor = AnimatedSprite;
 
-    var prototypeAccessors = { totalFrames: { configurable: true },textures: { configurable: true },currentFrame: { configurable: true } };
+    var prototypeAccessors = { totalFrames: { configurable: true },textures: { configurable: true },currentFrame: { configurable: true },playing: { configurable: true },autoUpdate: { configurable: true } };
 
     /**
      * Stops the AnimatedSprite.
@@ -35973,10 +37134,11 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
             return;
         }
 
-        this.playing = false;
-        if (this._autoUpdate)
+        this._playing = false;
+        if (this._autoUpdate && this._isConnectedToTicker)
         {
             ticker.Ticker.shared.remove(this.update, this);
+            this._isConnectedToTicker = false;
         }
     };
 
@@ -35991,10 +37153,11 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
             return;
         }
 
-        this.playing = true;
-        if (this._autoUpdate)
+        this._playing = true;
+        if (this._autoUpdate && !this._isConnectedToTicker)
         {
             ticker.Ticker.shared.add(this.update, this, ticker.UPDATE_PRIORITY.HIGH);
+            this._isConnectedToTicker = true;
         }
     };
 
@@ -36039,7 +37202,6 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
     /**
      * Updates the object transform for rendering.
      *
-     * @private
      * @param {number} deltaTime - Time since last tick.
      */
     AnimatedSprite.prototype.update = function update (deltaTime)
@@ -36119,7 +37281,16 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
      */
     AnimatedSprite.prototype.updateTexture = function updateTexture ()
     {
-        this._texture = this._textures[this.currentFrame];
+        var currentFrame = this.currentFrame;
+
+        if (this._previousFrame === currentFrame)
+        {
+            return;
+        }
+
+        this._previousFrame = currentFrame;
+
+        this._texture = this._textures[currentFrame];
         this._textureID = -1;
         this._textureTrimmedID = -1;
         this._cachedTint = 0xFFFFFF;
@@ -36127,7 +37298,7 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
 
         if (this.updateAnchor)
         {
-            this._anchor.copy(this._texture.defaultAnchor);
+            this._anchor.copyFrom(this._texture.defaultAnchor);
         }
 
         if (this.onFrameChange)
@@ -36235,6 +37406,7 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
                 this._durations.push(value[i].time);
             }
         }
+        this._previousFrame = null;
         this.gotoAndStop(0);
         this.updateTexture();
     };
@@ -36257,6 +37429,46 @@ var AnimatedSprite = /*@__PURE__*/(function (Sprite) {
         return currentFrame;
     };
 
+    /**
+     * Indicates if the AnimatedSprite is currently playing.
+     *
+     * @member {boolean}
+     * @readonly
+     */
+    prototypeAccessors.playing.get = function ()
+    {
+        return this._playing;
+    };
+
+    /**
+     * Whether to use PIXI.Ticker.shared to auto update animation time
+     *
+     * @member {boolean}
+     */
+    prototypeAccessors.autoUpdate.get = function ()
+    {
+        return this._autoUpdate;
+    };
+
+    prototypeAccessors.autoUpdate.set = function (value) // eslint-disable-line require-jsdoc
+    {
+        if (value !== this._autoUpdate)
+        {
+            this._autoUpdate = value;
+
+            if (!this._autoUpdate && this._isConnectedToTicker)
+            {
+                ticker.Ticker.shared.remove(this.update, this);
+                this._isConnectedToTicker = false;
+            }
+            else if (this._autoUpdate && !this._isConnectedToTicker && this._playing)
+            {
+                ticker.Ticker.shared.add(this.update, this);
+                this._isConnectedToTicker = true;
+            }
+        }
+    };
+
     Object.defineProperties( AnimatedSprite.prototype, prototypeAccessors );
 
     return AnimatedSprite;
@@ -36275,8 +37487,8 @@ exports.AnimatedSprite = AnimatedSprite;
 
 },{"@pixi/core":48,"@pixi/sprite":73,"@pixi/ticker":77}],72:[function(require,module,exports){
 /*!
- * @pixi/sprite-tiling - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/sprite-tiling - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/sprite-tiling is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -36551,7 +37763,7 @@ var TilingSprite = /*@__PURE__*/(function (Sprite) {
      * The source can be - frame id, image url, video url, canvas element, video element, base texture
      *
      * @static
-     * @param {number|string|PIXI.Texture|HTMLCanvasElement|HTMLVideoElement} source - Source to create texture from
+     * @param {string|PIXI.Texture|HTMLCanvasElement|HTMLVideoElement} source - Source to create texture from
      * @param {number} width - the width of the tiling sprite
      * @param {number} height - the height of the tiling sprite
      * @return {PIXI.TilingSprite} The newly created texture
@@ -36647,7 +37859,7 @@ var TilingSprite = /*@__PURE__*/(function (Sprite) {
 
 var vertex = "attribute vec2 aVertexPosition;\nattribute vec2 aTextureCoord;\n\nuniform mat3 projectionMatrix;\nuniform mat3 translationMatrix;\nuniform mat3 uTransform;\n\nvarying vec2 vTextureCoord;\n\nvoid main(void)\n{\n    gl_Position = vec4((projectionMatrix * translationMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);\n\n    vTextureCoord = (uTransform * vec3(aTextureCoord, 1.0)).xy;\n}\n";
 
-var fragment = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = mod(vTextureCoord - uClampOffset, vec2(1.0, 1.0)) + uClampOffset;\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    vec4 sample = texture2D(uSampler, coord);\n    gl_FragColor = sample * uColor;\n}\n";
+var fragment = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\nuniform mat3 uMapCoord;\nuniform vec4 uClampFrame;\nuniform vec2 uClampOffset;\n\nvoid main(void)\n{\n    vec2 coord = vTextureCoord - floor(vTextureCoord - uClampOffset);\n    coord = (uMapCoord * vec3(coord, 1.0)).xy;\n    coord = clamp(coord, uClampFrame.xy, uClampFrame.zw);\n\n    vec4 texSample = texture2D(uSampler, coord);\n    gl_FragColor = texSample * uColor;\n}\n";
 
 var fragmentSimple = "varying vec2 vTextureCoord;\n\nuniform sampler2D uSampler;\nuniform vec4 uColor;\n\nvoid main(void)\n{\n    vec4 sample = texture2D(uSampler, vTextureCoord);\n    gl_FragColor = sample * uColor;\n}\n";
 
@@ -36672,6 +37884,14 @@ var TilingSpriteRenderer = /*@__PURE__*/(function (ObjectRenderer) {
         this.simpleShader = core.Shader.from(vertex, fragmentSimple, uniforms);
 
         this.quad = new core.QuadUv();
+
+        /**
+         * The WebGL state in which this renderer will work.
+         *
+         * @member {PIXI.State}
+         * @readonly
+         */
+        this.state = core.State.for2d();
     }
 
     if ( ObjectRenderer ) TilingSpriteRenderer.__proto__ = ObjectRenderer;
@@ -36765,14 +37985,15 @@ var TilingSpriteRenderer = /*@__PURE__*/(function (ObjectRenderer) {
 
         shader.uniforms.uTransform = tempMat.toArray(true);
         shader.uniforms.uColor = utils.premultiplyTintToRgba(ts.tint, ts.worldAlpha,
-            shader.uniforms.uColor, baseTex.premultiplyAlpha);
+            shader.uniforms.uColor, baseTex.alphaMode);
         shader.uniforms.translationMatrix = ts.transform.worldTransform.toArray(true);
         shader.uniforms.uSampler = tex;
 
         renderer.shader.bind(shader);
         renderer.geometry.bind(quad);// , renderer.shader.getGLShader());
 
-        renderer.state.setBlendMode(utils.correctBlendMode(ts.blendMode, baseTex.premultiplyAlpha));
+        this.state.blendMode = utils.correctBlendMode(ts.blendMode, baseTex.alphaMode);
+        renderer.state.set(this.state);
         renderer.geometry.draw(this.renderer.gl.TRIANGLES, 6, 0);
     };
 
@@ -36785,8 +38006,8 @@ exports.TilingSpriteRenderer = TilingSpriteRenderer;
 
 },{"@pixi/constants":47,"@pixi/core":48,"@pixi/math":60,"@pixi/sprite":73,"@pixi/utils":78}],73:[function(require,module,exports){
 /*!
- * @pixi/sprite - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/sprite - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/sprite is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -36922,6 +38143,13 @@ var Sprite = /*@__PURE__*/(function (Container) {
          */
         this._cachedTint = 0xFFFFFF;
 
+        /**
+         * this is used to store the uvs data of the sprite, assigned at the same time
+         * as the vertexData in calculateVertices()
+         *
+         * @private
+         * @member {Float32Array}
+         */
         this.uvs = null;
 
         // call texture setter
@@ -36952,8 +38180,6 @@ var Sprite = /*@__PURE__*/(function (Container) {
         // Batchable stuff..
         // TODO could make this a mixin?
         this.indices = indices;
-        this.size = 4;
-        this.start = 0;
 
         /**
          * Plugin that is responsible for rendering this element.
@@ -36996,7 +38222,6 @@ var Sprite = /*@__PURE__*/(function (Container) {
         this._textureTrimmedID = -1;
         this._cachedTint = 0xFFFFFF;
 
-        this.uvs = this._texture._uvs.uvsFloat32;
         // so if _width is 0 then width was not set..
         if (this._width)
         {
@@ -37030,6 +38255,12 @@ var Sprite = /*@__PURE__*/(function (Container) {
         if (this._transformID === this.transform._worldID && this._textureID === texture._updateID)
         {
             return;
+        }
+
+        // update texture UV here, because base texture can be changed without calling `_onTextureUpdate`
+        if (this._textureID !== texture._updateID)
+        {
+            this.uvs = this._texture._uvs.uvsFloat32;
         }
 
         this._transformID = this.transform._worldID;
@@ -37091,9 +38322,11 @@ var Sprite = /*@__PURE__*/(function (Container) {
 
         if (this._roundPixels)
         {
-            for (var i = 0; i < 8; i++)
+            var resolution = settings.settings.RESOLUTION;
+
+            for (var i = 0; i < vertexData.length; ++i)
             {
-                vertexData[i] = Math.round(vertexData[i]);
+                vertexData[i] = Math.round((vertexData[i] * resolution | 0) / resolution);
             }
         }
     };
@@ -37292,7 +38525,7 @@ var Sprite = /*@__PURE__*/(function (Container) {
      * The source can be - frame id, image url, video url, canvas element, video element, base texture
      *
      * @static
-     * @param {number|string|PIXI.Texture|HTMLCanvasElement|HTMLVideoElement} source Source to create texture from
+     * @param {string|PIXI.Texture|HTMLCanvasElement|HTMLVideoElement} source Source to create texture from
      * @param {object} [options] See {@link PIXI.BaseTexture}'s constructor for options.
      * @return {PIXI.Sprite} The newly created sprite
      */
@@ -37427,6 +38660,11 @@ var Sprite = /*@__PURE__*/(function (Container) {
             return;
         }
 
+        if (this._texture)
+        {
+            this._texture.off('update', this._onTextureUpdate, this);
+        }
+
         this._texture = value || core.Texture.EMPTY;
         this._cachedTint = 0xFFFFFF;
 
@@ -37457,8 +38695,8 @@ exports.Sprite = Sprite;
 
 },{"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/math":60,"@pixi/settings":70,"@pixi/utils":78}],74:[function(require,module,exports){
 /*!
- * @pixi/spritesheet - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/spritesheet - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/spritesheet is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -37496,15 +38734,23 @@ var loaders = require('@pixi/loaders');
  * @class
  * @memberof PIXI
  */
-var Spritesheet = function Spritesheet(baseTexture, data, resolutionFilename)
+var Spritesheet = function Spritesheet(texture, data, resolutionFilename)
 {
     if ( resolutionFilename === void 0 ) resolutionFilename = null;
 
     /**
-     * Reference to ths source texture
+     * Reference to original source image from the Loader. This reference is retained so we
+     * can destroy the Texture later on. It is never used internally.
+     * @type {PIXI.Texture}
+     * @private
+     */
+    this._texture = texture instanceof core.Texture ? texture : null;
+
+    /**
+     * Reference to ths source texture.
      * @type {PIXI.BaseTexture}
      */
-    this.baseTexture = baseTexture;
+    this.baseTexture = texture instanceof core.BaseTexture ? texture : this._texture.baseTexture;
 
     /**
      * A map containing all textures of the sprite sheet.
@@ -37789,8 +39035,13 @@ Spritesheet.prototype.destroy = function destroy (destroyBase)
     this.textures = null;
     if (destroyBase)
     {
+        if (this._texture)
+        {
+            this._texture.destroy();
+        }
         this.baseTexture.destroy();
     }
+    this._texture = null;
     this.baseTexture = null;
 };
 
@@ -37843,7 +39094,7 @@ SpritesheetLoader.use = function use (resource, next)
         }
 
         var spritesheet = new Spritesheet(
-            res.texture.baseTexture,
+            res.texture,
             resource.data,
             resource.url
         );
@@ -37878,8 +39129,8 @@ exports.SpritesheetLoader = SpritesheetLoader;
 
 },{"@pixi/core":48,"@pixi/loaders":59,"@pixi/math":60,"@pixi/utils":78}],75:[function(require,module,exports){
 /*!
- * @pixi/text-bitmap - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/text-bitmap - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/text-bitmap is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -38467,7 +39718,7 @@ var BitmapText = /*@__PURE__*/(function (Container) {
         var info = xml.getElementsByTagName('info')[0];
         var common = xml.getElementsByTagName('common')[0];
         var pages = xml.getElementsByTagName('page');
-        var res = utils.getResolutionOfUrl(pages[0].getAttribute('file'), settings.settings.RESOLUTION);
+        var res = utils.getResolutionOfUrl(pages[0].getAttribute('file'));
         var pagesTextures = {};
 
         data.font = info.getAttribute('face');
@@ -38578,6 +39829,7 @@ BitmapFontLoader.add = function add ()
 BitmapFontLoader.dirname = function dirname (url)
 {
     var dir = url
+        .replace(/\\/g, '/') // convert windows notation to UNIX notation, URL-safe because it's a forbidden character
         .replace(/\/$/, '') // replace trailing slash
         .replace(/\/[^\/]*$/, ''); // remove everything after the last
 
@@ -38719,8 +39971,8 @@ exports.BitmapText = BitmapText;
 
 },{"@pixi/core":48,"@pixi/display":49,"@pixi/loaders":59,"@pixi/math":60,"@pixi/settings":70,"@pixi/sprite":73,"@pixi/utils":78}],76:[function(require,module,exports){
 /*!
- * @pixi/text - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/text - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/text is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -39758,7 +41010,7 @@ TextMetrics.wordWrap = function wordWrap (text, style, canvas)
             if (TextMetrics.canBreakWords(token, style.breakWords))
             {
                 // break word into characters
-                var characters = token.split('');
+                var characters = TextMetrics.wordWrapSplit(token);
 
                 // loop the characters
                 for (var j = 0; j < characters.length; j++)
@@ -40039,12 +41291,12 @@ TextMetrics.tokenize = function tokenize (text)
 };
 
 /**
- * This method exists to be easily overridden
+ * Overridable helper method used internally by TextMetrics, exposed to allow customizing the class's behavior.
+ *
  * It allows one to customise which words should break
  * Examples are if the token is CJK or numbers.
  * It must return a boolean.
  *
- * @private
  * @param  {string}  token   The token
  * @param  {boolean}  breakWords  The style attr break words
  * @return {boolean} whether to break word or not
@@ -40055,13 +41307,13 @@ TextMetrics.canBreakWords = function canBreakWords (token, breakWords)
 };
 
 /**
- * This method exists to be easily overridden
+ * Overridable helper method used internally by TextMetrics, exposed to allow customizing the class's behavior.
+ *
  * It allows one to determine whether a pair of characters
  * should be broken by newlines
  * For example certain characters in CJK langs or numbers.
  * It must return a boolean.
  *
- * @private
  * @param  {string}  char  The character
  * @param  {string}  nextChar  The next character
  * @param  {string}  token The token/word the characters are from
@@ -40072,6 +41324,25 @@ TextMetrics.canBreakWords = function canBreakWords (token, breakWords)
 TextMetrics.canBreakChars = function canBreakChars (char, nextChar, token, index, breakWords) // eslint-disable-line no-unused-vars
 {
     return true;
+};
+
+/**
+ * Overridable helper method used internally by TextMetrics, exposed to allow customizing the class's behavior.
+ *
+ * It is called when a token (usually a word) has to be split into separate pieces
+ * in order to determine the point to break a word.
+ * It must return an array of characters.
+ *
+ * @example
+ * // Correctly splits emojis, eg "🤪🤪" will result in two element array, each with one emoji.
+ * TextMetrics.wordWrapSplit = (token) => [...token];
+ *
+ * @param  {string}  token The token to split
+ * @return {string[]} The characters of the token
+ */
+TextMetrics.wordWrapSplit = function wordWrapSplit (token)
+{
+    return token.split('');
 };
 
 /**
@@ -40215,8 +41486,14 @@ var canvas = (function () {
     {
         // OffscreenCanvas2D measureText can be up to 40% faster.
         var c = new OffscreenCanvas(0, 0);
+        var context = c.getContext('2d');
 
-        return c.getContext('2d') ? c : document.createElement('canvas');
+        if (context && context.measureText)
+        {
+            return c;
+        }
+
+        return document.createElement('canvas');
     }
     catch (ex)
     {
@@ -40367,7 +41644,13 @@ var defaultDestroyOptions = {
 var Text = /*@__PURE__*/(function (Sprite) {
     function Text(text, style, canvas)
     {
-        canvas = canvas || document.createElement('canvas');
+        var ownCanvas = false;
+
+        if (!canvas)
+        {
+            canvas = document.createElement('canvas');
+            ownCanvas = true;
+        }
 
         canvas.width = 3;
         canvas.height = 3;
@@ -40378,6 +41661,17 @@ var Text = /*@__PURE__*/(function (Sprite) {
         texture.trim = new math.Rectangle();
 
         Sprite.call(this, texture);
+
+        /**
+         * Keep track if this Text object created it's own canvas
+         * element (`true`) or uses the constructor argument (`false`).
+         * Used to workaround a GC issues with Safari < 13 when
+         * destroying Text. See `destroy` for more info.
+         *
+         * @member {boolean}
+         * @private
+         */
+        this._ownCanvas = ownCanvas;
 
         /**
          * The canvas element that everything is drawn to
@@ -40533,7 +41827,10 @@ var Text = /*@__PURE__*/(function (Sprite) {
             else
             {
                 // set canvas text styles
-                context.fillStyle = this._generateFillStyle(style, lines);
+                context.fillStyle = this._generateFillStyle(style, lines, measured);
+                // TODO: Can't have different types for getter and setter. The getter shouldn't have the number type as
+                //       the setter converts to string. See this thread for more details:
+                //       https://github.com/microsoft/TypeScript/issues/2521
                 context.strokeStyle = style.stroke;
 
                 context.shadowColor = 0;
@@ -40622,6 +41919,8 @@ var Text = /*@__PURE__*/(function (Sprite) {
         // https://medium.com/@giltayar/iterating-over-emoji-characters-the-es6-way-f06e4589516
         // https://github.com/orling/grapheme-splitter
         var stringArray = Array.from ? Array.from(text) : text.split('');
+        var previousWidth = this.context.measureText(text).width;
+        var currentWidth = 0;
 
         for (var i = 0; i < stringArray.length; ++i)
         {
@@ -40635,7 +41934,9 @@ var Text = /*@__PURE__*/(function (Sprite) {
             {
                 this.context.fillText(currentChar, currentPosition, y);
             }
-            currentPosition += this.context.measureText(currentChar).width + letterSpacing;
+            currentWidth = this.context.measureText(text.substring(i + 1)).width;
+            currentPosition += previousWidth - currentWidth + letterSpacing;
+            previousWidth = currentWidth;
         }
     };
 
@@ -40742,7 +42043,7 @@ var Text = /*@__PURE__*/(function (Sprite) {
      * @param {string[]} lines - The lines of text.
      * @return {string|number|CanvasGradient} The fill style
      */
-    Text.prototype._generateFillStyle = function _generateFillStyle (style, lines)
+    Text.prototype._generateFillStyle = function _generateFillStyle (style, lines, metrics)
     {
         if (!Array.isArray(style.fill))
         {
@@ -40756,12 +42057,16 @@ var Text = /*@__PURE__*/(function (Sprite) {
         // the gradient will be evenly spaced out according to how large the array is.
         // ['#FF0000', '#00FF00', '#0000FF'] would created stops at 0.25, 0.5 and 0.75
         var gradient;
-        var totalIterations;
-        var currentIteration;
-        var stop;
 
-        var width = Math.ceil(this.canvas.width / this._resolution);
-        var height = Math.ceil(this.canvas.height / this._resolution);
+        // a dropshadow will enlarge the canvas and result in the gradient being
+        // generated with the incorrect dimensions
+        var dropShadowCorrection = (style.dropShadow) ? style.dropShadowDistance : 0;
+
+        // should also take padding into account, padding can offset the gradient
+        var padding = style.padding || 0;
+
+        var width = Math.ceil(this.canvas.width / this._resolution) - dropShadowCorrection - (padding * 2);
+        var height = Math.ceil(this.canvas.height / this._resolution) - dropShadowCorrection - (padding * 2);
 
         // make a copy of the style settings, so we can manipulate them later
         var fill = style.fill.slice();
@@ -40789,42 +42094,66 @@ var Text = /*@__PURE__*/(function (Sprite) {
         if (style.fillGradientType === TEXT_GRADIENT.LINEAR_VERTICAL)
         {
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
-            gradient = this.context.createLinearGradient(width / 2, 0, width / 2, height);
+            gradient = this.context.createLinearGradient(width / 2, padding, width / 2, height + padding);
 
             // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
             // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
-            totalIterations = (fill.length + 1) * lines.length;
-            currentIteration = 0;
+
+            // There's potential for floating point precision issues at the seams between gradient repeats.
+            // The loop below generates the stops in order, so track the last generated one to prevent
+            // floating point precision from making us go the teeniest bit backwards, resulting in
+            // the first and last colors getting swapped.
+            var lastIterationStop = 0;
+
+            // Actual height of the text itself, not counting spacing for lineHeight/leading/dropShadow etc
+            var textHeight = metrics.fontProperties.fontSize + style.strokeThickness;
+
+            // textHeight, but as a 0-1 size in global gradient stop space
+            var gradStopLineHeight = textHeight / height;
+
             for (var i$1 = 0; i$1 < lines.length; i$1++)
             {
-                currentIteration += 1;
+                var thisLineTop = metrics.lineHeight * i$1;
+
                 for (var j = 0; j < fill.length; j++)
                 {
+                    // 0-1 stop point for the current line, multiplied to global space afterwards
+                    var lineStop = 0;
+
                     if (typeof fillGradientStops[j] === 'number')
                     {
-                        stop = (fillGradientStops[j] / lines.length) + (i$1 / lines.length);
+                        lineStop = fillGradientStops[j];
                     }
                     else
                     {
-                        stop = currentIteration / totalIterations;
+                        lineStop = j / fill.length;
                     }
-                    gradient.addColorStop(stop, fill[j]);
-                    currentIteration++;
+
+                    var globalStop = (thisLineTop / height) + (lineStop * gradStopLineHeight);
+
+                    // Prevent color stop generation going backwards from floating point imprecision
+                    var clampedStop = Math.max(lastIterationStop, globalStop);
+
+                    clampedStop = Math.min(clampedStop, 1); // Cap at 1 as well for safety's sake to avoid a possible throw.
+                    gradient.addColorStop(clampedStop, fill[j]);
+                    lastIterationStop = clampedStop;
                 }
             }
         }
         else
         {
             // start the gradient at the center left of the canvas, and end at the center right of the canvas
-            gradient = this.context.createLinearGradient(0, height / 2, width, height / 2);
+            gradient = this.context.createLinearGradient(padding, height / 2, width + padding, height / 2);
 
             // can just evenly space out the gradients in this case, as multiple lines makes no difference
             // to an even left to right gradient
-            totalIterations = fill.length + 1;
-            currentIteration = 1;
+            var totalIterations = fill.length + 1;
+            var currentIteration = 1;
 
             for (var i$2 = 0; i$2 < fill.length; i$2++)
             {
+                var stop = (void 0);
+
                 if (typeof fillGradientStops[i$2] === 'number')
                 {
                     stop = fillGradientStops[i$2];
@@ -40863,6 +42192,13 @@ var Text = /*@__PURE__*/(function (Sprite) {
         options = Object.assign({}, defaultDestroyOptions, options);
 
         Sprite.prototype.destroy.call(this, options);
+
+        // set canvas width and height to 0 to workaround memory leak in Safari < 13
+        // https://stackoverflow.com/questions/52532614/total-canvas-memory-use-exceeds-the-maximum-limit-safari-12
+        if (this._ownCanvas)
+        {
+            this.canvas.height = this.canvas.width = 0;
+        }
 
         // make sure to reset the the context and canvas.. dont want this hanging around in memory!
         this.context = null;
@@ -41002,8 +42338,8 @@ exports.TextStyle = TextStyle;
 
 },{"@pixi/core":48,"@pixi/math":60,"@pixi/settings":70,"@pixi/sprite":73,"@pixi/utils":78}],77:[function(require,module,exports){
 /*!
- * @pixi/ticker - v5.1.1
- * Compiled Fri, 02 Aug 2019 23:20:23 UTC
+ * @pixi/ticker - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/ticker is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -41034,20 +42370,20 @@ settings.settings.TARGET_FPMS = 0.06;
  * @constant
  * @name UPDATE_PRIORITY
  * @memberof PIXI
- * @type {object}
+ * @enum {number}
  * @property {number} INTERACTION=50 Highest priority, used for {@link PIXI.interaction.InteractionManager}
  * @property {number} HIGH=25 High priority updating, {@link PIXI.VideoBaseTexture} and {@link PIXI.AnimatedSprite}
  * @property {number} NORMAL=0 Default priority for ticker events, see {@link PIXI.Ticker#add}.
  * @property {number} LOW=-25 Low priority used for {@link PIXI.Application} rendering.
  * @property {number} UTILITY=-50 Lowest priority used for {@link PIXI.prepare.BasePrepare} utility.
  */
-var UPDATE_PRIORITY = {
-    INTERACTION: 50,
-    HIGH: 25,
-    NORMAL: 0,
-    LOW: -25,
-    UTILITY: -50,
-};
+(function (UPDATE_PRIORITY) {
+    UPDATE_PRIORITY[UPDATE_PRIORITY["INTERACTION"] = 50] = "INTERACTION";
+    UPDATE_PRIORITY[UPDATE_PRIORITY["HIGH"] = 25] = "HIGH";
+    UPDATE_PRIORITY[UPDATE_PRIORITY["NORMAL"] = 0] = "NORMAL";
+    UPDATE_PRIORITY[UPDATE_PRIORITY["LOW"] = -25] = "LOW";
+    UPDATE_PRIORITY[UPDATE_PRIORITY["UTILITY"] = -50] = "UTILITY";
+})(exports.UPDATE_PRIORITY || (exports.UPDATE_PRIORITY = {}));
 
 /**
  * Internal class for handling the priority sorting of ticker handlers.
@@ -41056,164 +42392,140 @@ var UPDATE_PRIORITY = {
  * @class
  * @memberof PIXI
  */
-var TickerListener = function TickerListener(fn, context, priority, once)
-{
-    if ( context === void 0 ) context = null;
-    if ( priority === void 0 ) priority = 0;
-    if ( once === void 0 ) once = false;
-
+var TickerListener = /** @class */ (function () {
     /**
-     * The handler function to execute.
+     * Constructor
      * @private
-     * @member {Function}
+     * @param {Function} fn - The listener function to be added for one update
+     * @param {*} [context=null] - The listener context
+     * @param {number} [priority=0] - The priority for emitting
+     * @param {boolean} [once=false] - If the handler should fire once
      */
-    this.fn = fn;
-
-    /**
-     * The calling to execute.
-     * @private
-     * @member {*}
-     */
-    this.context = context;
-
-    /**
-     * The current priority.
-     * @private
-     * @member {number}
-     */
-    this.priority = priority;
-
-    /**
-     * If this should only execute once.
-     * @private
-     * @member {boolean}
-     */
-    this.once = once;
-
-    /**
-     * The next item in chain.
-     * @private
-     * @member {TickerListener}
-     */
-    this.next = null;
-
-    /**
-     * The previous item in chain.
-     * @private
-     * @member {TickerListener}
-     */
-    this.previous = null;
-
-    /**
-     * `true` if this listener has been destroyed already.
-     * @member {boolean}
-     * @private
-     */
-    this._destroyed = false;
-};
-
-/**
- * Simple compare function to figure out if a function and context match.
- * @private
- * @param {Function} fn - The listener function to be added for one update
- * @param {Function} context - The listener context
- * @return {boolean} `true` if the listener match the arguments
- */
-TickerListener.prototype.match = function match (fn, context)
-{
-    context = context || null;
-
-    return this.fn === fn && this.context === context;
-};
-
-/**
- * Emit by calling the current function.
- * @private
- * @param {number} deltaTime - time since the last emit.
- * @return {TickerListener} Next ticker
- */
-TickerListener.prototype.emit = function emit (deltaTime)
-{
-    if (this.fn)
-    {
-        if (this.context)
-        {
-            this.fn.call(this.context, deltaTime);
-        }
-        else
-        {
-            this.fn(deltaTime);
-        }
-    }
-
-    var redirect = this.next;
-
-    if (this.once)
-    {
-        this.destroy(true);
-    }
-
-    // Soft-destroying should remove
-    // the next reference
-    if (this._destroyed)
-    {
+    function TickerListener(fn, context, priority, once) {
+        if (context === void 0) { context = null; }
+        if (priority === void 0) { priority = 0; }
+        if (once === void 0) { once = false; }
+        /**
+         * The handler function to execute.
+         * @private
+         * @member {Function}
+         */
+        this.fn = fn;
+        /**
+         * The calling to execute.
+         * @private
+         * @member {*}
+         */
+        this.context = context;
+        /**
+         * The current priority.
+         * @private
+         * @member {number}
+         */
+        this.priority = priority;
+        /**
+         * If this should only execute once.
+         * @private
+         * @member {boolean}
+         */
+        this.once = once;
+        /**
+         * The next item in chain.
+         * @private
+         * @member {TickerListener}
+         */
         this.next = null;
+        /**
+         * The previous item in chain.
+         * @private
+         * @member {TickerListener}
+         */
+        this.previous = null;
+        /**
+         * `true` if this listener has been destroyed already.
+         * @member {boolean}
+         * @private
+         */
+        this._destroyed = false;
     }
-
-    return redirect;
-};
-
-/**
- * Connect to the list.
- * @private
- * @param {TickerListener} previous - Input node, previous listener
- */
-TickerListener.prototype.connect = function connect (previous)
-{
-    this.previous = previous;
-    if (previous.next)
-    {
-        previous.next.previous = this;
-    }
-    this.next = previous.next;
-    previous.next = this;
-};
-
-/**
- * Destroy and don't use after this.
- * @private
- * @param {boolean} [hard = false] `true` to remove the `next` reference, this
- *    is considered a hard destroy. Soft destroy maintains the next reference.
- * @return {TickerListener} The listener to redirect while emitting or removing.
- */
-TickerListener.prototype.destroy = function destroy (hard)
-{
-        if ( hard === void 0 ) hard = false;
-
-    this._destroyed = true;
-    this.fn = null;
-    this.context = null;
-
-    // Disconnect, hook up next and previous
-    if (this.previous)
-    {
-        this.previous.next = this.next;
-    }
-
-    if (this.next)
-    {
-        this.next.previous = this.previous;
-    }
-
-    // Redirect to the next item
-    var redirect = this.next;
-
-    // Remove references
-    this.next = hard ? null : redirect;
-    this.previous = null;
-
-    return redirect;
-};
+    /**
+     * Simple compare function to figure out if a function and context match.
+     * @private
+     * @param {Function} fn - The listener function to be added for one update
+     * @param {any} [context] - The listener context
+     * @return {boolean} `true` if the listener match the arguments
+     */
+    TickerListener.prototype.match = function (fn, context) {
+        if (context === void 0) { context = null; }
+        return this.fn === fn && this.context === context;
+    };
+    /**
+     * Emit by calling the current function.
+     * @private
+     * @param {number} deltaTime - time since the last emit.
+     * @return {TickerListener} Next ticker
+     */
+    TickerListener.prototype.emit = function (deltaTime) {
+        if (this.fn) {
+            if (this.context) {
+                this.fn.call(this.context, deltaTime);
+            }
+            else {
+                this.fn(deltaTime);
+            }
+        }
+        var redirect = this.next;
+        if (this.once) {
+            this.destroy(true);
+        }
+        // Soft-destroying should remove
+        // the next reference
+        if (this._destroyed) {
+            this.next = null;
+        }
+        return redirect;
+    };
+    /**
+     * Connect to the list.
+     * @private
+     * @param {TickerListener} previous - Input node, previous listener
+     */
+    TickerListener.prototype.connect = function (previous) {
+        this.previous = previous;
+        if (previous.next) {
+            previous.next.previous = this;
+        }
+        this.next = previous.next;
+        previous.next = this;
+    };
+    /**
+     * Destroy and don't use after this.
+     * @private
+     * @param {boolean} [hard = false] `true` to remove the `next` reference, this
+     *        is considered a hard destroy. Soft destroy maintains the next reference.
+     * @return {TickerListener} The listener to redirect while emitting or removing.
+     */
+    TickerListener.prototype.destroy = function (hard) {
+        if (hard === void 0) { hard = false; }
+        this._destroyed = true;
+        this.fn = null;
+        this.context = null;
+        // Disconnect, hook up next and previous
+        if (this.previous) {
+            this.previous.next = this.next;
+        }
+        if (this.next) {
+            this.next.previous = this.previous;
+        }
+        // Redirect to the next item
+        var redirect = this.next;
+        // Remove references
+        this.next = hard ? null : redirect;
+        this.previous = null;
+        return redirect;
+    };
+    return TickerListener;
+}());
 
 /**
  * A Ticker class that runs an update loop that other objects listen to.
@@ -41224,633 +42536,554 @@ TickerListener.prototype.destroy = function destroy (hard)
  * @class
  * @memberof PIXI
  */
-var Ticker = function Ticker()
-{
-    var this$1 = this;
-
-    /**
-     * The first listener. All new listeners added are chained on this.
-     * @private
-     * @type {TickerListener}
-     */
-    this._head = new TickerListener(null, null, Infinity);
-
-    /**
-     * Internal current frame request ID
-     * @type {?number}
-     * @private
-     */
-    this._requestId = null;
-
-    /**
-     * Internal value managed by minFPS property setter and getter.
-     * This is the maximum allowed milliseconds between updates.
-     * @type {number}
-     * @private
-     */
-    this._maxElapsedMS = 100;
-
-    /**
-     * Internal value managed by maxFPS property setter and getter.
-     * This is the minimum allowed milliseconds between updates.
-     * @private
-     */
-    this._minElapsedMS = 0;
-
-    /**
-     * Whether or not this ticker should invoke the method
-     * {@link PIXI.Ticker#start} automatically
-     * when a listener is added.
-     *
-     * @member {boolean}
-     * @default false
-     */
-    this.autoStart = false;
-
-    /**
-     * Scalar time value from last frame to this frame.
-     * This value is capped by setting {@link PIXI.Ticker#minFPS}
-     * and is scaled with {@link PIXI.Ticker#speed}.
-     * **Note:** The cap may be exceeded by scaling.
-     *
-     * @member {number}
-     * @default 1
-     */
-    this.deltaTime = 1;
-
-    /**
-     * Scaler time elapsed in milliseconds from last frame to this frame.
-     * This value is capped by setting {@link PIXI.Ticker#minFPS}
-     * and is scaled with {@link PIXI.Ticker#speed}.
-     * **Note:** The cap may be exceeded by scaling.
-     * If the platform supports DOMHighResTimeStamp,
-     * this value will have a precision of 1 µs.
-     * Defaults to target frame time
-     *
-     * @member {number}
-     * @default 16.66
-     */
-    this.deltaMS = 1 / settings.settings.TARGET_FPMS;
-
-    /**
-     * Time elapsed in milliseconds from last frame to this frame.
-     * Opposed to what the scalar {@link PIXI.Ticker#deltaTime}
-     * is based, this value is neither capped nor scaled.
-     * If the platform supports DOMHighResTimeStamp,
-     * this value will have a precision of 1 µs.
-     * Defaults to target frame time
-     *
-     * @member {number}
-     * @default 16.66
-     */
-    this.elapsedMS = 1 / settings.settings.TARGET_FPMS;
-
-    /**
-     * The last time {@link PIXI.Ticker#update} was invoked.
-     * This value is also reset internally outside of invoking
-     * update, but only when a new animation frame is requested.
-     * If the platform supports DOMHighResTimeStamp,
-     * this value will have a precision of 1 µs.
-     *
-     * @member {number}
-     * @default -1
-     */
-    this.lastTime = -1;
-
-    /**
-     * Factor of current {@link PIXI.Ticker#deltaTime}.
-     * @example
-     * // Scales ticker.deltaTime to what would be
-     * // the equivalent of approximately 120 FPS
-     * ticker.speed = 2;
-     *
-     * @member {number}
-     * @default 1
-     */
-    this.speed = 1;
-
-    /**
-     * Whether or not this ticker has been started.
-     * `true` if {@link PIXI.Ticker#start} has been called.
-     * `false` if {@link PIXI.Ticker#stop} has been called.
-     * While `false`, this value may change to `true` in the
-     * event of {@link PIXI.Ticker#autoStart} being `true`
-     * and a listener is added.
-     *
-     * @member {boolean}
-     * @default false
-     */
-    this.started = false;
-
-    /**
-     * If enabled, deleting is disabled.
-     * @member {boolean}
-     * @default false
-     * @private
-     */
-    this._protected = false;
-
-    /**
-     * The last time keyframe was executed.
-     * Maintains a relatively fixed interval with the previous value.
-     * @member {number}
-     * @default -1
-     * @private
-     */
-    this._lastFrame = -1;
-
-    /**
-     * Internal tick method bound to ticker instance.
-     * This is because in early 2015, Function.bind
-     * is still 60% slower in high performance scenarios.
-     * Also separating frame requests from update method
-     * so listeners may be called at any time and with
-     * any animation API, just invoke ticker.update(time).
-     *
-     * @private
-     * @param {number} time - Time since last tick.
-     */
-    this._tick = function (time) {
-        this$1._requestId = null;
-
-        if (this$1.started)
-        {
-            // Invoke listeners now
-            this$1.update(time);
-            // Listener side effects may have modified ticker state.
-            if (this$1.started && this$1._requestId === null && this$1._head.next)
-            {
-                this$1._requestId = requestAnimationFrame(this$1._tick);
+var Ticker = /** @class */ (function () {
+    function Ticker() {
+        var _this = this;
+        /**
+         * The first listener. All new listeners added are chained on this.
+         * @private
+         * @type {TickerListener}
+         */
+        this._head = new TickerListener(null, null, Infinity);
+        /**
+         * Internal current frame request ID
+         * @type {?number}
+         * @private
+         */
+        this._requestId = null;
+        /**
+         * Internal value managed by minFPS property setter and getter.
+         * This is the maximum allowed milliseconds between updates.
+         * @type {number}
+         * @private
+         */
+        this._maxElapsedMS = 100;
+        /**
+         * Internal value managed by maxFPS property setter and getter.
+         * This is the minimum allowed milliseconds between updates.
+         * @type {number}
+         * @private
+         */
+        this._minElapsedMS = 0;
+        /**
+         * Whether or not this ticker should invoke the method
+         * {@link PIXI.Ticker#start} automatically
+         * when a listener is added.
+         *
+         * @member {boolean}
+         * @default false
+         */
+        this.autoStart = false;
+        /**
+         * Scalar time value from last frame to this frame.
+         * This value is capped by setting {@link PIXI.Ticker#minFPS}
+         * and is scaled with {@link PIXI.Ticker#speed}.
+         * **Note:** The cap may be exceeded by scaling.
+         *
+         * @member {number}
+         * @default 1
+         */
+        this.deltaTime = 1;
+        /**
+         * Scaler time elapsed in milliseconds from last frame to this frame.
+         * This value is capped by setting {@link PIXI.Ticker#minFPS}
+         * and is scaled with {@link PIXI.Ticker#speed}.
+         * **Note:** The cap may be exceeded by scaling.
+         * If the platform supports DOMHighResTimeStamp,
+         * this value will have a precision of 1 µs.
+         * Defaults to target frame time
+         *
+         * @member {number}
+         * @default 16.66
+         */
+        this.deltaMS = 1 / settings.settings.TARGET_FPMS;
+        /**
+         * Time elapsed in milliseconds from last frame to this frame.
+         * Opposed to what the scalar {@link PIXI.Ticker#deltaTime}
+         * is based, this value is neither capped nor scaled.
+         * If the platform supports DOMHighResTimeStamp,
+         * this value will have a precision of 1 µs.
+         * Defaults to target frame time
+         *
+         * @member {number}
+         * @default 16.66
+         */
+        this.elapsedMS = 1 / settings.settings.TARGET_FPMS;
+        /**
+         * The last time {@link PIXI.Ticker#update} was invoked.
+         * This value is also reset internally outside of invoking
+         * update, but only when a new animation frame is requested.
+         * If the platform supports DOMHighResTimeStamp,
+         * this value will have a precision of 1 µs.
+         *
+         * @member {number}
+         * @default -1
+         */
+        this.lastTime = -1;
+        /**
+         * Factor of current {@link PIXI.Ticker#deltaTime}.
+         * @example
+         * // Scales ticker.deltaTime to what would be
+         * // the equivalent of approximately 120 FPS
+         * ticker.speed = 2;
+         *
+         * @member {number}
+         * @default 1
+         */
+        this.speed = 1;
+        /**
+         * Whether or not this ticker has been started.
+         * `true` if {@link PIXI.Ticker#start} has been called.
+         * `false` if {@link PIXI.Ticker#stop} has been called.
+         * While `false`, this value may change to `true` in the
+         * event of {@link PIXI.Ticker#autoStart} being `true`
+         * and a listener is added.
+         *
+         * @member {boolean}
+         * @default false
+         */
+        this.started = false;
+        /**
+         * If enabled, deleting is disabled.
+         * @member {boolean}
+         * @default false
+         * @private
+         */
+        this._protected = false;
+        /**
+         * The last time keyframe was executed.
+         * Maintains a relatively fixed interval with the previous value.
+         * @member {number}
+         * @default -1
+         * @private
+         */
+        this._lastFrame = -1;
+        /**
+         * Internal tick method bound to ticker instance.
+         * This is because in early 2015, Function.bind
+         * is still 60% slower in high performance scenarios.
+         * Also separating frame requests from update method
+         * so listeners may be called at any time and with
+         * any animation API, just invoke ticker.update(time).
+         *
+         * @private
+         * @param {number} time - Time since last tick.
+         */
+        this._tick = function (time) {
+            _this._requestId = null;
+            if (_this.started) {
+                // Invoke listeners now
+                _this.update(time);
+                // Listener side effects may have modified ticker state.
+                if (_this.started && _this._requestId === null && _this._head.next) {
+                    _this._requestId = requestAnimationFrame(_this._tick);
+                }
             }
+        };
+    }
+    /**
+     * Conditionally requests a new animation frame.
+     * If a frame has not already been requested, and if the internal
+     * emitter has listeners, a new frame is requested.
+     *
+     * @private
+     */
+    Ticker.prototype._requestIfNeeded = function () {
+        if (this._requestId === null && this._head.next) {
+            // ensure callbacks get correct delta
+            this.lastTime = performance.now();
+            this._lastFrame = this.lastTime;
+            this._requestId = requestAnimationFrame(this._tick);
         }
     };
-};
-
-var prototypeAccessors = { FPS: { configurable: true },minFPS: { configurable: true },maxFPS: { configurable: true } };
-var staticAccessors = { shared: { configurable: true },system: { configurable: true } };
-
-/**
- * Conditionally requests a new animation frame.
- * If a frame has not already been requested, and if the internal
- * emitter has listeners, a new frame is requested.
- *
- * @private
- */
-Ticker.prototype._requestIfNeeded = function _requestIfNeeded ()
-{
-    if (this._requestId === null && this._head.next)
-    {
-        // ensure callbacks get correct delta
-        this.lastTime = performance.now();
-        this._lastFrame = this.lastTime;
-        this._requestId = requestAnimationFrame(this._tick);
-    }
-};
-
-/**
- * Conditionally cancels a pending animation frame.
- *
- * @private
- */
-Ticker.prototype._cancelIfNeeded = function _cancelIfNeeded ()
-{
-    if (this._requestId !== null)
-    {
-        cancelAnimationFrame(this._requestId);
-        this._requestId = null;
-    }
-};
-
-/**
- * Conditionally requests a new animation frame.
- * If the ticker has been started it checks if a frame has not already
- * been requested, and if the internal emitter has listeners. If these
- * conditions are met, a new frame is requested. If the ticker has not
- * been started, but autoStart is `true`, then the ticker starts now,
- * and continues with the previous conditions to request a new frame.
- *
- * @private
- */
-Ticker.prototype._startIfPossible = function _startIfPossible ()
-{
-    if (this.started)
-    {
-        this._requestIfNeeded();
-    }
-    else if (this.autoStart)
-    {
-        this.start();
-    }
-};
-
-/**
- * Register a handler for tick events. Calls continuously unless
- * it is removed or the ticker is stopped.
- *
- * @param {Function} fn - The listener function to be added for updates
- * @param {*} [context] - The listener context
- * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
- * @returns {PIXI.Ticker} This instance of a ticker
- */
-Ticker.prototype.add = function add (fn, context, priority)
-{
-        if ( priority === void 0 ) priority = UPDATE_PRIORITY.NORMAL;
-
-    return this._addListener(new TickerListener(fn, context, priority));
-};
-
-/**
- * Add a handler for the tick event which is only execute once.
- *
- * @param {Function} fn - The listener function to be added for one update
- * @param {*} [context] - The listener context
- * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
- * @returns {PIXI.Ticker} This instance of a ticker
- */
-Ticker.prototype.addOnce = function addOnce (fn, context, priority)
-{
-        if ( priority === void 0 ) priority = UPDATE_PRIORITY.NORMAL;
-
-    return this._addListener(new TickerListener(fn, context, priority, true));
-};
-
-/**
- * Internally adds the event handler so that it can be sorted by priority.
- * Priority allows certain handler (user, AnimatedSprite, Interaction) to be run
- * before the rendering.
- *
- * @private
- * @param {TickerListener} listener - Current listener being added.
- * @returns {PIXI.Ticker} This instance of a ticker
- */
-Ticker.prototype._addListener = function _addListener (listener)
-{
-    // For attaching to head
-    var current = this._head.next;
-    var previous = this._head;
-
-    // Add the first item
-    if (!current)
-    {
-        listener.connect(previous);
-    }
-    else
-    {
-        // Go from highest to lowest priority
-        while (current)
-        {
-            if (listener.priority > current.priority)
-            {
-                listener.connect(previous);
-                break;
-            }
-            previous = current;
-            current = current.next;
+    /**
+     * Conditionally cancels a pending animation frame.
+     *
+     * @private
+     */
+    Ticker.prototype._cancelIfNeeded = function () {
+        if (this._requestId !== null) {
+            cancelAnimationFrame(this._requestId);
+            this._requestId = null;
         }
-
-        // Not yet connected
-        if (!listener.previous)
-        {
+    };
+    /**
+     * Conditionally requests a new animation frame.
+     * If the ticker has been started it checks if a frame has not already
+     * been requested, and if the internal emitter has listeners. If these
+     * conditions are met, a new frame is requested. If the ticker has not
+     * been started, but autoStart is `true`, then the ticker starts now,
+     * and continues with the previous conditions to request a new frame.
+     *
+     * @private
+     */
+    Ticker.prototype._startIfPossible = function () {
+        if (this.started) {
+            this._requestIfNeeded();
+        }
+        else if (this.autoStart) {
+            this.start();
+        }
+    };
+    /**
+     * Register a handler for tick events. Calls continuously unless
+     * it is removed or the ticker is stopped.
+     *
+     * @param {Function} fn - The listener function to be added for updates
+     * @param {*} [context] - The listener context
+     * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
+     * @returns {PIXI.Ticker} This instance of a ticker
+     */
+    Ticker.prototype.add = function (fn, context, priority) {
+        if (priority === void 0) { priority = exports.UPDATE_PRIORITY.NORMAL; }
+        return this._addListener(new TickerListener(fn, context, priority));
+    };
+    /**
+     * Add a handler for the tick event which is only execute once.
+     *
+     * @param {Function} fn - The listener function to be added for one update
+     * @param {*} [context] - The listener context
+     * @param {number} [priority=PIXI.UPDATE_PRIORITY.NORMAL] - The priority for emitting
+     * @returns {PIXI.Ticker} This instance of a ticker
+     */
+    Ticker.prototype.addOnce = function (fn, context, priority) {
+        if (priority === void 0) { priority = exports.UPDATE_PRIORITY.NORMAL; }
+        return this._addListener(new TickerListener(fn, context, priority, true));
+    };
+    /**
+     * Internally adds the event handler so that it can be sorted by priority.
+     * Priority allows certain handler (user, AnimatedSprite, Interaction) to be run
+     * before the rendering.
+     *
+     * @private
+     * @param {TickerListener} listener - Current listener being added.
+     * @returns {PIXI.Ticker} This instance of a ticker
+     */
+    Ticker.prototype._addListener = function (listener) {
+        // For attaching to head
+        var current = this._head.next;
+        var previous = this._head;
+        // Add the first item
+        if (!current) {
             listener.connect(previous);
         }
-    }
-
-    this._startIfPossible();
-
-    return this;
-};
-
-/**
- * Removes any handlers matching the function and context parameters.
- * If no handlers are left after removing, then it cancels the animation frame.
- *
- * @param {Function} fn - The listener function to be removed
- * @param {*} [context] - The listener context to be removed
- * @returns {PIXI.Ticker} This instance of a ticker
- */
-Ticker.prototype.remove = function remove (fn, context)
-{
-    var listener = this._head.next;
-
-    while (listener)
-    {
-        // We found a match, lets remove it
-        // no break to delete all possible matches
-        // incase a listener was added 2+ times
-        if (listener.match(fn, context))
-        {
-            listener = listener.destroy();
-        }
-        else
-        {
-            listener = listener.next;
-        }
-    }
-
-    if (!this._head.next)
-    {
-        this._cancelIfNeeded();
-    }
-
-    return this;
-};
-
-/**
- * Starts the ticker. If the ticker has listeners
- * a new animation frame is requested at this point.
- */
-Ticker.prototype.start = function start ()
-{
-    if (!this.started)
-    {
-        this.started = true;
-        this._requestIfNeeded();
-    }
-};
-
-/**
- * Stops the ticker. If the ticker has requested
- * an animation frame it is canceled at this point.
- */
-Ticker.prototype.stop = function stop ()
-{
-    if (this.started)
-    {
-        this.started = false;
-        this._cancelIfNeeded();
-    }
-};
-
-/**
- * Destroy the ticker and don't use after this. Calling
- * this method removes all references to internal events.
- */
-Ticker.prototype.destroy = function destroy ()
-{
-    if (!this._protected)
-    {
-        this.stop();
-
-        var listener = this._head.next;
-
-        while (listener)
-        {
-            listener = listener.destroy(true);
-        }
-
-        this._head.destroy();
-        this._head = null;
-    }
-};
-
-/**
- * Triggers an update. An update entails setting the
- * current {@link PIXI.Ticker#elapsedMS},
- * the current {@link PIXI.Ticker#deltaTime},
- * invoking all listeners with current deltaTime,
- * and then finally setting {@link PIXI.Ticker#lastTime}
- * with the value of currentTime that was provided.
- * This method will be called automatically by animation
- * frame callbacks if the ticker instance has been started
- * and listeners are added.
- *
- * @param {number} [currentTime=performance.now()] - the current time of execution
- */
-Ticker.prototype.update = function update (currentTime)
-{
-        if ( currentTime === void 0 ) currentTime = performance.now();
-
-    var elapsedMS;
-
-    // If the difference in time is zero or negative, we ignore most of the work done here.
-    // If there is no valid difference, then should be no reason to let anyone know about it.
-    // A zero delta, is exactly that, nothing should update.
-    //
-    // The difference in time can be negative, and no this does not mean time traveling.
-    // This can be the result of a race condition between when an animation frame is requested
-    // on the current JavaScript engine event loop, and when the ticker's start method is invoked
-    // (which invokes the internal _requestIfNeeded method). If a frame is requested before
-    // _requestIfNeeded is invoked, then the callback for the animation frame the ticker requests,
-    // can receive a time argument that can be less than the lastTime value that was set within
-    // _requestIfNeeded. This difference is in microseconds, but this is enough to cause problems.
-    //
-    // This check covers this browser engine timing issue, as well as if consumers pass an invalid
-    // currentTime value. This may happen if consumers opt-out of the autoStart, and update themselves.
-
-    if (currentTime > this.lastTime)
-    {
-        // Save uncapped elapsedMS for measurement
-        elapsedMS = this.elapsedMS = currentTime - this.lastTime;
-
-        // cap the milliseconds elapsed used for deltaTime
-        if (elapsedMS > this._maxElapsedMS)
-        {
-            elapsedMS = this._maxElapsedMS;
-        }
-
-        elapsedMS *= this.speed;
-
-        // If not enough time has passed, exit the function.
-        // Get ready for next frame by setting _lastFrame, but based on _minElapsedMS
-        // adjustment to ensure a relatively stable interval.
-        if (this._minElapsedMS)
-        {
-            var delta = currentTime - this._lastFrame | 0;
-
-            if (delta < this._minElapsedMS)
-            {
-                return;
+        else {
+            // Go from highest to lowest priority
+            while (current) {
+                if (listener.priority > current.priority) {
+                    listener.connect(previous);
+                    break;
+                }
+                previous = current;
+                current = current.next;
             }
-
-            this._lastFrame = currentTime - (delta % this._minElapsedMS);
+            // Not yet connected
+            if (!listener.previous) {
+                listener.connect(previous);
+            }
         }
-
-        this.deltaMS = elapsedMS;
-        this.deltaTime = this.deltaMS * settings.settings.TARGET_FPMS;
-
-        // Cache a local reference, in-case ticker is destroyed
-        // during the emit, we can still check for head.next
-        var head = this._head;
-
-        // Invoke listeners added to internal emitter
-        var listener = head.next;
-
-        while (listener)
-        {
-            listener = listener.emit(this.deltaTime);
+        this._startIfPossible();
+        return this;
+    };
+    /**
+     * Removes any handlers matching the function and context parameters.
+     * If no handlers are left after removing, then it cancels the animation frame.
+     *
+     * @param {Function} fn - The listener function to be removed
+     * @param {*} [context] - The listener context to be removed
+     * @returns {PIXI.Ticker} This instance of a ticker
+     */
+    Ticker.prototype.remove = function (fn, context) {
+        var listener = this._head.next;
+        while (listener) {
+            // We found a match, lets remove it
+            // no break to delete all possible matches
+            // incase a listener was added 2+ times
+            if (listener.match(fn, context)) {
+                listener = listener.destroy();
+            }
+            else {
+                listener = listener.next;
+            }
         }
-
-        if (!head.next)
-        {
+        if (!this._head.next) {
             this._cancelIfNeeded();
         }
-    }
-    else
-    {
-        this.deltaTime = this.deltaMS = this.elapsedMS = 0;
-    }
-
-    this.lastTime = currentTime;
-};
-
-/**
- * The frames per second at which this ticker is running.
- * The default is approximately 60 in most modern browsers.
- * **Note:** This does not factor in the value of
- * {@link PIXI.Ticker#speed}, which is specific
- * to scaling {@link PIXI.Ticker#deltaTime}.
- *
- * @member {number}
- * @readonly
- */
-prototypeAccessors.FPS.get = function ()
-{
-    return 1000 / this.elapsedMS;
-};
-
-/**
- * Manages the maximum amount of milliseconds allowed to
- * elapse between invoking {@link PIXI.Ticker#update}.
- * This value is used to cap {@link PIXI.Ticker#deltaTime},
- * but does not effect the measured value of {@link PIXI.Ticker#FPS}.
- * When setting this property it is clamped to a value between
- * `0` and `PIXI.settings.TARGET_FPMS * 1000`.
- *
- * @member {number}
- * @default 10
- */
-prototypeAccessors.minFPS.get = function ()
-{
-    return 1000 / this._maxElapsedMS;
-};
-
-prototypeAccessors.minFPS.set = function (fps) // eslint-disable-line require-jsdoc
-{
-    // Minimum must be below the maxFPS
-    var minFPS = Math.min(this.maxFPS, fps);
-
-    // Must be at least 0, but below 1 / settings.TARGET_FPMS
-    var minFPMS = Math.min(Math.max(0, minFPS) / 1000, settings.settings.TARGET_FPMS);
-
-    this._maxElapsedMS = 1 / minFPMS;
-};
-
-/**
- * Manages the minimum amount of milliseconds required to
- * elapse between invoking {@link PIXI.Ticker#update}.
- * This will effect the measured value of {@link PIXI.Ticker#FPS}.
- * If it is set to `0`, then there is no limit; PixiJS will render as many frames as it can.
- * Otherwise it will be at least `minFPS`
- *
- * @member {number}
- * @default 0
- */
-prototypeAccessors.maxFPS.get = function ()
-{
-    if (this._minElapsedMS)
-    {
-        return Math.round(1000 / this._minElapsedMS);
-    }
-
-    return 0;
-};
-
-prototypeAccessors.maxFPS.set = function (fps)
-{
-    if (fps === 0)
-    {
-        this._minElapsedMS = 0;
-    }
-    else
-    {
-        // Max must be at least the minFPS
-        var maxFPS = Math.max(this.minFPS, fps);
-
-        this._minElapsedMS = 1 / (maxFPS / 1000);
-    }
-};
-
-/**
- * The shared ticker instance used by {@link PIXI.AnimatedSprite} and by
- * {@link PIXI.VideoResource} to update animation frames / video textures.
- *
- * It may also be used by {@link PIXI.Application} if created with the `sharedTicker` option property set to true.
- *
- * The property {@link PIXI.Ticker#autoStart} is set to `true` for this instance.
- * Please follow the examples for usage, including how to opt-out of auto-starting the shared ticker.
- *
- * @example
- * let ticker = PIXI.Ticker.shared;
- * // Set this to prevent starting this ticker when listeners are added.
- * // By default this is true only for the PIXI.Ticker.shared instance.
- * ticker.autoStart = false;
- * // FYI, call this to ensure the ticker is stopped. It should be stopped
- * // if you have not attempted to render anything yet.
- * ticker.stop();
- * // Call this when you are ready for a running shared ticker.
- * ticker.start();
- *
- * @example
- * // You may use the shared ticker to render...
- * let renderer = PIXI.autoDetectRenderer();
- * let stage = new PIXI.Container();
- * document.body.appendChild(renderer.view);
- * ticker.add(function (time) {
- * renderer.render(stage);
- * });
- *
- * @example
- * // Or you can just update it manually.
- * ticker.autoStart = false;
- * ticker.stop();
- * function animate(time) {
- * ticker.update(time);
- * renderer.render(stage);
- * requestAnimationFrame(animate);
- * }
- * animate(performance.now());
- *
- * @member {PIXI.Ticker}
- * @static
- */
-staticAccessors.shared.get = function ()
-{
-    if (!Ticker._shared)
-    {
-        var shared = Ticker._shared = new Ticker();
-
-        shared.autoStart = true;
-        shared._protected = true;
-    }
-
-    return Ticker._shared;
-};
-
-/**
- * The system ticker instance used by {@link PIXI.interaction.InteractionManager} and by
- * {@link PIXI.BasePrepare} for core timing functionality that shouldn't usually need to be paused,
- * unlike the `shared` ticker which drives visual animations and rendering which may want to be paused.
- *
- * The property {@link PIXI.Ticker#autoStart} is set to `true` for this instance.
- *
- * @member {PIXI.Ticker}
- * @static
- */
-staticAccessors.system.get = function ()
-{
-    if (!Ticker._system)
-    {
-        var system = Ticker._system = new Ticker();
-
-        system.autoStart = true;
-        system._protected = true;
-    }
-
-    return Ticker._system;
-};
-
-Object.defineProperties( Ticker.prototype, prototypeAccessors );
-Object.defineProperties( Ticker, staticAccessors );
+        return this;
+    };
+    Object.defineProperty(Ticker.prototype, "count", {
+        /**
+         * Counts the number of listeners on this ticker.
+         *
+         * @returns {number} The number of listeners on this ticker
+         */
+        get: function () {
+            if (!this._head) {
+                return 0;
+            }
+            var count = 0;
+            var current = this._head;
+            while ((current = current.next)) {
+                count++;
+            }
+            return count;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Starts the ticker. If the ticker has listeners
+     * a new animation frame is requested at this point.
+     */
+    Ticker.prototype.start = function () {
+        if (!this.started) {
+            this.started = true;
+            this._requestIfNeeded();
+        }
+    };
+    /**
+     * Stops the ticker. If the ticker has requested
+     * an animation frame it is canceled at this point.
+     */
+    Ticker.prototype.stop = function () {
+        if (this.started) {
+            this.started = false;
+            this._cancelIfNeeded();
+        }
+    };
+    /**
+     * Destroy the ticker and don't use after this. Calling
+     * this method removes all references to internal events.
+     */
+    Ticker.prototype.destroy = function () {
+        if (!this._protected) {
+            this.stop();
+            var listener = this._head.next;
+            while (listener) {
+                listener = listener.destroy(true);
+            }
+            this._head.destroy();
+            this._head = null;
+        }
+    };
+    /**
+     * Triggers an update. An update entails setting the
+     * current {@link PIXI.Ticker#elapsedMS},
+     * the current {@link PIXI.Ticker#deltaTime},
+     * invoking all listeners with current deltaTime,
+     * and then finally setting {@link PIXI.Ticker#lastTime}
+     * with the value of currentTime that was provided.
+     * This method will be called automatically by animation
+     * frame callbacks if the ticker instance has been started
+     * and listeners are added.
+     *
+     * @param {number} [currentTime=performance.now()] - the current time of execution
+     */
+    Ticker.prototype.update = function (currentTime) {
+        if (currentTime === void 0) { currentTime = performance.now(); }
+        var elapsedMS;
+        // If the difference in time is zero or negative, we ignore most of the work done here.
+        // If there is no valid difference, then should be no reason to let anyone know about it.
+        // A zero delta, is exactly that, nothing should update.
+        //
+        // The difference in time can be negative, and no this does not mean time traveling.
+        // This can be the result of a race condition between when an animation frame is requested
+        // on the current JavaScript engine event loop, and when the ticker's start method is invoked
+        // (which invokes the internal _requestIfNeeded method). If a frame is requested before
+        // _requestIfNeeded is invoked, then the callback for the animation frame the ticker requests,
+        // can receive a time argument that can be less than the lastTime value that was set within
+        // _requestIfNeeded. This difference is in microseconds, but this is enough to cause problems.
+        //
+        // This check covers this browser engine timing issue, as well as if consumers pass an invalid
+        // currentTime value. This may happen if consumers opt-out of the autoStart, and update themselves.
+        if (currentTime > this.lastTime) {
+            // Save uncapped elapsedMS for measurement
+            elapsedMS = this.elapsedMS = currentTime - this.lastTime;
+            // cap the milliseconds elapsed used for deltaTime
+            if (elapsedMS > this._maxElapsedMS) {
+                elapsedMS = this._maxElapsedMS;
+            }
+            elapsedMS *= this.speed;
+            // If not enough time has passed, exit the function.
+            // Get ready for next frame by setting _lastFrame, but based on _minElapsedMS
+            // adjustment to ensure a relatively stable interval.
+            if (this._minElapsedMS) {
+                var delta = currentTime - this._lastFrame | 0;
+                if (delta < this._minElapsedMS) {
+                    return;
+                }
+                this._lastFrame = currentTime - (delta % this._minElapsedMS);
+            }
+            this.deltaMS = elapsedMS;
+            this.deltaTime = this.deltaMS * settings.settings.TARGET_FPMS;
+            // Cache a local reference, in-case ticker is destroyed
+            // during the emit, we can still check for head.next
+            var head = this._head;
+            // Invoke listeners added to internal emitter
+            var listener = head.next;
+            while (listener) {
+                listener = listener.emit(this.deltaTime);
+            }
+            if (!head.next) {
+                this._cancelIfNeeded();
+            }
+        }
+        else {
+            this.deltaTime = this.deltaMS = this.elapsedMS = 0;
+        }
+        this.lastTime = currentTime;
+    };
+    Object.defineProperty(Ticker.prototype, "FPS", {
+        /**
+         * The frames per second at which this ticker is running.
+         * The default is approximately 60 in most modern browsers.
+         * **Note:** This does not factor in the value of
+         * {@link PIXI.Ticker#speed}, which is specific
+         * to scaling {@link PIXI.Ticker#deltaTime}.
+         *
+         * @member {number}
+         * @readonly
+         */
+        get: function () {
+            return 1000 / this.elapsedMS;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Ticker.prototype, "minFPS", {
+        /**
+         * Manages the maximum amount of milliseconds allowed to
+         * elapse between invoking {@link PIXI.Ticker#update}.
+         * This value is used to cap {@link PIXI.Ticker#deltaTime},
+         * but does not effect the measured value of {@link PIXI.Ticker#FPS}.
+         * When setting this property it is clamped to a value between
+         * `0` and `PIXI.settings.TARGET_FPMS * 1000`.
+         *
+         * @member {number}
+         * @default 10
+         */
+        get: function () {
+            return 1000 / this._maxElapsedMS;
+        },
+        set: function (fps) {
+            // Minimum must be below the maxFPS
+            var minFPS = Math.min(this.maxFPS, fps);
+            // Must be at least 0, but below 1 / settings.TARGET_FPMS
+            var minFPMS = Math.min(Math.max(0, minFPS) / 1000, settings.settings.TARGET_FPMS);
+            this._maxElapsedMS = 1 / minFPMS;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Ticker.prototype, "maxFPS", {
+        /**
+         * Manages the minimum amount of milliseconds required to
+         * elapse between invoking {@link PIXI.Ticker#update}.
+         * This will effect the measured value of {@link PIXI.Ticker#FPS}.
+         * If it is set to `0`, then there is no limit; PixiJS will render as many frames as it can.
+         * Otherwise it will be at least `minFPS`
+         *
+         * @member {number}
+         * @default 0
+         */
+        get: function () {
+            if (this._minElapsedMS) {
+                return Math.round(1000 / this._minElapsedMS);
+            }
+            return 0;
+        },
+        set: function (fps) {
+            if (fps === 0) {
+                this._minElapsedMS = 0;
+            }
+            else {
+                // Max must be at least the minFPS
+                var maxFPS = Math.max(this.minFPS, fps);
+                this._minElapsedMS = 1 / (maxFPS / 1000);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Ticker, "shared", {
+        /**
+         * The shared ticker instance used by {@link PIXI.AnimatedSprite} and by
+         * {@link PIXI.VideoResource} to update animation frames / video textures.
+         *
+         * It may also be used by {@link PIXI.Application} if created with the `sharedTicker` option property set to true.
+         *
+         * The property {@link PIXI.Ticker#autoStart} is set to `true` for this instance.
+         * Please follow the examples for usage, including how to opt-out of auto-starting the shared ticker.
+         *
+         * @example
+         * let ticker = PIXI.Ticker.shared;
+         * // Set this to prevent starting this ticker when listeners are added.
+         * // By default this is true only for the PIXI.Ticker.shared instance.
+         * ticker.autoStart = false;
+         * // FYI, call this to ensure the ticker is stopped. It should be stopped
+         * // if you have not attempted to render anything yet.
+         * ticker.stop();
+         * // Call this when you are ready for a running shared ticker.
+         * ticker.start();
+         *
+         * @example
+         * // You may use the shared ticker to render...
+         * let renderer = PIXI.autoDetectRenderer();
+         * let stage = new PIXI.Container();
+         * document.body.appendChild(renderer.view);
+         * ticker.add(function (time) {
+         *     renderer.render(stage);
+         * });
+         *
+         * @example
+         * // Or you can just update it manually.
+         * ticker.autoStart = false;
+         * ticker.stop();
+         * function animate(time) {
+         *     ticker.update(time);
+         *     renderer.render(stage);
+         *     requestAnimationFrame(animate);
+         * }
+         * animate(performance.now());
+         *
+         * @member {PIXI.Ticker}
+         * @static
+         */
+        get: function () {
+            if (!Ticker._shared) {
+                var shared = Ticker._shared = new Ticker();
+                shared.autoStart = true;
+                shared._protected = true;
+            }
+            return Ticker._shared;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Ticker, "system", {
+        /**
+         * The system ticker instance used by {@link PIXI.interaction.InteractionManager} and by
+         * {@link PIXI.BasePrepare} for core timing functionality that shouldn't usually need to be paused,
+         * unlike the `shared` ticker which drives visual animations and rendering which may want to be paused.
+         *
+         * The property {@link PIXI.Ticker#autoStart} is set to `true` for this instance.
+         *
+         * @member {PIXI.Ticker}
+         * @static
+         */
+        get: function () {
+            if (!Ticker._system) {
+                var system = Ticker._system = new Ticker();
+                system.autoStart = true;
+                system._protected = true;
+            }
+            return Ticker._system;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Ticker;
+}());
 
 /**
  * Middleware for for Application Ticker.
@@ -41863,110 +43096,101 @@ Object.defineProperties( Ticker, staticAccessors );
  * @class
  * @memberof PIXI
  */
-var TickerPlugin = function TickerPlugin () {};
-
-TickerPlugin.init = function init (options)
-{
-        var this$1 = this;
-
-    // Set default
-    options = Object.assign({
-        autoStart: true,
-        sharedTicker: false,
-    }, options);
-
-    // Create ticker setter
-    Object.defineProperty(this, 'ticker',
-        {
-            set: function set(ticker)
-            {
-                if (this._ticker)
-                {
+var TickerPlugin = /** @class */ (function () {
+    function TickerPlugin() {
+    }
+    /**
+     * Initialize the plugin with scope of application instance
+     *
+     * @static
+     * @private
+     * @param {object} [options] - See application options
+     */
+    TickerPlugin.init = function (options) {
+        var _this = this;
+        // Set default
+        options = Object.assign({
+            autoStart: true,
+            sharedTicker: false,
+        }, options);
+        // Create ticker setter
+        Object.defineProperty(this, 'ticker', {
+            set: function (ticker) {
+                if (this._ticker) {
                     this._ticker.remove(this.render, this);
                 }
                 this._ticker = ticker;
-                if (ticker)
-                {
-                    ticker.add(this.render, this, UPDATE_PRIORITY.LOW);
+                if (ticker) {
+                    ticker.add(this.render, this, exports.UPDATE_PRIORITY.LOW);
                 }
             },
-            get: function get()
-            {
+            get: function () {
                 return this._ticker;
             },
         });
-
-    /**
-     * Convenience method for stopping the render.
-     *
-     * @method PIXI.Application#stop
-     */
-    this.stop = function () {
-        this$1._ticker.stop();
+        /**
+         * Convenience method for stopping the render.
+         *
+         * @method PIXI.Application#stop
+         */
+        this.stop = function () {
+            _this._ticker.stop();
+        };
+        /**
+         * Convenience method for starting the render.
+         *
+         * @method PIXI.Application#start
+         */
+        this.start = function () {
+            _this._ticker.start();
+        };
+        /**
+         * Internal reference to the ticker.
+         *
+         * @type {PIXI.Ticker}
+         * @name _ticker
+         * @memberof PIXI.Application#
+         * @private
+         */
+        this._ticker = null;
+        /**
+         * Ticker for doing render updates.
+         *
+         * @type {PIXI.Ticker}
+         * @name ticker
+         * @memberof PIXI.Application#
+         * @default PIXI.Ticker.shared
+         */
+        this.ticker = options.sharedTicker ? Ticker.shared : new Ticker();
+        // Start the rendering
+        if (options.autoStart) {
+            this.start();
+        }
     };
-
     /**
-     * Convenience method for starting the render.
+     * Clean up the ticker, scoped to application.
      *
-     * @method PIXI.Application#start
-     */
-    this.start = function () {
-        this$1._ticker.start();
-    };
-
-    /**
-     * Internal reference to the ticker.
-     *
-     * @type {PIXI.Ticker}
-     * @name _ticker
-     * @memberof PIXI.Application#
+     * @static
      * @private
      */
-    this._ticker = null;
-
-    /**
-     * Ticker for doing render updates.
-     *
-     * @type {PIXI.Ticker}
-     * @name ticker
-     * @memberof PIXI.Application#
-     * @default PIXI.Ticker.shared
-     */
-    this.ticker = options.sharedTicker ? Ticker.shared : new Ticker();
-
-    // Start the rendering
-    if (options.autoStart)
-    {
-        this.start();
-    }
-};
-
-/**
- * Clean up the ticker, scoped to application.
- *
- * @static
- * @private
- */
-TickerPlugin.destroy = function destroy ()
-{
-    if (this._ticker)
-    {
-        var oldTicker = this._ticker;
-
-        this.ticker = null;
-        oldTicker.destroy();
-    }
-};
+    TickerPlugin.destroy = function () {
+        if (this._ticker) {
+            var oldTicker = this._ticker;
+            this.ticker = null;
+            oldTicker.destroy();
+        }
+    };
+    return TickerPlugin;
+}());
 
 exports.Ticker = Ticker;
 exports.TickerPlugin = TickerPlugin;
-exports.UPDATE_PRIORITY = UPDATE_PRIORITY;
 
 
 },{"@pixi/settings":70}],78:[function(require,module,exports){
 /*!
- * @pixi/utils - v5.1.2
- * Compiled Sat, 24 Aug 2019 01:06:18 UTC
+ * @pixi/utils - v5.2.4
+ * Compiled Sun, 03 May 2020 22:38:52 UTC
  *
  * @pixi/utils is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
@@ -41980,7 +43204,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var settings = require('@pixi/settings');
 var eventemitter3 = _interopDefault(require('eventemitter3'));
 var earcut = _interopDefault(require('earcut'));
-var _url = _interopDefault(require('url'));
+var _url = require('url');
+var _url__default = _interopDefault(_url);
 var constants = require('@pixi/constants');
 
 /**
@@ -41994,7 +43219,6 @@ var constants = require('@pixi/constants');
  * @example `@2x`
  */
 settings.settings.RETINA_PREFIX = /@([0-9\.]+)x/;
-
 /**
  * Should the `failIfMajorPerformanceCaveat` flag be enabled as a context option used in the `isWebGLSupported` function.
  * For most scenarios this should be left as true, as otherwise the user may have a poor experience.
@@ -42009,19 +43233,16 @@ settings.settings.RETINA_PREFIX = /@([0-9\.]+)x/;
 settings.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = true;
 
 var saidHello = false;
-var VERSION = '5.1.2';
-
+var VERSION = '5.2.4';
 /**
  * Skips the hello message of renderers that are created after this is run.
  *
  * @function skipHello
  * @memberof PIXI.utils
  */
-function skipHello()
-{
+function skipHello() {
     saidHello = true;
 }
-
 /**
  * Logs out the version and renderer information for this running instance of PIXI.
  * If you don't want to see this message you can run `PIXI.utils.skipHello()` before
@@ -42032,17 +43253,14 @@ function skipHello()
  * @memberof PIXI.utils
  * @param {string} type - The string renderer type to log.
  */
-function sayHello(type)
-{
-    if (saidHello)
-    {
+function sayHello(type) {
+    var _a;
+    if (saidHello) {
         return;
     }
-
-    if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
-    {
+    if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
         var args = [
-            ("\n %c %c %c PixiJS " + VERSION + " - ✰ " + type + " ✰  %c  %c  http://www.pixijs.com/  %c %c ♥%c♥%c♥ \n\n"),
+            "\n %c %c %c PixiJS " + VERSION + " - \u2730 " + type + " \u2730  %c  %c  http://www.pixijs.com/  %c %c \u2665%c\u2665%c\u2665 \n\n",
             'background: #ff66a5; padding:5px 0;',
             'background: #ff66a5; padding:5px 0;',
             'color: #ff66a5; background: #030307; padding:5px 0;',
@@ -42052,19 +43270,15 @@ function sayHello(type)
             'color: #ff2424; background: #fff; padding:5px 0;',
             'color: #ff2424; background: #fff; padding:5px 0;',
             'color: #ff2424; background: #fff; padding:5px 0;' ];
-
-        window.console.log.apply(console, args);
+        (_a = window.console).log.apply(_a, args);
     }
-    else if (window.console)
-    {
-        window.console.log(("PixiJS " + VERSION + " - " + type + " - http://www.pixijs.com/"));
+    else if (window.console) {
+        window.console.log("PixiJS " + VERSION + " - " + type + " - http://www.pixijs.com/");
     }
-
     saidHello = true;
 }
 
 var supported;
-
 /**
  * Helper for checking for WebGL support.
  *
@@ -42072,51 +43286,35 @@ var supported;
  * @function isWebGLSupported
  * @return {boolean} Is WebGL supported.
  */
-function isWebGLSupported()
-{
-    if (typeof supported === 'undefined')
-    {
-        supported = (function supported()
-        {
+function isWebGLSupported() {
+    if (typeof supported === 'undefined') {
+        supported = (function supported() {
             var contextOptions = {
                 stencil: true,
                 failIfMajorPerformanceCaveat: settings.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT,
             };
-
-            try
-            {
-                if (!window.WebGLRenderingContext)
-                {
+            try {
+                if (!window.WebGLRenderingContext) {
                     return false;
                 }
-
                 var canvas = document.createElement('canvas');
-                var gl = canvas.getContext('webgl', contextOptions)
-                    || canvas.getContext('experimental-webgl', contextOptions);
-
+                var gl = (canvas.getContext('webgl', contextOptions)
+                    || canvas.getContext('experimental-webgl', contextOptions));
                 var success = !!(gl && gl.getContextAttributes().stencil);
-
-                if (gl)
-                {
+                if (gl) {
                     var loseContext = gl.getExtension('WEBGL_lose_context');
-
-                    if (loseContext)
-                    {
+                    if (loseContext) {
                         loseContext.loseContext();
                     }
                 }
-
                 gl = null;
-
                 return success;
             }
-            catch (e)
-            {
+            catch (e) {
                 return false;
             }
         })();
     }
-
     return supported;
 }
 
@@ -42131,17 +43329,13 @@ function isWebGLSupported()
  * @param  {number[]} [out=[]] If supplied, this array will be used rather than returning a new one
  * @return {number[]} An array representing the [R, G, B] of the color where all values are floats.
  */
-function hex2rgb(hex, out)
-{
+function hex2rgb(hex, out) {
     out = out || [];
-
     out[0] = ((hex >> 16) & 0xFF) / 255;
     out[1] = ((hex >> 8) & 0xFF) / 255;
     out[2] = (hex & 0xFF) / 255;
-
     return out;
 }
-
 /**
  * Converts a hexadecimal color number to a string.
  *
@@ -42152,14 +43346,11 @@ function hex2rgb(hex, out)
  * @param {number} hex - Number in hex (e.g., `0xffffff`)
  * @return {string} The string color (e.g., `"#ffffff"`).
  */
-function hex2string(hex)
-{
-    hex = hex.toString(16);
-    hex = '000000'.substr(0, 6 - hex.length) + hex;
-
-    return ("#" + hex);
+function hex2string(hex) {
+    var hexString = hex.toString(16);
+    hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
+    return "#" + hexString;
 }
-
 /**
  * Converts a hexadecimal string to a hexadecimal color number.
  *
@@ -42170,16 +43361,12 @@ function hex2string(hex)
  * @param {string} The string color (e.g., `"#ffffff"`)
  * @return {number} Number in hexadecimal.
  */
-function string2hex(string)
-{
-    if (typeof string === 'string' && string[0] === '#')
-    {
+function string2hex(string) {
+    if (typeof string === 'string' && string[0] === '#') {
         string = string.substr(1);
     }
-
     return parseInt(string, 16);
 }
-
 /**
  * Converts a color as an [R, G, B] array of normalized floats to a hexadecimal number.
  *
@@ -42190,8 +43377,7 @@ function string2hex(string)
  * @param {number[]} rgb - Array of numbers where all values are normalized floats from 0.0 to 1.0.
  * @return {number} Number in hexadecimal.
  */
-function rgb2hex(rgb)
-{
+function rgb2hex(rgb) {
     return (((rgb[0] * 255) << 16) + ((rgb[1] * 255) << 8) + (rgb[2] * 255 | 0));
 }
 
@@ -42201,36 +43387,26 @@ function rgb2hex(rgb)
  * @memberof PIXI.utils
  * @function mapPremultipliedBlendModes
  * @private
- * @param {Array<number[]>} [array] - The array to output into.
  * @return {Array<number[]>} Mapped modes.
  */
-function mapPremultipliedBlendModes()
-{
+function mapPremultipliedBlendModes() {
     var pm = [];
     var npm = [];
-
-    for (var i = 0; i < 32; i++)
-    {
+    for (var i = 0; i < 32; i++) {
         pm[i] = i;
         npm[i] = i;
     }
-
     pm[constants.BLEND_MODES.NORMAL_NPM] = constants.BLEND_MODES.NORMAL;
     pm[constants.BLEND_MODES.ADD_NPM] = constants.BLEND_MODES.ADD;
     pm[constants.BLEND_MODES.SCREEN_NPM] = constants.BLEND_MODES.SCREEN;
-
     npm[constants.BLEND_MODES.NORMAL] = constants.BLEND_MODES.NORMAL_NPM;
     npm[constants.BLEND_MODES.ADD] = constants.BLEND_MODES.ADD_NPM;
     npm[constants.BLEND_MODES.SCREEN] = constants.BLEND_MODES.SCREEN_NPM;
-
     var array = [];
-
     array.push(npm);
     array.push(pm);
-
     return array;
 }
-
 /**
  * maps premultiply flag and blendMode to adjusted blendMode
  * @memberof PIXI.utils
@@ -42238,7 +43414,6 @@ function mapPremultipliedBlendModes()
  * @type {Array<number[]>}
  */
 var premultiplyBlendMode = mapPremultipliedBlendModes();
-
 /**
  * changes blendMode according to texture format
  *
@@ -42248,11 +43423,9 @@ var premultiplyBlendMode = mapPremultipliedBlendModes();
  * @param {boolean} premultiplied  whether source is premultiplied
  * @returns {number} true blend mode for this texture
  */
-function correctBlendMode(blendMode, premultiplied)
-{
+function correctBlendMode(blendMode, premultiplied) {
     return premultiplyBlendMode[premultiplied ? 1 : 0][blendMode];
 }
-
 /**
  * combines rgb and alpha to out array
  *
@@ -42264,26 +43437,21 @@ function correctBlendMode(blendMode, premultiplied)
  * @param {boolean} [premultiply=true] do premultiply it
  * @returns {Float32Array} vec4 rgba
  */
-function premultiplyRgba(rgb, alpha, out, premultiply)
-{
+function premultiplyRgba(rgb, alpha, out, premultiply) {
     out = out || new Float32Array(4);
-    if (premultiply || premultiply === undefined)
-    {
+    if (premultiply || premultiply === undefined) {
         out[0] = rgb[0] * alpha;
         out[1] = rgb[1] * alpha;
         out[2] = rgb[2] * alpha;
     }
-    else
-    {
+    else {
         out[0] = rgb[0];
         out[1] = rgb[1];
         out[2] = rgb[2];
     }
     out[3] = alpha;
-
     return out;
 }
-
 /**
  * premultiplies tint
  *
@@ -42293,27 +43461,21 @@ function premultiplyRgba(rgb, alpha, out, premultiply)
  * @param {number} alpha floating point alpha (0.0-1.0)
  * @returns {number} tint multiplied by alpha
  */
-function premultiplyTint(tint, alpha)
-{
-    if (alpha === 1.0)
-    {
+function premultiplyTint(tint, alpha) {
+    if (alpha === 1.0) {
         return (alpha * 255 << 24) + tint;
     }
-    if (alpha === 0.0)
-    {
+    if (alpha === 0.0) {
         return 0;
     }
     var R = ((tint >> 16) & 0xFF);
     var G = ((tint >> 8) & 0xFF);
     var B = (tint & 0xFF);
-
     R = ((R * alpha) + 0.5) | 0;
     G = ((G * alpha) + 0.5) | 0;
     B = ((B * alpha) + 0.5) | 0;
-
     return (alpha * 255 << 24) + (R << 16) + (G << 8) + B;
 }
-
 /**
  * converts integer tint and float alpha to vec4 form, premultiplies by default
  *
@@ -42325,20 +43487,17 @@ function premultiplyTint(tint, alpha)
  * @param {boolean} [premultiply=true] do premultiply it
  * @returns {Float32Array} vec4 rgba
  */
-function premultiplyTintToRgba(tint, alpha, out, premultiply)
-{
+function premultiplyTintToRgba(tint, alpha, out, premultiply) {
     out = out || new Float32Array(4);
     out[0] = ((tint >> 16) & 0xFF) / 255.0;
     out[1] = ((tint >> 8) & 0xFF) / 255.0;
     out[2] = (tint & 0xFF) / 255.0;
-    if (premultiply || premultiply === undefined)
-    {
+    if (premultiply || premultiply === undefined) {
         out[0] *= alpha;
         out[1] *= alpha;
         out[2] *= alpha;
     }
     out[3] = alpha;
-
     return out;
 }
 
@@ -42351,23 +43510,16 @@ function premultiplyTintToRgba(tint, alpha, out, premultiply)
  * @param {Uint16Array|Uint32Array} [outBuffer] - Buffer for output, length has to be `6 * size`
  * @return {Uint16Array|Uint32Array} - Resulting index buffer
  */
-function createIndicesForQuads(size, outBuffer)
-{
-    if ( outBuffer === void 0 ) outBuffer = null;
-
+function createIndicesForQuads(size, outBuffer) {
+    if (outBuffer === void 0) { outBuffer = null; }
     // the total number of indices in our array, there are 6 points per quad.
     var totalIndices = size * 6;
-
     outBuffer = outBuffer || new Uint16Array(totalIndices);
-
-    if (outBuffer.length !== totalIndices)
-    {
-        throw new Error(("Out buffer length is incorrect, got " + (outBuffer.length) + " and expected " + totalIndices));
+    if (outBuffer.length !== totalIndices) {
+        throw new Error("Out buffer length is incorrect, got " + outBuffer.length + " and expected " + totalIndices);
     }
-
     // fill the indices with the quads to draw
-    for (var i = 0, j = 0; i < totalIndices; i += 6, j += 4)
-    {
+    for (var i = 0, j = 0; i < totalIndices; i += 6, j += 4) {
         outBuffer[i + 0] = j + 0;
         outBuffer[i + 1] = j + 1;
         outBuffer[i + 2] = j + 2;
@@ -42375,8 +43527,119 @@ function createIndicesForQuads(size, outBuffer)
         outBuffer[i + 4] = j + 2;
         outBuffer[i + 5] = j + 3;
     }
-
     return outBuffer;
+}
+
+function getBufferType(array) {
+    if (array.BYTES_PER_ELEMENT === 4) {
+        if (array instanceof Float32Array) {
+            return 'Float32Array';
+        }
+        else if (array instanceof Uint32Array) {
+            return 'Uint32Array';
+        }
+        return 'Int32Array';
+    }
+    else if (array.BYTES_PER_ELEMENT === 2) {
+        if (array instanceof Uint16Array) {
+            return 'Uint16Array';
+        }
+    }
+    else if (array.BYTES_PER_ELEMENT === 1) {
+        if (array instanceof Uint8Array) {
+            return 'Uint8Array';
+        }
+    }
+    // TODO map out the rest of the array elements!
+    return null;
+}
+
+/* eslint-disable object-shorthand */
+var map = { Float32Array: Float32Array, Uint32Array: Uint32Array, Int32Array: Int32Array, Uint8Array: Uint8Array };
+function interleaveTypedArrays(arrays, sizes) {
+    var outSize = 0;
+    var stride = 0;
+    var views = {};
+    for (var i = 0; i < arrays.length; i++) {
+        stride += sizes[i];
+        outSize += arrays[i].length;
+    }
+    var buffer = new ArrayBuffer(outSize * 4);
+    var out = null;
+    var littleOffset = 0;
+    for (var i = 0; i < arrays.length; i++) {
+        var size = sizes[i];
+        var array = arrays[i];
+        /*
+        @todo This is unsafe casting but consistent with how the code worked previously. Should it stay this way
+              or should and `getBufferTypeUnsafe` function be exposed that throws an Error if unsupported type is passed?
+         */
+        var type = getBufferType(array);
+        if (!views[type]) {
+            views[type] = new map[type](buffer);
+        }
+        out = views[type];
+        for (var j = 0; j < array.length; j++) {
+            var indexStart = ((j / size | 0) * stride) + littleOffset;
+            var index = j % size;
+            out[indexStart + index] = array[j];
+        }
+        littleOffset += size;
+    }
+    return new Float32Array(buffer);
+}
+
+// Taken from the bit-twiddle package
+/**
+ * Rounds to next power of two.
+ *
+ * @function nextPow2
+ * @memberof PIXI.utils
+ * @param {number} v input value
+ * @return {number}
+ */
+function nextPow2(v) {
+    v += v === 0 ? 1 : 0;
+    --v;
+    v |= v >>> 1;
+    v |= v >>> 2;
+    v |= v >>> 4;
+    v |= v >>> 8;
+    v |= v >>> 16;
+    return v + 1;
+}
+/**
+ * Checks if a number is a power of two.
+ *
+ * @function isPow2
+ * @memberof PIXI.utils
+ * @param {number} v input value
+ * @return {boolean} `true` if value is power of two
+ */
+function isPow2(v) {
+    return !(v & (v - 1)) && (!!v);
+}
+/**
+ * Computes ceil of log base 2
+ *
+ * @function log2
+ * @memberof PIXI.utils
+ * @param {number} v input value
+ * @return {number} logarithm base 2
+ */
+function log2(v) {
+    var r = (v > 0xFFFF ? 1 : 0) << 4;
+    v >>>= r;
+    var shift = (v > 0xFF ? 1 : 0) << 3;
+    v >>>= shift;
+    r |= shift;
+    shift = (v > 0xF ? 1 : 0) << 2;
+    v >>>= shift;
+    r |= shift;
+    shift = (v > 0x3 ? 1 : 0) << 1;
+    v >>>= shift;
+    r |= shift;
+    return r | (v >> 1);
 }
 
 /**
@@ -42388,40 +43651,18 @@ function createIndicesForQuads(size, outBuffer)
  * @param {number} startIdx starting index
  * @param {number} removeCount how many to remove
  */
-function removeItems(arr, startIdx, removeCount)
-{
+function removeItems(arr, startIdx, removeCount) {
     var length = arr.length;
     var i;
-
-    if (startIdx >= length || removeCount === 0)
-    {
+    if (startIdx >= length || removeCount === 0) {
         return;
     }
-
     removeCount = (startIdx + removeCount > length ? length - startIdx : removeCount);
-
     var len = length - removeCount;
-
-    for (i = startIdx; i < len; ++i)
-    {
+    for (i = startIdx; i < len; ++i) {
         arr[i] = arr[i + removeCount];
     }
-
     arr.length = len;
-}
-
-var nextUid = 0;
-
-/**
- * Gets the next unique identifier
- *
- * @memberof PIXI.utils
- * @function uid
- * @return {number} The next unique identifier to use.
- */
-function uid()
-{
-    return ++nextUid;
 }
 
 /**
@@ -42432,72 +43673,65 @@ function uid()
  * @param {number} n - the number to check the sign of
  * @returns {number} 0 if `n` is 0, -1 if `n` is negative, 1 if `n` is positive
  */
-function sign(n)
-{
-    if (n === 0) { return 0; }
-
+function sign(n) {
+    if (n === 0)
+        { return 0; }
     return n < 0 ? -1 : 1;
 }
 
-// Taken from the bit-twiddle package
-
+var nextUid = 0;
 /**
- * Rounds to next power of two.
+ * Gets the next unique identifier
  *
- * @function nextPow2
  * @memberof PIXI.utils
- * @param {number} v input value
- * @return {number}
+ * @function uid
+ * @return {number} The next unique identifier to use.
  */
-function nextPow2(v)
-{
-    v += v === 0;
-    --v;
-    v |= v >>> 1;
-    v |= v >>> 2;
-    v |= v >>> 4;
-    v |= v >>> 8;
-    v |= v >>> 16;
-
-    return v + 1;
+function uid() {
+    return ++nextUid;
 }
 
+// A map of warning messages already fired
+var warnings = {};
 /**
- * Checks if a number is a power of two.
+ * Helper for warning developers about deprecated features & settings.
+ * A stack track for warnings is given; useful for tracking-down where
+ * deprecated methods/properties/classes are being used within the code.
  *
- * @function isPow2
  * @memberof PIXI.utils
- * @param {number} v input value
- * @return {boolean} `true` if value is power of two
+ * @function deprecation
+ * @param {string} version - The version where the feature became deprecated
+ * @param {string} message - Message should include what is deprecated, where, and the new solution
+ * @param {number} [ignoreDepth=3] - The number of steps to ignore at the top of the error stack
+ *        this is mostly to ignore internal deprecation calls.
  */
-function isPow2(v)
-{
-    return !(v & (v - 1)) && (!!v);
-}
-
-/**
- * Computes ceil of log base 2
- *
- * @function log2
- * @memberof PIXI.utils
- * @param {number} v input value
- * @return {number} logarithm base 2
- */
-function log2(v)
-{
-    var r = (v > 0xFFFF) << 4;
-
-    v >>>= r;
-
-    var shift = (v > 0xFF) << 3;
-
-    v >>>= shift; r |= shift;
-    shift = (v > 0xF) << 2;
-    v >>>= shift; r |= shift;
-    shift = (v > 0x3) << 1;
-    v >>>= shift; r |= shift;
-
-    return r | (v >> 1);
+function deprecation(version, message, ignoreDepth) {
+    if (ignoreDepth === void 0) { ignoreDepth = 3; }
+    // Ignore duplicat
+    if (warnings[message]) {
+        return;
+    }
+    /* eslint-disable no-console */
+    var stack = new Error().stack;
+    // Handle IE < 10 and Safari < 6
+    if (typeof stack === 'undefined') {
+        console.warn('PixiJS Deprecation Warning: ', message + "\nDeprecated since v" + version);
+    }
+    else {
+        // chop off the stack trace which includes PixiJS internal calls
+        stack = stack.split('\n').splice(ignoreDepth).join('\n');
+        if (console.groupCollapsed) {
+            console.groupCollapsed('%cPixiJS Deprecation Warning: %c%s', 'color:#614108;background:#fffbe6', 'font-weight:normal;color:#614108;background:#fffbe6', message + "\nDeprecated since v" + version);
+            console.warn(stack);
+            console.groupEnd();
+        }
+        else {
+            console.warn('PixiJS Deprecation Warning: ', message + "\nDeprecated since v" + version);
+            console.warn(stack);
+        }
+    }
+    /* eslint-enable no-console */
+    warnings[message] = true;
 }
 
 /**
@@ -42509,7 +43743,6 @@ function log2(v)
  * @type {Object}
  */
 var ProgramCache = {};
-
 /**
  * @todo Describe property usage
  *
@@ -42519,7 +43752,6 @@ var ProgramCache = {};
  * @type {Object}
  */
 var TextureCache = Object.create(null);
-
 /**
  * @todo Describe property usage
  *
@@ -42528,7 +43760,6 @@ var TextureCache = Object.create(null);
  * @memberof PIXI.utils
  * @type {Object}
  */
-
 var BaseTextureCache = Object.create(null);
 /**
  * Destroys all texture in the cache
@@ -42536,39 +43767,118 @@ var BaseTextureCache = Object.create(null);
  * @memberof PIXI.utils
  * @function destroyTextureCache
  */
-function destroyTextureCache()
-{
+function destroyTextureCache() {
     var key;
-
-    for (key in TextureCache)
-    {
+    for (key in TextureCache) {
         TextureCache[key].destroy();
     }
-    for (key in BaseTextureCache)
-    {
+    for (key in BaseTextureCache) {
         BaseTextureCache[key].destroy();
     }
 }
-
 /**
  * Removes all textures from cache, but does not destroy them
  *
  * @memberof PIXI.utils
  * @function clearTextureCache
  */
-function clearTextureCache()
-{
+function clearTextureCache() {
     var key;
-
-    for (key in TextureCache)
-    {
+    for (key in TextureCache) {
         delete TextureCache[key];
     }
-    for (key in BaseTextureCache)
-    {
+    for (key in BaseTextureCache) {
         delete BaseTextureCache[key];
     }
 }
+
+/**
+ * Creates a Canvas element of the given size to be used as a target for rendering to.
+ *
+ * @class
+ * @memberof PIXI.utils
+ */
+var CanvasRenderTarget = /** @class */ (function () {
+    /**
+     * @param {number} width - the width for the newly created canvas
+     * @param {number} height - the height for the newly created canvas
+     * @param {number} [resolution=1] - The resolution / device pixel ratio of the canvas
+     */
+    function CanvasRenderTarget(width, height, resolution) {
+        /**
+         * The Canvas object that belongs to this CanvasRenderTarget.
+         *
+         * @member {HTMLCanvasElement}
+         */
+        this.canvas = document.createElement('canvas');
+        /**
+         * A CanvasRenderingContext2D object representing a two-dimensional rendering context.
+         *
+         * @member {CanvasRenderingContext2D}
+         */
+        this.context = this.canvas.getContext('2d');
+        this.resolution = resolution || settings.settings.RESOLUTION;
+        this.resize(width, height);
+    }
+    /**
+     * Clears the canvas that was created by the CanvasRenderTarget class.
+     *
+     * @private
+     */
+    CanvasRenderTarget.prototype.clear = function () {
+        this.context.setTransform(1, 0, 0, 1, 0, 0);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    };
+    /**
+     * Resizes the canvas to the specified width and height.
+     *
+     * @param {number} width - the new width of the canvas
+     * @param {number} height - the new height of the canvas
+     */
+    CanvasRenderTarget.prototype.resize = function (width, height) {
+        this.canvas.width = width * this.resolution;
+        this.canvas.height = height * this.resolution;
+    };
+    /**
+     * Destroys this canvas.
+     *
+     */
+    CanvasRenderTarget.prototype.destroy = function () {
+        this.context = null;
+        this.canvas = null;
+    };
+    Object.defineProperty(CanvasRenderTarget.prototype, "width", {
+        /**
+         * The width of the canvas buffer in pixels.
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.canvas.width;
+        },
+        set: function (val) {
+            this.canvas.width = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CanvasRenderTarget.prototype, "height", {
+        /**
+         * The height of the canvas buffer in pixels.
+         *
+         * @member {number}
+         */
+        get: function () {
+            return this.canvas.height;
+        },
+        set: function (val) {
+            this.canvas.height = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return CanvasRenderTarget;
+}());
 
 /**
  * Trim transparent borders from a canvas
@@ -42578,18 +43888,14 @@ function clearTextureCache()
  * @param {HTMLCanvasElement} canvas - the canvas to trim
  * @returns {object} Trim data
  */
-function trimCanvas(canvas)
-{
+function trimCanvas(canvas) {
     // https://gist.github.com/remy/784508
-
     var width = canvas.width;
     var height = canvas.height;
-
     var context = canvas.getContext('2d');
     var imageData = context.getImageData(0, 0, width, height);
     var pixels = imageData.data;
     var len = pixels.length;
-
     var bound = {
         top: null,
         left: null,
@@ -42600,155 +43906,44 @@ function trimCanvas(canvas)
     var i;
     var x;
     var y;
-
-    for (i = 0; i < len; i += 4)
-    {
-        if (pixels[i + 3] !== 0)
-        {
+    for (i = 0; i < len; i += 4) {
+        if (pixels[i + 3] !== 0) {
             x = (i / 4) % width;
             y = ~~((i / 4) / width);
-
-            if (bound.top === null)
-            {
+            if (bound.top === null) {
                 bound.top = y;
             }
-
-            if (bound.left === null)
-            {
+            if (bound.left === null) {
                 bound.left = x;
             }
-            else if (x < bound.left)
-            {
+            else if (x < bound.left) {
                 bound.left = x;
             }
-
-            if (bound.right === null)
-            {
+            if (bound.right === null) {
                 bound.right = x + 1;
             }
-            else if (bound.right < x)
-            {
+            else if (bound.right < x) {
                 bound.right = x + 1;
             }
-
-            if (bound.bottom === null)
-            {
+            if (bound.bottom === null) {
                 bound.bottom = y;
             }
-            else if (bound.bottom < y)
-            {
+            else if (bound.bottom < y) {
                 bound.bottom = y;
             }
         }
     }
-
-    if (bound.top !== null)
-    {
+    if (bound.top !== null) {
         width = bound.right - bound.left;
         height = bound.bottom - bound.top + 1;
         data = context.getImageData(bound.left, bound.top, width, height);
     }
-
     return {
         height: height,
         width: width,
         data: data,
     };
 }
-
-/**
- * Creates a Canvas element of the given size to be used as a target for rendering to.
- *
- * @class
- * @memberof PIXI.utils
- */
-var CanvasRenderTarget = function CanvasRenderTarget(width, height, resolution)
-{
-    /**
-     * The Canvas object that belongs to this CanvasRenderTarget.
-     *
-     * @member {HTMLCanvasElement}
-     */
-    this.canvas = document.createElement('canvas');
-
-    /**
-     * A CanvasRenderingContext2D object representing a two-dimensional rendering context.
-     *
-     * @member {CanvasRenderingContext2D}
-     */
-    this.context = this.canvas.getContext('2d');
-
-    this.resolution = resolution || settings.settings.RESOLUTION;
-
-    this.resize(width, height);
-};
-
-var prototypeAccessors = { width: { configurable: true },height: { configurable: true } };
-
-/**
- * Clears the canvas that was created by the CanvasRenderTarget class.
- *
- * @private
- */
-CanvasRenderTarget.prototype.clear = function clear ()
-{
-    this.context.setTransform(1, 0, 0, 1, 0, 0);
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-};
-
-/**
- * Resizes the canvas to the specified width and height.
- *
- * @param {number} width - the new width of the canvas
- * @param {number} height - the new height of the canvas
- */
-CanvasRenderTarget.prototype.resize = function resize (width, height)
-{
-    this.canvas.width = width * this.resolution;
-    this.canvas.height = height * this.resolution;
-};
-
-/**
- * Destroys this canvas.
- *
- */
-CanvasRenderTarget.prototype.destroy = function destroy ()
-{
-    this.context = null;
-    this.canvas = null;
-};
-
-/**
- * The width of the canvas buffer in pixels.
- *
- * @member {number}
- */
-prototypeAccessors.width.get = function ()
-{
-    return this.canvas.width;
-};
-
-prototypeAccessors.width.set = function (val) // eslint-disable-line require-jsdoc
-{
-    this.canvas.width = val;
-};
-
-/**
- * The height of the canvas buffer in pixels.
- *
- * @member {number}
- */
-prototypeAccessors.height.get = function ()
-{
-    return this.canvas.height;
-};
-
-prototypeAccessors.height.set = function (val) // eslint-disable-line require-jsdoc
-{
-    this.canvas.height = val;
-};
-
-Object.defineProperties( CanvasRenderTarget.prototype, prototypeAccessors );
 
 /**
  * Regexp for data URI.
@@ -42762,16 +43957,33 @@ Object.defineProperties( CanvasRenderTarget.prototype, prototypeAccessors );
 var DATA_URI = /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(base64))?,(.*)/i;
 
 /**
- * Typedef for decomposeDataUri return object.
- *
  * @memberof PIXI.utils
- * @typedef {object} DecomposedDataUri
- * @property {string} mediaType Media type, eg. `image`
- * @property {string} subType Sub type, eg. `png`
- * @property {string} encoding Data encoding, eg. `base64`
- * @property {string} data The actual data
+ * @interface DecomposedDataUri
  */
-
+/**
+ * type, eg. `image`
+ * @memberof PIXI.utils.DecomposedDataUri#
+ * @member {string} mediaType
+ */
+/**
+ * Sub type, eg. `png`
+ * @memberof PIXI.utils.DecomposedDataUri#
+ * @member {string} subType
+ */
+/**
+ * @memberof PIXI.utils.DecomposedDataUri#
+ * @member {string} charset
+ */
+/**
+ * Data encoding, eg. `base64`
+ * @memberof PIXI.utils.DecomposedDataUri#
+ * @member {string} encoding
+ */
+/**
+ * The actual data
+ * @memberof PIXI.utils.DecomposedDataUri#
+ * @member {string} data
+ */
 /**
  * Split a data URI into components. Returns undefined if
  * parameter `dataUri` is not a valid data URI.
@@ -42781,12 +43993,9 @@ var DATA_URI = /^\s*data:(?:([\w-]+)\/([\w+.-]+))?(?:;charset=([\w-]+))?(?:;(bas
  * @param {string} dataUri - the data URI to check
  * @return {PIXI.utils.DecomposedDataUri|undefined} The decomposed data uri or undefined
  */
-function decomposeDataUri(dataUri)
-{
+function decomposeDataUri(dataUri) {
     var dataUriMatch = DATA_URI.exec(dataUri);
-
-    if (dataUriMatch)
-    {
+    if (dataUriMatch) {
         return {
             mediaType: dataUriMatch[1] ? dataUriMatch[1].toLowerCase() : undefined,
             subType: dataUriMatch[2] ? dataUriMatch[2].toLowerCase() : undefined,
@@ -42795,12 +44004,10 @@ function decomposeDataUri(dataUri)
             data: dataUriMatch[5],
         };
     }
-
     return undefined;
 }
 
 var tempAnchor;
-
 /**
  * Sets the `crossOrigin` property for this resource based on if the url
  * for this resource is cross-origin. If crossOrigin was manually set, this
@@ -42812,38 +44019,27 @@ var tempAnchor;
  * @param {object} [loc=window.location] - The location object to test against.
  * @return {string} The crossOrigin value to use (or empty string for none).
  */
-function determineCrossOrigin(url, loc)
-{
-    if ( loc === void 0 ) loc = window.location;
-
+function determineCrossOrigin(url, loc) {
+    if (loc === void 0) { loc = window.location; }
     // data: and javascript: urls are considered same-origin
-    if (url.indexOf('data:') === 0)
-    {
+    if (url.indexOf('data:') === 0) {
         return '';
     }
-
     // default is window.location
     loc = loc || window.location;
-
-    if (!tempAnchor)
-    {
+    if (!tempAnchor) {
         tempAnchor = document.createElement('a');
     }
-
     // let the browser determine the full href for the url of this resource and then
     // parse with the node url lib, we can't use the properties of the anchor element
     // because they don't work in IE9 :(
     tempAnchor.href = url;
-    url = _url.parse(tempAnchor.href);
-
-    var samePort = (!url.port && loc.port === '') || (url.port === loc.port);
-
+    var parsedUrl = _url.parse(tempAnchor.href);
+    var samePort = (!parsedUrl.port && loc.port === '') || (parsedUrl.port === loc.port);
     // if cross origin
-    if (url.hostname !== loc.hostname || !samePort || url.protocol !== loc.protocol)
-    {
+    if (parsedUrl.hostname !== loc.hostname || !samePort || parsedUrl.protocol !== loc.protocol) {
         return 'anonymous';
     }
-
     return '';
 }
 
@@ -42857,76 +44053,12 @@ function determineCrossOrigin(url, loc)
  * @param {number} [defaultValue=1] - the defaultValue if no filename prefix is set.
  * @return {number} resolution / device pixel ratio of an asset
  */
-function getResolutionOfUrl(url, defaultValue)
-{
+function getResolutionOfUrl(url, defaultValue) {
     var resolution = settings.settings.RETINA_PREFIX.exec(url);
-
-    if (resolution)
-    {
+    if (resolution) {
         return parseFloat(resolution[1]);
     }
-
     return defaultValue !== undefined ? defaultValue : 1;
-}
-
-// A map of warning messages already fired
-var warnings = {};
-
-/**
- * Helper for warning developers about deprecated features & settings.
- * A stack track for warnings is given; useful for tracking-down where
- * deprecated methods/properties/classes are being used within the code.
- *
- * @memberof PIXI.utils
- * @function deprecation
- * @param {string} version - The version where the feature became deprecated
- * @param {string} message - Message should include what is deprecated, where, and the new solution
- * @param {number} [ignoreDepth=3] - The number of steps to ignore at the top of the error stack
- *        this is mostly to ignore internal deprecation calls.
- */
-function deprecation(version, message, ignoreDepth)
-{
-    if ( ignoreDepth === void 0 ) ignoreDepth = 3;
-
-    // Ignore duplicat
-    if (warnings[message])
-    {
-        return;
-    }
-
-    /* eslint-disable no-console */
-    var stack = new Error().stack;
-
-    // Handle IE < 10 and Safari < 6
-    if (typeof stack === 'undefined')
-    {
-        console.warn('PixiJS Deprecation Warning: ', (message + "\nDeprecated since v" + version));
-    }
-    else
-    {
-        // chop off the stack trace which includes PixiJS internal calls
-        stack = stack.split('\n').splice(ignoreDepth).join('\n');
-
-        if (console.groupCollapsed)
-        {
-            console.groupCollapsed(
-                '%cPixiJS Deprecation Warning: %c%s',
-                'color:#614108;background:#fffbe6',
-                'font-weight:normal;color:#614108;background:#fffbe6',
-                (message + "\nDeprecated since v" + version)
-            );
-            console.warn(stack);
-            console.groupEnd();
-        }
-        else
-        {
-            console.warn('PixiJS Deprecation Warning: ', (message + "\nDeprecated since v" + version));
-            console.warn(stack);
-        }
-    }
-    /* eslint-enable no-console */
-
-    warnings[message] = true;
 }
 
 /**
@@ -42956,7 +44088,7 @@ Object.defineProperty(exports, 'isMobile', {
 });
 exports.EventEmitter = eventemitter3;
 exports.earcut = earcut;
-exports.url = _url;
+exports.url = _url__default;
 exports.BaseTextureCache = BaseTextureCache;
 exports.CanvasRenderTarget = CanvasRenderTarget;
 exports.DATA_URI = DATA_URI;
@@ -42969,9 +44101,11 @@ exports.decomposeDataUri = decomposeDataUri;
 exports.deprecation = deprecation;
 exports.destroyTextureCache = destroyTextureCache;
 exports.determineCrossOrigin = determineCrossOrigin;
+exports.getBufferType = getBufferType;
 exports.getResolutionOfUrl = getResolutionOfUrl;
 exports.hex2rgb = hex2rgb;
 exports.hex2string = hex2string;
+exports.interleaveTypedArrays = interleaveTypedArrays;
 exports.isPow2 = isPow2;
 exports.isWebGLSupported = isWebGLSupported;
 exports.log2 = log2;
@@ -42990,7 +44124,7 @@ exports.trimCanvas = trimCanvas;
 exports.uid = uid;
 
 
-},{"@pixi/constants":47,"@pixi/settings":70,"earcut":88,"eventemitter3":79,"url":128}],79:[function(require,module,exports){
+},{"@pixi/constants":47,"@pixi/settings":70,"earcut":88,"eventemitter3":79,"url":129}],79:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty
@@ -43456,9 +44590,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
@@ -43498,10 +44630,6 @@ function fromByteArray (uint8) {
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var customInspectSymbol =
-  (typeof Symbol === 'function' && typeof Symbol.for === 'function')
-    ? Symbol.for('nodejs.util.inspect.custom')
-    : null
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -43538,9 +44666,7 @@ function typedArraySupport () {
   // Can typed array instances can be augmented?
   try {
     var arr = new Uint8Array(1)
-    var proto = { foo: function () { return 42 } }
-    Object.setPrototypeOf(proto, Uint8Array.prototype)
-    Object.setPrototypeOf(arr, proto)
+    arr.__proto__ = { __proto__: Uint8Array.prototype, foo: function () { return 42 } }
     return arr.foo() === 42
   } catch (e) {
     return false
@@ -43569,7 +44695,7 @@ function createBuffer (length) {
   }
   // Return an augmented `Uint8Array` instance
   var buf = new Uint8Array(length)
-  Object.setPrototypeOf(buf, Buffer.prototype)
+  buf.__proto__ = Buffer.prototype
   return buf
 }
 
@@ -43619,7 +44745,7 @@ function from (value, encodingOrOffset, length) {
   }
 
   if (value == null) {
-    throw new TypeError(
+    throw TypeError(
       'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
       'or Array-like Object. Received type ' + (typeof value)
     )
@@ -43671,8 +44797,8 @@ Buffer.from = function (value, encodingOrOffset, length) {
 
 // Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
 // https://github.com/feross/buffer/pull/148
-Object.setPrototypeOf(Buffer.prototype, Uint8Array.prototype)
-Object.setPrototypeOf(Buffer, Uint8Array)
+Buffer.prototype.__proto__ = Uint8Array.prototype
+Buffer.__proto__ = Uint8Array
 
 function assertSize (size) {
   if (typeof size !== 'number') {
@@ -43776,8 +44902,7 @@ function fromArrayBuffer (array, byteOffset, length) {
   }
 
   // Return an augmented `Uint8Array` instance
-  Object.setPrototypeOf(buf, Buffer.prototype)
-
+  buf.__proto__ = Buffer.prototype
   return buf
 }
 
@@ -44099,9 +45224,6 @@ Buffer.prototype.inspect = function inspect () {
   if (this.length > max) str += ' ... '
   return '<Buffer ' + str + '>'
 }
-if (customInspectSymbol) {
-  Buffer.prototype[customInspectSymbol] = Buffer.prototype.inspect
-}
 
 Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
   if (isInstance(target, Uint8Array)) {
@@ -44227,7 +45349,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
         return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
       }
     }
-    return arrayIndexOf(buffer, [val], byteOffset, encoding, dir)
+    return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
   }
 
   throw new TypeError('val must be string, number or Buffer')
@@ -44593,8 +45715,7 @@ Buffer.prototype.slice = function slice (start, end) {
 
   var newBuf = this.subarray(start, end)
   // Return an augmented `Uint8Array` instance
-  Object.setPrototypeOf(newBuf, Buffer.prototype)
-
+  newBuf.__proto__ = Buffer.prototype
   return newBuf
 }
 
@@ -45083,8 +46204,6 @@ Buffer.prototype.fill = function fill (val, start, end, encoding) {
     }
   } else if (typeof val === 'number') {
     val = val & 255
-  } else if (typeof val === 'boolean') {
-    val = Number(val)
   }
 
   // Invalid ranges are not set to a default, so can range check early.
@@ -45755,7 +46874,7 @@ var DomEase = function (_EventEmitter) {
 
 module.exports = DomEase;
 
-},{"./ease":86,"eventemitter3":87,"exists":94,"penner":102}],86:[function(require,module,exports){
+},{"./ease":86,"eventemitter3":87,"exists":94,"penner":103}],86:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -46252,7 +47371,7 @@ function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
 
             // if this didn't work, try curing all small self-intersections locally
             } else if (pass === 1) {
-                ear = cureLocalIntersections(ear, triangles, dim);
+                ear = cureLocalIntersections(filterPoints(ear), triangles, dim);
                 earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
 
             // as a last resort, try splitting the remaining polygon into two
@@ -46359,7 +47478,7 @@ function cureLocalIntersections(start, triangles, dim) {
         p = p.next;
     } while (p !== start);
 
-    return p;
+    return filterPoints(p);
 }
 
 // try splitting polygon into two and triangulate them independently
@@ -46421,6 +47540,9 @@ function eliminateHole(hole, outerNode) {
     outerNode = findHoleBridge(hole, outerNode);
     if (outerNode) {
         var b = splitPolygon(outerNode, hole);
+
+        // filter collinear points around the cuts
+        filterPoints(outerNode, outerNode.next);
         filterPoints(b, b.next);
     }
 }
@@ -46452,7 +47574,7 @@ function findHoleBridge(hole, outerNode) {
 
     if (!m) return null;
 
-    if (hx === qx) return m.prev; // hole touches outer segment; pick lower endpoint
+    if (hx === qx) return m; // hole touches outer segment; pick leftmost endpoint
 
     // look for points inside the triangle of hole point, segment intersection and endpoint;
     // if there are no points found, we have a valid connection;
@@ -46464,24 +47586,30 @@ function findHoleBridge(hole, outerNode) {
         tanMin = Infinity,
         tan;
 
-    p = m.next;
+    p = m;
 
-    while (p !== stop) {
+    do {
         if (hx >= p.x && p.x >= mx && hx !== p.x &&
                 pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
             tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 
-            if ((tan < tanMin || (tan === tanMin && p.x > m.x)) && locallyInside(p, hole)) {
+            if (locallyInside(p, hole) &&
+                (tan < tanMin || (tan === tanMin && (p.x > m.x || (p.x === m.x && sectorContainsSector(m, p)))))) {
                 m = p;
                 tanMin = tan;
             }
         }
 
         p = p.next;
-    }
+    } while (p !== stop);
 
     return m;
+}
+
+// whether sector in vertex m contains sector in vertex p in the same coordinates
+function sectorContainsSector(m, p) {
+    return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
 }
 
 // interlink polygon nodes in z-order
@@ -46593,8 +47721,10 @@ function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
 
 // check if a diagonal between two polygon nodes is valid (lies in polygon interior)
 function isValidDiagonal(a, b) {
-    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) &&
-           locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b);
+    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && // dones't intersect other edges
+           (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && // locally visible
+            (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
+            equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
 }
 
 // signed area of a triangle
@@ -46609,10 +47739,28 @@ function equals(p1, p2) {
 
 // check if two segments intersect
 function intersects(p1, q1, p2, q2) {
-    if ((equals(p1, q1) && equals(p2, q2)) ||
-        (equals(p1, q2) && equals(p2, q1))) return true;
-    return area(p1, q1, p2) > 0 !== area(p1, q1, q2) > 0 &&
-           area(p2, q2, p1) > 0 !== area(p2, q2, q1) > 0;
+    var o1 = sign(area(p1, q1, p2));
+    var o2 = sign(area(p1, q1, q2));
+    var o3 = sign(area(p2, q2, p1));
+    var o4 = sign(area(p2, q2, q1));
+
+    if (o1 !== o2 && o3 !== o4) return true; // general case
+
+    if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
+    if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
+    if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
+    if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
+
+    return false;
+}
+
+// for collinear points p, q, r, check if point q lies on segment pr
+function onSegment(p, q, r) {
+    return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
+}
+
+function sign(num) {
+    return num > 0 ? 1 : num < 0 ? -1 : 0;
 }
 
 // check if a polygon diagonal intersects any polygon segments
@@ -47359,7 +48507,7 @@ Promise.reject = function(reason){
 })(typeof window != 'undefined' ? window : typeof global != 'undefined' ? global : typeof self != 'undefined' ? self : this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
-},{"timers":126}],93:[function(require,module,exports){
+},{"timers":127}],93:[function(require,module,exports){
 arguments[4][79][0].apply(exports,arguments)
 },{"dup":79}],94:[function(require,module,exports){
 module.exports = exists;
@@ -47461,8 +48609,145 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 },{}],96:[function(require,module,exports){
-!function(e){var n=/iPhone/i,t=/iPod/i,r=/iPad/i,a=/\bAndroid(?:.+)Mobile\b/i,p=/Android/i,b=/\bAndroid(?:.+)SD4930UR\b/i,l=/\bAndroid(?:.+)(?:KF[A-Z]{2,4})\b/i,f=/Windows Phone/i,s=/\bWindows(?:.+)ARM\b/i,u=/BlackBerry/i,c=/BB10/i,h=/Opera Mini/i,v=/\b(CriOS|Chrome)(?:.+)Mobile/i,w=/Mobile(?:.+)Firefox\b/i;function m(e,i){return e.test(i)}function i(e){var i=e||("undefined"!=typeof navigator?navigator.userAgent:""),o=i.split("[FBAN");void 0!==o[1]&&(i=o[0]),void 0!==(o=i.split("Twitter"))[1]&&(i=o[0]);var d={apple:{phone:m(n,i)&&!m(f,i),ipod:m(t,i),tablet:!m(n,i)&&m(r,i)&&!m(f,i),device:(m(n,i)||m(t,i)||m(r,i))&&!m(f,i)},amazon:{phone:m(b,i),tablet:!m(b,i)&&m(l,i),device:m(b,i)||m(l,i)},android:{phone:!m(f,i)&&m(b,i)||!m(f,i)&&m(a,i),tablet:!m(f,i)&&!m(b,i)&&!m(a,i)&&(m(l,i)||m(p,i)),device:!m(f,i)&&(m(b,i)||m(l,i)||m(a,i)||m(p,i))||m(/\bokhttp\b/i,i)},windows:{phone:m(f,i),tablet:m(s,i),device:m(f,i)||m(s,i)},other:{blackberry:m(u,i),blackberry10:m(c,i),opera:m(h,i),firefox:m(w,i),chrome:m(v,i),device:m(u,i)||m(c,i)||m(h,i)||m(w,i)||m(v,i)}};return d.any=d.apple.device||d.android.device||d.windows.device||d.other.device,d.phone=d.apple.phone||d.android.phone||d.windows.phone,d.tablet=d.apple.tablet||d.android.tablet||d.windows.tablet,d}"undefined"!=typeof module&&module.exports&&"undefined"==typeof window?module.exports=i:"undefined"!=typeof module&&module.exports&&"undefined"!=typeof window?(module.exports=i(),module.exports.isMobile=i):"function"==typeof define&&define.amd?define([],e.isMobile=i()):e.isMobile=i()}(this);
-},{}],97:[function(require,module,exports){
+"use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+exports.__esModule = true;
+__export(require("./isMobile"));
+var isMobile_1 = require("./isMobile");
+exports["default"] = isMobile_1["default"];
+
+},{"./isMobile":97}],97:[function(require,module,exports){
+"use strict";
+exports.__esModule = true;
+var appleIphone = /iPhone/i;
+var appleIpod = /iPod/i;
+var appleTablet = /iPad/i;
+var appleUniversal = /\biOS-universal(?:.+)Mac\b/i;
+var androidPhone = /\bAndroid(?:.+)Mobile\b/i;
+var androidTablet = /Android/i;
+var amazonPhone = /(?:SD4930UR|\bSilk(?:.+)Mobile\b)/i;
+var amazonTablet = /Silk/i;
+var windowsPhone = /Windows Phone/i;
+var windowsTablet = /\bWindows(?:.+)ARM\b/i;
+var otherBlackBerry = /BlackBerry/i;
+var otherBlackBerry10 = /BB10/i;
+var otherOpera = /Opera Mini/i;
+var otherChrome = /\b(CriOS|Chrome)(?:.+)Mobile/i;
+var otherFirefox = /Mobile(?:.+)Firefox\b/i;
+var isAppleTabletOnIos13 = function (navigator) {
+    return (typeof navigator !== 'undefined' &&
+        navigator.platform === 'MacIntel' &&
+        typeof navigator.maxTouchPoints === 'number' &&
+        navigator.maxTouchPoints > 1 &&
+        typeof MSStream === 'undefined');
+};
+function createMatch(userAgent) {
+    return function (regex) { return regex.test(userAgent); };
+}
+function isMobile(param) {
+    var nav = {
+        userAgent: '',
+        platform: '',
+        maxTouchPoints: 0
+    };
+    if (!param && typeof navigator !== 'undefined') {
+        nav = {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            maxTouchPoints: navigator.maxTouchPoints || 0
+        };
+    }
+    else if (typeof param === 'string') {
+        nav.userAgent = param;
+    }
+    else if (param && param.userAgent) {
+        nav = {
+            userAgent: param.userAgent,
+            platform: param.platform,
+            maxTouchPoints: param.maxTouchPoints || 0
+        };
+    }
+    var userAgent = nav.userAgent;
+    var tmp = userAgent.split('[FBAN');
+    if (typeof tmp[1] !== 'undefined') {
+        userAgent = tmp[0];
+    }
+    tmp = userAgent.split('Twitter');
+    if (typeof tmp[1] !== 'undefined') {
+        userAgent = tmp[0];
+    }
+    var match = createMatch(userAgent);
+    var result = {
+        apple: {
+            phone: match(appleIphone) && !match(windowsPhone),
+            ipod: match(appleIpod),
+            tablet: !match(appleIphone) &&
+                (match(appleTablet) || isAppleTabletOnIos13(nav)) &&
+                !match(windowsPhone),
+            universal: match(appleUniversal),
+            device: (match(appleIphone) ||
+                match(appleIpod) ||
+                match(appleTablet) ||
+                match(appleUniversal) ||
+                isAppleTabletOnIos13(nav)) &&
+                !match(windowsPhone)
+        },
+        amazon: {
+            phone: match(amazonPhone),
+            tablet: !match(amazonPhone) && match(amazonTablet),
+            device: match(amazonPhone) || match(amazonTablet)
+        },
+        android: {
+            phone: (!match(windowsPhone) && match(amazonPhone)) ||
+                (!match(windowsPhone) && match(androidPhone)),
+            tablet: !match(windowsPhone) &&
+                !match(amazonPhone) &&
+                !match(androidPhone) &&
+                (match(amazonTablet) || match(androidTablet)),
+            device: (!match(windowsPhone) &&
+                (match(amazonPhone) ||
+                    match(amazonTablet) ||
+                    match(androidPhone) ||
+                    match(androidTablet))) ||
+                match(/\bokhttp\b/i)
+        },
+        windows: {
+            phone: match(windowsPhone),
+            tablet: match(windowsTablet),
+            device: match(windowsPhone) || match(windowsTablet)
+        },
+        other: {
+            blackberry: match(otherBlackBerry),
+            blackberry10: match(otherBlackBerry10),
+            opera: match(otherOpera),
+            firefox: match(otherFirefox),
+            chrome: match(otherChrome),
+            device: match(otherBlackBerry) ||
+                match(otherBlackBerry10) ||
+                match(otherOpera) ||
+                match(otherFirefox) ||
+                match(otherChrome)
+        },
+        any: false,
+        phone: false,
+        tablet: false
+    };
+    result.any =
+        result.apple.device ||
+            result.android.device ||
+            result.windows.device ||
+            result.other.device;
+    result.phone =
+        result.apple.phone || result.android.phone || result.windows.phone;
+    result.tablet =
+        result.apple.tablet || result.android.tablet || result.windows.tablet;
+    return result;
+}
+exports["default"] = isMobile;
+
+},{}],98:[function(require,module,exports){
 (function (global){
 /*!
     localForage -- Offline Storage, Improved
@@ -50263,7 +51548,7 @@ module.exports = localforage_js;
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],98:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -50430,7 +51715,7 @@ MiniSignal.MiniSignalBinding = MiniSignalBinding;
 exports['default'] = MiniSignal;
 module.exports = exports['default'];
 
-},{}],99:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -50522,7 +51807,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],100:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 'use strict'
 
 module.exports = function parseURI (str, opts) {
@@ -50554,7 +51839,7 @@ module.exports = function parseURI (str, opts) {
   return uri
 }
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 (function (process){
 // .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
 // backported and transplited with Babel, with backwards-compat fixes
@@ -50860,7 +52145,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":105}],102:[function(require,module,exports){
+},{"_process":106}],103:[function(require,module,exports){
 
 /*
 	Copyright © 2001 Robert Penner
@@ -51128,13 +52413,13 @@ var substr = 'ab'.substr(-1) === 'b'
 
 }).call(this);
 
-},{}],103:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 (function (global){
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports,require("pixi.js")):"function"==typeof define&&define.amd?define(["exports","pixi.js"],e):e((t=t||self).Viewport={},t.PIXI)}(this,function(t,e){"use strict";class i{constructor(t){this.viewport=t,this.touches=[],this.addListeners()}addListeners(){this.viewport.interactive=!0,this.viewport.forceHitArea||(this.viewport.hitArea=new e.Rectangle(0,0,this.viewport.worldWidth,this.viewport.worldHeight)),this.viewport.on("pointerdown",this.down,this),this.viewport.on("pointermove",this.move,this),this.viewport.on("pointerup",this.up,this),this.viewport.on("pointerupoutside",this.up,this),this.viewport.on("pointercancel",this.up,this),this.viewport.on("pointerout",this.up,this),this.wheelFunction=t=>this.handleWheel(t),this.viewport.options.divWheel.addEventListener("wheel",this.wheelFunction,{passive:this.viewport.options.passiveWheel}),this.isMouseDown=!1}destroy(){this.viewport.options.divWheel.removeEventListener("wheel",this.wheelFunction)}down(t){if(this.viewport.pause||!this.viewport.worldVisible)return;if("mouse"===t.data.pointerType?this.isMouseDown=!0:this.get(t.data.pointerId)||this.touches.push({id:t.data.pointerId,last:null}),1===this.count()){this.last=t.data.global.clone();const e=this.viewport.plugins.get("decelerate"),i=this.viewport.plugins.get("bounce");e&&e.isActive()||i&&i.isActive()?this.clickedAvailable=!1:this.clickedAvailable=!0}else this.clickedAvailable=!1;this.viewport.plugins.down(t)&&this.viewport.options.stopPropagation&&t.stopPropagation()}checkThreshold(t){return Math.abs(t)>=this.viewport.threshold}move(t){if(this.viewport.pause||!this.viewport.worldVisible)return;const e=this.viewport.plugins.move(t);if(this.clickedAvailable){const e=t.data.global.x-this.last.x,i=t.data.global.y-this.last.y;(this.checkThreshold(e)||this.checkThreshold(i))&&(this.clickedAvailable=!1)}e&&this.viewport.options.stopPropagation&&t.stopPropagation()}up(t){if(this.viewport.pause||!this.viewport.worldVisible)return;"mouse"===t.data.pointerType&&(this.isMouseDown=!1),"mouse"!==t.data.pointerType&&this.remove(t.data.pointerId);const e=this.viewport.plugins.up(t);this.clickedAvailable&&0===this.count()&&(this.viewport.emit("clicked",{screen:this.last,world:this.viewport.toWorld(this.last),viewport:this}),this.clickedAvailable=!1),e&&this.viewport.options.stopPropagation&&t.stopPropagation()}getPointerPosition(t){let i=new e.Point;return this.viewport.options.interaction?this.viewport.options.interaction.mapPositionToPoint(i,t.clientX,t.clientY):(i.x=t.clientX,i.y=t.clientY),i}handleWheel(t){if(this.viewport.pause||!this.viewport.worldVisible)return;const e=this.viewport.toLocal(this.getPointerPosition(t));return this.viewport.left<=e.x&&e.x<=this.viewport.right&&this.viewport.top<=e.y&&e.y<=this.viewport.bottom?this.viewport.plugins.wheel(t):void 0}pause(){this.touches=[],this.isMouseDown=!1}get(t){for(let e of this.touches)if(e.id===t)return e;return null}remove(t){for(let e=0;e<this.touches.length;e++)if(this.touches[e].id===t)return void this.touches.splice(e,1)}count(){return(this.isMouseDown?1:0)+this.touches.length}}const s=["drag","pinch","wheel","follow","mouse-edges","decelerate","bounce","snap-zoom","clamp-zoom","snap","clamp"];class n{constructor(t){this.viewport=t,this.list=[],this.plugins={}}add(t,e,i=s.length){this.plugins[t]=e;const n=s.indexOf(t);-1!==n&&s.splice(n,1),s.splice(i,0,t),this.sort()}get(t){return this.plugins[t]}update(t){for(let e of this.list)e.update(t)}resize(){for(let t of this.list)t.resize()}reset(){this.plugins.bounce&&(this.plugins.bounce.reset(),this.plugins.bounce.bounce()),this.plugins.decelerate&&this.plugins.decelerate.reset(),this.plugins.snap&&this.plugins.snap.reset(),this.plugins.clamp&&this.plugins.clamp.update(),this.plugins["clamp-zoom"]&&this.plugins["clamp-zoom"].clamp()}remove(t){this.plugins[t]&&(this.plugins[t]=null,this.viewport.emit(t+"-remove"),this.sort())}pause(t){this.plugins[t]&&this.plugins[t].pause()}resume(t){this.plugins[t]&&this.plugins[t].resume()}sort(){this.list=[];for(let t of s)this.plugins[t]&&this.list.push(this.plugins[t])}down(t){let e=!1;for(let i of this.list)i.down(t)&&(e=!0);return e}move(t){let e=!1;for(let i of this.viewport.plugins.list)i.move(t)&&(e=!0);return e}up(t){let e=!1;for(let i of this.list)i.up(t)&&(e=!0);return e}wheel(t){let e=!1;for(let i of this.list)i.wheel(t)&&(e=!0);return e}}class h{constructor(t){this.parent=t,this.paused=!1}destroy(){}down(){return!1}move(){return!1}up(){return!1}wheel(){return!1}update(){}resize(){}reset(){}pause(){this.paused=!0}resume(){this.paused=!1}}const o={direction:"all",wheel:!0,wheelScroll:1,reverse:!1,clampWheel:!1,underflow:"center",factor:1,mouseButtons:"all"};class r extends h{constructor(t,e={}){super(t),this.options=Object.assign({},o,e),this.moved=!1,this.reverse=this.options.reverse?1:-1,this.xDirection=!this.options.direction||"all"===this.options.direction||"x"===this.options.direction,this.yDirection=!this.options.direction||"all"===this.options.direction||"y"===this.options.direction,this.parseUnderflow(),this.mouseButtons(this.options.mouseButtons)}mouseButtons(t){this.mouse=t&&"all"!==t?[-1!==t.indexOf("left"),-1!==t.indexOf("middle"),-1!==t.indexOf("right")]:[!0,!0,!0]}parseUnderflow(){const t=this.options.underflow.toLowerCase();"center"===t?(this.underflowX=0,this.underflowY=0):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0)}checkButtons(t){const e="mouse"===t.data.pointerType,i=this.parent.input.count();return!(!(1===i||i>1&&!this.parent.plugins.get("pinch"))||e&&!this.mouse[t.data.button])}down(t){if(!this.paused)return this.checkButtons(t)?(this.last={x:t.data.global.x,y:t.data.global.y},this.current=t.data.pointerId,!0):void(this.last=null)}get active(){return this.moved}move(t){if(!this.paused&&this.last&&this.current===t.data.pointerId){const i=t.data.global.x,s=t.data.global.y,n=this.parent.input.count();if(1===n||n>1&&!this.parent.plugins.get("pinch")){const t=i-this.last.x,n=s-this.last.y;if(this.moved||this.xDirection&&this.parent.input.checkThreshold(t)||this.yDirection&&this.parent.input.checkThreshold(n)){const t={x:i,y:s};return this.xDirection&&(this.parent.x+=(t.x-this.last.x)*this.options.factor),this.yDirection&&(this.parent.y+=(t.y-this.last.y)*this.options.factor),this.last=t,this.moved||this.parent.emit("drag-start",{screen:new e.Point(this.last.x,this.last.y),world:this.parent.toWorld(new e.Point(this.last.x,this.last.y)),viewport:this.parent}),this.moved=!0,this.parent.emit("moved",{viewport:this.parent,type:"drag"}),!0}}else this.moved=!1}}up(){const t=this.parent.input.touches;if(1===t.length){const e=t[0];return e.last&&(this.last={x:e.last.x,y:e.last.y},this.current=e.id),this.moved=!1,!0}if(this.last&&this.moved){const t=new e.Point(this.last.x,this.last.y);return this.parent.emit("drag-end",{screen:t,world:this.parent.toWorld(t),viewport:this.parent}),this.last=null,this.moved=!1,!0}}wheel(t){if(!this.paused&&this.options.wheel){if(!this.parent.plugins.get("wheel"))return this.xDirection&&(this.parent.x+=t.deltaX*this.options.wheelScroll*this.reverse),this.yDirection&&(this.parent.y+=t.deltaY*this.options.wheelScroll*this.reverse),this.options.clampWheel&&this.clamp(),this.parent.emit("wheel-scroll",this.parent),this.parent.emit("moved",this.parent),this.parent.options.passiveWheel||t.preventDefault(),!0}}resume(){this.last=null,this.paused=!1}clamp(){const t=this.parent.plugins.get("decelerate")||{};if("y"!==this.options.clampWheel)if(this.parent.screenWorldWidth<this.parent.screenWidth)switch(this.underflowX){case-1:this.parent.x=0;break;case 1:this.parent.x=this.parent.screenWidth-this.parent.screenWorldWidth;break;default:this.parent.x=(this.parent.screenWidth-this.parent.screenWorldWidth)/2}else this.parent.left<0?(this.parent.x=0,t.x=0):this.parent.right>this.parent.worldWidth&&(this.parent.x=-this.parent.worldWidth*this.parent.scale.x+this.parent.screenWidth,t.x=0);if("x"!==this.options.clampWheel)if(this.parent.screenWorldHeight<this.parent.screenHeight)switch(this.underflowY){case-1:this.parent.y=0;break;case 1:this.parent.y=this.parent.screenHeight-this.parent.screenWorldHeight;break;default:this.parent.y=(this.parent.screenHeight-this.parent.screenWorldHeight)/2}else this.parent.top<0&&(this.parent.y=0,t.y=0),this.parent.bottom>this.parent.worldHeight&&(this.parent.y=-this.parent.worldHeight*this.parent.scale.y+this.parent.screenHeight,t.y=0)}}const a={noDrag:!1,percent:1,center:null};class p extends h{constructor(t,e={}){super(t),this.options=Object.assign({},a,e)}down(){if(this.parent.input.count()>=2)return this.active=!0,!0}move(t){if(this.paused||!this.active)return;const e=t.data.global.x,i=t.data.global.y,s=this.parent.input.touches;if(s.length>=2){const n=s[0],h=s[1],o=n.last&&h.last?Math.sqrt(Math.pow(h.last.x-n.last.x,2)+Math.pow(h.last.y-n.last.y,2)):null;if(n.id===t.data.pointerId?n.last={x:e,y:i,data:t.data}:h.id===t.data.pointerId&&(h.last={x:e,y:i,data:t.data}),o){let t;const e={x:n.last.x+(h.last.x-n.last.x)/2,y:n.last.y+(h.last.y-n.last.y)/2};this.options.center||(t=this.parent.toLocal(e));const i=(Math.sqrt(Math.pow(h.last.x-n.last.x,2)+Math.pow(h.last.y-n.last.y,2))-o)/this.parent.screenWidth*this.parent.scale.x*this.options.percent;this.parent.scale.x+=i,this.parent.scale.y+=i,this.parent.emit("zoomed",{viewport:this.parent,type:"pinch"});const s=this.parent.plugins.get("clamp-zoom");if(s&&s.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const i=this.parent.toGlobal(t);this.parent.x+=e.x-i.x,this.parent.y+=e.y-i.y,this.parent.emit("moved",{viewport:this.parent,type:"pinch"})}!this.options.noDrag&&this.lastCenter&&(this.parent.x+=e.x-this.lastCenter.x,this.parent.y+=e.y-this.lastCenter.y,this.parent.emit("moved",{viewport:this.parent,type:"pinch"})),this.lastCenter=e,this.moved=!0}else this.pinching||(this.parent.emit("pinch-start",this.parent),this.pinching=!0);return!0}}up(){if(this.pinching&&this.parent.input.touches.length<=1)return this.active=!1,this.lastCenter=null,this.pinching=!1,this.moved=!1,this.parent.emit("pinch-end",this.parent),!0}}const l={left:!1,right:!1,top:!1,bottom:!1,direction:null,underflow:"center"};class c extends h{constructor(t,e={}){super(t),this.options=Object.assign({},l,e),this.options.direction&&(this.options.left="x"===this.options.direction||"all"===this.options.direction||null,this.options.right="x"===this.options.direction||"all"===this.options.direction||null,this.options.top="y"===this.options.direction||"all"===this.options.direction||null,this.options.bottom="y"===this.options.direction||"all"===this.options.direction||null),this.parseUnderflow(),this.update()}parseUnderflow(){const t=this.options.underflow.toLowerCase();"none"===t?this.noUnderflow=!0:"center"===t?(this.underflowX=this.underflowY=0,this.noUnderflow=!1):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0,this.noUnderflow=!1)}move(){return this.update(),!1}update(){if(this.paused)return;const t={x:this.parent.x,y:this.parent.y},e=this.parent.plugins.decelerate||{};if(null!==this.options.left||null!==this.options.right){let i=!1;if(this.parent.screenWorldWidth<this.parent.screenWidth){if(!this.noUnderflow)switch(this.underflowX){case-1:0!==this.parent.x&&(this.parent.x=0,i=!0);break;case 1:this.parent.x!==this.parent.screenWidth-this.parent.screenWorldWidth&&(this.parent.x=this.parent.screenWidth-this.parent.screenWorldWidth,i=!0);break;default:this.parent.x!==(this.parent.screenWidth-this.parent.screenWorldWidth)/2&&(this.parent.x=(this.parent.screenWidth-this.parent.screenWorldWidth)/2,i=!0)}}else null!==this.options.left&&this.parent.left<(!0===this.options.left?0:this.options.left)&&(this.parent.x=-(!0===this.options.left?0:this.options.left)*this.parent.scale.x,e.x=0,i=!0),null!==this.options.right&&this.parent.right>(!0===this.options.right?this.parent.worldWidth:this.options.right)&&(this.parent.x=-(!0===this.options.right?this.parent.worldWidth:this.options.right)*this.parent.scale.x+this.parent.screenWidth,e.x=0,i=!0);i&&this.parent.emit("moved",{viewport:this.parent,original:t,type:"clamp-x"})}if(null!==this.options.top||null!==this.options.bottom){let i=!1;if(this.parent.screenWorldHeight<this.parent.screenHeight){if(!this.noUnderflow)switch(this.underflowY){case-1:0!==this.parent.y&&(this.parent.y=0,i=!0);break;case 1:this.parent.y!==this.parent.screenHeight-this.parent.screenWorldHeight&&(this.parent.y=this.parent.screenHeight-this.parent.screenWorldHeight,i=!0);break;default:this.parent.y!==(this.parent.screenHeight-this.parent.screenWorldHeight)/2&&(this.parent.y=(this.parent.screenHeight-this.parent.screenWorldHeight)/2,i=!0)}}else null!==this.options.top&&this.parent.top<(!0===this.options.top?0:this.options.top)&&(this.parent.y=-(!0===this.options.top?0:this.options.top)*this.parent.scale.y,e.y=0,i=!0),null!==this.options.bottom&&this.parent.bottom>(!0===this.options.bottom?this.parent.worldHeight:this.options.bottom)&&(this.parent.y=-(!0===this.options.bottom?this.parent.worldHeight:this.options.bottom)*this.parent.scale.y+this.parent.screenHeight,e.y=0,i=!0);i&&this.parent.emit("moved",{viewport:this.parent,original:t,type:"clamp-y"})}}}const d={minWidth:null,minHeight:null,maxWidth:null,maxHeight:null};class u extends h{constructor(t,e={}){super(t),this.options=Object.assign({},d,e),this.clamp()}resize(){this.clamp()}clamp(){if(this.paused)return;let t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight;if(null!==this.options.minWidth&&t<this.options.minWidth){const i=this.parent.scale.x;this.parent.fitWidth(this.options.minWidth,!1,!1,!0),this.parent.scale.y*=this.parent.scale.x/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.maxWidth&&t>this.options.maxWidth){const i=this.parent.scale.x;this.parent.fitWidth(this.options.maxWidth,!1,!1,!0),this.parent.scale.y*=this.parent.scale.x/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.minHeight&&e<this.options.minHeight){const i=this.parent.scale.y;this.parent.fitHeight(this.options.minHeight,!1,!1,!0),this.parent.scale.x*=this.parent.scale.y/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.maxHeight&&e>this.options.maxHeight){const t=this.parent.scale.y;this.parent.fitHeight(this.options.maxHeight,!1,!1,!0),this.parent.scale.x*=this.parent.scale.y/t,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}}}const g={friction:.95,bounce:.8,minSpeed:.01};class m extends h{constructor(t,e={}){super(t),this.options=Object.assign({},g,e),this.saved=[],this.reset(),this.parent.on("moved",t=>this.moved(t))}destroy(){this.parent}down(){this.saved=[],this.x=this.y=!1}isActive(){return this.x||this.y}move(){if(this.paused)return;const t=this.parent.input.count();(1===t||t>1&&!this.parent.plugins.get("pinch"))&&(this.saved.push({x:this.parent.x,y:this.parent.y,time:performance.now()}),this.saved.length>60&&this.saved.splice(0,30))}moved(t){if(this.saved.length){const e=this.saved[this.saved.length-1];"clamp-x"===t.type?e.x===t.original.x&&(e.x=this.parent.x):"clamp-y"===t.type&&e.y===t.original.y&&(e.y=this.parent.y)}}up(){if(0===this.parent.input.count()&&this.saved.length){const t=performance.now();for(let e of this.saved)if(e.time>=t-100){const i=t-e.time;this.x=(this.parent.x-e.x)/i,this.y=(this.parent.y-e.y)/i,this.percentChangeX=this.percentChangeY=this.options.friction;break}}}activate(t){void 0!==(t=t||{}).x&&(this.x=t.x,this.percentChangeX=this.options.friction),void 0!==t.y&&(this.y=t.y,this.percentChangeY=this.options.friction)}update(t){if(this.paused)return;let e;this.x&&(this.parent.x+=this.x*t,this.x*=this.percentChangeX,Math.abs(this.x)<this.options.minSpeed&&(this.x=0),e=!0),this.y&&(this.parent.y+=this.y*t,this.y*=this.percentChangeY,Math.abs(this.y)<this.options.minSpeed&&(this.y=0),e=!0),e&&this.parent.emit("moved",{viewport:this.parent,type:"decelerate"})}reset(){this.x=this.y=null}}var w="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};var f=function(t,e){return t(e={exports:{}},e.exports),e.exports}(function(t,e){(function(){var e;(function(e){t.exports=e})(e={linear:function(t,e,i,s){return i*t/s+e},easeInQuad:function(t,e,i,s){return i*(t/=s)*t+e},easeOutQuad:function(t,e,i,s){return-i*(t/=s)*(t-2)+e},easeInOutQuad:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t+e:-i/2*(--t*(t-2)-1)+e},easeInCubic:function(t,e,i,s){return i*(t/=s)*t*t+e},easeOutCubic:function(t,e,i,s){return i*((t=t/s-1)*t*t+1)+e},easeInOutCubic:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t+e:i/2*((t-=2)*t*t+2)+e},easeInQuart:function(t,e,i,s){return i*(t/=s)*t*t*t+e},easeOutQuart:function(t,e,i,s){return-i*((t=t/s-1)*t*t*t-1)+e},easeInOutQuart:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t*t+e:-i/2*((t-=2)*t*t*t-2)+e},easeInQuint:function(t,e,i,s){return i*(t/=s)*t*t*t*t+e},easeOutQuint:function(t,e,i,s){return i*((t=t/s-1)*t*t*t*t+1)+e},easeInOutQuint:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t*t*t+e:i/2*((t-=2)*t*t*t*t+2)+e},easeInSine:function(t,e,i,s){return-i*Math.cos(t/s*(Math.PI/2))+i+e},easeOutSine:function(t,e,i,s){return i*Math.sin(t/s*(Math.PI/2))+e},easeInOutSine:function(t,e,i,s){return-i/2*(Math.cos(Math.PI*t/s)-1)+e},easeInExpo:function(t,e,i,s){return 0===t?e:i*Math.pow(2,10*(t/s-1))+e},easeOutExpo:function(t,e,i,s){return t===s?e+i:i*(1-Math.pow(2,-10*t/s))+e},easeInOutExpo:function(t,e,i,s){return(t/=s/2)<1?i/2*Math.pow(2,10*(t-1))+e:i/2*(2-Math.pow(2,-10*--t))+e},easeInCirc:function(t,e,i,s){return-i*(Math.sqrt(1-(t/=s)*t)-1)+e},easeOutCirc:function(t,e,i,s){return i*Math.sqrt(1-(t=t/s-1)*t)+e},easeInOutCirc:function(t,e,i,s){return(t/=s/2)<1?-i/2*(Math.sqrt(1-t*t)-1)+e:i/2*(Math.sqrt(1-(t-=2)*t)+1)+e},easeInElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s),(h=0)||(h=.3*s),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),-n*Math.pow(2,10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)+e},easeOutElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s),(h=0)||(h=.3*s),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),n*Math.pow(2,-10*t)*Math.sin((t*s-o)*(2*Math.PI)/h)+i+e},easeInOutElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s/2),(h=0)||(h=s*(.3*1.5)),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),t<1?n*Math.pow(2,10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)*-.5+e:n*Math.pow(2,-10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)*.5+i+e},easeInBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),i*(t/=s)*t*((n+1)*t-n)+e},easeOutBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),i*((t=t/s-1)*t*((n+1)*t+n)+1)+e},easeInOutBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),(t/=s/2)<1?i/2*(t*t*((1+(n*=1.525))*t-n))+e:i/2*((t-=2)*t*((1+(n*=1.525))*t+n)+2)+e},easeInBounce:function(t,i,s,n){return s-e.easeOutBounce(n-t,0,s,n)+i},easeOutBounce:function(t,e,i,s){return(t/=s)<1/2.75?i*(7.5625*t*t)+e:t<2/2.75?i*(7.5625*(t-=1.5/2.75)*t+.75)+e:t<2.5/2.75?i*(7.5625*(t-=2.25/2.75)*t+.9375)+e:i*(7.5625*(t-=2.625/2.75)*t+.984375)+e},easeInOutBounce:function(t,i,s,n){return t<n/2?.5*e.easeInBounce(2*t,0,s,n)+i:.5*e.easeOutBounce(2*t-n,0,s,n)+.5*s+i}})}).call(w)});function x(t,e){return t?"function"==typeof t?t:"string"==typeof t?f[t]:void 0:f[e]}const y={sides:"all",friction:.5,time:150,ease:"easeInOutSine",underflow:"center"};class v extends h{constructor(t,e={}){super(t),this.options=Object.assign({},y,e),this.ease=x(this.options.ease,"easeInOutSine"),this.options.sides&&("all"===this.options.sides?this.top=this.bottom=this.left=this.right=!0:"horizontal"===this.options.sides?this.right=this.left=!0:"vertical"===this.options.sides?this.top=this.bottom=!0:(this.top=-1!==this.options.sides.indexOf("top"),this.bottom=-1!==this.options.sides.indexOf("bottom"),this.left=-1!==this.options.sides.indexOf("left"),this.right=-1!==this.options.sides.indexOf("right"))),this.parseUnderflow(),this.last={},this.reset()}parseUnderflow(){const t=this.options.underflow.toLowerCase();"center"===t?(this.underflowX=0,this.underflowY=0):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0)}isActive(){return null!==this.toX||null!==this.toY}down(){this.toX=this.toY=null}up(){this.bounce()}update(t){if(!this.paused){if(this.bounce(),this.toX){const e=this.toX;e.time+=t,this.parent.emit("moved",{viewport:this.parent,type:"bounce-x"}),e.time>=this.options.time?(this.parent.x=e.end,this.toX=null,this.parent.emit("bounce-x-end",this.parent)):this.parent.x=this.ease(e.time,e.start,e.delta,this.options.time)}if(this.toY){const e=this.toY;e.time+=t,this.parent.emit("moved",{viewport:this.parent,type:"bounce-y"}),e.time>=this.options.time?(this.parent.y=e.end,this.toY=null,this.parent.emit("bounce-y-end",this.parent)):this.parent.y=this.ease(e.time,e.start,e.delta,this.options.time)}}}calcUnderflowX(){let t;switch(this.underflowX){case-1:t=0;break;case 1:t=this.parent.screenWidth-this.parent.screenWorldWidth;break;default:t=(this.parent.screenWidth-this.parent.screenWorldWidth)/2}return t}calcUnderflowY(){let t;switch(this.underflowY){case-1:t=0;break;case 1:t=this.parent.screenHeight-this.parent.screenWorldHeight;break;default:t=(this.parent.screenHeight-this.parent.screenWorldHeight)/2}return t}bounce(){if(this.paused)return;let t,e=this.parent.plugins.get("decelerate");e&&(e.x||e.y)&&(e.x&&e.percentChangeX===e.options.friction||e.y&&e.percentChangeY===e.options.friction)&&(((t=this.parent.OOB()).left&&this.left||t.right&&this.right)&&(e.percentChangeX=this.options.friction),(t.top&&this.top||t.bottom&&this.bottom)&&(e.percentChangeY=this.options.friction));const i=this.parent.plugins.get("drag")||{},s=this.parent.plugins.get("pinch")||{};if(e=e||{},!(i.active||s.active||this.toX&&this.toY||e.x&&e.y)){const i=(t=t||this.parent.OOB()).cornerPoint;if(!this.toX&&!e.x){let e=null;t.left&&this.left?e=this.parent.screenWorldWidth<this.parent.screenWidth?this.calcUnderflowX():0:t.right&&this.right&&(e=this.parent.screenWorldWidth<this.parent.screenWidth?this.calcUnderflowX():-i.x),null!==e&&this.parent.x!==e&&(this.toX={time:0,start:this.parent.x,delta:e-this.parent.x,end:e},this.parent.emit("bounce-x-start",this.parent))}if(!this.toY&&!e.y){let e=null;t.top&&this.top?e=this.parent.screenWorldHeight<this.parent.screenHeight?this.calcUnderflowY():0:t.bottom&&this.bottom&&(e=this.parent.screenWorldHeight<this.parent.screenHeight?this.calcUnderflowY():-i.y),null!==e&&this.parent.y!==e&&(this.toY={time:0,start:this.parent.y,delta:e-this.parent.y,end:e},this.parent.emit("bounce-y-start",this.parent))}}}reset(){this.toX=this.toY=null}}const b={topLeft:!1,friction:.8,time:1e3,ease:"easeInOutSine",interrupt:!0,removeOnComplete:!1,removeOnInterrupt:!1,forceStart:!1};class W extends h{constructor(t,e,i,s={}){super(t),this.options=Object.assign({},b,s),this.ease=x(s.ease,"easeInOutSine"),this.x=e,this.y=i,this.options.forceStart&&this.snapStart()}snapStart(){this.percent=0,this.snapping={time:0};const t=this.options.topLeft?this.parent.corner:this.parent.center;this.deltaX=this.x-t.x,this.deltaY=this.y-t.y,this.startX=t.x,this.startY=t.y,this.parent.emit("snap-start",this.parent)}wheel(){this.options.removeOnInterrupt&&this.parent.plugins.remove("snap")}down(){this.options.removeOnInterrupt?this.parent.plugins.remove("snap"):this.options.interrupt&&(this.snapping=null)}up(){if(0===this.parent.input.count()){const t=this.parent.plugins.get("decelerate");t&&(t.x||t.y)&&(t.percentChangeX=t.percentChangeY=this.options.friction)}}update(t){if(!(this.paused||this.options.interrupt&&0!==this.parent.input.count()))if(this.snapping){const e=this.snapping;let i,s,n;if(e.time+=t,e.time>this.options.time)i=!0,s=this.startX+this.deltaX,n=this.startY+this.deltaY;else{const t=this.ease(e.time,0,1,this.options.time);s=this.startX+this.deltaX*t,n=this.startY+this.deltaY*t}this.options.topLeft?this.parent.moveCorner(s,n):this.parent.moveCenter(s,n),this.parent.emit("moved",{viewport:this.parent,type:"snap"}),i&&(this.options.removeOnComplete&&this.parent.plugins.remove("snap"),this.parent.emit("snap-end",this.parent),this.snapping=null)}else{const t=this.options.topLeft?this.parent.corner:this.parent.center;t.x===this.x&&t.y===this.y||this.snapStart()}}}const H={width:0,height:0,time:1e3,ease:"easeInOutSine",center:null,interrupt:!0,removeOnComplete:!1,removeOnInterrupts:!1,forceStart:!1,noMove:!1};class M extends h{constructor(t,e={}){super(t),this.options=Object.assign({},H,e),this.ease=x(this.options.ease),this.options.width>0&&(this.x_scale=t.screenWidth/this.options.width),this.options.height>0&&(this.y_scale=t.screenHeight/this.options.height),this.xIndependent=!!this.x_scale,this.yIndependent=!!this.y_scale,this.x_scale=this.xIndependent?this.x_scale:this.y_scale,this.y_scale=this.yIndependent?this.y_scale:this.x_scale,0===this.options.time?(t.container.scale.x=this.x_scale,t.container.scale.y=this.y_scale,this.options.removeOnComplete&&this.parent.plugins.remove("snap-zoom")):e.forceStart&&this.createSnapping()}createSnapping(){const t=this.parent.scale;this.snapping={time:0,startX:t.x,startY:t.y,deltaX:this.x_scale-t.x,deltaY:this.y_scale-t.y},this.parent.emit("snap-zoom-start",this.parent)}resize(){this.snapping=null,this.options.width>0&&(this.x_scale=this.parent._screenWidth/this.options.width),this.options.height>0&&(this.y_scale=this.parent._screenHeight/this.options.height),this.x_scale=this.xIndependent?this.x_scale:this.y_scale,this.y_scale=this.yIndependent?this.y_scale:this.x_scale}reset(){this.snapping=null}wheel(){this.options.removeOnInterrupt&&this.parent.plugins.remove("snap-zoom")}down(){this.options.removeOnInterrupt?this.parent.plugins.remove("snap-zoom"):this.options.interrupt&&(this.snapping=null)}update(t){if(this.paused)return;if(this.options.interrupt&&0!==this.parent.input.count())return;let e;if(this.options.center||this.options.noMove||(e=this.parent.center),this.snapping){if(this.snapping){const i=this.snapping;if(i.time+=t,i.time>=this.options.time)this.parent.scale.set(this.x_scale,this.y_scale),this.options.removeOnComplete&&this.parent.plugins.remove("snap-zoom"),this.parent.emit("snap-zoom-end",this.parent),this.snapping=null;else{const t=this.snapping;this.parent.scale.x=this.ease(t.time,t.startX,t.deltaX,this.options.time),this.parent.scale.y=this.ease(t.time,t.startY,t.deltaY,this.options.time)}const s=this.parent.plugins.get("clamp-zoom");s&&s.clamp(),this.options.noMove||(this.options.center?this.parent.moveCenter(this.options.center):this.parent.moveCenter(e))}}else this.parent.scale.x===this.x_scale&&this.parent.scale.y===this.y_scale||this.createSnapping()}resume(){this.snapping=null,super.resume()}}const O={speed:0,acceleration:null,radius:null};class z extends h{constructor(t,e,i={}){super(t),this.target=e,this.options=Object.assign({},O,i),this.velocity={x:0,y:0}}update(t){if(this.paused)return;const e=this.parent.center;let i=this.target.x,s=this.target.y;if(this.options.radius){if(!(Math.sqrt(Math.pow(this.target.y-e.y,2)+Math.pow(this.target.x-e.x,2))>this.options.radius))return;{const t=Math.atan2(this.target.y-e.y,this.target.x-e.x);i=this.target.x-Math.cos(t)*this.options.radius,s=this.target.y-Math.sin(t)*this.options.radius}}const n=i-e.x,h=s-e.y;if(n||h)if(this.options.speed)if(this.options.acceleration){const o=Math.atan2(s-e.y,i-e.x),r=Math.sqrt(Math.pow(n,2)+Math.pow(h,2));if(r){const a=(Math.pow(this.velocity.x,2)+Math.pow(this.velocity.y,2))/(2*this.options.acceleration);this.velocity=r>a?{x:Math.min(this.velocity.x+this.options.acceleration*t,this.options.speed),y:Math.min(this.velocity.y+this.options.acceleration*t,this.options.speed)}:{x:Math.max(this.velocity.x-this.options.acceleration*this.options.speed,0),y:Math.max(this.velocity.y-this.options.acceleration*this.options.speed,0)};const p=Math.cos(o)*this.velocity.x,l=Math.sin(o)*this.velocity.y,c=Math.abs(p)>Math.abs(n)?i:e.x+p,d=Math.abs(l)>Math.abs(h)?s:e.y+l;this.parent.moveCenter(c,d),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}}else{const t=Math.atan2(s-e.y,i-e.x),o=Math.cos(t)*this.options.speed,r=Math.sin(t)*this.options.speed,a=Math.abs(o)>Math.abs(n)?i:e.x+o,p=Math.abs(r)>Math.abs(h)?s:e.y+r;this.parent.moveCenter(a,p),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}else this.parent.moveCenter(i,s),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}}const C={percent:.1,smooth:!1,interrupt:!0,reverse:!1,center:null};class I extends h{constructor(t,e={}){super(t),this.options=Object.assign({},C,e)}down(){this.options.interrupt&&(this.smoothing=null)}update(){if(this.smoothing){const t=this.smoothingCenter,e=this.smoothing;let i;this.options.center||(i=this.parent.toLocal(t)),this.parent.scale.x+=e.x,this.parent.scale.y+=e.y,this.parent.emit("zoomed",{viewport:this.parent,type:"wheel"});const s=this.parent.plugins.get("clamp-zoom");if(s&&s.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const e=this.parent.toGlobal(i);this.parent.x+=t.x-e.x,this.parent.y+=t.y-e.y}this.smoothingCount++,this.smoothingCount>=this.options.smooth&&(this.smoothing=null)}}wheel(t){if(this.paused)return;let e=this.parent.input.getPointerPosition(t);const i=(this.options.reverse?-1:1)*-t.deltaY*(t.deltaMode?120:1)/500,s=Math.pow(2,(1+this.options.percent)*i);if(this.options.smooth){const t={x:this.smoothing?this.smoothing.x*(this.options.smooth-this.smoothingCount):0,y:this.smoothing?this.smoothing.y*(this.options.smooth-this.smoothingCount):0};this.smoothing={x:((this.parent.scale.x+t.x)*s-this.parent.scale.x)/this.options.smooth,y:((this.parent.scale.y+t.y)*s-this.parent.scale.y)/this.options.smooth},this.smoothingCount=0,this.smoothingCenter=e}else{let t;this.options.center||(t=this.parent.toLocal(e)),this.parent.scale.x*=s,this.parent.scale.y*=s,this.parent.emit("zoomed",{viewport:this.parent,type:"wheel"});const i=this.parent.plugins.get("clamp-zoom");if(i&&i.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const i=this.parent.toGlobal(t);this.parent.x+=e.x-i.x,this.parent.y+=e.y-i.y}}this.parent.emit("moved",{viewport:this.parent,type:"wheel"}),this.parent.emit("wheel",{wheel:{dx:t.deltaX,dy:t.deltaY,dz:t.deltaZ},event:t,viewport:this.parent}),this.parent.options.passiveWheel||t.preventDefault()}}const S={radius:null,distance:null,top:null,bottom:null,left:null,right:null,speed:8,reverse:!1,noDecelerate:!1,linear:!1,allowButtons:!1};class _ extends h{constructor(t,e={}){super(t),this.options=Object.assign({},S,e),this.reverse=this.options.reverse?1:-1,this.radiusSquared=Math.pow(this.options.radius,2),this.resize()}resize(){const t=this.options.distance;null!==t?(this.left=t,this.top=t,this.right=this.parent.worldScreenWidth-t,this.bottom=this.parent.worldScreenHeight-t):this.radius||(this.left=this.options.left,this.top=this.options.top,this.right=null===this.options.right?null:this.parent.worldScreenWidth-this.options.right,this.bottom=null===this.options.bottom?null:this.parent.worldScreenHeight-this.options.bottom)}down(){this.options.allowButtons||(this.horizontal=this.vertical=null)}move(t){if("mouse"!==t.data.pointerType&&1!==t.data.identifier||!this.options.allowButtons&&0!==t.data.buttons)return;const e=t.data.global.x,i=t.data.global.y;if(this.radiusSquared){const t=this.parent.toScreen(this.parent.center);if(Math.pow(t.x-e,2)+Math.pow(t.y-i,2)>=this.radiusSquared){const s=Math.atan2(t.y-i,t.x-e);this.options.linear?(this.horizontal=Math.round(Math.cos(s))*this.options.speed*this.reverse*.06,this.vertical=Math.round(Math.sin(s))*this.options.speed*this.reverse*.06):(this.horizontal=Math.cos(s)*this.options.speed*this.reverse*.06,this.vertical=Math.sin(s)*this.options.speed*this.reverse*.06)}else this.horizontal&&this.decelerateHorizontal(),this.vertical&&this.decelerateVertical(),this.horizontal=this.vertical=0}else null!==this.left&&e<this.left?this.horizontal=1*this.reverse*this.options.speed*.06:null!==this.right&&e>this.right?this.horizontal=-1*this.reverse*this.options.speed*.06:(this.decelerateHorizontal(),this.horizontal=0),null!==this.top&&i<this.top?this.vertical=1*this.reverse*this.options.speed*.06:null!==this.bottom&&i>this.bottom?this.vertical=-1*this.reverse*this.options.speed*.06:(this.decelerateVertical(),this.vertical=0)}decelerateHorizontal(){const t=this.parent.plugins.get("decelerate");this.horizontal&&t&&!this.options.noDecelerate&&t.activate({x:this.horizontal*this.options.speed*this.reverse/(1e3/60)})}decelerateVertical(){const t=this.parent.plugins.get("decelerate");this.vertical&&t&&!this.options.noDecelerate&&t.activate({y:this.vertical*this.options.speed*this.reverse/(1e3/60)})}up(){this.horizontal&&this.decelerateHorizontal(),this.vertical&&this.decelerateVertical(),this.horizontal=this.vertical=null}update(){if(!this.paused&&(this.horizontal||this.vertical)){const t=this.parent.center;this.horizontal&&(t.x+=this.horizontal*this.options.speed),this.vertical&&(t.y+=this.vertical*this.options.speed),this.parent.moveCenter(t),this.parent.emit("moved",{viewport:this.parent,type:"mouse-edges"})}}}const k={screenWidth:window.innerWidth,screenHeight:window.innerHeight,worldWidth:null,worldHeight:null,threshold:5,passiveWheel:!0,stopPropagation:!1,forceHitArea:null,noTicker:!1,interaction:null,disableOnContextMenu:!1};t.Plugin=h,t.Viewport=class extends e.Container{constructor(t={}){if(super(),this.options=Object.assign({},k,t),t.ticker)this.options.ticker=t.ticker;else{let i;const s=e;i=parseInt(/^(\d+)\./.exec(e.VERSION)[1])<5?s.ticker.shared:s.Ticker.shared,this.options.ticker=t.ticker||i}this.screenWidth=this.options.screenWidth,this.screenHeight=this.options.screenHeight,this._worldWidth=this.options.worldWidth,this._worldHeight=this.options.worldHeight,this.forceHitArea=this.options.forceHitArea,this.threshold=this.options.threshold,this.options.divWheel=this.options.divWheel||document.body,this.options.disableOnContextMenu&&(this.options.divWheel.oncontextmenu=t=>t.preventDefault()),this.options.noTicker||(this.tickerFunction=()=>this.update(this.options.ticker.elapsedMS),this.options.ticker.add(this.tickerFunction)),this.input=new i(this),this.plugins=new n(this)}destroy(t){this.options.noTicker||this.options.ticker.remove(this.tickerFunction),this.input.destroy(),super.destroy(t)}update(t){this.pause||(this.plugins.update(t),this.lastViewport&&(this.lastViewport.x!==this.x||this.lastViewport.y!==this.y?this.moving=!0:this.moving&&(this.emit("moved-end",this),this.moving=!1),this.lastViewport.scaleX!==this.scale.x||this.lastViewport.scaleY!==this.scale.y?this.zooming=!0:this.zooming&&(this.emit("zoomed-end",this),this.zooming=!1)),this.forceHitArea||(this._hitAreaDefault=new e.Rectangle(this.left,this.top,this.worldScreenWidth,this.worldScreenHeight),this.hitArea=this._hitAreaDefault),this._dirty=this._dirty||!this.lastViewport||this.lastViewport.x!==this.x||this.lastViewport.y!==this.y||this.lastViewport.scaleX!==this.scale.x||this.lastViewport.scaleY!==this.scale.y,this.lastViewport={x:this.x,y:this.y,scaleX:this.scale.x,scaleY:this.scale.y},this.emit("frame-end",this))}resize(t=window.innerWidth,e=window.innerHeight,i,s){this.screenWidth=t,this.screenHeight=e,void 0!==i&&(this._worldWidth=i),void 0!==s&&(this._worldHeight=s),this.plugins.resize()}get worldWidth(){return this._worldWidth?this._worldWidth:this.width/this.scale.x}set worldWidth(t){this._worldWidth=t,this.plugins.resize()}get worldHeight(){return this._worldHeight?this._worldHeight:this.height/this.scale.y}set worldHeight(t){this._worldHeight=t,this.plugins.resize()}getVisibleBounds(){return new e.Rectangle(this.left,this.top,this.worldScreenWidth,this.worldScreenHeight)}toWorld(t,i){return 2===arguments.length?this.toLocal(new e.Point(t,i)):this.toLocal(t)}toScreen(t,i){return 2===arguments.length?this.toGlobal(new e.Point(t,i)):this.toGlobal(t)}get worldScreenWidth(){return this.screenWidth/this.scale.x}get worldScreenHeight(){return this.screenHeight/this.scale.y}get screenWorldWidth(){return this.worldWidth*this.scale.x}get screenWorldHeight(){return this.worldHeight*this.scale.y}get center(){return new e.Point(this.worldScreenWidth/2-this.x/this.scale.x,this.worldScreenHeight/2-this.y/this.scale.y)}set center(t){this.moveCenter(t)}moveCenter(){let t,e;return isNaN(arguments[0])?(t=arguments[0].x,e=arguments[0].y):(t=arguments[0],e=arguments[1]),this.position.set((this.worldScreenWidth/2-t)*this.scale.x,(this.worldScreenHeight/2-e)*this.scale.y),this.plugins.reset(),this.dirty=!0,this}get corner(){return new e.Point(-this.x/this.scale.x,-this.y/this.scale.y)}set corner(t){this.moveCorner(t)}moveCorner(t,e){return 1===arguments.length?this.position.set(-t.x*this.scale.x,-t.y*this.scale.y):this.position.set(-t*this.scale.x,-e*this.scale.y),this.plugins.reset(),this}fitWidth(t,e,i=!0,s){let n;e&&(n=this.center),this.scale.x=this.screenWidth/t,i&&(this.scale.y=this.scale.x);const h=this.plugins.get("clamp-zoom");return!s&&h&&h.clamp(),e&&this.moveCenter(n),this}fitHeight(t,e,i=!0,s){let n;e&&(n=this.center),this.scale.y=this.screenHeight/t,i&&(this.scale.x=this.scale.y);const h=this.plugins.get("clamp-zoom");return!s&&h&&h.clamp(),e&&this.moveCenter(n),this}fitWorld(t){let e;t&&(e=this.center),this.scale.x=this.screenWidth/this.worldWidth,this.scale.y=this.screenHeight/this.worldHeight,this.scale.x<this.scale.y?this.scale.y=this.scale.x:this.scale.x=this.scale.y;const i=this.plugins.get("clamp-zoom");return i&&i.clamp(),t&&this.moveCenter(e),this}fit(t,e=this.worldWidth,i=this.worldHeight){let s;t&&(s=this.center),this.scale.x=this.screenWidth/e,this.scale.y=this.screenHeight/i,this.scale.x<this.scale.y?this.scale.y=this.scale.x:this.scale.x=this.scale.y;const n=this.plugins.get("clamp-zoom");return n&&n.clamp(),t&&this.moveCenter(s),this}setZoom(t,e){let i;e&&(i=this.center),this.scale.set(t);const s=this.plugins.get("clamp-zoom");return s&&s.clamp(),e&&this.moveCenter(i),this}zoomPercent(t,e){return this.setZoom(this.scale.x+this.scale.x*t,e)}zoom(t,e){return this.fitWidth(t+this.worldScreenWidth,e),this}set scaled(t){this.setZoom(t,!0)}get scaled(){return this.scale.x}snapZoom(t){return this.plugins.add("snap-zoom",new M(this,t)),this}OOB(){return{left:this.left<0,right:this.right>this._worldWidth,top:this.top<0,bottom:this.bottom>this._worldHeight,cornerPoint:new e.Point(this._worldWidth*this.scale.x-this.screenWidth,this._worldHeight*this.scale.y-this.screenHeight)}}get right(){return-this.x/this.scale.x+this.worldScreenWidth}set right(t){this.x=-t*this.scale.x+this.screenWidth,this.plugins.reset()}get left(){return-this.x/this.scale.x}set left(t){this.x=-t*this.scale.x,this.plugins.reset()}get top(){return-this.y/this.scale.y}set top(t){this.y=-t*this.scale.y,this.plugins.reset()}get bottom(){return-this.y/this.scale.y+this.worldScreenHeight}set bottom(t){this.y=-t*this.scale.y+this.screenHeight,this.plugins.reset()}get dirty(){return this._dirty}set dirty(t){this._dirty=t}get forceHitArea(){return this._forceHitArea}set forceHitArea(t){t?(this._forceHitArea=t,this.hitArea=t):(this._forceHitArea=null,this.hitArea=new e.Rectangle(0,0,this.worldWidth,this.worldHeight))}drag(t){return this.plugins.add("drag",new r(this,t)),this}clamp(t){return this.plugins.add("clamp",new c(this,t)),this}decelerate(t){return this.plugins.add("decelerate",new m(this,t)),this}bounce(t){return this.plugins.add("bounce",new v(this,t)),this}pinch(t){return this.plugins.add("pinch",new p(this,t)),this}snap(t,e,i){return this.plugins.add("snap",new W(this,t,e,i)),this}follow(t,e){return this.plugins.add("follow",new z(this,t,e)),this}wheel(t){return this.plugins.add("wheel",new I(this,t)),this}clampZoom(t){return this.plugins.add("clamp-zoom",new u(this,t)),this}mouseEdges(t){return this.plugins.add("mouse-edges",new _(this,t)),this}get pause(){return this._pause}set pause(t){this._pause=t,this.lastViewport=null,this.moving=!1,this.zooming=!1,t&&this.input.pause()}ensureVisible(t,e,i,s){t<this.left?this.left=t:t+i>this.right&&(this.right=t+i),e<this.top?this.top=e:e+s>this.bottom&&(this.bottom=e+s)}},Object.defineProperty(t,"__esModule",{value:!0})});
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports,require("pixi.js")):"function"==typeof define&&define.amd?define(["exports","pixi.js"],e):e((t=t||self).Viewport={},t.PIXI)}(this,(function(t,e){"use strict";class i{constructor(t){this.viewport=t,this.touches=[],this.addListeners()}addListeners(){this.viewport.interactive=!0,this.viewport.forceHitArea||(this.viewport.hitArea=new e.Rectangle(0,0,this.viewport.worldWidth,this.viewport.worldHeight)),this.viewport.on("pointerdown",this.down,this),this.viewport.on("pointermove",this.move,this),this.viewport.on("pointerup",this.up,this),this.viewport.on("pointerupoutside",this.up,this),this.viewport.on("pointercancel",this.up,this),this.viewport.on("pointerout",this.up,this),this.wheelFunction=t=>this.handleWheel(t),this.viewport.options.divWheel.addEventListener("wheel",this.wheelFunction,{passive:this.viewport.options.passiveWheel}),this.isMouseDown=!1}destroy(){this.viewport.options.divWheel.removeEventListener("wheel",this.wheelFunction)}down(t){if(this.viewport.pause||!this.viewport.worldVisible)return;if("mouse"===t.data.pointerType?this.isMouseDown=!0:this.get(t.data.pointerId)||this.touches.push({id:t.data.pointerId,last:null}),1===this.count()){this.last=t.data.global.clone();const e=this.viewport.plugins.get("decelerate"),i=this.viewport.plugins.get("bounce");e&&e.isActive()||i&&i.isActive()?this.clickedAvailable=!1:this.clickedAvailable=!0}else this.clickedAvailable=!1;this.viewport.plugins.down(t)&&this.viewport.options.stopPropagation&&t.stopPropagation()}checkThreshold(t){return Math.abs(t)>=this.viewport.threshold}move(t){if(this.viewport.pause||!this.viewport.worldVisible)return;const e=this.viewport.plugins.move(t);if(this.clickedAvailable){const e=t.data.global.x-this.last.x,i=t.data.global.y-this.last.y;(this.checkThreshold(e)||this.checkThreshold(i))&&(this.clickedAvailable=!1)}e&&this.viewport.options.stopPropagation&&t.stopPropagation()}up(t){if(this.viewport.pause||!this.viewport.worldVisible)return;"mouse"===t.data.pointerType&&(this.isMouseDown=!1),"mouse"!==t.data.pointerType&&this.remove(t.data.pointerId);const e=this.viewport.plugins.up(t);this.clickedAvailable&&0===this.count()&&(this.viewport.emit("clicked",{event:t,screen:this.last,world:this.viewport.toWorld(this.last),viewport:this}),this.clickedAvailable=!1),e&&this.viewport.options.stopPropagation&&t.stopPropagation()}getPointerPosition(t){let i=new e.Point;return this.viewport.options.interaction?this.viewport.options.interaction.mapPositionToPoint(i,t.clientX,t.clientY):(i.x=t.clientX,i.y=t.clientY),i}handleWheel(t){if(this.viewport.pause||!this.viewport.worldVisible)return;const e=this.viewport.toLocal(this.getPointerPosition(t));if(this.viewport.left<=e.x&&e.x<=this.viewport.right&&this.viewport.top<=e.y&&e.y<=this.viewport.bottom){this.viewport.plugins.wheel(t)&&!this.viewport.options.passiveWheel&&t.preventDefault()}}pause(){this.touches=[],this.isMouseDown=!1}get(t){for(let e of this.touches)if(e.id===t)return e;return null}remove(t){for(let e=0;e<this.touches.length;e++)if(this.touches[e].id===t)return void this.touches.splice(e,1)}count(){return(this.isMouseDown?1:0)+this.touches.length}}const s=["drag","pinch","wheel","follow","mouse-edges","decelerate","bounce","snap-zoom","clamp-zoom","snap","clamp"];class n{constructor(t){this.viewport=t,this.list=[],this.plugins={}}add(t,e,i=s.length){this.plugins[t]=e;const n=s.indexOf(t);-1!==n&&s.splice(n,1),s.splice(i,0,t),this.sort()}get(t){return this.plugins[t]}update(t){for(let e of this.list)e.update(t)}resize(){for(let t of this.list)t.resize()}reset(){for(let t of this.list)t.reset()}remove(t){this.plugins[t]&&(this.plugins[t]=null,this.viewport.emit(t+"-remove"),this.sort())}pause(t){this.plugins[t]&&this.plugins[t].pause()}resume(t){this.plugins[t]&&this.plugins[t].resume()}sort(){this.list=[];for(let t of s)this.plugins[t]&&this.list.push(this.plugins[t])}down(t){let e=!1;for(let i of this.list)i.down(t)&&(e=!0);return e}move(t){let e=!1;for(let i of this.viewport.plugins.list)i.move(t)&&(e=!0);return e}up(t){let e=!1;for(let i of this.list)i.up(t)&&(e=!0);return e}wheel(t){let e=!1;for(let i of this.list)i.wheel(t)&&(e=!0);return e}}class h{constructor(t){this.parent=t,this.paused=!1}destroy(){}down(){return!1}move(){return!1}up(){return!1}wheel(){return!1}update(){}resize(){}reset(){}pause(){this.paused=!0}resume(){this.paused=!1}}const o={direction:"all",pressDrag:!0,wheel:!0,wheelScroll:1,reverse:!1,clampWheel:!1,underflow:"center",factor:1,mouseButtons:"all",keyToPress:null,ignoreKeyToPressOnTouch:!1};class r extends h{constructor(t,e={}){super(t),this.options=Object.assign({},o,e),this.moved=!1,this.reverse=this.options.reverse?1:-1,this.xDirection=!this.options.direction||"all"===this.options.direction||"x"===this.options.direction,this.yDirection=!this.options.direction||"all"===this.options.direction||"y"===this.options.direction,this.keyIsPressed=!1,this.parseUnderflow(),this.mouseButtons(this.options.mouseButtons),this.options.keyToPress&&this.handleKeyPresses(this.options.keyToPress)}handleKeyPresses(t){parent.addEventListener("keydown",e=>{t.includes(e.code)&&(this.keyIsPressed=!0)}),parent.addEventListener("keyup",e=>{t.includes(e.code)&&(this.keyIsPressed=!1)})}mouseButtons(t){this.mouse=t&&"all"!==t?[-1!==t.indexOf("left"),-1!==t.indexOf("middle"),-1!==t.indexOf("right")]:[!0,!0,!0]}parseUnderflow(){const t=this.options.underflow.toLowerCase();"center"===t?(this.underflowX=0,this.underflowY=0):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0)}checkButtons(t){const e="mouse"===t.data.pointerType,i=this.parent.input.count();return!(!(1===i||i>1&&!this.parent.plugins.get("pinch"))||e&&!this.mouse[t.data.button])}checkKeyPress(t){return!!(!this.options.keyToPress||this.keyIsPressed||this.options.ignoreKeyToPressOnTouch&&"touch"===t.data.pointerType)}down(t){if(!this.paused&&this.options.pressDrag)return this.checkButtons(t)&&this.checkKeyPress(t)?(this.last={x:t.data.global.x,y:t.data.global.y},this.current=t.data.pointerId,!0):void(this.last=null)}get active(){return this.moved}move(t){if(!this.paused&&this.options.pressDrag&&this.last&&this.current===t.data.pointerId){const i=t.data.global.x,s=t.data.global.y,n=this.parent.input.count();if(1===n||n>1&&!this.parent.plugins.get("pinch")){const n=i-this.last.x,h=s-this.last.y;if(this.moved||this.xDirection&&this.parent.input.checkThreshold(n)||this.yDirection&&this.parent.input.checkThreshold(h)){const n={x:i,y:s};return this.xDirection&&(this.parent.x+=(n.x-this.last.x)*this.options.factor),this.yDirection&&(this.parent.y+=(n.y-this.last.y)*this.options.factor),this.last=n,this.moved||this.parent.emit("drag-start",{event:t,screen:new e.Point(this.last.x,this.last.y),world:this.parent.toWorld(new e.Point(this.last.x,this.last.y)),viewport:this.parent}),this.moved=!0,this.parent.emit("moved",{viewport:this.parent,type:"drag"}),!0}}else this.moved=!1}}up(t){if(this.paused)return;const i=this.parent.input.touches;if(1===i.length){const t=i[0];return t.last&&(this.last={x:t.last.x,y:t.last.y},this.current=t.id),this.moved=!1,!0}if(this.last&&this.moved){const i=new e.Point(this.last.x,this.last.y);return this.parent.emit("drag-end",{event:t,screen:i,world:this.parent.toWorld(i),viewport:this.parent}),this.last=null,this.moved=!1,!0}}wheel(t){if(!this.paused&&this.options.wheel){if(!this.parent.plugins.get("wheel"))return this.xDirection&&(this.parent.x+=t.deltaX*this.options.wheelScroll*this.reverse),this.yDirection&&(this.parent.y+=t.deltaY*this.options.wheelScroll*this.reverse),this.options.clampWheel&&this.clamp(),this.parent.emit("wheel-scroll",this.parent),this.parent.emit("moved",{viewport:this.parent,type:"wheel"}),this.parent.options.passiveWheel||t.preventDefault(),!0}}resume(){this.last=null,this.paused=!1}clamp(){const t=this.parent.plugins.get("decelerate")||{};if("y"!==this.options.clampWheel)if(this.parent.screenWorldWidth<this.parent.screenWidth)switch(this.underflowX){case-1:this.parent.x=0;break;case 1:this.parent.x=this.parent.screenWidth-this.parent.screenWorldWidth;break;default:this.parent.x=(this.parent.screenWidth-this.parent.screenWorldWidth)/2}else this.parent.left<0?(this.parent.x=0,t.x=0):this.parent.right>this.parent.worldWidth&&(this.parent.x=-this.parent.worldWidth*this.parent.scale.x+this.parent.screenWidth,t.x=0);if("x"!==this.options.clampWheel)if(this.parent.screenWorldHeight<this.parent.screenHeight)switch(this.underflowY){case-1:this.parent.y=0;break;case 1:this.parent.y=this.parent.screenHeight-this.parent.screenWorldHeight;break;default:this.parent.y=(this.parent.screenHeight-this.parent.screenWorldHeight)/2}else this.parent.top<0&&(this.parent.y=0,t.y=0),this.parent.bottom>this.parent.worldHeight&&(this.parent.y=-this.parent.worldHeight*this.parent.scale.y+this.parent.screenHeight,t.y=0)}}const a={noDrag:!1,percent:1,center:null};class p extends h{constructor(t,e={}){super(t),this.options=Object.assign({},a,e)}down(){if(this.parent.input.count()>=2)return this.active=!0,!0}move(t){if(this.paused||!this.active)return;const e=t.data.global.x,i=t.data.global.y,s=this.parent.input.touches;if(s.length>=2){const n=s[0],h=s[1],o=n.last&&h.last?Math.sqrt(Math.pow(h.last.x-n.last.x,2)+Math.pow(h.last.y-n.last.y,2)):null;if(n.id===t.data.pointerId?n.last={x:e,y:i,data:t.data}:h.id===t.data.pointerId&&(h.last={x:e,y:i,data:t.data}),o){let t;const e={x:n.last.x+(h.last.x-n.last.x)/2,y:n.last.y+(h.last.y-n.last.y)/2};this.options.center||(t=this.parent.toLocal(e));let i=Math.sqrt(Math.pow(h.last.x-n.last.x,2)+Math.pow(h.last.y-n.last.y,2));i=0===i?i=1e-10:i;const s=(1-o/i)*this.options.percent*this.parent.scale.x;this.parent.scale.x+=s,this.parent.scale.y+=s,this.parent.emit("zoomed",{viewport:this.parent,type:"pinch"});const r=this.parent.plugins.get("clamp-zoom");if(r&&r.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const i=this.parent.toGlobal(t);this.parent.x+=e.x-i.x,this.parent.y+=e.y-i.y,this.parent.emit("moved",{viewport:this.parent,type:"pinch"})}!this.options.noDrag&&this.lastCenter&&(this.parent.x+=e.x-this.lastCenter.x,this.parent.y+=e.y-this.lastCenter.y,this.parent.emit("moved",{viewport:this.parent,type:"pinch"})),this.lastCenter=e,this.moved=!0}else this.pinching||(this.parent.emit("pinch-start",this.parent),this.pinching=!0);return!0}}up(){if(this.pinching&&this.parent.input.touches.length<=1)return this.active=!1,this.lastCenter=null,this.pinching=!1,this.moved=!1,this.parent.emit("pinch-end",this.parent),!0}}const l={left:!1,right:!1,top:!1,bottom:!1,direction:null,underflow:"center"};class c extends h{constructor(t,e={}){super(t),this.options=Object.assign({},l,e),this.options.direction&&(this.options.left="x"===this.options.direction||"all"===this.options.direction||null,this.options.right="x"===this.options.direction||"all"===this.options.direction||null,this.options.top="y"===this.options.direction||"all"===this.options.direction||null,this.options.bottom="y"===this.options.direction||"all"===this.options.direction||null),this.parseUnderflow(),this.last={x:null,y:null,scaleX:null,scaleY:null},this.update()}parseUnderflow(){const t=this.options.underflow.toLowerCase();"none"===t?this.noUnderflow=!0:"center"===t?(this.underflowX=this.underflowY=0,this.noUnderflow=!1):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0,this.noUnderflow=!1)}move(){return this.update(),!1}update(){if(this.paused)return;if(this.parent.x===this.last.x&&this.parent.y===this.last.y&&this.parent.scale.x===this.last.scaleX&&this.parent.scale.y===this.last.scaleY)return;const t={x:this.parent.x,y:this.parent.y},e=this.parent.plugins.decelerate||{};if(null!==this.options.left||null!==this.options.right){let i=!1;if(this.parent.screenWorldWidth<this.parent.screenWidth){if(!this.noUnderflow)switch(this.underflowX){case-1:0!==this.parent.x&&(this.parent.x=0,i=!0);break;case 1:this.parent.x!==this.parent.screenWidth-this.parent.screenWorldWidth&&(this.parent.x=this.parent.screenWidth-this.parent.screenWorldWidth,i=!0);break;default:this.parent.x!==(this.parent.screenWidth-this.parent.screenWorldWidth)/2&&(this.parent.x=(this.parent.screenWidth-this.parent.screenWorldWidth)/2,i=!0)}}else null!==this.options.left&&this.parent.left<(!0===this.options.left?0:this.options.left)&&(this.parent.x=-(!0===this.options.left?0:this.options.left)*this.parent.scale.x,e.x=0,i=!0),null!==this.options.right&&this.parent.right>(!0===this.options.right?this.parent.worldWidth:this.options.right)&&(this.parent.x=-(!0===this.options.right?this.parent.worldWidth:this.options.right)*this.parent.scale.x+this.parent.screenWidth,e.x=0,i=!0);i&&this.parent.emit("moved",{viewport:this.parent,original:t,type:"clamp-x"})}if(null!==this.options.top||null!==this.options.bottom){let i=!1;if(this.parent.screenWorldHeight<this.parent.screenHeight){if(!this.noUnderflow)switch(this.underflowY){case-1:0!==this.parent.y&&(this.parent.y=0,i=!0);break;case 1:this.parent.y!==this.parent.screenHeight-this.parent.screenWorldHeight&&(this.parent.y=this.parent.screenHeight-this.parent.screenWorldHeight,i=!0);break;default:this.parent.y!==(this.parent.screenHeight-this.parent.screenWorldHeight)/2&&(this.parent.y=(this.parent.screenHeight-this.parent.screenWorldHeight)/2,i=!0)}}else null!==this.options.top&&this.parent.top<(!0===this.options.top?0:this.options.top)&&(this.parent.y=-(!0===this.options.top?0:this.options.top)*this.parent.scale.y,e.y=0,i=!0),null!==this.options.bottom&&this.parent.bottom>(!0===this.options.bottom?this.parent.worldHeight:this.options.bottom)&&(this.parent.y=-(!0===this.options.bottom?this.parent.worldHeight:this.options.bottom)*this.parent.scale.y+this.parent.screenHeight,e.y=0,i=!0);i&&this.parent.emit("moved",{viewport:this.parent,original:t,type:"clamp-y"})}this.last.x=this.parent.x,this.last.y=this.parent.y,this.last.scaleX=this.parent.scale.x,this.last.scaleY=this.parent.scale.y}reset(){this.update()}}const d={minWidth:null,minHeight:null,maxWidth:null,maxHeight:null,minScale:null,maxScale:null};class u extends h{constructor(t,e={}){super(t),this.options=Object.assign({},d,e),this.clamp()}resize(){this.clamp()}clamp(){if(!this.paused)if(this.options.minWidth||this.options.minHeight||this.options.maxWidth||this.options.maxHeight){let t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight;if(null!==this.options.minWidth&&t<this.options.minWidth){const i=this.parent.scale.x;this.parent.fitWidth(this.options.minWidth,!1,!1,!0),this.parent.scale.y*=this.parent.scale.x/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.maxWidth&&t>this.options.maxWidth){const i=this.parent.scale.x;this.parent.fitWidth(this.options.maxWidth,!1,!1,!0),this.parent.scale.y*=this.parent.scale.x/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.minHeight&&e<this.options.minHeight){const i=this.parent.scale.y;this.parent.fitHeight(this.options.minHeight,!1,!1,!0),this.parent.scale.x*=this.parent.scale.y/i,t=this.parent.worldScreenWidth,e=this.parent.worldScreenHeight,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}if(null!==this.options.maxHeight&&e>this.options.maxHeight){const t=this.parent.scale.y;this.parent.fitHeight(this.options.maxHeight,!1,!1,!0),this.parent.scale.x*=this.parent.scale.y/t,this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"})}}else{let t=this.parent.scale.x;null!==this.options.minScale&&t<this.options.minScale&&(t=this.options.minScale),null!==this.options.maxScale&&t>this.options.maxScale&&(t=this.options.maxScale),t!==this.parent.scale.x&&(this.parent.scale.set(t),this.parent.emit("zoomed",{viewport:this.parent,type:"clamp-zoom"}))}}reset(){this.clamp()}}const g={friction:.95,bounce:.8,minSpeed:.01};class m extends h{constructor(t,e={}){super(t),this.options=Object.assign({},g,e),this.saved=[],this.reset(),this.parent.on("moved",t=>this.moved(t))}destroy(){this.parent}down(){this.saved=[],this.x=this.y=!1}isActive(){return this.x||this.y}move(){if(this.paused)return;const t=this.parent.input.count();(1===t||t>1&&!this.parent.plugins.get("pinch"))&&(this.saved.push({x:this.parent.x,y:this.parent.y,time:performance.now()}),this.saved.length>60&&this.saved.splice(0,30))}moved(t){if(this.saved.length){const e=this.saved[this.saved.length-1];"clamp-x"===t.type?e.x===t.original.x&&(e.x=this.parent.x):"clamp-y"===t.type&&e.y===t.original.y&&(e.y=this.parent.y)}}up(){if(0===this.parent.input.count()&&this.saved.length){const t=performance.now();for(let e of this.saved)if(e.time>=t-100){const i=t-e.time;this.x=(this.parent.x-e.x)/i,this.y=(this.parent.y-e.y)/i,this.percentChangeX=this.percentChangeY=this.options.friction;break}}}activate(t){void 0!==(t=t||{}).x&&(this.x=t.x,this.percentChangeX=this.options.friction),void 0!==t.y&&(this.y=t.y,this.percentChangeY=this.options.friction)}update(t){if(this.paused)return;let e;this.x&&(this.parent.x+=this.x*t,this.x*=this.percentChangeX,Math.abs(this.x)<this.options.minSpeed&&(this.x=0),e=!0),this.y&&(this.parent.y+=this.y*t,this.y*=this.percentChangeY,Math.abs(this.y)<this.options.minSpeed&&(this.y=0),e=!0),e&&this.parent.emit("moved",{viewport:this.parent,type:"decelerate"})}reset(){this.x=this.y=null}}var w="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};var f=function(t,e){return t(e={exports:{}},e.exports),e.exports}((function(t,e){(function(){var e;(function(e){t.exports=e})(e={linear:function(t,e,i,s){return i*t/s+e},easeInQuad:function(t,e,i,s){return i*(t/=s)*t+e},easeOutQuad:function(t,e,i,s){return-i*(t/=s)*(t-2)+e},easeInOutQuad:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t+e:-i/2*(--t*(t-2)-1)+e},easeInCubic:function(t,e,i,s){return i*(t/=s)*t*t+e},easeOutCubic:function(t,e,i,s){return i*((t=t/s-1)*t*t+1)+e},easeInOutCubic:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t+e:i/2*((t-=2)*t*t+2)+e},easeInQuart:function(t,e,i,s){return i*(t/=s)*t*t*t+e},easeOutQuart:function(t,e,i,s){return-i*((t=t/s-1)*t*t*t-1)+e},easeInOutQuart:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t*t+e:-i/2*((t-=2)*t*t*t-2)+e},easeInQuint:function(t,e,i,s){return i*(t/=s)*t*t*t*t+e},easeOutQuint:function(t,e,i,s){return i*((t=t/s-1)*t*t*t*t+1)+e},easeInOutQuint:function(t,e,i,s){return(t/=s/2)<1?i/2*t*t*t*t*t+e:i/2*((t-=2)*t*t*t*t+2)+e},easeInSine:function(t,e,i,s){return-i*Math.cos(t/s*(Math.PI/2))+i+e},easeOutSine:function(t,e,i,s){return i*Math.sin(t/s*(Math.PI/2))+e},easeInOutSine:function(t,e,i,s){return-i/2*(Math.cos(Math.PI*t/s)-1)+e},easeInExpo:function(t,e,i,s){return 0===t?e:i*Math.pow(2,10*(t/s-1))+e},easeOutExpo:function(t,e,i,s){return t===s?e+i:i*(1-Math.pow(2,-10*t/s))+e},easeInOutExpo:function(t,e,i,s){return(t/=s/2)<1?i/2*Math.pow(2,10*(t-1))+e:i/2*(2-Math.pow(2,-10*--t))+e},easeInCirc:function(t,e,i,s){return-i*(Math.sqrt(1-(t/=s)*t)-1)+e},easeOutCirc:function(t,e,i,s){return i*Math.sqrt(1-(t=t/s-1)*t)+e},easeInOutCirc:function(t,e,i,s){return(t/=s/2)<1?-i/2*(Math.sqrt(1-t*t)-1)+e:i/2*(Math.sqrt(1-(t-=2)*t)+1)+e},easeInElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s),(h=0)||(h=.3*s),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),-n*Math.pow(2,10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)+e},easeOutElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s),(h=0)||(h=.3*s),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),n*Math.pow(2,-10*t)*Math.sin((t*s-o)*(2*Math.PI)/h)+i+e},easeInOutElastic:function(t,e,i,s){var n,h,o;return o=1.70158,0===t||(t/=s/2),(h=0)||(h=s*(.3*1.5)),(n=i)<Math.abs(i)?(n=i,o=h/4):o=h/(2*Math.PI)*Math.asin(i/n),t<1?n*Math.pow(2,10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)*-.5+e:n*Math.pow(2,-10*(t-=1))*Math.sin((t*s-o)*(2*Math.PI)/h)*.5+i+e},easeInBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),i*(t/=s)*t*((n+1)*t-n)+e},easeOutBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),i*((t=t/s-1)*t*((n+1)*t+n)+1)+e},easeInOutBack:function(t,e,i,s,n){return void 0===n&&(n=1.70158),(t/=s/2)<1?i/2*(t*t*((1+(n*=1.525))*t-n))+e:i/2*((t-=2)*t*((1+(n*=1.525))*t+n)+2)+e},easeInBounce:function(t,i,s,n){return s-e.easeOutBounce(n-t,0,s,n)+i},easeOutBounce:function(t,e,i,s){return(t/=s)<1/2.75?i*(7.5625*t*t)+e:t<2/2.75?i*(7.5625*(t-=1.5/2.75)*t+.75)+e:t<2.5/2.75?i*(7.5625*(t-=2.25/2.75)*t+.9375)+e:i*(7.5625*(t-=2.625/2.75)*t+.984375)+e},easeInOutBounce:function(t,i,s,n){return t<n/2?.5*e.easeInBounce(2*t,0,s,n)+i:.5*e.easeOutBounce(2*t-n,0,s,n)+.5*s+i}})}).call(w)}));function y(t,e){return t?"function"==typeof t?t:"string"==typeof t?f[t]:void 0:f[e]}const x={sides:"all",friction:.5,time:150,ease:"easeInOutSine",underflow:"center",bounceBox:null};class v extends h{constructor(t,e={}){super(t),this.options=Object.assign({},x,e),this.ease=y(this.options.ease,"easeInOutSine"),this.options.sides&&("all"===this.options.sides?this.top=this.bottom=this.left=this.right=!0:"horizontal"===this.options.sides?this.right=this.left=!0:"vertical"===this.options.sides?this.top=this.bottom=!0:(this.top=-1!==this.options.sides.indexOf("top"),this.bottom=-1!==this.options.sides.indexOf("bottom"),this.left=-1!==this.options.sides.indexOf("left"),this.right=-1!==this.options.sides.indexOf("right"))),this.parseUnderflow(),this.last={},this.reset()}parseUnderflow(){const t=this.options.underflow.toLowerCase();"center"===t?(this.underflowX=0,this.underflowY=0):(this.underflowX=-1!==t.indexOf("left")?-1:-1!==t.indexOf("right")?1:0,this.underflowY=-1!==t.indexOf("top")?-1:-1!==t.indexOf("bottom")?1:0)}isActive(){return null!==this.toX||null!==this.toY}down(){this.toX=this.toY=null}up(){this.bounce()}update(t){if(!this.paused){if(this.bounce(),this.toX){const e=this.toX;e.time+=t,this.parent.emit("moved",{viewport:this.parent,type:"bounce-x"}),e.time>=this.options.time?(this.parent.x=e.end,this.toX=null,this.parent.emit("bounce-x-end",this.parent)):this.parent.x=this.ease(e.time,e.start,e.delta,this.options.time)}if(this.toY){const e=this.toY;e.time+=t,this.parent.emit("moved",{viewport:this.parent,type:"bounce-y"}),e.time>=this.options.time?(this.parent.y=e.end,this.toY=null,this.parent.emit("bounce-y-end",this.parent)):this.parent.y=this.ease(e.time,e.start,e.delta,this.options.time)}}}calcUnderflowX(){let t;switch(this.underflowX){case-1:t=0;break;case 1:t=this.parent.screenWidth-this.parent.screenWorldWidth;break;default:t=(this.parent.screenWidth-this.parent.screenWorldWidth)/2}return t}calcUnderflowY(){let t;switch(this.underflowY){case-1:t=0;break;case 1:t=this.parent.screenHeight-this.parent.screenWorldHeight;break;default:t=(this.parent.screenHeight-this.parent.screenWorldHeight)/2}return t}oob(){const t=this.options.bounceBox;if(t){const i=void 0===t.x?0:t.x,s=void 0===t.y?0:t.y,n=void 0===t.width?this.parent.worldWidth:t.width,h=void 0===t.height?this.parent.worldHeight:t.height;return{left:this.parent.left<i,right:this.parent.right>n,top:this.parent.top<s,bottom:this.parent.bottom>h,topLeft:new e.Point(i*this.parent.scale.x,s*this.parent.scale.y),bottomRight:new e.Point(n*this.parent.scale.x-this.parent.screenWidth,h*this.parent.scale.y-this.parent.screenHeight)}}return{left:this.parent.left<0,right:this.parent.right>this.parent.worldWidth,top:this.parent.top<0,bottom:this.parent.bottom>this.parent.worldHeight,topLeft:new e.Point(0,0),bottomRight:new e.Point(this.parent.worldWidth*this.parent.scale.x-this.parent.screenWidth,this.parent.worldHeight*this.parent.scale.y-this.parent.screenHeight)}}bounce(){if(this.paused)return;let t,e=this.parent.plugins.get("decelerate");e&&(e.x||e.y)&&(e.x&&e.percentChangeX===e.options.friction||e.y&&e.percentChangeY===e.options.friction)&&(t=this.oob(),(t.left&&this.left||t.right&&this.right)&&(e.percentChangeX=this.options.friction),(t.top&&this.top||t.bottom&&this.bottom)&&(e.percentChangeY=this.options.friction));const i=this.parent.plugins.get("drag")||{},s=this.parent.plugins.get("pinch")||{};if(e=e||{},!(i.active||s.active||this.toX&&this.toY||e.x&&e.y)){t=t||this.oob();const i=t.topLeft,s=t.bottomRight;if(!this.toX&&!e.x){let e=null;t.left&&this.left?e=this.parent.screenWorldWidth<this.parent.screenWidth?this.calcUnderflowX():-i.x:t.right&&this.right&&(e=this.parent.screenWorldWidth<this.parent.screenWidth?this.calcUnderflowX():-s.x),null!==e&&this.parent.x!==e&&(this.toX={time:0,start:this.parent.x,delta:e-this.parent.x,end:e},this.parent.emit("bounce-x-start",this.parent))}if(!this.toY&&!e.y){let e=null;t.top&&this.top?e=this.parent.screenWorldHeight<this.parent.screenHeight?this.calcUnderflowY():-i.y:t.bottom&&this.bottom&&(e=this.parent.screenWorldHeight<this.parent.screenHeight?this.calcUnderflowY():-s.y),null!==e&&this.parent.y!==e&&(this.toY={time:0,start:this.parent.y,delta:e-this.parent.y,end:e},this.parent.emit("bounce-y-start",this.parent))}}}reset(){this.toX=this.toY=null,this.bounce()}}const b={topLeft:!1,friction:.8,time:1e3,ease:"easeInOutSine",interrupt:!0,removeOnComplete:!1,removeOnInterrupt:!1,forceStart:!1};class W extends h{constructor(t,e,i,s={}){super(t),this.options=Object.assign({},b,s),this.ease=y(s.ease,"easeInOutSine"),this.x=e,this.y=i,this.options.forceStart&&this.snapStart()}snapStart(){this.percent=0,this.snapping={time:0};const t=this.options.topLeft?this.parent.corner:this.parent.center;this.deltaX=this.x-t.x,this.deltaY=this.y-t.y,this.startX=t.x,this.startY=t.y,this.parent.emit("snap-start",this.parent)}wheel(){this.options.removeOnInterrupt&&this.parent.plugins.remove("snap")}down(){this.options.removeOnInterrupt?this.parent.plugins.remove("snap"):this.options.interrupt&&(this.snapping=null)}up(){if(0===this.parent.input.count()){const t=this.parent.plugins.get("decelerate");t&&(t.x||t.y)&&(t.percentChangeX=t.percentChangeY=this.options.friction)}}update(t){if(!(this.paused||this.options.interrupt&&0!==this.parent.input.count()))if(this.snapping){const e=this.snapping;let i,s,n;if(e.time+=t,e.time>this.options.time)i=!0,s=this.startX+this.deltaX,n=this.startY+this.deltaY;else{const t=this.ease(e.time,0,1,this.options.time);s=this.startX+this.deltaX*t,n=this.startY+this.deltaY*t}this.options.topLeft?this.parent.moveCorner(s,n):this.parent.moveCenter(s,n),this.parent.emit("moved",{viewport:this.parent,type:"snap"}),i&&(this.options.removeOnComplete&&this.parent.plugins.remove("snap"),this.parent.emit("snap-end",this.parent),this.snapping=null)}else{const t=this.options.topLeft?this.parent.corner:this.parent.center;t.x===this.x&&t.y===this.y||this.snapStart()}}}const H={width:0,height:0,time:1e3,ease:"easeInOutSine",center:null,interrupt:!0,removeOnComplete:!1,removeOnInterrupts:!1,forceStart:!1,noMove:!1};class M extends h{constructor(t,e={}){super(t),this.options=Object.assign({},H,e),this.ease=y(this.options.ease),this.options.width>0&&(this.xScale=t.screenWidth/this.options.width),this.options.height>0&&(this.yScale=t.screenHeight/this.options.height),this.xIndependent=!!this.xScale,this.yIndependent=!!this.yScale,this.xScale=this.xIndependent?this.xScale:this.yScale,this.yScale=this.yIndependent?this.yScale:this.xScale,0===this.options.time?(t.container.scale.x=this.xScale,t.container.scale.y=this.yScale,this.options.removeOnComplete&&this.parent.plugins.remove("snap-zoom")):e.forceStart&&this.createSnapping()}createSnapping(){const t=this.parent.scale;this.snapping={time:0,startX:t.x,startY:t.y,deltaX:this.xScale-t.x,deltaY:this.yScale-t.y},this.parent.emit("snap-zoom-start",this.parent)}resize(){this.snapping=null,this.options.width>0&&(this.xScale=this.parent.screenWidth/this.options.width),this.options.height>0&&(this.yScale=this.parent.screenHeight/this.options.height),this.xScale=this.xIndependent?this.xScale:this.yScale,this.yScale=this.yIndependent?this.yScale:this.xScale}wheel(){this.options.removeOnInterrupt&&this.parent.plugins.remove("snap-zoom")}down(){this.options.removeOnInterrupt?this.parent.plugins.remove("snap-zoom"):this.options.interrupt&&(this.snapping=null)}update(t){if(this.paused)return;if(this.options.interrupt&&0!==this.parent.input.count())return;let e;if(this.options.center||this.options.noMove||(e=this.parent.center),this.snapping){if(this.snapping){const i=this.snapping;if(i.time+=t,i.time>=this.options.time)this.parent.scale.set(this.xScale,this.yScale),this.options.removeOnComplete&&this.parent.plugins.remove("snap-zoom"),this.parent.emit("snap-zoom-end",this.parent),this.snapping=null;else{const t=this.snapping;this.parent.scale.x=this.ease(t.time,t.startX,t.deltaX,this.options.time),this.parent.scale.y=this.ease(t.time,t.startY,t.deltaY,this.options.time)}const s=this.parent.plugins.get("clamp-zoom");s&&s.clamp(),this.options.noMove||(this.options.center?this.parent.moveCenter(this.options.center):this.parent.moveCenter(e))}}else this.parent.scale.x===this.xScale&&this.parent.scale.y===this.yScale||this.createSnapping()}resume(){this.snapping=null,super.resume()}}const S={speed:0,acceleration:null,radius:null};class O extends h{constructor(t,e,i={}){super(t),this.target=e,this.options=Object.assign({},S,i),this.velocity={x:0,y:0}}update(t){if(this.paused)return;const e=this.parent.center;let i=this.target.x,s=this.target.y;if(this.options.radius){if(!(Math.sqrt(Math.pow(this.target.y-e.y,2)+Math.pow(this.target.x-e.x,2))>this.options.radius))return;{const t=Math.atan2(this.target.y-e.y,this.target.x-e.x);i=this.target.x-Math.cos(t)*this.options.radius,s=this.target.y-Math.sin(t)*this.options.radius}}const n=i-e.x,h=s-e.y;if(n||h)if(this.options.speed)if(this.options.acceleration){const o=Math.atan2(s-e.y,i-e.x),r=Math.sqrt(Math.pow(n,2)+Math.pow(h,2));if(r){const a=(Math.pow(this.velocity.x,2)+Math.pow(this.velocity.y,2))/(2*this.options.acceleration);this.velocity=r>a?{x:Math.min(this.velocity.x+this.options.acceleration*t,this.options.speed),y:Math.min(this.velocity.y+this.options.acceleration*t,this.options.speed)}:{x:Math.max(this.velocity.x-this.options.acceleration*this.options.speed,0),y:Math.max(this.velocity.y-this.options.acceleration*this.options.speed,0)};const p=Math.cos(o)*this.velocity.x,l=Math.sin(o)*this.velocity.y,c=Math.abs(p)>Math.abs(n)?i:e.x+p,d=Math.abs(l)>Math.abs(h)?s:e.y+l;this.parent.moveCenter(c,d),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}}else{const t=Math.atan2(s-e.y,i-e.x),o=Math.cos(t)*this.options.speed,r=Math.sin(t)*this.options.speed,a=Math.abs(o)>Math.abs(n)?i:e.x+o,p=Math.abs(r)>Math.abs(h)?s:e.y+r;this.parent.moveCenter(a,p),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}else this.parent.moveCenter(i,s),this.parent.emit("moved",{viewport:this.parent,type:"follow"})}}const z={percent:.1,smooth:!1,interrupt:!0,reverse:!1,center:null,lineHeight:20};class I extends h{constructor(t,e={}){super(t),this.options=Object.assign({},z,e)}down(){this.options.interrupt&&(this.smoothing=null)}update(){if(this.smoothing){const t=this.smoothingCenter,e=this.smoothing;let i;this.options.center||(i=this.parent.toLocal(t)),this.parent.scale.x+=e.x,this.parent.scale.y+=e.y,this.parent.emit("zoomed",{viewport:this.parent,type:"wheel"});const s=this.parent.plugins.get("clamp-zoom");if(s&&s.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const e=this.parent.toGlobal(i);this.parent.x+=t.x-e.x,this.parent.y+=t.y-e.y}this.parent.emit("moved",{viewport:this.parent,type:"wheel"}),this.smoothingCount++,this.smoothingCount>=this.options.smooth&&(this.smoothing=null)}}wheel(t){if(this.paused)return;let e=this.parent.input.getPointerPosition(t);const i=(this.options.reverse?-1:1)*-t.deltaY*(t.deltaMode?this.options.lineHeight:1)/500,s=Math.pow(2,(1+this.options.percent)*i);if(this.options.smooth){const t={x:this.smoothing?this.smoothing.x*(this.options.smooth-this.smoothingCount):0,y:this.smoothing?this.smoothing.y*(this.options.smooth-this.smoothingCount):0};this.smoothing={x:((this.parent.scale.x+t.x)*s-this.parent.scale.x)/this.options.smooth,y:((this.parent.scale.y+t.y)*s-this.parent.scale.y)/this.options.smooth},this.smoothingCount=0,this.smoothingCenter=e}else{let t;this.options.center||(t=this.parent.toLocal(e)),this.parent.scale.x*=s,this.parent.scale.y*=s,this.parent.emit("zoomed",{viewport:this.parent,type:"wheel"});const i=this.parent.plugins.get("clamp-zoom");if(i&&i.clamp(),this.options.center)this.parent.moveCenter(this.options.center);else{const i=this.parent.toGlobal(t);this.parent.x+=e.x-i.x,this.parent.y+=e.y-i.y}}return this.parent.emit("moved",{viewport:this.parent,type:"wheel"}),this.parent.emit("wheel",{wheel:{dx:t.deltaX,dy:t.deltaY,dz:t.deltaZ},event:t,viewport:this.parent}),!this.parent.options.passiveWheel||void 0}}const C={radius:null,distance:null,top:null,bottom:null,left:null,right:null,speed:8,reverse:!1,noDecelerate:!1,linear:!1,allowButtons:!1};class k extends h{constructor(t,e={}){super(t),this.options=Object.assign({},C,e),this.reverse=this.options.reverse?1:-1,this.radiusSquared=Math.pow(this.options.radius,2),this.resize()}resize(){const t=this.options.distance;null!==t?(this.left=t,this.top=t,this.right=this.parent.worldScreenWidth-t,this.bottom=this.parent.worldScreenHeight-t):this.radius||(this.left=this.options.left,this.top=this.options.top,this.right=null===this.options.right?null:this.parent.worldScreenWidth-this.options.right,this.bottom=null===this.options.bottom?null:this.parent.worldScreenHeight-this.options.bottom)}down(){this.options.allowButtons||(this.horizontal=this.vertical=null)}move(t){if("mouse"!==t.data.pointerType&&1!==t.data.identifier||!this.options.allowButtons&&0!==t.data.buttons)return;const e=t.data.global.x,i=t.data.global.y;if(this.radiusSquared){const t=this.parent.toScreen(this.parent.center);if(Math.pow(t.x-e,2)+Math.pow(t.y-i,2)>=this.radiusSquared){const s=Math.atan2(t.y-i,t.x-e);this.options.linear?(this.horizontal=Math.round(Math.cos(s))*this.options.speed*this.reverse*.06,this.vertical=Math.round(Math.sin(s))*this.options.speed*this.reverse*.06):(this.horizontal=Math.cos(s)*this.options.speed*this.reverse*.06,this.vertical=Math.sin(s)*this.options.speed*this.reverse*.06)}else this.horizontal&&this.decelerateHorizontal(),this.vertical&&this.decelerateVertical(),this.horizontal=this.vertical=0}else null!==this.left&&e<this.left?this.horizontal=1*this.reverse*this.options.speed*.06:null!==this.right&&e>this.right?this.horizontal=-1*this.reverse*this.options.speed*.06:(this.decelerateHorizontal(),this.horizontal=0),null!==this.top&&i<this.top?this.vertical=1*this.reverse*this.options.speed*.06:null!==this.bottom&&i>this.bottom?this.vertical=-1*this.reverse*this.options.speed*.06:(this.decelerateVertical(),this.vertical=0)}decelerateHorizontal(){const t=this.parent.plugins.get("decelerate");this.horizontal&&t&&!this.options.noDecelerate&&t.activate({x:this.horizontal*this.options.speed*this.reverse/(1e3/60)})}decelerateVertical(){const t=this.parent.plugins.get("decelerate");this.vertical&&t&&!this.options.noDecelerate&&t.activate({y:this.vertical*this.options.speed*this.reverse/(1e3/60)})}up(){this.horizontal&&this.decelerateHorizontal(),this.vertical&&this.decelerateVertical(),this.horizontal=this.vertical=null}update(){if(!this.paused&&(this.horizontal||this.vertical)){const t=this.parent.center;this.horizontal&&(t.x+=this.horizontal*this.options.speed),this.vertical&&(t.y+=this.vertical*this.options.speed),this.parent.moveCenter(t),this.parent.emit("moved",{viewport:this.parent,type:"mouse-edges"})}}}const P={screenWidth:window.innerWidth,screenHeight:window.innerHeight,worldWidth:null,worldHeight:null,threshold:5,passiveWheel:!0,stopPropagation:!1,forceHitArea:null,noTicker:!1,interaction:null,disableOnContextMenu:!1};class X extends e.Container{constructor(t={}){if(super(),this.options=Object.assign({},P,t),t.ticker)this.options.ticker=t.ticker;else{let i;const s=e;i=parseInt(/^(\d+)\./.exec(e.VERSION)[1])<5?s.ticker.shared:s.Ticker.shared,this.options.ticker=t.ticker||i}this.screenWidth=this.options.screenWidth,this.screenHeight=this.options.screenHeight,this._worldWidth=this.options.worldWidth,this._worldHeight=this.options.worldHeight,this.forceHitArea=this.options.forceHitArea,this.threshold=this.options.threshold,this.options.divWheel=this.options.divWheel||document.body,this.options.disableOnContextMenu&&(this.options.divWheel.oncontextmenu=t=>t.preventDefault()),this.options.noTicker||(this.tickerFunction=()=>this.update(this.options.ticker.elapsedMS),this.options.ticker.add(this.tickerFunction)),this.input=new i(this),this.plugins=new n(this)}destroy(t){this.options.noTicker||this.options.ticker.remove(this.tickerFunction),this.input.destroy(),super.destroy(t)}update(t){this.pause||(this.plugins.update(t),this.lastViewport&&(this.lastViewport.x!==this.x||this.lastViewport.y!==this.y?this.moving=!0:this.moving&&(this.emit("moved-end",this),this.moving=!1),this.lastViewport.scaleX!==this.scale.x||this.lastViewport.scaleY!==this.scale.y?this.zooming=!0:this.zooming&&(this.emit("zoomed-end",this),this.zooming=!1)),this.forceHitArea||(this._hitAreaDefault=new e.Rectangle(this.left,this.top,this.worldScreenWidth,this.worldScreenHeight),this.hitArea=this._hitAreaDefault),this._dirty=this._dirty||!this.lastViewport||this.lastViewport.x!==this.x||this.lastViewport.y!==this.y||this.lastViewport.scaleX!==this.scale.x||this.lastViewport.scaleY!==this.scale.y,this.lastViewport={x:this.x,y:this.y,scaleX:this.scale.x,scaleY:this.scale.y},this.emit("frame-end",this))}resize(t=window.innerWidth,e=window.innerHeight,i,s){this.screenWidth=t,this.screenHeight=e,void 0!==i&&(this._worldWidth=i),void 0!==s&&(this._worldHeight=s),this.plugins.resize(),this.dirty=!0}get worldWidth(){return this._worldWidth?this._worldWidth:this.width/this.scale.x}set worldWidth(t){this._worldWidth=t,this.plugins.resize()}get worldHeight(){return this._worldHeight?this._worldHeight:this.height/this.scale.y}set worldHeight(t){this._worldHeight=t,this.plugins.resize()}getVisibleBounds(){return new e.Rectangle(this.left,this.top,this.worldScreenWidth,this.worldScreenHeight)}toWorld(t,i){return 2===arguments.length?this.toLocal(new e.Point(t,i)):this.toLocal(t)}toScreen(t,i){return 2===arguments.length?this.toGlobal(new e.Point(t,i)):this.toGlobal(t)}get worldScreenWidth(){return this.screenWidth/this.scale.x}get worldScreenHeight(){return this.screenHeight/this.scale.y}get screenWorldWidth(){return this.worldWidth*this.scale.x}get screenWorldHeight(){return this.worldHeight*this.scale.y}get center(){return new e.Point(this.worldScreenWidth/2-this.x/this.scale.x,this.worldScreenHeight/2-this.y/this.scale.y)}set center(t){this.moveCenter(t)}moveCenter(){let t,e;return isNaN(arguments[0])?(t=arguments[0].x,e=arguments[0].y):(t=arguments[0],e=arguments[1]),this.position.set((this.worldScreenWidth/2-t)*this.scale.x,(this.worldScreenHeight/2-e)*this.scale.y),this.plugins.reset(),this.dirty=!0,this}get corner(){return new e.Point(-this.x/this.scale.x,-this.y/this.scale.y)}set corner(t){this.moveCorner(t)}moveCorner(t,e){return 1===arguments.length?this.position.set(-t.x*this.scale.x,-t.y*this.scale.y):this.position.set(-t*this.scale.x,-e*this.scale.y),this.plugins.reset(),this}fitWidth(t,e,i=!0,s){let n;e&&(n=this.center),this.scale.x=this.screenWidth/t,i&&(this.scale.y=this.scale.x);const h=this.plugins.get("clamp-zoom");return!s&&h&&h.clamp(),e&&this.moveCenter(n),this}fitHeight(t,e,i=!0,s){let n;e&&(n=this.center),this.scale.y=this.screenHeight/t,i&&(this.scale.x=this.scale.y);const h=this.plugins.get("clamp-zoom");return!s&&h&&h.clamp(),e&&this.moveCenter(n),this}fitWorld(t){let e;t&&(e=this.center),this.scale.x=this.screenWidth/this.worldWidth,this.scale.y=this.screenHeight/this.worldHeight,this.scale.x<this.scale.y?this.scale.y=this.scale.x:this.scale.x=this.scale.y;const i=this.plugins.get("clamp-zoom");return i&&i.clamp(),t&&this.moveCenter(e),this}fit(t,e=this.worldWidth,i=this.worldHeight){let s;t&&(s=this.center),this.scale.x=this.screenWidth/e,this.scale.y=this.screenHeight/i,this.scale.x<this.scale.y?this.scale.y=this.scale.x:this.scale.x=this.scale.y;const n=this.plugins.get("clamp-zoom");return n&&n.clamp(),t&&this.moveCenter(s),this}setZoom(t,e){let i;e&&(i=this.center),this.scale.set(t);const s=this.plugins.get("clamp-zoom");return s&&s.clamp(),e&&this.moveCenter(i),this}zoomPercent(t,e){return this.setZoom(this.scale.x+this.scale.x*t,e)}zoom(t,e){return this.fitWidth(t+this.worldScreenWidth,e),this}set scaled(t){this.setZoom(t,!0)}get scaled(){return this.scale.x}snapZoom(t){return this.plugins.add("snap-zoom",new M(this,t)),this}OOB(){return{left:this.left<0,right:this.right>this.worldWidth,top:this.top<0,bottom:this.bottom>this._worldHeight,cornerPoint:new e.Point(this.worldWidth*this.scale.x-this.screenWidth,this.worldHeight*this.scale.y-this.screenHeight)}}get right(){return-this.x/this.scale.x+this.worldScreenWidth}set right(t){this.x=-t*this.scale.x+this.screenWidth,this.plugins.reset()}get left(){return-this.x/this.scale.x}set left(t){this.x=-t*this.scale.x,this.plugins.reset()}get top(){return-this.y/this.scale.y}set top(t){this.y=-t*this.scale.y,this.plugins.reset()}get bottom(){return-this.y/this.scale.y+this.worldScreenHeight}set bottom(t){this.y=-t*this.scale.y+this.screenHeight,this.plugins.reset()}get dirty(){return this._dirty}set dirty(t){this._dirty=t}get forceHitArea(){return this._forceHitArea}set forceHitArea(t){t?(this._forceHitArea=t,this.hitArea=t):(this._forceHitArea=null,this.hitArea=new e.Rectangle(0,0,this.worldWidth,this.worldHeight))}drag(t){return this.plugins.add("drag",new r(this,t)),this}clamp(t){return this.plugins.add("clamp",new c(this,t)),this}decelerate(t){return this.plugins.add("decelerate",new m(this,t)),this}bounce(t){return this.plugins.add("bounce",new v(this,t)),this}pinch(t){return this.plugins.add("pinch",new p(this,t)),this}snap(t,e,i){return this.plugins.add("snap",new W(this,t,e,i)),this}follow(t,e){return this.plugins.add("follow",new O(this,t,e)),this}wheel(t){return this.plugins.add("wheel",new I(this,t)),this}clampZoom(t){return this.plugins.add("clamp-zoom",new u(this,t)),this}mouseEdges(t){return this.plugins.add("mouse-edges",new k(this,t)),this}get pause(){return this._pause}set pause(t){this._pause=t,this.lastViewport=null,this.moving=!1,this.zooming=!1,t&&this.input.pause()}ensureVisible(t,e,i,s,n){n&&(i>this.worldScreenWidth||s>this.worldScreenHeight)&&(this.fit(!0,i,s),this.emit("zoomed",{viewport:this,type:"ensureVisible"}));let h=!1;t<this.left?(this.left=t,h=!0):t+i>this.right&&(this.right=t+i,h=!0),e<this.top?(this.top=e,h=!0):e+s>this.bottom&&(this.bottom=e+s,h=!0),h&&this.emit("moved",{viewport:this,type:"ensureVisible"})}}t.Plugin=h,t.Viewport=X,Object.defineProperty(t,"__esModule",{value:!0})}));
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"pixi.js":104}],104:[function(require,module,exports){
+},{"pixi.js":105}],105:[function(require,module,exports){
 /*!
  * pixi.js - v5.1.2
  * Compiled Sat, 24 Aug 2019 01:06:18 UTC
@@ -52568,7 +53853,7 @@ exports.filters = filters;
 exports.useDeprecated = useDeprecated;
 
 
-},{"@pixi/accessibility":45,"@pixi/app":46,"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/extract":50,"@pixi/filter-alpha":51,"@pixi/filter-blur":52,"@pixi/filter-color-matrix":53,"@pixi/filter-displacement":54,"@pixi/filter-fxaa":55,"@pixi/filter-noise":56,"@pixi/graphics":57,"@pixi/interaction":58,"@pixi/loaders":59,"@pixi/math":60,"@pixi/mesh":62,"@pixi/mesh-extras":61,"@pixi/mixin-cache-as-bitmap":63,"@pixi/mixin-get-child-by-name":64,"@pixi/mixin-get-global-position":65,"@pixi/particles":66,"@pixi/polyfill":67,"@pixi/prepare":68,"@pixi/runner":69,"@pixi/settings":70,"@pixi/sprite":73,"@pixi/sprite-animated":71,"@pixi/sprite-tiling":72,"@pixi/spritesheet":74,"@pixi/text":76,"@pixi/text-bitmap":75,"@pixi/ticker":77,"@pixi/utils":78}],105:[function(require,module,exports){
+},{"@pixi/accessibility":45,"@pixi/app":46,"@pixi/constants":47,"@pixi/core":48,"@pixi/display":49,"@pixi/extract":50,"@pixi/filter-alpha":51,"@pixi/filter-blur":52,"@pixi/filter-color-matrix":53,"@pixi/filter-displacement":54,"@pixi/filter-fxaa":55,"@pixi/filter-noise":56,"@pixi/graphics":57,"@pixi/interaction":58,"@pixi/loaders":59,"@pixi/math":60,"@pixi/mesh":62,"@pixi/mesh-extras":61,"@pixi/mixin-cache-as-bitmap":63,"@pixi/mixin-get-child-by-name":64,"@pixi/mixin-get-global-position":65,"@pixi/particles":66,"@pixi/polyfill":67,"@pixi/prepare":68,"@pixi/runner":69,"@pixi/settings":70,"@pixi/sprite":73,"@pixi/sprite-animated":71,"@pixi/sprite-tiling":72,"@pixi/spritesheet":74,"@pixi/text":76,"@pixi/text-bitmap":75,"@pixi/ticker":77,"@pixi/utils":78}],106:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -52754,9 +54039,9 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],106:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 (function (global){
-/*! https://mths.be/punycode v1.4.1 by @mathias */
+/*! https://mths.be/punycode v1.3.2 by @mathias */
 ;(function(root) {
 
 	/** Detect free variables */
@@ -52822,7 +54107,7 @@ process.umask = function() { return 0; };
 	 * @returns {Error} Throws a `RangeError` with the applicable error message.
 	 */
 	function error(type) {
-		throw new RangeError(errors[type]);
+		throw RangeError(errors[type]);
 	}
 
 	/**
@@ -52969,7 +54254,7 @@ process.umask = function() { return 0; };
 
 	/**
 	 * Bias adaptation function as per section 3.4 of RFC 3492.
-	 * https://tools.ietf.org/html/rfc3492#section-3.4
+	 * http://tools.ietf.org/html/rfc3492#section-3.4
 	 * @private
 	 */
 	function adapt(delta, numPoints, firstTime) {
@@ -53244,7 +54529,7 @@ process.umask = function() { return 0; };
 		 * @memberOf punycode
 		 * @type String
 		 */
-		'version': '1.4.1',
+		'version': '1.3.2',
 		/**
 		 * An object of methods to convert from JavaScript's internal character
 		 * representation (UCS-2) to Unicode code points, and back.
@@ -53274,24 +54559,21 @@ process.umask = function() { return 0; };
 			return punycode;
 		});
 	} else if (freeExports && freeModule) {
-		if (module.exports == freeExports) {
-			// in Node.js, io.js, or RingoJS v0.8.0+
+		if (module.exports == freeExports) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = punycode;
-		} else {
-			// in Narwhal or RingoJS v0.7.0-
+		} else { // in Narwhal or RingoJS v0.7.0-
 			for (key in punycode) {
 				punycode.hasOwnProperty(key) && (freeExports[key] = punycode[key]);
 			}
 		}
-	} else {
-		// in Rhino or a web browser
+	} else { // in Rhino or a web browser
 		root.punycode = punycode;
 	}
 
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],107:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -53377,7 +54659,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],108:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -53464,13 +54746,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],109:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":107,"./encode":108}],110:[function(require,module,exports){
+},{"./decode":108,"./encode":109}],111:[function(require,module,exports){
 /*!
  * resource-loader - v3.0.1
  * https://github.com/pixijs/pixi-sound
@@ -55821,7 +57103,7 @@ exports.encodeBinary = encodeBinary;
 exports.middleware = index;
 
 
-},{"mini-signals":98,"parse-uri":100}],111:[function(require,module,exports){
+},{"mini-signals":99,"parse-uri":101}],112:[function(require,module,exports){
 // A library of seedable RNGs implemented in Javascript.
 //
 // Usage:
@@ -55883,7 +57165,7 @@ sr.tychei = tychei;
 
 module.exports = sr;
 
-},{"./lib/alea":112,"./lib/tychei":113,"./lib/xor128":114,"./lib/xor4096":115,"./lib/xorshift7":116,"./lib/xorwow":117,"./seedrandom":118}],112:[function(require,module,exports){
+},{"./lib/alea":113,"./lib/tychei":114,"./lib/xor128":115,"./lib/xor4096":116,"./lib/xorshift7":117,"./lib/xorwow":118,"./seedrandom":119}],113:[function(require,module,exports){
 // A port of an algorithm by Johannes Baagøe <baagoe@baagoe.com>, 2010
 // http://baagoe.com/en/RandomMusings/javascript/
 // https://github.com/nquinlan/better-random-numbers-for-javascript-mirror
@@ -55999,7 +57281,7 @@ if (module && module.exports) {
 
 
 
-},{}],113:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 // A Javascript implementaion of the "Tyche-i" prng algorithm by
 // Samuel Neves and Filipe Araujo.
 // See https://eden.dei.uc.pt/~sneves/pubs/2011-snfa2.pdf
@@ -56104,7 +57386,7 @@ if (module && module.exports) {
 
 
 
-},{}],114:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 // A Javascript implementaion of the "xor128" prng algorithm by
 // George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
 
@@ -56187,7 +57469,7 @@ if (module && module.exports) {
 
 
 
-},{}],115:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 // A Javascript implementaion of Richard Brent's Xorgens xor4096 algorithm.
 //
 // This fast non-cryptographic random number generator is designed for
@@ -56335,7 +57617,7 @@ if (module && module.exports) {
   (typeof define) == 'function' && define   // present with an AMD loader
 );
 
-},{}],116:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 // A Javascript implementaion of the "xorshift7" algorithm by
 // François Panneton and Pierre L'ecuyer:
 // "On the Xorgshift Random Number Generators"
@@ -56434,7 +57716,7 @@ if (module && module.exports) {
 );
 
 
-},{}],117:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 // A Javascript implementaion of the "xorwow" prng algorithm by
 // George Marsaglia.  See http://www.jstatsoft.org/v08/i14/paper
 
@@ -56522,7 +57804,7 @@ if (module && module.exports) {
 
 
 
-},{}],118:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 /*
 Copyright 2019 David Bau.
 
@@ -56547,15 +57829,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-(function (pool, math) {
+(function (global, pool, math) {
 //
 // The following constants are related to IEEE 754 limits.
 //
 
-// Detect the global object, even if operating in strict mode.
-// http://stackoverflow.com/a/14387057/265298
-var global = (0, eval)('this'),
-    width = 256,        // each RC4 output is 0 <= x < 256
+var width = 256,        // each RC4 output is 0 <= x < 256
     chunks = 6,         // at least six RC4 outputs for each double
     digits = 52,        // there are 52 significant digits in a double
     rngname = 'random', // rngname: name for Math.random and Math.seedrandom
@@ -56773,15 +58052,18 @@ if ((typeof module) == 'object' && module.exports) {
 
 // End anonymous scope, and pass initial values.
 })(
+  // global: `self` in browsers (including strict mode and web workers),
+  // otherwise `this` in Node and other environments
+  (typeof self !== 'undefined') ? self : this,
   [],     // pool: entropy pool starts empty
   Math    // math: package containing random, pow, and seedrandom
 );
 
-},{"crypto":81}],119:[function(require,module,exports){
+},{"crypto":81}],120:[function(require,module,exports){
 arguments[4][90][0].apply(exports,arguments)
-},{"dup":90}],120:[function(require,module,exports){
+},{"dup":90}],121:[function(require,module,exports){
 arguments[4][79][0].apply(exports,arguments)
-},{"dup":79}],121:[function(require,module,exports){
+},{"dup":79}],122:[function(require,module,exports){
 module.exports = function (options)
 {
     options = options || {}
@@ -56803,7 +58085,7 @@ module.exports = function (options)
     }
     return object
 }
-},{}],122:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 const exists = require('exists')
 
 const html = require('./html')
@@ -57046,7 +58328,7 @@ module.exports = class Snap
         this.horizontal.style.display = this.vertical.style.display = 'none'
     }
 }
-},{"./html":121,"exists":94}],123:[function(require,module,exports){
+},{"./html":122,"exists":94}],124:[function(require,module,exports){
 const exists = require('exists')
 
 const html = require('./html')
@@ -57449,7 +58731,7 @@ WindowManager.Window = Window
 WindowManager.WindowOptions = WindowOptions
 
 module.exports = WindowManager
-},{"./html":121,"./snap":122,"./window":125,"./window-options":124,"exists":94}],124:[function(require,module,exports){
+},{"./html":122,"./snap":123,"./window":126,"./window-options":125,"exists":94}],125:[function(require,module,exports){
 /**
  * @typedef {object} Window~WindowOptions
  * @property {number} [x=0]
@@ -57521,7 +58803,7 @@ const WindowOptions = {
 }
 
 module.exports = WindowOptions
-},{}],125:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 const Events = require('eventemitter3')
 const clicked = require('clicked')
 const Ease = require('dom-ease')
@@ -58499,7 +59781,7 @@ class Window extends Events
 }
 
 module.exports = Window
-},{"./html":121,"clicked":119,"dom-ease":85,"eventemitter3":120,"exists":94}],126:[function(require,module,exports){
+},{"./html":122,"clicked":120,"dom-ease":85,"eventemitter3":121,"exists":94}],127:[function(require,module,exports){
 (function (setImmediate,clearImmediate){
 var nextTick = require('process/browser.js').nextTick;
 var apply = Function.prototype.apply;
@@ -58578,7 +59860,7 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
   delete immediateIds[id];
 };
 }).call(this,require("timers").setImmediate,require("timers").clearImmediate)
-},{"process/browser.js":105,"timers":126}],127:[function(require,module,exports){
+},{"process/browser.js":106,"timers":127}],128:[function(require,module,exports){
 // TinyColor v1.4.1
 // https://github.com/bgrins/TinyColor
 // Brian Grinstead, MIT License
@@ -59775,7 +61057,7 @@ else {
 
 })(Math);
 
-},{}],128:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -60509,7 +61791,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":129,"punycode":106,"querystring":109}],129:[function(require,module,exports){
+},{"./util":130,"punycode":107,"querystring":110}],130:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -60527,7 +61809,7 @@ module.exports = {
   }
 };
 
-},{}],130:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 // yy-color
 // by David Figatner
 // MIT License
@@ -60847,7 +62129,7 @@ module.exports = {
     randomHSL: randomHSL,
     randomGoldenRatioHSL: randomGoldenRatioHSL
 }
-},{"yy-random":143}],131:[function(require,module,exports){
+},{"yy-random":144}],132:[function(require,module,exports){
 // yy-counter
 // In-browser counter to watch changeable values like counters or FPS
 // David Figatner
@@ -60965,7 +62247,7 @@ module.exports = class Counter
         this.div.innerHTML = s
     }
 }
-},{}],132:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -61192,7 +62474,7 @@ module.exports = function () {
     return FPS;
 }();
 
-},{"tinycolor2":127,"yy-counter":131}],133:[function(require,module,exports){
+},{"tinycolor2":128,"yy-counter":132}],134:[function(require,module,exports){
 const Config = {
 
     /**
@@ -61314,7 +62596,7 @@ const Config = {
 
 module.exports = Config;
 
-},{}],134:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 module.exports = function (options) {
     options = options || {};
     const object = document.createElement(options.type || 'div');
@@ -61332,7 +62614,7 @@ module.exports = function (options) {
     return object;
 };
 
-},{}],135:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 /**
  * Handles all keyboard input for the menu and user-registered keys
  */
@@ -61558,7 +62840,7 @@ const LocalAccelerator = {
 
 module.exports = LocalAccelerator;
 
-},{}],136:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 const Config = require('./config');
 const MenuItem = require('./menuItem');
 const LocalAccelerator = require('./localAccelerator');
@@ -61956,7 +63238,7 @@ class Menu {
 
 module.exports = Menu;
 
-},{"./config":133,"./html":134,"./localAccelerator":135,"./menuItem":137}],137:[function(require,module,exports){
+},{"./config":134,"./html":135,"./localAccelerator":136,"./menuItem":138}],138:[function(require,module,exports){
 const html = require('./html');
 const Config = require('./config');
 const localAccelerator = require('./localAccelerator');
@@ -62146,14 +63428,14 @@ class MenuItem {
 
 module.exports = MenuItem;
 
-},{"./config":133,"./html":134,"./localAccelerator":135}],138:[function(require,module,exports){
+},{"./config":134,"./html":135,"./localAccelerator":136}],139:[function(require,module,exports){
 module.exports = {
     Pixel: require('./pixel'),
     PixelSheet: require('./pixel-sheet'),
     Scene: require('./scene'),
     PixelArt: require('./pixelart')
 }
-},{"./pixel":140,"./pixel-sheet":139,"./pixelart":141,"./scene":142}],139:[function(require,module,exports){
+},{"./pixel":141,"./pixel-sheet":140,"./pixelart":142,"./scene":143}],140:[function(require,module,exports){
 const Pixel = require('./pixel')
 
 /**
@@ -62183,7 +63465,7 @@ module.exports = function PixelSheet(map, data, sheet)
         Pixel.add(pixel, sheet)
     }
 }
-},{"./pixel":140}],140:[function(require,module,exports){
+},{"./pixel":141}],141:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const Random = require('yy-random')
 
@@ -62515,7 +63797,7 @@ module.exports = class Pixel extends PIXI.Sprite
         this.currentAnimation = ''
     }
 }
-},{"pixi.js":104,"yy-random":143}],141:[function(require,module,exports){
+},{"pixi.js":105,"yy-random":144}],142:[function(require,module,exports){
 // Note: these algorithms are WOEFULLY inefficient. They are designed for low-resolution pixel drawings that are rendered to a spritesheet.
 // Please do NOT use these where you want to render shapes during each frame
 
@@ -63004,7 +64286,7 @@ const PixelArt = {
 }
 
 module.exports = PixelArt
-},{"yy-color":130}],142:[function(require,module,exports){
+},{"yy-color":131}],143:[function(require,module,exports){
 const PIXI = require('pixi.js')
 const Pixel = require('./pixel')
 
@@ -63170,7 +64452,7 @@ module.exports = class Scene extends PIXI.Container
         }
     }
 }
-},{"./pixel":140,"pixi.js":104}],143:[function(require,module,exports){
+},{"./pixel":141,"pixi.js":105}],144:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63616,7 +64898,7 @@ var Random = function () {
 
 module.exports = new Random();
 
-},{"seedrandom":111}],144:[function(require,module,exports){
+},{"seedrandom":112}],145:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63774,7 +65056,7 @@ var GrowingPacker = function () {
 
 module.exports = GrowingPacker;
 
-},{}],145:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -64114,7 +65396,7 @@ var RenderSheet = function (_Events) {
             if (!this.checkLoaded()) {
                 setTimeout(function () {
                     return _this3.render();
-                }, WAIT);
+                }, this.wait);
                 return;
             }
             this.canvases = [];
@@ -64406,7 +65688,7 @@ module.exports = RenderSheet;
  * @event RenderSheet#render
  */
 
-},{"./growingpacker":144,"./simplepacker":146,"eventemitter3":147,"pixi.js":104}],146:[function(require,module,exports){
+},{"./growingpacker":145,"./simplepacker":147,"eventemitter3":93,"pixi.js":105}],147:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -64487,9 +65769,7 @@ module.exports = function () {
     return SimplePacker;
 }();
 
-},{}],147:[function(require,module,exports){
-arguments[4][79][0].apply(exports,arguments)
-},{"dup":79}],148:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 const Ease = require('dom-ease')
 
 class Tooltip
@@ -65090,7 +66370,7 @@ var DomEase = function (_EventEmitter) {
 
 module.exports = DomEase;
 
-},{"./ease":151,"eventemitter3":156,"penner":102}],151:[function(require,module,exports){
+},{"./ease":151,"eventemitter3":156,"penner":103}],151:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();

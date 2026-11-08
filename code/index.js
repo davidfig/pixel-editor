@@ -9,13 +9,11 @@ let _main
 
 const BACKGROUND = '#000000'
 
-async function init()
-{
+async function init() {
     process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
     await State.load()
     const main = State.main
-    if (main)
-    {
+    if (main) {
         _main = new BrowserWindow({
             webPreferences: {
                 nodeIntegration: true,
@@ -26,37 +24,38 @@ async function init()
             width: Math.round(main.width),
             height: Math.round(main.height),
             x: Math.round(main.x),
-            y: Math.round(main.y)
+            y: Math.round(main.y),
+            nodeIntegration: true,
+            contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js'),
         })
-        if (main.maximize)
-        {
+        if (main.maximize) {
             _main.maximize()
         }
     }
-    else
-    {
-        try
-        {
+    else {
+        try {
             _main = new BrowserWindow({
                 webPreferences: {
                     nodeIntegration: true,
                     enableRemoteModule: true
                 },
                 title: 'Pixel Editor',
-                backgroundColor: BACKGROUND
+                backgroundColor: BACKGROUND,
+                nodeIntegration: true,
+                contextIsolation: true,
+                preload: path.join(__dirname, 'preload.js'),
             })
             _main.maximize()
         }
-        catch(e)
-        {
+        catch (e) {
             console.error(e)
             debugger
         }
     }
     _main.setMenu(null)
     _main.loadURL(url.format({ pathname: path.join(__dirname, '..', 'html', 'electron.html'), protocol: 'file:', slashes: true }))
-    if (Settings.DEBUG)
-    {
+    if (Settings.DEBUG) {
         _main.toggleDevTools()
     }
     State.setupMain(_main)
@@ -64,10 +63,8 @@ async function init()
 
 app.on('ready', init)
 app.on('activate',
-    function ()
-    {
-        if (_main === null)
-        {
+    function () {
+        if (_main === null) {
             init()
         }
     }

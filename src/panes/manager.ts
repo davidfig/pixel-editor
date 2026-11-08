@@ -3,7 +3,7 @@ import type { WindowManager } from 'simple-window-manager'
 import type { App } from '../app'
 import { Sprite } from '../model/sprite'
 import { openSpriteFolder } from '../storage/disk'
-import { type SpriteSummary, deleteSprite, listSprites, newId, saveSprite } from '../storage/library'
+import { type SpriteSummary, deleteSprite, listSprites, newId, saveHandle, saveSprite } from '../storage/library'
 import { confirm } from '../ui/dialog'
 import { type Icon, el, iconButton } from '../ui/dom'
 import { Pane } from './pane'
@@ -101,9 +101,11 @@ export class Manager extends Pane {
         }
         const existing = new Set((await listSprites()).map((s) => s.name))
         let count = 0
-        for (const { sprite } of files) {
+        for (const { sprite, handle } of files) {
             if (!existing.has(sprite.name)) {
-                await saveSprite(newId(), new Sprite(sprite), { current: 0 })
+                const id = newId()
+                await saveSprite(id, new Sprite(sprite), { current: 0 })
+                await saveHandle(id, handle)
                 count++
             }
         }

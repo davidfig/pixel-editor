@@ -1,0 +1,14 @@
+{
+    "name": "Pixel Editor",
+    "short_name": "Pixel Editor",
+    "description": "A pixel art and sprite editor",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#222222",
+    "theme_color": "#333333",
+    "icons": [
+        { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}

@@ -162,7 +162,8 @@ export class Layout {
                     const entries: MenuEntry[] = [
                         { label: 'New', command: 'New' },
                         { label: 'Open File…', command: 'Open' },
-                        { label: 'Save File As…', command: 'Save' },
+                        { label: 'Save File', command: 'Save' },
+                        { label: 'Save File As…', command: 'SaveAs' },
                         { label: 'Export PNG…', command: 'Export' },
                     ]
                     const recent = this.recentNames.filter((r) => r.id !== app.spriteId)

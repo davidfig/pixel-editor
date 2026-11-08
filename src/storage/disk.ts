@@ -5,6 +5,7 @@ interface FilePickerType {
     description: string
     accept: Record<string, string[]>
 }
+type PermissionMode = { mode: 'read' | 'readwrite' }
 declare global {
     interface Window {
         showOpenFilePicker?: (options: { types?: FilePickerType[]; multiple?: boolean }) => Promise<FileSystemFileHandle[]>
@@ -14,35 +15,81 @@ declare global {
     interface FileSystemDirectoryHandle {
         values(): AsyncIterableIterator<FileSystemFileHandle | FileSystemDirectoryHandle>
     }
+    interface FileSystemHandle {
+        queryPermission?(descriptor: PermissionMode): Promise<PermissionState>
+        requestPermission?(descriptor: PermissionMode): Promise<PermissionState>
+    }
 }
 
 const JSON_TYPE: FilePickerType = { description: 'Pixel sprite', accept: { 'application/json': ['.json'] } }
 const PNG_TYPE: FilePickerType = { description: 'PNG image', accept: { 'image/png': ['.png'] } }
 
-/** Ask the user for a sprite file and parse it. Resolves null if they cancel. */
-export async function openSpriteFile(): Promise<SpriteData | null> {
-    const file = await pickFile()
-    if (!file) {
-        return null
-    }
-    const sprite = parseSprite(JSON.parse(await file.text()))
-    if (sprite.name === 'untitled') {
-        sprite.name = file.name.replace(/\.json$/i, '')
-    }
-    return sprite
+/** A sprite read from disk, with the file it came from when the browser can write back to it. */
+export interface OpenedSprite {
+    sprite: SpriteData
+    handle?: FileSystemFileHandle
 }
 
-export async function saveSpriteFile(sprite: SpriteData): Promise<boolean> {
-    const json = JSON.stringify(serializeSprite(sprite))
-    return saveBlob(new Blob([json], { type: 'application/json' }), sprite.name + '.json', JSON_TYPE)
+export interface SaveResult {
+    saved: boolean
+    /** The file the sprite now lives in (not set when the browser could only download it). */
+    handle?: FileSystemFileHandle
+}
+
+/** Ask the user for a sprite file and parse it. Resolves null if they cancel. */
+export async function openSpriteFile(): Promise<OpenedSprite | null> {
+    const picked = await pickFile()
+    if (!picked) {
+        return null
+    }
+    const sprite = parseSprite(JSON.parse(await picked.file.text()))
+    if (sprite.name === 'untitled') {
+        sprite.name = picked.file.name.replace(/\.json$/i, '')
+    }
+    return { sprite, handle: picked.handle }
+}
+
+/**
+ * Save a sprite. With a handle (and saveAs false), writes straight back to that file; otherwise, or if that
+ * file can't be written (permission refused, or it was moved or deleted), asks where to save it.
+ */
+export async function saveSpriteFile(sprite: SpriteData, handle?: FileSystemFileHandle | null, saveAs = false): Promise<SaveResult> {
+    const blob = new Blob([JSON.stringify(serializeSprite(sprite))], { type: 'application/json' })
+    if (handle && !saveAs) {
+        if ((await canWrite(handle)) && (await write(handle, blob))) {
+            return { saved: true, handle }
+        }
+    }
+    const suggestedName = handle?.name ?? sprite.name + '.json'
+    if (window.showSaveFilePicker) {
+        let picked: FileSystemFileHandle
+        try {
+            picked = await window.showSaveFilePicker({ suggestedName, types: [JSON_TYPE] })
+        } catch {
+            return { saved: false }
+        }
+        return (await write(picked, blob)) ? { saved: true, handle: picked } : { saved: false }
+    }
+    download(blob, suggestedName)
+    return { saved: true }
 }
 
 export async function savePng(blob: Blob, name: string): Promise<boolean> {
-    return saveBlob(blob, name.endsWith('.png') ? name : name + '.png', PNG_TYPE)
+    name = name.endsWith('.png') ? name : name + '.png'
+    if (window.showSaveFilePicker) {
+        try {
+            const handle = await window.showSaveFilePicker({ suggestedName: name, types: [PNG_TYPE] })
+            return await write(handle, blob)
+        } catch {
+            return false
+        }
+    }
+    download(blob, name)
+    return true
 }
 
 /** Every sprite file in a folder the user picks (Chrome and Edge only). */
-export async function openSpriteFolder(): Promise<{ file: string; sprite: SpriteData; modified: number }[] | null> {
+export async function openSpriteFolder(): Promise<{ file: string; sprite: SpriteData; modified: number; handle: FileSystemFileHandle }[] | null> {
     if (!window.showDirectoryPicker) {
         return null
     }
@@ -58,8 +105,9 @@ export async function openSpriteFolder(): Promise<{ file: string; sprite: Sprite
             continue
         }
         try {
-            const file = await (entry as FileSystemFileHandle).getFile()
-            out.push({ file: entry.name, sprite: parseSprite(JSON.parse(await file.text())), modified: file.lastModified })
+            const handle = entry as FileSystemFileHandle
+            const file = await handle.getFile()
+            out.push({ file: entry.name, sprite: parseSprite(JSON.parse(await file.text())), modified: file.lastModified, handle })
         } catch {
             // not a sprite file
         }
@@ -67,11 +115,35 @@ export async function openSpriteFolder(): Promise<{ file: string; sprite: Sprite
     return out
 }
 
-async function pickFile(): Promise<File | null> {
+/** Whether the page may write to this file, asking the user if needed. */
+async function canWrite(handle: FileSystemFileHandle): Promise<boolean> {
+    try {
+        const mode: PermissionMode = { mode: 'readwrite' }
+        if ((await handle.queryPermission?.(mode)) === 'granted') {
+            return true
+        }
+        return (await handle.requestPermission?.(mode)) === 'granted'
+    } catch {
+        return false
+    }
+}
+
+async function write(handle: FileSystemFileHandle, blob: Blob): Promise<boolean> {
+    try {
+        const writable = await handle.createWritable()
+        await writable.write(blob)
+        await writable.close()
+        return true
+    } catch {
+        return false
+    }
+}
+
+async function pickFile(): Promise<{ file: File; handle?: FileSystemFileHandle } | null> {
     if (window.showOpenFilePicker) {
         try {
             const [handle] = await window.showOpenFilePicker({ types: [JSON_TYPE] })
-            return await handle.getFile()
+            return { file: await handle.getFile(), handle }
         } catch {
             return null
         }
@@ -80,29 +152,17 @@ async function pickFile(): Promise<File | null> {
         const input = document.createElement('input')
         input.type = 'file'
         input.accept = '.json,application/json'
-        input.addEventListener('change', () => resolve(input.files?.[0] ?? null))
+        input.addEventListener('change', () => resolve(input.files?.[0] ? { file: input.files[0] } : null))
         input.addEventListener('cancel', () => resolve(null))
         input.click()
     })
 }
 
-async function saveBlob(blob: Blob, name: string, type: FilePickerType): Promise<boolean> {
-    if (window.showSaveFilePicker) {
-        try {
-            const handle = await window.showSaveFilePicker({ suggestedName: name, types: [type] })
-            const writable = await handle.createWritable()
-            await writable.write(blob)
-            await writable.close()
-            return true
-        } catch {
-            return false
-        }
-    }
+function download(blob: Blob, name: string): void {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = name
     a.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
-    return true
 }

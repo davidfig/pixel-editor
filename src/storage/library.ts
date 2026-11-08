@@ -31,6 +31,7 @@ export interface SpriteSummary {
 
 const STATE_KEY = 'state'
 const SPRITE_PREFIX = 'sprite:'
+const HANDLE_PREFIX = 'handle:'
 
 let store: UseStore | undefined
 
@@ -66,6 +67,24 @@ export async function saveSprite(id: string, sprite: SpriteData, editor: EditorS
 
 export async function deleteSprite(id: string): Promise<void> {
     await del(SPRITE_PREFIX + id, db())
+    await del(HANDLE_PREFIX + id, db())
+}
+
+/** The file on disk a sprite was opened from or last saved to, so Save can write back to it. */
+export async function loadHandle(id: string): Promise<FileSystemFileHandle | null> {
+    try {
+        return (await get<FileSystemFileHandle>(HANDLE_PREFIX + id, db())) ?? null
+    } catch {
+        return null
+    }
+}
+
+export async function saveHandle(id: string, handle: FileSystemFileHandle): Promise<void> {
+    try {
+        await set(HANDLE_PREFIX + id, handle, db())
+    } catch {
+        // the browser can't store file handles; Save will ask where to save instead
+    }
 }
 
 export async function listSprites(): Promise<SpriteSummary[]> {

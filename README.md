@@ -15,7 +15,13 @@ npm test           # unit tests
 npm run build      # type-check and build to dist/
 ```
 
-Sprites are saved in the browser (IndexedDB) as you work. Use **File → Open File…** and **File → Save File As…** to move sprite files on and off disk, and **File → Export PNG…** to export frames.
+## Using it on your computer
+
+- **Install it:** in Chrome or Edge, use the install button in the address bar (or **⋮ → Cast, save and share → Install page as app**). It gets its own window and Dock icon, and works offline.
+- **Edit files in place:** **File → Open File…** (⌘O) opens a sprite from disk, and **File → Save File** (⌘S) writes it back to the same file. **File → Save File As…** (⇧⌘S) saves a copy somewhere else. The editor remembers each sprite's file, even after a restart; the browser may ask once per session for permission to write to it. The Sprites pane can open a whole folder the same way.
+- **Safari and Firefox** can't write to files on disk, so Save downloads the file instead.
+
+Sprites are also saved in the browser (IndexedDB) as you work, and **File → Export PNG…** (⌘E) exports frames.
 
 The sprite file format and the 2026 rewrite (TypeScript, no pixi.js, web only) are described in [PLAN.md](PLAN.md).
 

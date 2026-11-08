@@ -41,6 +41,8 @@ export class App extends EventEmitter<AppEvents> {
     private tools: Record<ToolName, Tool>
     private clipboard: Clipboard | null = null
     private editorDirty = false
+    /** The file on disk the current sprite was opened from or saved to, if the browser can write to it. */
+    private fileHandle: FileSystemFileHandle | null = null
 
     private constructor(state: State, sprite: Sprite, spriteId: string, editor: library.EditorState | undefined) {
         super()
@@ -79,7 +81,9 @@ export class App extends EventEmitter<AppEvents> {
         const id = state.get('spriteId')
         const loaded = id ? await library.loadSprite(id) : null
         if (loaded && id) {
-            return new App(state, new Sprite(loaded.sprite), id, loaded.editor)
+            const app = new App(state, new Sprite(loaded.sprite), id, loaded.editor)
+            app.fileHandle = await library.loadHandle(id)
+            return app
         }
         const app = new App(state, new Sprite({ name: await uniqueName('pixel'), frames: [], animations: { idle: [[0, 0]] } }), library.newId(), undefined)
         state.open(app.spriteId)
@@ -128,6 +132,7 @@ export class App extends EventEmitter<AppEvents> {
         const sprite = new Sprite({ name: await uniqueName('pixel'), frames: [], animations: { idle: [[0, 0]] } })
         sprite.dirty = true
         this.setSprite(sprite, library.newId())
+        this.fileHandle = null
         this.state.setCursor(0, 0, 1, 1)
     }
 
@@ -141,25 +146,38 @@ export class App extends EventEmitter<AppEvents> {
             this.state.forget(id)
             return
         }
+        const handle = await library.loadHandle(id)
         this.setSprite(new Sprite(loaded.sprite), id, loaded.editor)
+        this.fileHandle = handle
     }
 
-    /** Import a sprite file from disk into the library and open it. */
+    /** Import a sprite file from disk into the library and open it, remembering the file so Save writes back to it. */
     async openFile(): Promise<void> {
         try {
-            const data = await openSpriteFile()
-            if (data) {
-                const sprite = new Sprite(data)
+            const opened = await openSpriteFile()
+            if (opened) {
+                const sprite = new Sprite(opened.sprite)
                 sprite.dirty = true
-                this.setSprite(sprite, library.newId())
+                const id = library.newId()
+                this.setSprite(sprite, id)
+                this.fileHandle = opened.handle ?? null
+                if (opened.handle) {
+                    await library.saveHandle(id, opened.handle)
+                }
             }
         } catch (e) {
             alert(`Couldn't open that file: ${(e as Error).message}`)
         }
     }
 
-    async saveFile(): Promise<void> {
-        await saveSpriteFile(this.sprite)
+    /** Save to the file the sprite came from, or ask where to save it (always, with saveAs). */
+    async saveFile(saveAs = false): Promise<void> {
+        const id = this.spriteId
+        const result = await saveSpriteFile(this.sprite, this.fileHandle, saveAs)
+        if (result.handle && id === this.spriteId) {
+            this.fileHandle = result.handle
+            await library.saveHandle(id, result.handle)
+        }
     }
 
     /**
@@ -232,6 +250,7 @@ export class App extends EventEmitter<AppEvents> {
             New: () => this.newFile(),
             Open: () => this.openFile(),
             Save: () => this.saveFile(),
+            SaveAs: () => this.saveFile(true),
             Undo: () => this.sprite.undo(),
             Redo: () => this.sprite.redo(),
             Copy: () => this.copy(),

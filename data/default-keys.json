@@ -2,6 +2,7 @@
     "New": "CommandOrControl+M|CommandOrControl+N",
     "Open": "CommandOrControl+O",
     "Save": "CommandOrControl+S",
+    "SaveAs": "CommandOrControl+Shift+S",
     "Export": "CommandOrControl+E",
     "Exit": "CommandOrControl+Q",
     "Undo": "CommandOrControl+Z",
